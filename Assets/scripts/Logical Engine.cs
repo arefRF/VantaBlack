@@ -23,7 +23,7 @@ public class LogicalEngine
     public LogicalEngine(int x, int y)
     {
         
-        database = Database.database;
+        database = new Database(0);
         player = database.player.GetComponent<Player>();
         Gengine = GameObject.Find("Graphical").GetComponent<GraphicalEngine>();
         spManager = new SnapshotManager();

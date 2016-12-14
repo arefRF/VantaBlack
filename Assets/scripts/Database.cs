@@ -3,13 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Database {
-    public static Database database = new Database(0);
-    private Database(long i)
+    
+    public Database(long i)
     {
         snapshots = new List<Snapshot>();
         turn = i;
     }
-
 
     public LogicalEngine logicalengine;
     public GameObject player;
@@ -53,10 +52,10 @@ public class TimeLaps
     public GameObject gameobject;
     public TimeLaps(int lifetime, GameObject gameobject)
     {
-        this.lifetime = lifetime + Database.database.turn;
+        this.lifetime = lifetime + Interface.GetEngine().database.turn;
         this.gameobject = gameobject;
         position = gameobject.transform.position;
-        time = Database.database.turn;
+        time = Interface.GetEngine().database.turn;
     }
 }
 
