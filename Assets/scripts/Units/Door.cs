@@ -26,7 +26,7 @@ public class Door : Unit
         if (isOpen)
             return;
         isOpen = true;
-        Interface.GetEngine().Gengine._Internal_Door_Change_Sprite(this);
+        Starter.GetEngine().Gengine._Internal_Door_Change_Sprite(this);
     }
 
     public void CloseDoor()
@@ -34,12 +34,12 @@ public class Door : Unit
         if (!isOpen)
             return;
         isOpen = false;
-        Interface.GetEngine().Gengine._Internal_Door_Change_Sprite(this);
+        Starter.GetEngine().Gengine._Internal_Door_Change_Sprite(this);
     }
 
     public virtual void OpenClose()
     {
-        Interface.GetEngine().AddToSnapshot(this);
+        Starter.GetEngine().AddToSnapshot(this);
         if (isOpen)
             CloseDoor();
         else

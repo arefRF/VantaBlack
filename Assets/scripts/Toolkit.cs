@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 
 public sealed class Toolkit{
-
     public static Vector2 VectorSum(Vector2 a, Vector2 b)
     {
         return new Vector2(a.x + b.x, a.y + b.y);
@@ -26,82 +25,14 @@ public sealed class Toolkit{
         return Direction.Down;
     }
 
-    public static bool IsWallOnTheWay(Wall wall, Direction movingdirection)
-    {
-        switch (wall.direction)
-        {
-            case Direction.Up: if (movingdirection == Direction.Down) return true; return false;
-            case Direction.Down: if (movingdirection == Direction.Up) return true; return false;
-            case Direction.Left: if (movingdirection == Direction.Right) return true; return false;
-            case Direction.Right: if (movingdirection == Direction.Left) return true; return false;
-            default: return true;
-        }
-    }
-
-    public static bool IsWallOnTherWay2(Vector2 position, Direction dir)
-    {
-        if (dir == Direction.Right)
-        {
-            for (int i = 0; i < Database.database.units[(int)position.x, (int)position.y].Count; i++)
-            {
-                Unit u = Database.database.units[(int)position.x, (int)position.y][i];
-                if (u.unitType == UnitType.Wall)
-                {
-                    if (((Wall)u).direction == Direction.Right)
-                        return true;
-                }
-            }
-            return false;
-        }
-        else if (dir == Direction.Left)
-        {
-            for (int i = 0; i < Database.database.units[(int)position.x, (int)position.y].Count; i++)
-            {
-                Unit u = Database.database.units[(int)position.x, (int)position.y][i];
-                if (u.unitType == UnitType.Wall)
-                {
-                    if (((Wall)u).direction == Direction.Left)
-                        return true;
-                }
-            }
-            return false;
-        }
-        else if (dir == Direction.Up)
-        {
-            for (int i = 0; i < Database.database.units[(int)position.x, (int)position.y].Count; i++)
-            {
-                Unit u = Database.database.units[(int)position.x, (int)position.y][i];
-                if (u.unitType == UnitType.Wall)
-                {
-                    if (((Wall)u).direction == Direction.Up)
-                        return true;
-                }
-            }
-            return false;
-        }
-        else if (dir == Direction.Down)
-        {
-            for (int i = 0; i < Database.database.units[(int)position.x, (int)position.y].Count; i++)
-            {
-                Unit u = Database.database.units[(int)position.x, (int)position.y][i];
-                if (u.unitType == UnitType.Wall)
-                {
-                    if (((Wall)u).direction == Direction.Down)
-                        return true;
-                }
-            }
-            return false;
-        }
-        return false;
-    }
-
     public static bool IsWallOnTheWay(Vector2 position, Direction dir)
     {
-        if(dir == Direction.Right)
+        Database database = Starter.GetDataBase();
+        if (dir == Direction.Right)
         {
-            for (int i = 0; i < Database.database.units[(int)position.x, (int)position.y].Count; i++)
+            for (int i = 0; i < database.units[(int)position.x, (int)position.y].Count; i++)
             {
-                Unit u = Database.database.units[(int)position.x, (int)position.y][i];
+                Unit u = database.units[(int)position.x, (int)position.y][i];
                 if (u.unitType == UnitType.Wall)
                 {
                     if (((Wall)u).direction == Direction.Right)
@@ -112,9 +43,9 @@ public sealed class Toolkit{
         }
         else if (dir == Direction.Left)
         {
-            for (int i = 0; i < Database.database.units[(int)position.x, (int)position.y].Count; i++)
+            for (int i = 0; i < database.units[(int)position.x, (int)position.y].Count; i++)
             {
-                Unit u = Database.database.units[(int)position.x, (int)position.y][i];
+                Unit u = database.units[(int)position.x, (int)position.y][i];
                 if (u.unitType == UnitType.Wall)
                 {
                     if (((Wall)u).direction == Direction.Left)
@@ -125,9 +56,9 @@ public sealed class Toolkit{
         }
         else if (dir == Direction.Up)
         {
-            for (int i = 0; i < Database.database.units[(int)position.x, (int)position.y].Count; i++)
+            for (int i = 0; i < database.units[(int)position.x, (int)position.y].Count; i++)
             {
-                Unit u = Database.database.units[(int)position.x, (int)position.y][i];
+                Unit u = database.units[(int)position.x, (int)position.y][i];
                 if (u.unitType == UnitType.Wall)
                 {
                     if (((Wall)u).direction == Direction.Up)
@@ -138,9 +69,9 @@ public sealed class Toolkit{
         }
         else if (dir == Direction.Down)
         {
-            for (int i = 0; i < Database.database.units[(int)position.x, (int)position.y].Count; i++)
+            for (int i = 0; i < database.units[(int)position.x, (int)position.y].Count; i++)
             {
-                Unit u = Database.database.units[(int)position.x, (int)position.y][i];
+                Unit u = database.units[(int)position.x, (int)position.y][i];
                 if (u.unitType == UnitType.Wall)
                 {
                     if (((Wall)u).direction == Direction.Down)
@@ -166,6 +97,7 @@ public sealed class Toolkit{
 
     public static bool IsEmptySpace(Vector2 position,  Direction d)
     {
+        Database database = Starter.GetDataBase();
         try {
             /*foreach(Unit u in Database.database.units[1,1])
             {
@@ -174,9 +106,9 @@ public sealed class Toolkit{
             Vector2 temp = DirectiontoVector(ReverseDirection(d));
             if (IsWallOnTheWay(VectorSum(position, temp), d))
                 return false;
-            for (int i = 0; i < Database.database.units[(int)position.x, (int)position.y].Count; i++)
+            for (int i = 0; i < database.units[(int)position.x, (int)position.y].Count; i++)
             {
-                Unit u = Database.database.units[(int)position.x, (int)position.y][i];
+                Unit u = database.units[(int)position.x, (int)position.y][i];
                 if (u.unitType == UnitType.Wall || u.unitType == UnitType.Switch || u.unitType == UnitType.Pipe)
                     continue;
                 else if (u.unitType == UnitType.Door)
@@ -233,9 +165,10 @@ public sealed class Toolkit{
     }
     private static void _CWAllToWall(CloneableWall w, Wall wall)
     {
+        Database database = Starter.GetDataBase();
         wall.direction = w.direction;
         wall.magnetic = w.magnetic;
-        Snapshot snp = Interface.GetEngine().GetCurrentSnapshot();
+        Snapshot snp = Starter.GetEngine().GetCurrentSnapshot();
         for (int i = 0; i < wall.connectedUnits.Count; i++)
         {
             bool flag = true;
@@ -243,20 +176,20 @@ public sealed class Toolkit{
             {
                 if (snp.units[j].codeNumber == wall.connectedUnits[i].codeNumber)
                 {
-                    for(int k=0;k<Database.database.units[(int)snp.units[j].position.x, (int)snp.units[j].position.y].Count; k++)
+                    for(int k=0;k<database.units[(int)snp.units[j].position.x, (int)snp.units[j].position.y].Count; k++)
                     {
-                        if (snp.units[j].codeNumber == Database.database.units[(int)snp.units[j].position.x, (int)snp.units[j].position.y][k].codeNumber)
+                        if (snp.units[j].codeNumber == database.units[(int)snp.units[j].position.x, (int)snp.units[j].position.y][k].codeNumber)
                         {
-                            Database.database.units[(int)snp.units[j].position.x, (int)snp.units[j].position.y].RemoveAt(k);
+                            database.units[(int)snp.units[j].position.x, (int)snp.units[j].position.y].RemoveAt(k);
                         }
                     }
                     break;
                 }
 
             }
-                Database.database.units[(int)wall.connectedUnits[i].obj.transform.position.x, (int)wall.connectedUnits[i].obj.transform.position.y].Remove((Switch)(wall.connectedUnits[i]));
+                database.units[(int)wall.connectedUnits[i].obj.transform.position.x, (int)wall.connectedUnits[i].obj.transform.position.y].Remove((Switch)(wall.connectedUnits[i]));
                 Vector2 temppos = Toolkit.VectorSum((Toolkit.DirectiontoVector(Toolkit.ReverseDirection(((Switch)(wall.connectedUnits[i])).direction))), wall.position);
-                Database.database.units[(int)temppos.x, (int)temppos.y].Add((Switch)(wall.connectedUnits[i]));
+                database.units[(int)temppos.x, (int)temppos.y].Add((Switch)(wall.connectedUnits[i]));
                 GraphicalEngine.MoveObject(wall.connectedUnits[i].obj, temppos);
         }
     }
@@ -296,11 +229,12 @@ public sealed class Toolkit{
 
     private static void _CRockToRock(CloneableRock r, Rock rock)
     {
+        Database database = Starter.GetDataBase();
         for (int i = 0; i < rock.connectedUnits.Count; i++)
         {
-            Database.database.units[(int)rock.connectedUnits[i].obj.transform.position.x, (int)rock.connectedUnits[i].obj.transform.position.y].Remove((Switch)(rock.connectedUnits[i]));
+            database.units[(int)rock.connectedUnits[i].obj.transform.position.x, (int)rock.connectedUnits[i].obj.transform.position.y].Remove((Switch)(rock.connectedUnits[i]));
             Vector2 temppos = Toolkit.VectorSum((Toolkit.DirectiontoVector(Toolkit.ReverseDirection(((Switch)(rock.connectedUnits[i])).direction))), rock.position);
-            Database.database.units[(int)temppos.x, (int)temppos.y].Add((Switch)(rock.connectedUnits[i]));
+            database.units[(int)temppos.x, (int)temppos.y].Add((Switch)(rock.connectedUnits[i]));
             GraphicalEngine.MoveObject(rock.connectedUnits[i].obj, temppos);
         }
     }
@@ -312,9 +246,10 @@ public sealed class Toolkit{
 
     public static Door IsDoorOnTheWay(Vector2 position, Direction d)
     {
-        for(int i=0;i<Database.database.units[(int)position.x, (int)position.y].Count;i++)
+        Database database = Starter.GetDataBase();
+        for (int i=0;i<database.units[(int)position.x, (int)position.y].Count;i++)
         {
-            Unit u = Database.database.units[(int)position.x, (int)position.y][i];
+            Unit u = database.units[(int)position.x, (int)position.y][i];
             if (u.unitType == UnitType.Door)
             {
                 if (((Door)u).direction == d)
@@ -324,9 +259,9 @@ public sealed class Toolkit{
         try
         {
             Vector2 pos2 = Toolkit.VectorSum(position, Toolkit.DirectiontoVector(d));
-            for (int i = 0; i < Database.database.units[(int)pos2.x, (int)pos2.y].Count; i++)
+            for (int i = 0; i < database.units[(int)pos2.x, (int)pos2.y].Count; i++)
             {
-                Unit u = Database.database.units[(int)pos2.x, (int)pos2.y][i];
+                Unit u = database.units[(int)pos2.x, (int)pos2.y][i];
                 if (u.unitType == UnitType.Door)
                 {
                     if (((Door)u).direction == Toolkit.ReverseDirection(d))
@@ -342,14 +277,15 @@ public sealed class Toolkit{
 
     public static Unit GetUnitByCodeNumber(int codenumber)
     {
-        for(int i=0; i<Database.database.units.GetLength(0); i++)
+        Database database = Starter.GetDataBase();
+        for (int i=0; i<database.units.GetLength(0); i++)
         {
-            for(int j=0; j<Database.database.units.GetLength(1); j++)
+            for(int j=0; j<database.units.GetLength(1); j++)
             {
-                for(int k=0; k<Database.database.units[i,j].Count; k++)
+                for(int k=0; k<database.units[i,j].Count; k++)
                 {
-                    if (codenumber == Database.database.units[i, j][k].codeNumber)
-                        return Database.database.units[i, j][k];
+                    if (codenumber == database.units[i, j][k].codeNumber)
+                        return database.units[i, j][k];
                 }
             }
         }
@@ -358,23 +294,24 @@ public sealed class Toolkit{
 
     public static void RemoveWall(Wall wall)
     {
+        Database database = Starter.GetDataBase();
         switch (wall.direction)
         {
             case Direction.Right:
-                Database.database.units[(int)wall.obj.transform.position.x, (int)wall.obj.transform.position.y].Remove(wall);
-                Database.database.units[(int)wall.obj.transform.position.x + 1, (int)wall.obj.transform.position.y].Remove(wall.obj.GetComponents<Wall>()[1]);
+                database.units[(int)wall.obj.transform.position.x, (int)wall.obj.transform.position.y].Remove(wall);
+                database.units[(int)wall.obj.transform.position.x + 1, (int)wall.obj.transform.position.y].Remove(wall.obj.GetComponents<Wall>()[1]);
                 break;
             case Direction.Left:
-                Database.database.units[(int)wall.obj.transform.position.x + 1, (int)wall.obj.transform.position.y].Remove(wall);
-                Database.database.units[(int)wall.obj.transform.position.x, (int)wall.obj.transform.position.y].Remove(wall.obj.GetComponents<Wall>()[0]);
+                database.units[(int)wall.obj.transform.position.x + 1, (int)wall.obj.transform.position.y].Remove(wall);
+                database.units[(int)wall.obj.transform.position.x, (int)wall.obj.transform.position.y].Remove(wall.obj.GetComponents<Wall>()[0]);
                 break;
             case Direction.Up:
-                Database.database.units[(int)wall.obj.transform.position.x, (int)wall.obj.transform.position.y].Remove(wall);
-                Database.database.units[(int)wall.obj.transform.position.x, (int)wall.obj.transform.position.y + 1].Remove(wall.obj.GetComponents<Wall>()[1]);
+                database.units[(int)wall.obj.transform.position.x, (int)wall.obj.transform.position.y].Remove(wall);
+                database.units[(int)wall.obj.transform.position.x, (int)wall.obj.transform.position.y + 1].Remove(wall.obj.GetComponents<Wall>()[1]);
                 break;
             case Direction.Down:
-                Database.database.units[(int)wall.obj.transform.position.x, (int)wall.obj.transform.position.y - 1].Remove(wall);
-                Database.database.units[(int)wall.obj.transform.position.x, (int)wall.obj.transform.position.y].Remove(wall.obj.GetComponents<Wall>()[0]);
+                database.units[(int)wall.obj.transform.position.x, (int)wall.obj.transform.position.y - 1].Remove(wall);
+                database.units[(int)wall.obj.transform.position.x, (int)wall.obj.transform.position.y].Remove(wall.obj.GetComponents<Wall>()[0]);
                 break;
         }
         wall.obj.SetActive(false);

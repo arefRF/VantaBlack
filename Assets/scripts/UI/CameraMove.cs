@@ -41,8 +41,8 @@ public class CameraMove : MonoBehaviour {
             {
                 if (moving != number)
                 {
-                    Interface.GetEngine().camerapos = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, Camera.main.transform.position.z);
-                    Interface.GetEngine().camerasize = Camera.main.orthographicSize;
+                    Starter.GetEngine().camerapos = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, Camera.main.transform.position.z);
+                    Starter.GetEngine().camerasize = Camera.main.orthographicSize;
                     is_moving = true;
                     moving = number;
                     StartCoroutine(Smooth_Move(new Vector3(x, y, -10)));

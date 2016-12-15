@@ -3,24 +3,24 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class SnapshotManager{
-
+    Database database;
     public SnapshotManager()
     {
-
+        database = Starter.GetDataBase();
     }
 
     public void takesnapshot(List<CloneableUnit> units, Vector3 CameraPos, float CameraSize)
     {
         Snapshot snp = new Snapshot(units, CameraPos, CameraSize);
-        Database.database.snapshots.Add(snp);
+        database.snapshots.Add(snp);
     }
 
     public Snapshot Revese()
     {
-        if (Database.database.snapshots.Count != 0)
+        if (database.snapshots.Count != 0)
         {
-            Snapshot snapshot = Database.database.snapshots[Database.database.snapshots.Count - 1];
-            Database.database.snapshots.RemoveAt(Database.database.snapshots.Count - 1);
+            Snapshot snapshot = database.snapshots[database.snapshots.Count - 1];
+            database.snapshots.RemoveAt(database.snapshots.Count - 1);
             return snapshot;
         }
         return null;
@@ -38,7 +38,7 @@ public class Snapshot
         this.units = new List<CloneableUnit>();
         foreach (CloneableUnit u in units)
             this.units.Add(u);
-        turn = Database.database.turn;
+        turn = Starter.GetDataBase().turn;
         cameraPosition = Camerapos;
         cameraSize = CameraSize;
     }

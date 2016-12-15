@@ -2,38 +2,19 @@
 using System.Collections.Generic;
 
 public class Interface : MonoBehaviour {
-    public GameObject player;
+    
     private LogicalEngine engine;
     private static LogicalEngine staticengine;
-    public int x, y;
+    
     Database database;
-    public Direction Gravity_Directin;
+    
     private Direction lean;
     private float camera_speed = 0.05f;
     private bool is_lean;
 	// Use this for initialization
-	void Awake () {
-        Database.database.player = player;
-        database = Database.database;
-
-        database.gravity_direction = Gravity_Directin;
-        database.state = State.Busy;
-        engine = new LogicalEngine(x, y);
-        database.logicalengine = engine;
-        staticengine = engine;
-
-        Starter._Set_Everything();
-
-        /*  database.checkPointPositions = new int[checkPointPositions.Count,2];
-          for(int i =0; i<checkPointPositions.Count; i++)
-          {
-              database.checkPointPositions[i, 0] = (int)checkPointPositions[i].x;
-              database.checkPointPositions[i, 1] = (int)checkPointPositions[i].y;
-          } */
-
-        engine.run();
+	void Start () {
+        database = Starter.GetDataBase();        
         is_lean = false;
-
     }
 	
 	// Update is called once per frame
@@ -126,35 +107,17 @@ public class Interface : MonoBehaviour {
 
             if (Input.GetKeyDown(KeyCode.A))
             {
-                /*for (int i = 0; i < Database.database.units.GetLength(0); i++)
-                {
-                    for (int j = 0; j < Database.database.units.GetLength(1); j++)
-                    {
-                        for (int k = 0; k < Database.database.units[i, j].Count; k++)
-                        {
-                            if (Database.database.units[i, j][k].unitType == UnitType.Player)
-                            {
-                                Wall.print("dafuq fudususncaidbdspibvfdbvod ");
-                            }
-                        }
-                    }
-                }*/
-                if (!_lean_absorb())
-                    engine.Absorb();
-                if (!_lean_action())
-                    engine.SwitchAction();
+               
+                
             }
             else if (Input.GetKeyUp(KeyCode.R))
             {
                 if (engine.snapshotunits.Count != 0)
                 {
                     Wall.print("some changes not saved to snapshot");
-                    //engine.NextTurn();
                 }
                 engine.Undo();
             }
-            else if (Input.GetKeyDown(KeyCode.E))
-                engine.Gengine.Refresh();
             else if (Input.GetKeyDown(KeyCode.M))
             {
                 GameObject.Find("Map").GetComponent<MapController>()._click();
@@ -204,11 +167,5 @@ public class Interface : MonoBehaviour {
             return true;
         }
         return false;
-    }
-   
-    
-    public static LogicalEngine GetEngine()
-    {
-        return staticengine;
     }
 }

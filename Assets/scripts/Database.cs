@@ -52,10 +52,10 @@ public class TimeLaps
     public GameObject gameobject;
     public TimeLaps(int lifetime, GameObject gameobject)
     {
-        this.lifetime = lifetime + Interface.GetEngine().database.turn;
+        this.lifetime = lifetime + Starter.GetEngine().database.turn;
         this.gameobject = gameobject;
         position = gameobject.transform.position;
-        time = Interface.GetEngine().database.turn;
+        time = Starter.GetEngine().database.turn;
     }
 }
 
