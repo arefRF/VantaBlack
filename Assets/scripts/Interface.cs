@@ -13,7 +13,8 @@ public class Interface : MonoBehaviour {
     private bool is_lean;
 	// Use this for initialization
 	void Start () {
-        database = Starter.GetDataBase();        
+        database = Starter.GetDataBase();
+        engine = Starter.GetEngine();        
         is_lean = false;
     }
 	
