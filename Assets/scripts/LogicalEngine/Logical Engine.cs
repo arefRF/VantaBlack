@@ -206,7 +206,6 @@ public class LogicalEngine
         database.state = State.Idle;
     }
 
-    /// action for dir, jump, rope
     public void UseContainerBlockSwitch(Direction direction)
     {
         Vector2 pos = Toolkit.VectorSum(player.transform.position, Toolkit.DirectiontoVector(direction));
@@ -269,10 +268,14 @@ public class LogicalEngine
         }
         if (flag)
         {
-            move(direction);
-            return true;
+            if (Toolkit.IsEmptySpace(player.transform.position, direction))
+            {
+                move(direction);
+                return true;
+            }
+            return false;
         }
-        return false;
+        return true;
     }
 
     public void move(Direction direction)

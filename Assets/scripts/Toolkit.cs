@@ -244,6 +244,42 @@ public sealed class Toolkit{
          
     }
 
+    public static bool CanMove(Vector2 position, Direction d)
+    {
+        Database database = Starter.GetDataBase();
+        try
+        {
+            /*foreach(Unit u in Database.database.units[1,1])
+            {
+                Wall.print(u.unitType);
+            }*/
+            Vector2 temp = DirectiontoVector(ReverseDirection(d));
+            if (IsWallOnTheWay(VectorSum(position, temp), d))
+                return false;
+            for (int i = 0; i < database.units[(int)position.x, (int)position.y].Count; i++)
+            {
+                Unit u = database.units[(int)position.x, (int)position.y][i];
+                if (u.unitType == UnitType.Wall || u.unitType == UnitType.Switch || u.unitType == UnitType.Pipe)
+                    continue;
+                else if (u.unitType == UnitType.Door)
+                {
+                    if (((Door)u).direction == d && !((Door)u).isOpen)
+                        return false;
+                }
+                else if (u.CanBeMoved)
+                {
+                    
+                }
+                else { return false; }
+            }
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
     public static Door IsDoorOnTheWay(Vector2 position, Direction d)
     {
         Database database = Starter.GetDataBase();

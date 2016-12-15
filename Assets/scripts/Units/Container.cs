@@ -3,8 +3,9 @@ using System.Collections.Generic;
 
 public class Container : Unit{
     public int number;
-    public Direction dirrection;
+    public Direction direction;
     public Ability ability;
+    public List<Unit> units;
     public Ability _lastAbility { get; set; }
     LogicalEngine engine;
 
@@ -36,11 +37,27 @@ public class Container : Unit{
     }
     private void RunFuel()
     {
-
+        for(int i=0; i<number; i++)
+        {
+            bool flag = true;
+            for(int j=0; j< units.Count; j++)
+            {
+                //moshkel dare
+                if (!Toolkit.IsEmptySpace(units[j].transform.position, direction))
+                    flag = false;
+            }
+            if (flag)
+            {
+                for (int j = 0; j < units.Count; j++)
+                {
+                    engine.moveObject.MoveObjects(units[j], direction, 1);
+                }
+            }
+        }
     }
     private void RunDirection()
     {
-
+        
     }
     private void RunJump()
     {
