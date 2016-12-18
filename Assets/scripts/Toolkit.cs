@@ -352,5 +352,16 @@ public sealed class Toolkit{
         }
         wall.obj.SetActive(false);
     }
+
+    public static void RemoveUnit(Unit u)
+    {
+        if(u.unitType == UnitType.Wall)
+        {
+            RemoveWall((Wall)u);
+            return;
+        }
+        Database database = Starter.GetDataBase();
+        database.units[(int)u.transform.position.x, (int)u.transform.position.y].Remove(u);
+    }
 }
 

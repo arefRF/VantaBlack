@@ -22,22 +22,37 @@ public class Move{
         this.engine = engine;
     }
 
-    
-    public void move(Direction dir)
+    //0 normal, 1 fall
+    public void MovePlayer(Vector2 sinkPos, int condition)
     {
-        engine.AddToSnapshot(player);
-        database.units[(int)player.transform.position.x, (int)player.transform.position.y].Remove(player);
+
+    }
+    
+    public void MoveUnit(Vector2 sinkPos, int condition)
+    {
+
+    }
+    public bool move(Direction dir)
+    {
         for (int i = 0; i < database.units[(int)player.transform.position.x, (int)player.transform.position.y].Count; i++)
         {
             Unit u = database.units[(int)player.transform.position.x, (int)player.transform.position.y][i];
-            if (u.unitType == UnitType.Switch && ((Switch)u).isAutomatic && ((Switch)u).isOn)
-                ((Switch)u).Run();
+            if (u.CanBeMoved)
+            {
+                if (!MoveObjects(u, dir))
+                    break;
+                return false;
+            }
+            else
+                return false;
         }
+        engine.AddToSnapshot(player);
+        database.units[(int)player.transform.position.x, (int)player.transform.position.y].Remove(player);
         Gengine._Move_Object(player.obj, Toolkit.VectorSum(player.transform.position, Toolkit.DirectiontoVector(dir)));
         player.position = database.player.transform.position;
         player.x = (int)player.position.x; player.y = (int)player.position.y;
         database.units[(int)player.transform.position.x, (int)player.transform.position.y].Add(player);
-        engine.action.CheckAutomaticSwitch(player.obj.transform.position);
+        return true;
     }
 
     private bool MoveObjects(Unit unit, Direction d)
@@ -282,6 +297,81 @@ public class Move{
         return true;
     }
 
+    public int FallPlayer()
+    {
+        int counter = 0;
+        player.state = PlayerState.Falling;
+        Vector2 pos;
+        while (true)
+        {
+            pos = Toolkit.VectorSum(player.transform.position, Toolkit.DirectiontoVector(player.direction));
+            for (int i = 0; i < database.units[(int)pos.x, (int)pos.y].Count; i++)
+            {
+                Unit u = database.units[(int)pos.x, (int)pos.y][i];
+                if (u.unitType == UnitType.Block || u.unitType == UnitType.BlockSwitch || u.unitType == UnitType.Container || u.unitType == UnitType.Rock)
+                {
+                    player.state = PlayerState.Hanging;
+                    return counter;
+                }
+            }
+            pos = Toolkit.VectorSum(player.transform.position, Toolkit.DirectiontoVector(database.gravity_direction));
+            for(int i=0; i<database.units[(int)pos.x, (int)pos.y].Count; i++)
+            {
+                Unit u = database.units[(int)pos.x, (int)pos.y][i];
+                if (u.CanBeMoved)
+                {
+                    if(FallUnit(u) == 0)
+                    {
+                        player.state = PlayerState.Steady;
+                        return counter;
+                    }
+                    break;
+                }
+                else
+                {
+                    player.state = PlayerState.Steady;
+                    return counter;
+                }
+            }
+            MovePlayer(pos, 1);
+            counter++;
+        }
+    }
+    public int FallUnit(Unit unit)
+    {
+        int counter = 0;
+        Vector2 pos;
+        while (true)
+        {
+            pos = Toolkit.VectorSum(unit.transform.position, Toolkit.DirectiontoVector(database.gravity_direction));
+            for (int i = 0; i < database.units[(int)pos.x, (int)pos.y].Count; i++)
+            {
+                Unit u = database.units[(int)pos.x, (int)pos.y][i];
+                if (u.CanBeMoved)
+                {
+                    if(u.unitType == UnitType.Player)
+                    {
+                        if (FallPlayer() == 0)
+                        {
+                            return counter;
+                        }
+                        break;
+                    }
+                    if (FallUnit(u) == 0)
+                    {
+                        return counter;
+                    }
+                    break;
+                }
+                else
+                {
+                    return counter;
+                }
+            }
+            MoveUnit(pos, 1);
+            counter++;
+        }
+    }
     private bool CheckBlockandContainer(Vector2 position)
     {
         foreach (Unit u in database.units[(int)position.x, (int)position.y])
@@ -291,22 +381,5 @@ public class Move{
         }
 
         return true;
-    }
-
-    public void CheckConnectedUnits(Unit unit)
-    {
-        switch (unit.unitType) {
-            case UnitType.Rock:
-                Wall.print("askljdasjkdlaskj");
-                for (int i = 0; i < ((Rock)unit).connectedUnits.Count; i++)
-                {
-                    database.units[(int)((Rock)unit).connectedUnits[i].obj.transform.position.x, (int)((Rock)unit).connectedUnits[i].obj.transform.position.y].Remove(((Rock)unit).connectedUnits[i]);
-                    Vector2 temppos = Toolkit.VectorSum((Toolkit.DirectiontoVector(Toolkit.ReverseDirection(((Switch)((Rock)unit).connectedUnits[i]).direction))), unit.gameObject.transform.position);
-                    GraphicalEngine.MoveObject(((Rock)unit).connectedUnits[i].obj, temppos);
-                    database.units[(int)temppos.x, (int)temppos.y].Add((Switch)((Rock)unit).connectedUnits[i]);
-                }
-                break;
-        }
-        
     }
 }

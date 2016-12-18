@@ -6,10 +6,14 @@ public class Player : Unit
 {
     public Ability ability;
     public List<Direction> move_direction;
+    public Direction direction { get; set; }
+    public PlayerState state { get; set; }
+
     //public bool CanUseRed;
     // Use this for initialization
     void Awake()
     {
+        direction = move_direction[0];
         unitType = UnitType.Player;
         obj = this.gameObject;
         position = gameObject.transform.position;
@@ -39,6 +43,7 @@ public class CloneablePlayer : CloneableUnit
 {
     public Ability ability;
     public List<Direction> move_direction;
+    public Direction direction;
     //public bool CanUseRed;
     public static CloneablePlayer Clone(Player player)
     {
@@ -46,6 +51,7 @@ public class CloneablePlayer : CloneableUnit
         CloneableUnit.init(player, p);
         p.ability = player.ability;
         p.move_direction = new List<Direction>();
+        p.direction = player.direction;
         foreach (Direction d in player.move_direction)
         {
             switch (d)
@@ -59,4 +65,9 @@ public class CloneablePlayer : CloneableUnit
         //p.CanUseRed = player.CanUseRed;
         return p;
     }
+}
+
+public enum PlayerState
+{
+    Steady, Falling, Hanging
 }

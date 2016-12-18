@@ -270,19 +270,21 @@ public class LogicalEngine
         {
             if (Toolkit.IsEmptySpace(player.transform.position, direction))
             {
-                move(direction);
-                return true;
+                if (move(direction))
+                    return true;
+                return false;
             }
             return false;
         }
         return true;
     }
 
-    public void move(Direction direction)
+    public bool move(Direction direction)
     {
-        moveObject.move(direction);            
+        bool flag = moveObject.move(direction);            
         ApplyGravity();
         NextTurn();
+        return flag;
     }
 
     public void DoneMoving()
