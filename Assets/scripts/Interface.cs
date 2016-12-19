@@ -11,28 +11,77 @@ public class Interface : MonoBehaviour {
     private Direction lean_direction;
     private float camera_speed = 0.05f;
     private bool is_lean;
-    private bool ability_use;
+    private bool is_space;
 	// Use this for initialization
 	void Start () {
         database = Starter.GetDataBase();
         engine = Starter.GetEngine();        
         is_lean = false;
-        ability_use = false;
+        is_space = false;
     }
 	
 	// Update is called once per frame
 	void Update () {
         if (database.state == State.Idle)
         {
-            if (!ability_use)
-                Get_Arrows();
+            if (is_lean)
+            {
+                // Absorb or Static Container or Undo Lean
+                Get_Lean_Undo();
+                if (Input.GetKeyDown(KeyCode.A))
+                    engine.Absorb(lean_direction);
+                else if (Input.GetKeyDown(KeyCode.Space))
+                    engine.UseContainerBlockSwitch(lean_direction);
+
+            }
+            else if (is_space)
+            {
+                // Directional Abilities use
+                if (Input.GetKeyUp(KeyCode.Space))
+                    is_space = false;
+
+            }
             else
-                Get_Ability();
+            {
+                Get_Move();
+                if (Input.GetKeyDown(KeyCode.Space))
+                    if (!engine.SpaceKeyPressed())
+                        is_space = true;
+            }
+           
         }
     }
 
+    // Get Arrows if Ability needs it
+    private void Get_Space_Arrows()
+    {
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+            engine.SpaceKeyPressed(Direction.Right);
+        else if (Input.GetKeyDown(KeyCode.LeftArrow))
+            engine.SpaceKeyPressed(Direction.Left);
+        else if (Input.GetKeyDown(KeyCode.DownArrow))
+            engine.SpaceKeyPressed(Direction.Down);
+        else if (Input.GetKeyDown(KeyCode.UpArrow))
+            engine.SpaceKeyPressed(Direction.Up);
+    }
 
+    private void Get_Lean_Undo()
+    {
+        if (Input.GetKeyUp(KeyCode.RightArrow) && lean_direction == Direction.Right)
+            Undo_Lean();
+        else if (Input.GetKeyUp(KeyCode.LeftArrow) && lean_direction == Direction.Left)
+            is_lean = false;
+        else if (Input.GetKeyUp(KeyCode.DownArrow) && lean_direction == Direction.Down)
+            is_lean = false;
+        else if (Input.GetKeyUp(KeyCode.UpArrow) && lean_direction == Direction.Up)
+            is_lean = false;
+    }
 
+    private void Undo_Lean()
+    {
+        is_lean = false;
+    }
+   
     private void Lean()
     {
         Debug.Log("Leaning");
@@ -40,12 +89,12 @@ public class Interface : MonoBehaviour {
 
     private void Get_Ability()
     {
-
+         
     }
-    private void Get_Arrows()
+    private void Get_Move()
     {
 
-        //Take Arrows
+        //Take Arrows to move or lean
 
         if (Input.GetKeyDown(KeyCode.RightArrow))
             if (!engine.ArrowKeyPressed(Direction.Right))
@@ -85,7 +134,7 @@ public class Interface : MonoBehaviour {
     {
         if(is_lean)
         {
-            engine.SwitchAction(lean);
+            engine.SwitchAction(lean_direction);
             return true;
         }
         return false;
@@ -102,7 +151,7 @@ public class Interface : MonoBehaviour {
     {
         if(is_lean)
         {
-            engine.Absorb(lean);
+            engine.Absorb(lean_direction);
             return true;
         }
         return false;
