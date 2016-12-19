@@ -67,7 +67,3 @@ public class CloneablePlayer : CloneableUnit
     }
 }
 
-public enum PlayerState
-{
-    Steady, Falling, Hanging
-}

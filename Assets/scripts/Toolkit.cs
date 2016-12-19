@@ -361,7 +361,43 @@ public sealed class Toolkit{
             return;
         }
         Database database = Starter.GetDataBase();
-        database.units[(int)u.transform.position.x, (int)u.transform.position.y].Remove(u);
+        database.units[(int)u.position.x, (int)u.position.y].Remove(u);
+    }
+
+    public static void AddUnit(Unit u)
+    {
+        Database database = Starter.GetDataBase();
+        if (u.unitType == UnitType.Wall)
+        {
+            return;
+        }
+        database.units[(int)u.position.x, (int)u.position.y].Add(u);
+    }
+    public static void AddUnitToPosition(Unit u, Vector2 position)
+    {
+        Database database = Starter.GetDataBase();
+        if (u.unitType == UnitType.Wall)
+        {
+            return;
+        }
+        database.units[(int)position.x, (int)position.y].Add(u);
+    }
+    public static Unit GetUnit(GameObject gameobject)
+    {
+        Database database = Starter.GetDataBase();
+        for (int i = 0; i < database.Xsize; i++)
+        {
+            for (int j = 0; j < database.Ysize; j++)
+            {
+                foreach (Unit u in database.units[i, j])
+                {
+                    if (u.gameObject == gameobject)
+                        return u;
+                }
+            }
+        }
+
+        return null;
     }
 }
 

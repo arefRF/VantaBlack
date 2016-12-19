@@ -23,14 +23,16 @@ public class Move{
     }
 
     //0 normal, 1 fall
-    public void MovePlayer(Vector2 sinkPos, int condition)
+    public void MoveUnit(Unit unit, Vector2 sinkPos, int condition)
     {
+        if(unit.unitType == UnitType.Player)
+        {
+            Toolkit.RemoveUnit(unit);
+        }
+        else
+        {
 
-    }
-    
-    public void MoveUnit(Vector2 sinkPos, int condition)
-    {
-
+        }
     }
     public bool move(Direction dir)
     {
@@ -255,21 +257,23 @@ public class Move{
     }
 
 
-    public void jump()
+    public bool jump()
     {
-        for (int i = 1; i < player.ability.number; i++)
+        for (int i = 0; i < player.ability.number; i++)
         {
-            switch (database.gravity_direction)
+            if (CheckJump(Toolkit.VectorSum(player.transform.position, Toolkit.DirectiontoVector(database.gravity_direction))))
             {
-                case Direction.Down: if (!CheckJump(Toolkit.VectorSum(player.position, new Vector2(0, i)))) Gengine._jump(i - 1); break;
-                case Direction.Up: if (!CheckJump(Toolkit.VectorSum(player.position, new Vector2(0, -i)))) Gengine._jump(i - 1); break;
-                case Direction.Right: if (!CheckJump(Toolkit.VectorSum(player.position, new Vector2(-i, 0)))) Gengine._jump(i - 1); break;
-                case Direction.Left: if (!CheckJump(Toolkit.VectorSum(player.position, new Vector2(i, 0)))) Gengine._jump(i - 1); break;
+                Toolkit.RemoveUnit(player);
+                player.position = Toolkit.VectorSum(player.transform.position, Toolkit.DirectiontoVector(database.gravity_direction));
+                Toolkit.AddUnit(player);
+                Gengine._move(Toolkit.ReverseDirection(database.gravity_direction));
+            }
+            else
+            {
+                return false;
             }
         }
-        player.position = player.gameObject.transform.position;
-        engine.CheckPointCheck();
-        engine.NextTurn();
+        return true;
     }
 
     /// <summary>
@@ -284,15 +288,8 @@ public class Move{
             if (u.unitType == UnitType.Block || u.unitType == UnitType.Container || u.unitType == UnitType.Container)
                 return false;
             if (u.unitType == UnitType.Wall)
-            {
-                switch (database.gravity_direction)
-                {
-                    case Direction.Down: if (u.GetComponent<Wall>().direction == Direction.Up) return false; break;
-                    case Direction.Up: if (u.GetComponent<Wall>().direction == Direction.Down) return false; break;
-                    case Direction.Right: if (u.GetComponent<Wall>().direction == Direction.Left) return false; break;
-                    case Direction.Left: if (u.GetComponent<Wall>().direction == Direction.Right) return false; break;
-                }
-            }
+                if (database.gravity_direction == Toolkit.ReverseDirection(((Wall)u).direction))
+                    return false;
         }
         return true;
     }
@@ -300,7 +297,6 @@ public class Move{
     public int FallPlayer()
     {
         int counter = 0;
-        player.state = PlayerState.Falling;
         Vector2 pos;
         while (true)
         {
@@ -333,7 +329,7 @@ public class Move{
                     return counter;
                 }
             }
-            MovePlayer(pos, 1);
+            MoveUnit(player,pos, 1);
             counter++;
         }
     }
@@ -368,7 +364,7 @@ public class Move{
                     return counter;
                 }
             }
-            MoveUnit(pos, 1);
+            MoveUnit(unit,pos, 1);
             counter++;
         }
     }

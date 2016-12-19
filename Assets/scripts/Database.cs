@@ -21,8 +21,8 @@ public class Database {
     public List<TimeLaps> timeLaps;
     public State state;
     public int[,] checkPointPositions;
-    public int Ysize { get; private set; }
-    public int Xsize { get; private set; }
+    public int Ysize { get; set; }
+    public int Xsize { get; set; }
 
     private Direction GravityDirection;
     
@@ -88,3 +88,7 @@ public enum DoorType
 }
 
 
+public enum PlayerState
+{
+    Steady, Falling, Hanging, Jumping
+}

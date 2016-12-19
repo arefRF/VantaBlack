@@ -28,6 +28,8 @@ public class LogicalEngine
         spManager = new SnapshotManager();
         database.units = new List<Unit>[x, y];
         database.timeLaps = new List<TimeLaps>();
+        database.Xsize = this.x;
+        database.Ysize = this.y;
         this.x = x;
         this.y = y;
         init();
@@ -229,17 +231,24 @@ public class LogicalEngine
         if (player.ability == null)
         {
             database.state = State.Idle;
-            return false;
+            return true;
         }
         switch (player.ability.abilitytype)
         {
             case AbilityType.Direction: action.ChangeDirection(); return false;
-            case AbilityType.Jump: moveObject.jump(); return false;
+            case AbilityType.Jump: Jump(); return false;
             case AbilityType.Blink: return true;
         }
         return false;
     }
+    private void Jump()
+    {
+        player.state = PlayerState.Jumping;
+        moveObject.jump();
+        player.state = PlayerState.Falling;
+        moveObject.FallPlayer();
 
+    }
     public void SpaceKeyPressed(Direction direction)
     {
         if (player.ability == null)
@@ -387,13 +396,13 @@ public class LogicalEngine
     public void SwitchAction()
     {
        
-        action.SwitchActionPressed();
+        //action.SwitchActionPressed();
         ApplyGravity();
     }
 
     public void SwitchAction(Direction d)
     {
-        action.SwitchActionPressed(d);
+        //action.SwitchActionPressed(d);
         ApplyGravity();
     }
 
@@ -427,7 +436,10 @@ public class LogicalEngine
             case UnitType.Wall: snapshotunits.Add(((Wall)u).Clone()); break;
         }
     }
-
+    public void RemoveFromSnapshot(Unit u)
+    {
+        //for
+    }
     public int MoveObjects(Unit unit, Direction d, int distance)
     {
         int i = moveObject.MoveObjects(unit, d, distance);
@@ -452,42 +464,8 @@ public class LogicalEngine
         }
     }
 
-    public Unit GetUnit(GameObject gameobject)
-    {
-        for (int i = 0; i < x; i++)
-        {
-            for (int j = 0; j < y; j++)
-            {
-                foreach (Unit u in database.units[i, j])
-                {
-                    if (u.gameObject == gameobject)
-                        return u;
-                }
-            }
-        }
-
-        return null;
-    }
-
-    public void EndTurn()
-    {
-        //CheckAutomaticSwitch();
-        //ApplyGravity();
-
-        //CheckBlockSwitch();
-        
-
-
-
-        //spManager.takesnapshot();
-        //Wall.print(database.snapShotCount);
-    }
-
     public void ApplyGravity()
     {
-        //ApplyGravity(player);
-        //return;
-        bool flag = false;
         for(int i=0; i<database.units.GetLength(0); i++)
         {
             for(int j=0; j<database.units.GetLength(1); j++)
@@ -577,50 +555,7 @@ public class LogicalEngine
         //action.CheckAutomaticSwitch(pos1);
         return flag;
     }
-    public void CheckPointCheck()
-    {
-        return;
-        for (int i = 0; i < database.checkPointPositions.Length; i++)
-        {
-            if (database.checkPointPositions[i, 0] == (int)player.obj.transform.position.x && database.checkPointPositions[i, 1] == (int)player.obj.transform.position.y)
-            {
-
-            }
-        }
-    }
-
-    public void ChangeUnitInScene(Unit unit, string massage)
-    {
-        if (massage.Equals("remove"))
-        {
-            try
-            {
-                for (int i = 0; i < database.units[(int)unit.obj.transform.position.x, (int)unit.obj.transform.position.y].Count; i++)
-                {
-                    if (unit.codeNumber == database.units[(int)unit.obj.transform.position.x, (int)unit.obj.transform.position.y][i].codeNumber)
-                        database.units[(int)unit.obj.transform.position.x, (int)unit.obj.transform.position.y].RemoveAt(i);
-                }
-            }
-            catch { }
-        }
-        else if (massage.Equals("enable"))
-        {
-            try
-            {
-                ((Switch)unit).enabled = true;
-            }
-            catch { }
-        }
-        else if (massage.Equals("disable"))
-        {
-            try
-            {
-                ((Switch)unit).enabled = false;
-            }
-            catch { }
-        }
-    }
-
+    
     public Snapshot GetCurrentSnapshot()
     {
         return currentSnapshot;
