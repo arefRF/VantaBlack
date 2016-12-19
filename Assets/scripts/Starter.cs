@@ -8,13 +8,14 @@ public class Starter : MonoBehaviour{
     public Direction Gravity_Directin;
     public GameObject player;
     public static LogicalEngine staticengine;
-    void Start()
+    void Awake()
     {
         _Set_Everything();
     }
     public void _Set_Everything()
     {
         database = new Database(0);
+        database.player = player;
         logicalengine = new LogicalEngine(x, y);
         staticengine = logicalengine;
         database.gravity_direction = Gravity_Directin;

@@ -16,7 +16,6 @@ public class Database {
     public int snapShotCount;
     public Direction gravity_direction;
     public List<Unit>[,] units;
-    public List<Switch> AutomaticSwitches;
     public long turn;
     public List<TimeLaps> timeLaps;
     public State state;

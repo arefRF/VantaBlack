@@ -43,7 +43,6 @@ public class LogicalEngine
     void init()
     {
         Unit.Code = 0;
-        database.AutomaticSwitches = new List<Switch>();
         for (int i = 0; i < x; i++)
         {
             for (int j = 0; j < y; j++)
@@ -51,155 +50,119 @@ public class LogicalEngine
                 database.units[i, j] = new List<Unit>();
             }
         }
-
-        List<GameObject> Gobjects = new List<GameObject>();
-        Gobjects.AddRange(GameObject.FindGameObjectsWithTag("Wall"));
-
-        foreach (GameObject g in Gobjects)
+        List<GameObject> game_objs = new List<GameObject>();
+        for (int i = 0; i < GameObject.Find("Objects").transform.childCount; i++)
         {
-            Wall[] wall = g.GetComponents<Wall>();
-            wall[0].codeNumber = Unit.Code;
-            Unit.Code++;
-            wall[1].codeNumber = Unit.Code;
-            Unit.Code++;
-            if (wall[0].direction == Direction.Right)
+            GameObject room = GameObject.Find("Objects").transform.GetChild(i).gameObject;
+            for (int j = 0; j < room.transform.childCount; j++)
             {
-                database.units[(int)g.transform.position.x, (int)g.transform.position.y].Add(wall[0]);
-                database.units[(int)g.transform.position.x + 1, (int)g.transform.position.y].Add(wall[1]);
-                wall[0].x = (int)g.transform.position.x; wall[0].y = (int)g.transform.position.y;
-                wall[1].x = (int)g.transform.position.x + 1; wall[1].y = (int)g.transform.position.y;
-            }
-            else
-            {
-                database.units[(int)g.transform.position.x, (int)g.transform.position.y].Add(wall[0]);
-                database.units[(int)g.transform.position.x, (int)g.transform.position.y + 1].Add(wall[1]);
-                wall[0].x = (int)g.transform.position.x; wall[0].y = (int)g.transform.position.y;
-                wall[1].x = (int)g.transform.position.x; wall[1].y = (int)g.transform.position.y + 1;
-            }
-
-        }
-        Gobjects.Clear();
-
-
-        Gobjects.AddRange(GameObject.FindGameObjectsWithTag("Block"));
-        foreach (GameObject g in Gobjects)
-        {
-            Block temp = g.GetComponent<Block>();
-            temp.codeNumber = Unit.Code;
-            Unit.Code++;
-            temp.unitType = UnitType.Block;
-            database.units[(int)g.transform.position.x, (int)g.transform.position.y].Add(temp);
-            temp.x = (int)g.transform.position.x; temp.y = (int)g.transform.position.y;
-        }
-        Gobjects.Clear();
-
-        Gobjects.AddRange(GameObject.FindGameObjectsWithTag("Pipe"));
-        foreach (GameObject g in Gobjects)
-        {
-            Pipe temp = g.GetComponent<Pipe>();
-            temp.codeNumber = Unit.Code;
-            Unit.Code++;
-            database.units[(int)g.transform.position.x, (int)g.transform.position.y].Add(g.GetComponent<Pipe>());
-            temp.x = (int)g.transform.position.x; temp.y = (int)g.transform.position.y;
-        }
-        Gobjects.Clear();
-
-        Gobjects.AddRange(GameObject.FindGameObjectsWithTag("Container"));
-        foreach (GameObject g in Gobjects)
-        {
-            Container temp = g.GetComponent<Container>();
-            temp.codeNumber = Unit.Code;
-            Unit.Code++;
-            database.units[(int)g.transform.position.x, (int)g.transform.position.y].Add(g.GetComponent<Container>());
-            temp.x = (int)g.transform.position.x; temp.y = (int)g.transform.position.y;
-        }
-        Gobjects.Clear();
-
-        /*Gobjects.AddRange(GameObject.FindGameObjectsWithTag("Switch"));
-        foreach (GameObject g in Gobjects)
-        {
-            Switch temp = g.GetComponent<Switch>();
-            temp.codeNumber = Unit.Code;
-            Unit.Code++;
-            database.units[(int)g.transform.position.x, (int)g.transform.position.y].Add(g.GetComponent<Switch>());
-            temp.x = (int)g.transform.position.x; temp.y = (int)g.transform.position.y;
-            SwitchControler sw = g.GetComponent<SwitchControler>();
-            if(sw != null)
-            {
-                try {
-                    sw.otherSwitch.GetComponent<Switch>().parentswitches.Add(temp);
-                }
-                catch
+                GameObject g = room.transform.GetChild(j).gameObject;
+                switch (g.tag)
                 {
-                    sw.otherSwitch.GetComponent<Switch>().parentswitches = new List<Switch>();
-                    sw.otherSwitch.GetComponent<Switch>().parentswitches.Add(temp);
+                    case "Wall":
+                        {
+                            Wall[] wall = g.GetComponents<Wall>();
+                            wall[0].codeNumber = Unit.Code;
+                            Unit.Code++;
+                            wall[1].codeNumber = Unit.Code;
+                            Unit.Code++;
+                            if (wall[0].direction == Direction.Right)
+                            {
+                                database.units[(int)g.transform.position.x, (int)g.transform.position.y].Add(wall[0]);
+                                database.units[(int)g.transform.position.x + 1, (int)g.transform.position.y].Add(wall[1]);
+                                wall[0].x = (int)g.transform.position.x; wall[0].y = (int)g.transform.position.y;
+                                wall[1].x = (int)g.transform.position.x + 1; wall[1].y = (int)g.transform.position.y;
+                            }
+                            else
+                            {
+                                database.units[(int)g.transform.position.x, (int)g.transform.position.y].Add(wall[0]);
+                                database.units[(int)g.transform.position.x, (int)g.transform.position.y + 1].Add(wall[1]);
+                                wall[0].x = (int)g.transform.position.x; wall[0].y = (int)g.transform.position.y;
+                                wall[1].x = (int)g.transform.position.x; wall[1].y = (int)g.transform.position.y + 1;
+                            }
+                        }
+                        break;
+
+                    case "Block":
+                        {
+                            Block temp = g.GetComponent<Block>();
+                            temp.codeNumber = Unit.Code;
+                            Unit.Code++;
+                            temp.unitType = UnitType.Block;
+                            database.units[(int)g.transform.position.x, (int)g.transform.position.y].Add(temp);
+                            temp.x = (int)g.transform.position.x; temp.y = (int)g.transform.position.y;
+                        }
+                        break;
+
+                    case "Container":
+                        {
+                            Container temp = g.GetComponent<Container>();
+                            temp.codeNumber = Unit.Code;
+                            Unit.Code++;
+                            database.units[(int)g.transform.position.x, (int)g.transform.position.y].Add(g.GetComponent<Container>());
+                            temp.x = (int)g.transform.position.x; temp.y = (int)g.transform.position.y;
+                        }
+                        break;
+
+                    case "Switch":
+                        {
+                            
+                        }
+                        break;
+
+                    case "Player":
+                        {
+                            Player temp = g.GetComponent<Player>();
+                            temp.codeNumber = Unit.Code;
+                            Unit.Code++;
+                            database.units[(int)g.transform.position.x, (int)g.transform.position.y].Add(g.GetComponent<Player>());
+                            temp.x = (int)g.transform.position.x; temp.y = (int)g.transform.position.y;
+                        }
+                        break;
+
+                    case "Rock":
+                        {
+                            Rock temp = g.GetComponent<Rock>();
+                            temp.codeNumber = Unit.Code;
+                            Unit.Code++;
+                            database.units[(int)g.transform.position.x, (int)g.transform.position.y].Add(g.GetComponent<Rock>());
+                            temp.x = (int)g.transform.position.x; temp.y = (int)g.transform.position.y;
+                        }
+                        break;
+
+                    case "Door":
+                        {
+                            g.GetComponent<Door>().codeNumber = Unit.Code;
+                            Unit.Code++;
+                            database.units[(int)g.transform.position.x, (int)g.transform.position.y].Add(g.GetComponent<Door>());
+                        }
+                        break;
+
+                    case "BlockSwitch":
+                        {
+                            BlockSwitch temp = g.GetComponent<BlockSwitch>();
+                            temp.codeNumber = Unit.Code;
+                            Unit.Code++;
+                            database.units[(int)g.transform.position.x, (int)g.transform.position.y].Add(g.GetComponent<BlockSwitch>());
+                            temp.x = (int)g.transform.position.x; temp.y = (int)g.transform.position.y;
+                        }
+                        break;
+                }
+
+            }
+        }
+        /*for (int i = 0; i < database.units.GetLength(0); i++)
+        {
+            for (int j = 0; j < database.units.GetLength(1); j++)
+            {
+                for (int k = 0; k < database.units[i, j].Count; k++)
+                {
+                    Wall.print(database.units[i, j][k]);
+                    Wall.print(database.units[i, j][k].codeNumber);
                 }
             }
-        }
-        Gobjects.Clear();*/
-
-        Gobjects.AddRange(GameObject.FindGameObjectsWithTag("Player"));
-        foreach (GameObject g in Gobjects)
-        {
-            Player temp = g.GetComponent<Player>();
-            temp.codeNumber = Unit.Code;
-            Unit.Code++;
-            database.units[(int)g.transform.position.x, (int)g.transform.position.y].Add(g.GetComponent<Player>());
-            temp.x = (int)g.transform.position.x; temp.y = (int)g.transform.position.y;
-        }
-        Gobjects.Clear();
-
-        Gobjects.AddRange(GameObject.FindGameObjectsWithTag("Rock"));
-        foreach (GameObject g in Gobjects)
-        {
-            Rock temp = g.GetComponent<Rock>();
-            temp.codeNumber = Unit.Code;
-            Debug.Log(temp.name+" Code Number: "+temp.codeNumber);
-            Unit.Code++;
-            database.units[(int)g.transform.position.x, (int)g.transform.position.y].Add(g.GetComponent<Rock>());
-            temp.x = (int)g.transform.position.x; temp.y = (int)g.transform.position.y;
-        }
-        Gobjects.Clear();
-
-        Gobjects.AddRange(GameObject.FindGameObjectsWithTag("Door"));
-        foreach (GameObject g in Gobjects)
-        {
-            g.GetComponent<Door>().codeNumber = Unit.Code;
-            Unit.Code++;
-            database.units[(int)g.transform.position.x, (int)g.transform.position.y].Add(g.GetComponent<Door>());
-        }
-        Gobjects.Clear();
-
-        Gobjects.AddRange(GameObject.FindGameObjectsWithTag("Box"));
-        foreach (GameObject g in Gobjects)
-        {
-            Box temp = g.GetComponent<Box>();
-            temp.codeNumber = Unit.Code;
-            Unit.Code++;
-            database.units[(int)g.transform.position.x, (int)g.transform.position.y].Add(g.GetComponent<Box>());
-            temp.x = (int)g.transform.position.x; temp.y = (int)g.transform.position.y;
-        }
-        Gobjects.Clear();
-
-        Gobjects.AddRange(GameObject.FindGameObjectsWithTag("BlockSwitch"));
-        foreach (GameObject g in Gobjects)
-        {
-            BlockSwitch temp = g.GetComponent<BlockSwitch>();
-            temp.codeNumber = Unit.Code;
-            Unit.Code++;
-            database.units[(int)g.transform.position.x, (int)g.transform.position.y].Add(g.GetComponent<BlockSwitch>());
-            temp.x = (int)g.transform.position.x; temp.y = (int)g.transform.position.y;
-        }
-        Gobjects.Clear();
-
-        /*for(int i=0; i< x; i++)
-        {
-            for(int j=0; j< y; j++)
-            {
-                Wall.print(database.units[i,j].Count);
-            }
-            Wall.print(" ");
         }*/
+
     }
 
     public void run()
