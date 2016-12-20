@@ -421,11 +421,11 @@ public class Move{
         return false;
     }
 
-    public void RollPlayer(Direction direction)
+    public void RollPlayer(Direction direction, int distance)
     {
         Toolkit.RemoveUnit(player);
-        player.position = Toolkit.VectorSum(player.position, Toolkit.DirectiontoVector(Toolkit.ReverseDirection(direction)));
+        player.position = Toolkit.VectorSum(player.position, Toolkit.DirectionToVectorWithMultiplier(Toolkit.ReverseDirection(direction), distance));
         Toolkit.AddUnit(player);
-        engine.playergraphics.Player_Roll(player.gameObject, Toolkit.ReverseDirection(direction));
+        engine.playergraphics.Player_Roll(player.gameObject, Toolkit.ReverseDirection(direction), distance);
     }
 }

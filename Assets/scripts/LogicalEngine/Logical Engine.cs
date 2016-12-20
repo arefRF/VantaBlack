@@ -596,17 +596,22 @@ public class LogicalEngine
 
     public void RollOnRamp(Unit unit)
     {
+        int counter = 0;
         if(unit.unitType == UnitType.Player)
         {
+            Ramp ramp = null;
             player.state = PlayerState.Rolling;
             while (true)
             {
-                Ramp ramp = Toolkit.GetRamp(player);
+                ramp = Toolkit.GetRamp(player);
                 if (ramp == null)
                     break;
                 if (!Toolkit.IsEmptySpace(unit.position, Toolkit.ReverseDirection(ramp.direction)))
                     break;
+                counter++;
             }
+            if(counter != 0)
+                moveObject.RollPlayer(ramp.direction, counter);
             player.state = PlayerState.Steady;
         }
     }
