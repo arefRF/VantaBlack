@@ -247,20 +247,17 @@ public class LogicalEngine
         }
         if (flag)
         {
+            if (player.direction != direction)
+            {
+                player.direction = direction;
+                playergraphics.Player_Change_Direction(player.gameObject, player.direction);
+                return true;
+            }
             if (Toolkit.IsEmptySpace(player.position, direction))
             {
-                if (player.direction == direction)
-                {
-                    if (move(direction))
-                        return true;
-                    return false;
-                }
-                else
-                {
-                    player.direction = direction;
-                    playergraphics.Player_Change_Direction(player.gameObject, player.direction);
+                if (move(direction))
                     return true;
-                }
+                return false;
             }
             return false;
         }
