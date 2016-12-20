@@ -421,5 +421,29 @@ public sealed class Toolkit{
         }
         return true;
     }
+
+    public static bool IsOnRamp(Unit unit)
+    {
+        Database database = Starter.GetDataBase();
+        for(int i=0; i<database.units[(int)unit.position.x, (int)unit.position.y].Count; i++)
+        {
+            Unit u = database.units[(int)unit.position.x, (int)unit.position.y][i];
+            if (u.unitType == UnitType.Ramp)
+                return true;
+        }
+        return false;
+    }
+
+    public static Ramp GetRamp(Unit unit)
+    {
+        Database database = Starter.GetDataBase();
+        for (int i = 0; i < database.units[(int)unit.position.x, (int)unit.position.y].Count; i++)
+        {
+            Unit u = database.units[(int)unit.position.x, (int)unit.position.y][i];
+            if (u.unitType == UnitType.Ramp)
+                return (Ramp)u;
+        }
+        return null;
+    }
 }
 

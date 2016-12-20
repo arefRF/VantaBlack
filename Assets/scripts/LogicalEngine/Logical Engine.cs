@@ -582,5 +582,20 @@ public class LogicalEngine
         player.state = PlayerState.Falling;
         moveObject.FallPlayer();
     }
+
+    public void Roll(Unit unit)
+    {
+        if(unit.unitType == UnitType.Player)
+        {
+            player.state = PlayerState.Rolling;
+            while (true)
+            {
+                Ramp ramp = Toolkit.GetRamp(player);
+                if (ramp == null)
+                    return;
+
+            }
+        }
+    }
 }
 

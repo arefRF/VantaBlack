@@ -49,9 +49,9 @@ public class Move{
                 return false;
         }
         engine.AddToSnapshot(player);
-        database.units[(int)player.transform.position.x, (int)player.transform.position.y].Remove(player);
+        Toolkit.RemoveUnit(player);
+        player.position = Toolkit.VectorSum(player.position, Toolkit.DirectiontoVector(dir));
         Gengine._Move_Object(player.obj, Toolkit.VectorSum(player.transform.position, Toolkit.DirectiontoVector(dir)));
-        player.position = database.player.transform.position;
         player.x = (int)player.position.x; player.y = (int)player.position.y;
         database.units[(int)player.transform.position.x, (int)player.transform.position.y].Add(player);
         return true;

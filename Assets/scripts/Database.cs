@@ -51,7 +51,7 @@ public class TimeLaps
 
 public enum UnitType
 {
-    Block, Pipe, Box, Magnet, Switch, Wall, Container, Player, Rock, Door, BlockSwitch
+    Block, Pipe, Box, Magnet, Switch, Wall, Container, Player, Rock, Door, BlockSwitch, Ramp
 }
 
 public enum State
@@ -70,5 +70,5 @@ public enum AbilityType
 
 public enum PlayerState
 {
-    Steady, Falling, Hanging, Jumping
+    Steady, Falling, Hanging, Jumping, Rolling
 }
