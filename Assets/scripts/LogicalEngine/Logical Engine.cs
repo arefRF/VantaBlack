@@ -247,9 +247,17 @@ public class LogicalEngine
         {
             if (Toolkit.IsEmptySpace(player.position, direction))
             {
-                if (move(direction))
+                if (player.direction == direction)
+                {
+                    if (move(direction))
+                        return true;
+                    return false;
+                }
+                else
+                {
+                    player.direction = direction;
                     return true;
-                return false;
+                }
             }
             return false;
         }
@@ -583,7 +591,7 @@ public class LogicalEngine
         moveObject.FallPlayer();
     }
 
-    public void Roll(Unit unit)
+    public void RollOnRamp(Unit unit)
     {
         if(unit.unitType == UnitType.Player)
         {
