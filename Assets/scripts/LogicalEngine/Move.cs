@@ -36,9 +36,10 @@ public class Move{
     }
     public bool move(Direction dir)
     {
-        for (int i = 0; i < database.units[(int)player.transform.position.x, (int)player.transform.position.y].Count; i++)
+        Vector2 temp = Toolkit.VectorSum(player.position, Toolkit.DirectiontoVector(dir));
+        for (int i = 0; i < database.units[(int)temp.x, (int)temp.y].Count; i++)
         {
-            Unit u = database.units[(int)player.transform.position.x, (int)player.transform.position.y][i];
+            Unit u = database.units[(int)temp.x, (int)temp.y][i];
             if (u.CanBeMoved)
             {
                 if (!MoveObjects(u, dir))

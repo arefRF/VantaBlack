@@ -99,16 +99,13 @@ public sealed class Toolkit{
     {
         Database database = Starter.GetDataBase();
         try {
-            /*foreach(Unit u in Database.database.units[1,1])
-            {
-                Wall.print(u.unitType);
-            }*/
             Vector2 temp = DirectiontoVector(ReverseDirection(d));
             if (IsWallOnTheWay(VectorSum(position, temp), d))
                 return false;
-            for (int i = 0; i < database.units[(int)position.x, (int)position.y].Count; i++)
+            temp = Toolkit.VectorSum(position, Toolkit.DirectiontoVector(d));
+            for (int i = 0; i < database.units[(int)temp.x, (int)temp.y].Count; i++)
             {
-                Unit u = database.units[(int)position.x, (int)position.y][i];
+                Unit u = database.units[(int)temp.x, (int)temp.y][i];
                 if (u.unitType == UnitType.Wall || u.unitType == UnitType.Switch || u.unitType == UnitType.Pipe)
                     continue;
                 else if (u.unitType == UnitType.Door)
