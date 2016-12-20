@@ -8,6 +8,7 @@ public class LogicalEngine
     public Database database;
     public Player player;
     public GraphicalEngine Gengine;
+    public PlayerGraphics playergraphics;
     public Move moveObject;
     int x, y;
     public Action action;
@@ -25,6 +26,7 @@ public class LogicalEngine
         database = Starter.GetDataBase();
         player = database.player.GetComponent<Player>();
         Gengine = GameObject.Find("Graphical").GetComponent<GraphicalEngine>();
+        playergraphics = GameObject.Find("Graphical").GetComponent<PlayerGraphics>();
         spManager = new SnapshotManager();
         database.units = new List<Unit>[x, y];
         database.timeLaps = new List<TimeLaps>();
@@ -256,6 +258,7 @@ public class LogicalEngine
                 else
                 {
                     player.direction = direction;
+                    playergraphics.Player_Change_Direction(player.gameObject, player.direction);
                     return true;
                 }
             }
@@ -600,9 +603,11 @@ public class LogicalEngine
             {
                 Ramp ramp = Toolkit.GetRamp(player);
                 if (ramp == null)
-                    return;
-
+                    break;
+                if (!Toolkit.IsEmptySpace(unit.position, Toolkit.ReverseDirection(ramp.direction)))
+                    break;
             }
+            player.state = PlayerState.Steady;
         }
     }
 }

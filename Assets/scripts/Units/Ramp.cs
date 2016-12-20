@@ -3,7 +3,7 @@ using System.Collections;
 using System;
 
 public class Ramp : Unit {
-    Direction direction;
+    public Direction direction;
 
     // Use this for initialization
     void Awake()
