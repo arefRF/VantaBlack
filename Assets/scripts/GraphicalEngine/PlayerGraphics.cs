@@ -11,10 +11,10 @@ public class PlayerGraphics : MonoBehaviour {
 
     public void Player_Change_Direction(GameObject player,Direction dir)
     {
-
+        
     }
 
-    public void Player_Roll(GameObject player,Direction dir)
+    public void Player_Roll(GameObject player,Direction dir,int number)
     {
 
     }
