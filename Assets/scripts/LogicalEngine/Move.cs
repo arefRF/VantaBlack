@@ -175,7 +175,6 @@ public class Move{
                     break;
             }
         }
-        engine.action.CheckAutomaticSwitch(unit.obj.transform.position);
         engine.Gengine._Move_Object(unit.obj, temp);
         database.units[(int)temp.x, (int)temp.y].Add(unit);
       
@@ -222,7 +221,6 @@ public class Move{
         }
         unit.x = (int)unit.obj.transform.position.x; unit.y = (int)unit.obj.transform.position.y;
         unit.position = unit.obj.transform.position;
-        engine.action.CheckAutomaticSwitch(unit.obj.transform.position);
         return true;
 
     }
@@ -255,9 +253,25 @@ public class Move{
         }
         return null;
     }
-
-
-    public bool jump()
+    public bool Jump(int distance)
+    {
+        for (int i = 0; i < distance; i++)
+        {
+            if (CheckJump(Toolkit.VectorSum(player.transform.position, Toolkit.DirectiontoVector(database.gravity_direction))))
+            {
+                Toolkit.RemoveUnit(player);
+                player.position = Toolkit.VectorSum(player.transform.position, Toolkit.DirectiontoVector(database.gravity_direction));
+                Toolkit.AddUnit(player);
+                Gengine._move(Toolkit.ReverseDirection(database.gravity_direction));
+            }
+            else
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    public bool Jump()
     {
         for (int i = 0; i < player.ability.number; i++)
         {
@@ -377,5 +391,31 @@ public class Move{
         }
 
         return true;
+    }
+
+    public bool Blink(Direction direction)
+    {
+        if (Toolkit.IsVoid(Toolkit.DirectionToVectorWithMultiplier(direction, player.ability.number)))
+        {
+            Toolkit.RemoveUnit(player);
+            player.position = Toolkit.DirectionToVectorWithMultiplier(direction, player.ability.number);
+            Gengine._Player_Blink(player.position);
+            Toolkit.AddUnit(player);
+            return true;
+        }
+        return false;
+    }
+
+    public bool ContainerBlink(Vector2 position)
+    {
+        if (Toolkit.IsVoid(position))
+        {
+            Toolkit.RemoveUnit(player);
+            player.position = position;
+            Gengine._Player_Blink(player.position);
+            Toolkit.AddUnit(player);
+            return true;
+        }
+        return false;
     }
 }

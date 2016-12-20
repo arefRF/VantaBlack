@@ -57,15 +57,15 @@ public class Container : Unit{
     }
     private void RunDirection()
     {
-        
+        Starter.GetEngine().action.ChangeDirection();
     }
     private void RunJump()
     {
-
+        Starter.GetEngine().ContainerJump(ability.number * 2);
     }
     private void RunBlink()
     {
-
+        Starter.GetEngine().ContainerBlink(this);
     }
     public bool IsEmpty()
     {

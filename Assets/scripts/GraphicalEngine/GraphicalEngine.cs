@@ -157,30 +157,21 @@ public class GraphicalEngine : MonoBehaviour {
     {
         if (fall)
         {
-            Vector2 cal = Time.deltaTime * _direction_to_vector(database.gravity_direction) * velocity ;
+            Vector2 cal = Time.deltaTime * Toolkit.DirectiontoVector(database.gravity_direction) * velocity ;
             fall_distance += Time.deltaTime * velocity;
             velocity += Time.deltaTime * gravity;
             database.player.transform.position = Toolkit.VectorSum(database.player.transform.position, cal);
             if (fall_distance > fall_pos)
             {
                 fall = false;
-                database.player.transform.position = Toolkit.VectorSum(player_pos, _direction_to_vector(database.gravity_direction) * fall_pos);
+                database.player.transform.position = Toolkit.VectorSum(player_pos, Toolkit.DirectiontoVector(database.gravity_direction) * fall_pos);
             }
         }
     }
 
-    
-    private Vector2 _direction_to_vector(Direction dir)
+    public void _Player_Blink(Vector2 position)
     {
-        if (dir == Direction.Down)
-            return new Vector2(0, -1);
-        else if (dir == Direction.Left)
-            return new Vector2(-1, 0);
-        else if (dir == Direction.Right)
-            return new Vector2(1, 0);
-        else if (dir == Direction.Down)
-            return new Vector2(0, 1);
-        return new Vector2(0, 0);
+        player.transform.position = position;
     }
 
     public void _fall_activate(int pos)

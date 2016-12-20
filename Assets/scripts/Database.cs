@@ -28,15 +28,6 @@ public class Database {
     public List<Snapshot> snapshots;
 
     public bool ACTIVE_RED, ACTIVE_BLUE, ACTIVE_GREEN, ACTIVE_PURPLE, ACTIVE_LIGHTBLUE;
-
-
-    public void Setsize(int x, int y)
-    {
-        Xsize = x;
-        Ysize = y;
-    }
-
-    
 }
 
 
@@ -58,7 +49,6 @@ public class TimeLaps
     }
 }
 
-[SerializeField]
 public enum UnitType
 {
     Block, Pipe, Box, Magnet, Switch, Wall, Container, Player, Rock, Door, BlockSwitch
@@ -68,24 +58,15 @@ public enum State
 {
     Idle, Busy, Busy_Moving
 }
-[SerializeField]
 public enum Direction
 {
     Right, Left, Up, Down
 }
 
-[SerializeField]
 public enum AbilityType
 {
     Direction, Jump, Gravity, Blink, Rope, Fuel
 }
-
-[SerializeField]
-public enum DoorType
-{
-    Internal, External
-}
-
 
 public enum PlayerState
 {

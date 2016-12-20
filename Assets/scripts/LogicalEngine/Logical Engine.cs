@@ -198,18 +198,23 @@ public class LogicalEngine
         }
         switch (player.ability.abilitytype)
         {
-            case AbilityType.Direction: action.ChangeDirection(); return false;
+            case AbilityType.Direction: ChangeDirection(); return false;
             case AbilityType.Jump: Jump(); return false;
-            case AbilityType.Blink: return true;
         }
         return false;
     }
+
+
     private void Jump()
     {
-        player.state = PlayerState.Jumping;
-        moveObject.jump();
-        player.state = PlayerState.Falling;
-        moveObject.FallPlayer();
+        if (player.ability.numberofuse > 0)
+        {
+            player.ability.numberofuse--;
+            player.state = PlayerState.Jumping;
+            moveObject.Jump();
+            player.state = PlayerState.Falling;
+            moveObject.FallPlayer();
+        }
 
     }
     public void SpaceKeyPressed(Direction direction)
@@ -223,7 +228,7 @@ public class LogicalEngine
         {
             case AbilityType.Direction: return;
             case AbilityType.Jump: return;
-            case AbilityType.Blink: action.Blink(direction); return;
+            case AbilityType.Blink: Blink(direction); return;
         }
     }
 
@@ -401,7 +406,14 @@ public class LogicalEngine
     }
     public void RemoveFromSnapshot(Unit u)
     {
-        //for
+        for(int i=0; i<snapshotunits.Count; i++)
+        {
+            if(snapshotunits[i].codeNumber == u.codeNumber)
+            {
+                snapshotunits.RemoveAt(i);
+                return;
+            }
+        }
     }
     public int MoveObjects(Unit unit, Direction d, int distance)
     {
@@ -438,10 +450,7 @@ public class LogicalEngine
                     Unit u = database.units[i,j][k];
                     if (u.CanBeMoved)
                     {
-                        if (ApplyGravity(u))
-                        {
-                            action.CheckAutomaticSwitch(u.transform.position);
-                        }
+                        ApplyGravity(u);
                     }
                 }
             }
@@ -522,6 +531,56 @@ public class LogicalEngine
     public Snapshot GetCurrentSnapshot()
     {
         return currentSnapshot;
+    }
+
+    public void ChangeDirection()
+    {
+        if(player.ability.numberofuse > 0)
+        {
+            player.ability.numberofuse--;
+            action.ChangeDirection();
+        }
+    }
+    public void Blink(Direction direction)
+    {
+        if(player.ability.numberofuse > 0)
+        {
+            player.ability.numberofuse--;
+            moveObject.Blink(direction);
+            player.state = PlayerState.Falling;
+            return;
+        }
+    }
+    public void ContainerBlink(Container container)
+    {
+        for(int i=0; i< x; i++)
+        {
+            for(int j=0; j< y; j++)
+            {
+                for(int k=0; k<database.units[i,j].Count; k++)
+                {
+                    if(database.units[i,j][k].unitType == UnitType.Container)
+                    {
+                        if (((Container)database.units[i, j][k]).codeNumber == container.codeNumber)
+                            continue;
+                        if(((Container)database.units[i, j][k]).ability != null && ((Container)database.units[i, j][k]).ability.abilitytype == AbilityType.Blink)
+                        {
+                            moveObject.ContainerBlink(Toolkit.VectorSum(container.position, Toolkit.DirectiontoVector(((Container)database.units[i, j][k]).direction)));
+                            player.state = PlayerState.Falling;
+                            moveObject.FallPlayer();
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    public void ContainerJump(int distance)
+    {
+        player.state = PlayerState.Jumping;
+        moveObject.Jump();
+        player.state = PlayerState.Falling;
+        moveObject.FallPlayer();
     }
 }
 

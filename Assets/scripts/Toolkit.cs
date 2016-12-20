@@ -137,7 +137,17 @@ public sealed class Toolkit{
             default: return new Vector2(0, 0);
         }
     }
-
+    public static Vector2 DirectionToVectorWithMultiplier(Direction d, int multiplier)
+    {
+        switch (d)
+        {
+            case Direction.Right: return new Vector2(multiplier, 0);
+            case Direction.Left: return new Vector2(-multiplier, 0);
+            case Direction.Down: return new Vector2(0, -multiplier);
+            case Direction.Up: return new Vector2(0, multiplier);
+            default: return new Vector2(0, 0);
+        }
+    }
     public static void ClonableUnitToUnit(CloneableUnit u, Unit unit)
     {
         unit.position = u.position;
@@ -398,6 +408,18 @@ public sealed class Toolkit{
         }
 
         return null;
+    }
+
+    public static bool IsVoid(Vector2 position)
+    {
+        Database database = Starter.GetDataBase();
+        for(int i=0; i<database.units[(int)position.x, (int)position.y].Count; i++)
+        {
+            Unit u = database.units[(int)position.x, (int)position.y][i];
+            if (u.unitType == UnitType.Block || u.unitType == UnitType.BlockSwitch || u.unitType == UnitType.Box || u.unitType == UnitType.Container || u.unitType == UnitType.Player || u.unitType == UnitType.Rock)
+                return false;
+        }
+        return true;
     }
 }
 
