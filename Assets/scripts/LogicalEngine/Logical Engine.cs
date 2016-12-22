@@ -21,6 +21,8 @@ public class LogicalEngine
 
     public List<CloneableUnit> snapshotunits;
     Snapshot currentSnapshot;
+
+    public List<GameObject> passedUnits { get; set; }
     public LogicalEngine(int x, int y)
     {
         database = Starter.GetDataBase();
