@@ -28,7 +28,7 @@ public class LogicalEngine
         database = Starter.GetDataBase();
         player = database.player.GetComponent<Player>();
         Gengine = GameObject.Find("Graphical").GetComponent<GraphicalEngine>();
-        playergraphics = GameObject.Find("Graphical").GetComponent<PlayerGraphics>();
+        playergraphics = player.gameObject.GetComponent<PlayerGraphics>();
         spManager = new SnapshotManager();
         database.units = new List<Unit>[x, y];
         database.timeLaps = new List<TimeLaps>();
