@@ -8,29 +8,16 @@ public class Box : Unit {
         unitType = UnitType.Box;
         obj = this.gameObject;
         position = gameObject.transform.position;
-        movable = true;
-        CanBeMoved = true;
 	}
 	
 	// Update is called once per frame
-	void Update () {
-	
-	}
-
-
-    public CloneableBox Clone()
+    
+    public override bool PlayerMoveInto(Direction dir)
     {
-        return CloneableBox.Clone(this);
+        return false;
     }
+
+
+
 }
 
-public class CloneableBox: CloneableUnit
-{
-
-    public static CloneableBox Clone(Box box)
-    {
-        CloneableBox b = new CloneableBox();
-        CloneableUnit.init(box, b);
-        return b;
-    }
-}

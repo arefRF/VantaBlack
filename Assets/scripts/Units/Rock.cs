@@ -1,32 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System;
 
-public class Rock : Block
+public class Rock : Unit
 {
 
-    public List<Unit> connectedUnits;
-
-    void Awake()
+    public override bool PlayerMoveInto(Direction dir)
     {
-        unitType = UnitType.Rock;
-        obj = this.gameObject;
-        position = gameObject.transform.position;
-        movable = true;
-        layer = 1;
-    }
-
-    public CloneableRock Clone()
-    {
-        return CloneableRock.Clone(this);
-    }
-}
-public class CloneableRock : CloneableUnit
-{
-
-    public static CloneableRock Clone(Rock rock)
-    {
-        CloneableRock r = new CloneableRock();
-        CloneableUnit.init(rock, r);
-        return r;
+        return false;
     }
 }

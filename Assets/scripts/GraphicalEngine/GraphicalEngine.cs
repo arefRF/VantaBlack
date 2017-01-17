@@ -50,7 +50,6 @@ public class GraphicalEngine : MonoBehaviour {
         {
             case UnitType.Player: _Player_Change_Ability(); _Player_Change_Direction(); break;
             case UnitType.Container: _Container_Change_Sprite((Container)u); break;
-            case UnitType.Block: _Block_Change_Sprite((Block)u); break;
         }
     }
 
@@ -197,7 +196,7 @@ public class GraphicalEngine : MonoBehaviour {
             obj.transform.position = new_pos;
             yield return null;
         }
-        Starter.GetEngine().DoneMoving();
+        //Starter.GetEngine().DoneMoving();
     } 
     public void _Player_Change_Ability()
     {
@@ -239,11 +238,5 @@ public class GraphicalEngine : MonoBehaviour {
         container.obj.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load(path, typeof(Sprite));
     }
 
-    public void _Block_Change_Sprite(Block block)
-    {
-        string path = @"blocks\";
 
-
-        block.obj.GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load(path,typeof(Sprite));
-    }
 }

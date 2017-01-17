@@ -1,12 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Container : Block {
-    public Direction direction;
-    public Ability ability { get; set; }
+public abstract class Container : ParentContainer {
 
-    public override bool MoveInto(Direction dir)
-    {
-        return false;
-    }
+
 }

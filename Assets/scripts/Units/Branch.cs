@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Branch : Block {
+public class Branch : Unit {
 
 
-    public override bool MoveInto(Direction dir)
+    public override bool PlayerMoveInto(Direction dir)
     {
         return true;
     }

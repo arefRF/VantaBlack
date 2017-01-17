@@ -5,21 +5,9 @@ using System;
 public class Ramp : Unit {
     public Direction direction;
 
-    // Use this for initialization
-    void Awake()
+    public override bool PlayerMoveInto(Direction dir)
     {
-        unitType = UnitType.Ramp;
-        obj = this.gameObject;
-        position = gameObject.transform.position;
-        movable = true;
-        layer = 3;
+        return true;
     }
-
-    // Update is called once per frame
-    void Update () {
-	
-	}
-
-
 
 }
