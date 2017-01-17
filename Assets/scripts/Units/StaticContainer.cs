@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Container : MonoBehaviour {
+public class StaticContainer : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
