@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Vision : MonoBehaviour {
+public class Vision : Block {
 
 	// Use this for initialization
 	void Start () {

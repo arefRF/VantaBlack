@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class Rock : Unit
+public class Rock : Block
 {
 
     public List<Unit> connectedUnits;

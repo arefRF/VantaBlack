@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Block : MonoBehaviour {
+public class Block : Unit {
 
 	// Use this for initialization
 	void Start () {

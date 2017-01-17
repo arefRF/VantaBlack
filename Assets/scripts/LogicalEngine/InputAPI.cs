@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class DynamicComtainer : FunctionalContainer {
+public class InputAPI : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
