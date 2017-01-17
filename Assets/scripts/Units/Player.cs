@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class Player : Unit
 {
@@ -26,10 +27,10 @@ public class Player : Unit
     {
 
     }
-    public override bool CanMove(UnitType unittype)
+
+
+    public override bool MoveInto(Direction dir)
     {
-        if (unittype == UnitType.Box || unittype == UnitType.Player)
-            return true;
         return false;
     }
 

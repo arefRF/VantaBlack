@@ -16,7 +16,9 @@ public abstract  class Unit : MonoBehaviour {
     public int y { get; set; }
     public int layer { get; set; }
 
-    public abstract bool CanMove(UnitType unittype);
+   // public abstract bool CanMove(UnitType unittype);
+
+    public abstract bool MoveInto(Direction dir);
 }
 
 public class CloneableUnit

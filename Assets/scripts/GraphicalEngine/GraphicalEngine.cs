@@ -37,10 +37,6 @@ public class GraphicalEngine : MonoBehaviour {
             {
                 for(int k=0; k<database.units[i,j].Count; k++)
                 {
-                    if (database.units[i, j][k].unitType == UnitType.Wall && (((Wall)database.units[i, j][k]).direction == Direction.Left || ((Wall)database.units[i, j][k]).direction == Direction.Down))
-                    {
-                        continue;
-                    }
                     Refresh(database.units[i, j][k]);
                 }
             }
@@ -49,19 +45,12 @@ public class GraphicalEngine : MonoBehaviour {
 
     public void Refresh(Unit u)
     {
-        if (u.unitType == UnitType.Wall && (((Wall)u).direction == Direction.Left || ((Wall)u).direction == Direction.Down))
-        {
-            Wall.print("djncskjdvidfbvifbvidpfbvdifbvidfbvdifbvdfijvdofn bdfonbdofgnbfgonbfognbfgjnbfgijnbfignbifjnbijnbjnbnbnbonbw[oufrb[gbefr['");
-            return;
-        }
         u.obj.transform.position = u.position;
         switch (u.unitType)
         {
             case UnitType.Player: _Player_Change_Ability(); _Player_Change_Direction(); break;
             case UnitType.Container: _Container_Change_Sprite((Container)u); break;
             case UnitType.Block: _Block_Change_Sprite((Block)u); break;
-            case UnitType.Switch: _Switch_Change_Sprite((Switch)u); break;
-            case UnitType.Door: Door_Change_Sprite((Door)u); break;
         }
     }
 
@@ -247,79 +236,14 @@ public class GraphicalEngine : MonoBehaviour {
     {
         
         string path = @"blocks\";
-        if (container.ability == null)
-        {
-            path += "white-light-middle";
-        }
-        
-        else
-        switch (container.ability.abilitytype)
-        {
-            case AbilityType.Fuel: path += "green-light-middle"; break;
-            case AbilityType.Direction: path += "red-light-middle"; break;
-        }
         container.obj.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load(path, typeof(Sprite));
     }
 
     public void _Block_Change_Sprite(Block block)
     {
         string path = @"blocks\";
-        if (block.ability == null)
-        {
-            path += "block-empty";
-        }
-        
-        else
-        switch (block.ability.abilitytype)
-        {
-            case AbilityType.Fuel: path += "block-green"; break;
-            case AbilityType.Direction: path += "block-red"; break;
-        }
+
 
         block.obj.GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load(path,typeof(Sprite));
     }
-
-    public void _Switch_Change_Sprite(Switch lamp)
-    {
-                
-        string path = @"switches\";
-        if (lamp.isAutomatic)
-            path += "switch-auto";
-        else
-        {
-            if (lamp.disabled)
-            {
-                path += "switch-gray";
-            }
-            else if (lamp.isOn)
-                path += "switch-green";
-            else
-                path += "switch-red";
-        }
-        try
-        {
-            lamp.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load(path, typeof(Sprite));
-        }
-        catch { };
-        
-   
-        //Debug.Log(path);
-    }
-
-
-
-    public void _Internal_Door_Change_Sprite(Door door)
-    {
-        string path = @"doors\";
-        if (door.isOpen)
-            path += "open-door";
-        else
-            path += "close-door";
-        door.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load(path, typeof(Sprite));
-    }
-
-    private void Door_Change_Sprite(Door door)
-    {
-        _Internal_Door_Change_Sprite(door);
-    } 
 }

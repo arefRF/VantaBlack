@@ -2,14 +2,11 @@
 using System.Collections;
 
 public class Container : Block {
+    public Direction direction;
+    public Ability ability { get; set; }
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    public override bool MoveInto(Direction dir)
+    {
+        return false;
+    }
 }

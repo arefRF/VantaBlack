@@ -18,20 +18,10 @@ public class AandR {
 
     public void Absorb(Direction dir)
     {
-        if (Toolkit.IsWallOnTheWay(player.transform.position, dir))
-            return;
         Unit unit = GetBlockandContainer(Toolkit.VectorSum(player.transform.position, Toolkit.DirectiontoVector(dir)));
         if (unit != null)
         {
-            if (unit.unitType == UnitType.Block)
-            {
-                engine.AddToSnapshot(player);
-                engine.AddToSnapshot(unit);
-                _absorb(((Block)unit));
-                Gengine._Block_Change_Sprite(((Block)unit));
-                engine.NextTurn();
-            }
-            else if (unit.unitType == UnitType.Container)
+            if (unit.unitType == UnitType.Container)
             {
                 DoContainer((Container)unit);
                 Gengine._Container_Change_Sprite((Container)unit);
@@ -81,44 +71,7 @@ public class AandR {
         player.ability = container.ability;
         container.ability = abil;
     }
-    private void _absorb(Block block)
-    {
-        if (block.ability == null)
-        {
-            ReleaseAbility(block);
-            return;
-        }
-        else if(player.ability == null)
-        {
-            Swap(block);
-            block.CheckPipe();
-            return;
-        }
-        else if (block.ability.abilitytype == player.ability.abilitytype)
-        {
-            player.ability.numberofuse = Mathf.Min(4, player.ability.numberofuse + block.ability.numberofuse);
-            block.ability.numberofuse = Mathf.Max(0, player.ability.numberofuse + block.ability.numberofuse - 4);
-            block.CheckPipe();
-            return;
-        }
-        else
-        {
-            Swap(block);
-        }
-        
-    }
-    private void ReleaseAbility(Block block)
-    {
-        block.ability = player.ability;
-        player.ability = null;
-    }
-    private void Swap(Block block)
-    {
-        Ability block_ability = block.ability;
-        block.ability = player.ability;
-        player.ability = block_ability;
-
-    }
+   
     private Unit GetBlockandContainer(Vector2 position)
     {
         foreach (Unit u in database.units[(int)position.x, (int)position.y])

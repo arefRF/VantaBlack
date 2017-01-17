@@ -20,8 +20,6 @@ public class Ramp : Unit {
 	
 	}
 
-    public override bool CanMove(UnitType unittype)
-    {
-        return false;
-    }
+
+
 }

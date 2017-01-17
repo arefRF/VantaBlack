@@ -63,29 +63,6 @@ public class LogicalEngine
                 GameObject g = room.transform.GetChild(j).gameObject;
                 switch (g.tag)
                 {
-                    case "Wall":
-                        {
-                            Wall[] wall = g.GetComponents<Wall>();
-                            wall[0].codeNumber = Unit.Code;
-                            Unit.Code++;
-                            wall[1].codeNumber = Unit.Code;
-                            Unit.Code++;
-                            if (wall[0].direction == Direction.Right)
-                            {
-                                database.units[(int)g.transform.position.x, (int)g.transform.position.y].Add(wall[0]);
-                                database.units[(int)g.transform.position.x + 1, (int)g.transform.position.y].Add(wall[1]);
-                                wall[0].x = (int)g.transform.position.x; wall[0].y = (int)g.transform.position.y;
-                                wall[1].x = (int)g.transform.position.x + 1; wall[1].y = (int)g.transform.position.y;
-                            }
-                            else
-                            {
-                                database.units[(int)g.transform.position.x, (int)g.transform.position.y].Add(wall[0]);
-                                database.units[(int)g.transform.position.x, (int)g.transform.position.y + 1].Add(wall[1]);
-                                wall[0].x = (int)g.transform.position.x; wall[0].y = (int)g.transform.position.y;
-                                wall[1].x = (int)g.transform.position.x; wall[1].y = (int)g.transform.position.y + 1;
-                            }
-                        }
-                        break;
 
                     case "Block":
                         {
@@ -133,24 +110,6 @@ public class LogicalEngine
                             temp.x = (int)g.transform.position.x; temp.y = (int)g.transform.position.y;
                         }
                         break;
-
-                    case "Door":
-                        {
-                            g.GetComponent<Door>().codeNumber = Unit.Code;
-                            Unit.Code++;
-                            database.units[(int)g.transform.position.x, (int)g.transform.position.y].Add(g.GetComponent<Door>());
-                        }
-                        break;
-
-                    case "BlockSwitch":
-                        {
-                            BlockSwitch temp = g.GetComponent<BlockSwitch>();
-                            temp.codeNumber = Unit.Code;
-                            Unit.Code++;
-                            database.units[(int)g.transform.position.x, (int)g.transform.position.y].Add(g.GetComponent<BlockSwitch>());
-                            temp.x = (int)g.transform.position.x; temp.y = (int)g.transform.position.y;
-                        }
-                        break;
                 }
 
             }
@@ -182,12 +141,7 @@ public class LogicalEngine
         {
             if(u.unitType == UnitType.Container)
             {
-                action.RunContainer((Container)u);
-                return;
-            }
-            else if (u.unitType == UnitType.BlockSwitch)
-            {
-                action.RunBlockSwitch((BlockSwitch)u);
+              //  Reza  action.RunContainer((Container)u);
                 return;
             }
         }
@@ -276,7 +230,6 @@ public class LogicalEngine
 
     public void DoneMoving()
     {
-        Wall.print("done moving");
         database.state = State.Busy;
         
     }
@@ -346,23 +299,10 @@ public class LogicalEngine
                     if (database.units[i, j][k].codeNumber == u.codeNumber)
                     {
                         Unit utemp = database.units[i, j][k];
-                        Toolkit.ClonableUnitToUnit(u, database.units[i, j][k]);
+                       // Toolkit.ClonableUnitToUnit(u, database.units[i, j][k]);
                         database.units[u.x, u.y].Add(database.units[i, j][k]);
                         u.position = new Vector2(u.x, u.y);
                         database.units[i, j].Remove(utemp);
-                        if(utemp.unitType == UnitType.Wall)
-                        {
-                            if(((Wall)utemp).direction == Direction.Right)
-                            {
-                                database.units[i + 1, j].Remove(utemp.obj.GetComponents<Wall>()[1]);
-                                database.units[u.x + 1, u.y].Add(utemp.obj.GetComponents<Wall>()[1]);
-                            }
-                            else
-                            {
-                                database.units[i, j + 1].Remove(utemp.obj.GetComponents<Wall>()[1]);
-                                database.units[u.x, u.y + 1].Add(utemp.obj.GetComponents<Wall>()[1]);
-                            }
-                        }
                         return utemp;
                     }
                 }
@@ -392,13 +332,12 @@ public class LogicalEngine
 
     public void AddToSnapshot(Unit u)
     {
-        if (u.unitType == UnitType.Wall && (((Wall)u).direction == Direction.Left || ((Wall)u).direction == Direction.Down))
-            return;
         for (int i=0; i<snapshotunits.Count; i++)
         {
             if (u.codeNumber == snapshotunits[i].codeNumber)
                 return;
         }
+        /* Reza 
         switch (u.unitType)
         {
             case UnitType.Block: snapshotunits.Add(((Block)u).Clone()); break;
@@ -413,6 +352,7 @@ public class LogicalEngine
             case UnitType.Switch: snapshotunits.Add(((Switch)u).Clone()); break;
             case UnitType.Wall: snapshotunits.Add(((Wall)u).Clone()); break;
         }
+        */
     }
     public void RemoveFromSnapshot(Unit u)
     {
@@ -477,12 +417,6 @@ public class LogicalEngine
         for (int i = 0; i < database.units[(int)unit.obj.transform.position.x, (int)unit.obj.transform.position.y].Count; i++)
         {
             Unit u = database.units[(int)unit.obj.transform.position.x, (int)unit.obj.transform.position.y][i];
-            if (u.unitType == UnitType.Door)
-            {
-
-                if (((Door)u).direction == database.gravity_direction && !((Door)u).isOpen)
-                    return false;
-            }
         }
         try
         {
@@ -525,9 +459,9 @@ public class LogicalEngine
             {
                 //engine.reserved.Add(unit);
                 database.units[(int)((Rock)unit).connectedUnits[i].obj.transform.position.x, (int)((Rock)unit).connectedUnits[i].obj.transform.position.y].Remove(((Rock)unit).connectedUnits[i]);
-                Vector2 temppos = Toolkit.VectorSum((Toolkit.DirectiontoVector(Toolkit.ReverseDirection(((Switch)((Rock)unit).connectedUnits[i]).direction))), unit.gameObject.transform.position);
-                GraphicalEngine.MoveObject(((Rock)unit).connectedUnits[i].obj, temppos);
-                database.units[(int)temppos.x, (int)temppos.y].Add((Switch)((Rock)unit).connectedUnits[i]);
+ /// Reza             //  Vector2 temppos = Toolkit.VectorSum((Toolkit.DirectiontoVector(Toolkit.ReverseDirection(((Switch)((Rock)unit).connectedUnits[i]).direction))), unit.gameObject.transform.position);
+ // Reza               GraphicalEngine.MoveObject(((Rock)unit).connectedUnits[i].obj, temppos);
+ /// Reza             //  database.units[(int)temppos.x, (int)temppos.y].Add((Switch)((Rock)unit).connectedUnits[i]);
             }
         }
         catch

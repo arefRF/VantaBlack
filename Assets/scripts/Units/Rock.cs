@@ -14,12 +14,6 @@ public class Rock : Block
         movable = true;
         layer = 1;
     }
-    public override bool CanMove(UnitType unittype)
-    {
-        if (unittype == UnitType.Box || unittype == UnitType.Player)
-            return true;
-        return false;
-    }
 
     public CloneableRock Clone()
     {

@@ -58,15 +58,4 @@ public class Action{
         }
         return true;
     }
-
-    public void RunContainer(Container container)
-    {
-        container.Run();
-    }
-
-    public void RunBlockSwitch(BlockSwitch blockswitch)
-    {
-
-    }
-   
 }

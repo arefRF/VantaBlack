@@ -1,15 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class Vision : Block {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    public override bool MoveInto(Direction dir)
+    {
+        return false;
+    }
 }

@@ -65,30 +65,12 @@ public class Move{
         bool flag = true;
         if (unit.unitType != UnitType.Wall)
         {
-            if (Toolkit.IsWallOnTheWay(unit.obj.transform.position, d))
-                return false;
-            Door door = Toolkit.IsDoorOnTheWay(unit.obj.transform.position, d);
-            if (door != null)
-            {
-                if (!door.isOpen)
-                    return false;
-            }
         }
         /*for(int i=0; i<database.units[5,9].Count; i++)
         {
             Wall.print(database.units[5,9][i]);
         }
         Wall.print("-----------------------------------------");*/
-        if (unit.unitType == UnitType.Wall)
-        {
-            switch (((Wall)unit).direction)
-            {
-                case Direction.Left: if (d == Direction.Down || d == Direction.Up) flag = false; break;
-                case Direction.Right: if (d == Direction.Down || d == Direction.Up) flag = false; break;
-                case Direction.Up: if (d == Direction.Left || d == Direction.Right) flag = false; break;
-                case Direction.Down: if (d == Direction.Right || d == Direction.Left) flag = false; break;
-            }
-        }
         switch (d)
         {
             case Direction.Down: temp = Toolkit.VectorSum(unit.transform.position, new Vector2(0, -1)); break;
@@ -109,11 +91,6 @@ public class Move{
                     continue;
                 if (u.unitType == UnitType.Switch)
                     continue;
-                if (u.unitType == UnitType.Door)
-                {
-                    if (((Door)u).direction != d)
-                        continue;
-                }
 
                 if (unit.CanMove(u.unitType) || u.CanBeMoved)
                 {
@@ -138,8 +115,8 @@ public class Move{
         {
             if (database.units[(int)tmpvec.x, (int)tmpvec.y][i].CanBeMoved && database.gravity_direction != d )
             {
-                if (! Toolkit.IsWallOnTheWay(Toolkit.VectorSum(unit.obj.transform.position, Toolkit.DirectiontoVector(d)), Toolkit.ReverseDirection(database.gravity_direction)))
-                    MoveObjects(database.units[(int)tmpvec.x, (int)tmpvec.y][i], d);
+              //Reza  if (! Toolkit.IsWallOnTheWay(Toolkit.VectorSum(unit.obj.transform.position, Toolkit.DirectiontoVector(d)), Toolkit.ReverseDirection(database.gravity_direction)))
+              // Reza      MoveObjects(database.units[(int)tmpvec.x, (int)tmpvec.y][i], d);
             }
         }
 
@@ -149,76 +126,23 @@ public class Move{
             for (int i = 0; i < database.units[(int)unit.transform.position.x, (int)unit.transform.position.y].Count; i++)
             {
                 Unit u = database.units[(int)unit.transform.position.x, (int)unit.transform.position.y][i];
-                if (u.unitType == UnitType.Switch && ((Switch)u).isAutomatic && ((Switch)u).isOn)
-                {
-                    ((Switch)u).Run();
-                }
-            }
-        }
-        if (unit.unitType == UnitType.Wall)
-        {
-            switch (((Wall)unit).direction)
-            {
-                case Direction.Right:
-                    engine.AddToSnapshot(unit.obj.GetComponents<Wall>()[1]);
-                    database.units[(int)unit.transform.position.x + 1, (int)unit.transform.position.y].Remove(unit.obj.GetComponents<Wall>()[1]);
-                    break;
-                case Direction.Left:
-                    engine.AddToSnapshot(unit.obj.GetComponents<Wall>()[0]);
-                    database.units[(int)unit.transform.position.x - 1, (int)unit.transform.position.y].Remove(unit.obj.GetComponents<Wall>()[0]);
-                    break;
-                case Direction.Up:
-                    engine.AddToSnapshot(unit.obj.GetComponents<Wall>()[1]);
-                    database.units[(int)unit.transform.position.x, (int)unit.transform.position.y + 1].Remove(unit.obj.GetComponents<Wall>()[1]);
-                    break;
-                case Direction.Down:
-                    engine.AddToSnapshot(unit.obj.GetComponents<Wall>()[0]);
-                    database.units[(int)unit.transform.position.x, (int)unit.transform.position.y - 1].Remove(unit.obj.GetComponents<Wall>()[0]);
-                    break;
+
             }
         }
         engine.Gengine._Move_Object(unit.obj, temp);
         database.units[(int)temp.x, (int)temp.y].Add(unit);
       
-        if (unit.unitType == UnitType.Wall)
-        {
-            for (int i = 0; i < ((Wall)unit).connectedUnits.Count; i++)
-            {
-                database.units[(int)((Wall)unit).connectedUnits[i].obj.transform.position.x, (int)((Wall)unit).connectedUnits[i].obj.transform.position.y].Remove((Switch)((Wall)unit).connectedUnits[i]);
-                Vector2 temppos = Toolkit.VectorSum((Toolkit.DirectiontoVector(Toolkit.ReverseDirection(((Switch)((Wall)unit).connectedUnits[i]).direction))), unit.gameObject.transform.position);
-                database.units[(int)temppos.x, (int)temppos.y].Add((Switch)((Wall)unit).connectedUnits[i]);
-                GraphicalEngine.MoveObject(((Wall)unit).connectedUnits[i].obj, temppos);
-            }
-            switch (((Wall)unit).direction)
-            {
-                case Direction.Right:
-                    unit.obj.GetComponents<Wall>()[1].x = (int)unit.obj.transform.position.x + 1; unit.obj.GetComponents<Wall>()[1].y = (int)unit.obj.transform.position.y;
-                    database.units[(int)temp.x + 1, (int)temp.y].Add(unit.obj.GetComponents<Wall>()[1]);
-                    break;
-                case Direction.Left:
-                    unit.obj.GetComponents<Wall>()[1].x = (int)unit.obj.transform.position.x - 1; unit.obj.GetComponents<Wall>()[1].y = (int)unit.obj.transform.position.y;
-                    database.units[(int)temp.x - 1, (int)temp.y].Add(unit.obj.GetComponents<Wall>()[0]);
-                    break;
-                case Direction.Up:
-                    unit.obj.GetComponents<Wall>()[1].x = (int)unit.obj.transform.position.x; unit.obj.GetComponents<Wall>()[1].y = (int)unit.obj.transform.position.y + 1;
-                    database.units[(int)temp.x, (int)temp.y + 1].Add(unit.obj.GetComponents<Wall>()[1]);
-                    break;
-                case Direction.Down:
-                    unit.obj.GetComponents<Wall>()[1].x = (int)unit.obj.transform.position.x; unit.obj.GetComponents<Wall>()[1].y = (int)unit.obj.transform.position.y - 1;
-                    database.units[(int)temp.x, (int)temp.y - 1].Add(unit.obj.GetComponents<Wall>()[0]);
-                    break;
-            }
-        }
-        else if (unit.unitType == UnitType.Rock)
+      
+        if (unit.unitType == UnitType.Rock)
         {
             for (int i = 0; i < ((Rock)unit).connectedUnits.Count; i++)
             {
                 //engine.reserved.Add(unit);
                 database.units[(int)((Rock)unit).connectedUnits[i].obj.transform.position.x, (int)((Rock)unit).connectedUnits[i].obj.transform.position.y].Remove(((Rock)unit).connectedUnits[i]);
-                Vector2 temppos = Toolkit.VectorSum((Toolkit.DirectiontoVector(Toolkit.ReverseDirection(((Switch)((Rock)unit).connectedUnits[i]).direction))), unit.gameObject.transform.position);
-                GraphicalEngine.MoveObject(((Rock)unit).connectedUnits[i].obj, temppos);
-                database.units[(int)temppos.x, (int)temppos.y].Add((Switch)((Rock)unit).connectedUnits[i]);
-                ((Switch)((Rock)unit).connectedUnits[i]).position = ((Switch)((Rock)unit).connectedUnits[i]).obj.transform.position;
+           // Reza     Vector2 temppos = Toolkit.VectorSum((Toolkit.DirectiontoVector(Toolkit.ReverseDirection(((Switch)((Rock)unit).connectedUnits[i]).direction))), unit.gameObject.transform.position);
+           // Reza     GraphicalEngine.MoveObject(((Rock)unit).connectedUnits[i].obj, temppos);
+           // Reza     database.units[(int)temppos.x, (int)temppos.y].Add((Switch)((Rock)unit).connectedUnits[i]);
+           // Reza     ((Switch)((Rock)unit).connectedUnits[i]).position = ((Switch)((Rock)unit).connectedUnits[i]).obj.transform.position;
             }
         }
         unit.x = (int)unit.obj.transform.position.x; unit.y = (int)unit.obj.transform.position.y;
@@ -303,9 +227,6 @@ public class Move{
         {
             if (u.unitType == UnitType.Block || u.unitType == UnitType.Container || u.unitType == UnitType.Container)
                 return false;
-            if (u.unitType == UnitType.Wall)
-                if (database.gravity_direction == Toolkit.ReverseDirection(((Wall)u).direction))
-                    return false;
         }
         return true;
     }

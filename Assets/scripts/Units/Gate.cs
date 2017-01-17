@@ -29,7 +29,7 @@ public class Gate : Block {
         if (isOpen)
             return;
         isOpen = true;
-        Starter.GetEngine().Gengine._Internal_Door_Change_Sprite(this);
+       
     }
 
     public void CloseDoor()
@@ -37,9 +37,13 @@ public class Gate : Block {
         if (!isOpen)
             return;
         isOpen = false;
-        Starter.GetEngine().Gengine._Internal_Door_Change_Sprite(this);
+
     }
 
+    public override bool MoveInto(Direction dir)
+    {
+        return true;
+    }
     public virtual void OpenClose()
     {
         Starter.GetEngine().AddToSnapshot(this);

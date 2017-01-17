@@ -12,12 +12,14 @@ public class Interface : MonoBehaviour {
     private float camera_speed = 0.05f;
     private bool is_lean;
     private bool is_space;
+    private bool is_walking;
 	// Use this for initialization
 	void Start () {
         database = Starter.GetDataBase();
         engine = Starter.GetEngine();        
         is_lean = false;
         is_space = false;
+        is_walking = false;
     }
 	
 	// Update is called once per frame
@@ -43,7 +45,8 @@ public class Interface : MonoBehaviour {
             }
             else
             {
-                Get_Move();
+                if(!is_walking)
+                    Get_Move();
                 if (Input.GetKeyDown(KeyCode.Space))
                     if (!engine.SpaceKeyPressed())
                         is_space = true;
@@ -96,14 +99,14 @@ public class Interface : MonoBehaviour {
 
         //Take Arrows to move or lean
 
-        if (Input.GetKeyDown(KeyCode.RightArrow))
+        if (Input.GetKey(KeyCode.RightArrow))
             if (!engine.ArrowKeyPressed(Direction.Right))
             {
                 is_lean = true;
                 lean_direction = Direction.Right;
                 Lean();
             }
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        if (Input.GetKey(KeyCode.LeftArrow))
             if (!engine.ArrowKeyPressed(Direction.Left))
             {
                 is_lean = true;
@@ -111,14 +114,14 @@ public class Interface : MonoBehaviour {
                 Lean();
             }
 
-        if (Input.GetKeyDown(KeyCode.DownArrow))
+        if (Input.GetKey(KeyCode.DownArrow))
             if (!engine.ArrowKeyPressed(Direction.Down))
             {
                 is_lean = true;
                 lean_direction = Direction.Up;
                 Lean();
             }
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (Input.GetKey(KeyCode.UpArrow))
             if (!engine.ArrowKeyPressed(Direction.Up))
             {
                 is_lean = true;
@@ -146,6 +149,16 @@ public class Interface : MonoBehaviour {
          pos.z = -10;
          Camera.main.transform.position = pos;
 
+    }
+
+    public void Player_Move_Finished()
+    {
+        is_walking = false;
+    }
+
+    public void Player_Move_Started()
+    {
+        is_walking = true;
     }
     private bool _lean_absorb()
     {

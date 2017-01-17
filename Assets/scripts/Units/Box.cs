@@ -16,12 +16,7 @@ public class Box : Unit {
 	void Update () {
 	
 	}
-    public override bool CanMove(UnitType unittype)
-    {
-        if (unittype == UnitType.Box)
-            return true;
-        return false;
-    }
+
 
     public CloneableBox Clone()
     {

@@ -1,15 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Branch : MonoBehaviour {
+public class Branch : Block {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+
+    public override bool MoveInto(Direction dir)
+    {
+        return true;
+    }
+
 }
