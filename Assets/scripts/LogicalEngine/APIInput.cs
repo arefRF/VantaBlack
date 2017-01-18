@@ -14,4 +14,14 @@ public class APIInput{
     {
         engine.Input_Move(dir);
     }
+
+    public void PlayerMoveFinished()
+    {
+
+    }
+
+    public void PlayerMoveStarted()
+    {
+
+    }
 }
