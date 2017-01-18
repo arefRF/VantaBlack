@@ -31,9 +31,9 @@ public class Interface : MonoBehaviour {
             {
                 // Absorb or Static Container or Undo Lean
                 Get_Lean_Undo();
-                if (Input.GetKeyDown(KeyCode.A))
+               // if (Input.GetKeyDown(KeyCode.A))
                     //engine.Absorb(lean_direction);
-                else if (Input.GetKeyDown(KeyCode.Space))
+               // else if (Input.GetKeyDown(KeyCode.Space))
                    // engine.UseContainerBlockSwitch(lean_direction);
 
             }
@@ -121,7 +121,7 @@ public class Interface : MonoBehaviour {
     {
         if(is_lean)
         {
-            engine.SwitchAction(lean_direction);
+            //engine.SwitchAction(lean_direction);
             return true;
         }
         return false;
