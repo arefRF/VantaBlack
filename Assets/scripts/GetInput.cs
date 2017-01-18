@@ -10,7 +10,6 @@ public class GetInput : MonoBehaviour {
     public APIInput api;
     private Direction lean_direction;
     private float camera_speed = 0.05f;
-    private bool is_lean;
     private bool is_space;
     private bool is_walking;
     // Use this for initialization
@@ -18,10 +17,10 @@ public class GetInput : MonoBehaviour {
     {
         database = Starter.GetDataBase();
         engine = Starter.GetEngine();
-        is_lean = false;
         is_space = false;
         is_walking = false;
         api = engine.apiinput;
+        api.input = this;
     }
 
     // Update is called once per frame
@@ -29,8 +28,6 @@ public class GetInput : MonoBehaviour {
     {
         if (database.state == State.Idle)
         {
-            if (is_lean)
-            {
                 // Absorb or Static Container or Undo Lean
                 Get_Lean_Undo();
                 // if (Input.GetKeyDown(KeyCode.A))
@@ -38,8 +35,8 @@ public class GetInput : MonoBehaviour {
                 // else if (Input.GetKeyDown(KeyCode.Space))
                 // engine.UseContainerBlockSwitch(lean_direction);
 
-            }
-            else if (is_space)
+            
+            if (is_space)
             {
                 // Directional Abilities use
                 if (Input.GetKeyUp(KeyCode.Space))
@@ -75,19 +72,14 @@ public class GetInput : MonoBehaviour {
 
     private void Get_Lean_Undo()
     {
-        if (Input.GetKeyUp(KeyCode.RightArrow) && lean_direction == Direction.Right)
-            Undo_Lean();
-        else if (Input.GetKeyUp(KeyCode.LeftArrow) && lean_direction == Direction.Left)
-            is_lean = false;
-        else if (Input.GetKeyUp(KeyCode.DownArrow) && lean_direction == Direction.Down)
-            is_lean = false;
-        else if (Input.GetKeyUp(KeyCode.UpArrow) && lean_direction == Direction.Up)
-            is_lean = false;
-    }
-
-    private void Undo_Lean()
-    {
-        is_lean = false;
+        if (Input.GetKeyUp(KeyCode.RightArrow))
+            api.ArrowRelease(Direction.Right);
+        else if (Input.GetKeyUp(KeyCode.LeftArrow))
+            api.ArrowRelease(Direction.Left);
+        else if (Input.GetKeyUp(KeyCode.DownArrow))
+            api.ArrowRelease(Direction.Down);
+        else if (Input.GetKeyUp(KeyCode.UpArrow))
+            api.ArrowRelease(Direction.Up);
     }
 
     private void Lean()
@@ -116,17 +108,6 @@ public class GetInput : MonoBehaviour {
     }
 
 
-
-
-    private bool _lean_action()
-    {
-        if (is_lean)
-        {
-            //engine.SwitchAction(lean_direction);
-            return true;
-        }
-        return false;
-    }
     private void Set_Camera(Vector3 pos)
     {
 
@@ -144,14 +125,5 @@ public class GetInput : MonoBehaviour {
     public void Player_Move_Started()
     {
         is_walking = true;
-    }
-    private bool _lean_absorb()
-    {
-        if (is_lean)
-        {
-            // engine.Absorb(lean_direction);
-            return true;
-        }
-        return false;
     }
 }
