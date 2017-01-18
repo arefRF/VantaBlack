@@ -104,4 +104,9 @@ public class LogicalEngine {
             database.player[i].Move(direction);
         }
     }
+
+    public void ArrowkeyReleased(Direction direction)
+    {
+
+    }
 }
