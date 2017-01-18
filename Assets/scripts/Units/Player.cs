@@ -17,7 +17,7 @@ public class Player : Unit
         List<Unit> list  = api.GetUnits(this, dir);
         for(int i = 0; i < list.Count; i++)
         {
-            if (!list[i].PlayerMoveInto(dir))
+            if (!list[i].PlayerMoveInto(Toolkit.ReverseDirection(dir))) ;
                 return false;
         }
 

@@ -8,6 +8,7 @@ public sealed class Toolkit{
         return new Vector2(a.x + b.x, a.y + b.y);
     }
 
+
     public static Direction VectorToDirection(Vector2 vector)
     {
         if (vector.x == 1 && vector.y == 0)
@@ -99,10 +100,6 @@ public sealed class Toolkit{
                 Unit u = database.units[(int)position.x, (int)position.y][i];
                 if (u.unitType == UnitType.Wall || u.unitType == UnitType.Switch || u.unitType == UnitType.Pipe)
                     continue;
-                else if (u.CanBeMoved)
-                {
-                    
-                }
                 else { return false; }
             }
             return true;

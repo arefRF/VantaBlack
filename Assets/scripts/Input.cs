@@ -7,7 +7,8 @@ public class Interface : MonoBehaviour {
     private static LogicalEngine staticengine;
     
     Database database;
-    
+
+    public APIInput api;
     private Direction lean_direction;
     private float camera_speed = 0.05f;
     private bool is_lean;
@@ -31,9 +32,9 @@ public class Interface : MonoBehaviour {
                 // Absorb or Static Container or Undo Lean
                 Get_Lean_Undo();
                 if (Input.GetKeyDown(KeyCode.A))
-                    engine.Absorb(lean_direction);
+                    //engine.Absorb(lean_direction);
                 else if (Input.GetKeyDown(KeyCode.Space))
-                    engine.UseContainerBlockSwitch(lean_direction);
+                   // engine.UseContainerBlockSwitch(lean_direction);
 
             }
             else if (is_space)
@@ -48,7 +49,7 @@ public class Interface : MonoBehaviour {
                 if(!is_walking)
                     Get_Move();
                 if (Input.GetKeyDown(KeyCode.Space))
-                    if (!engine.SpaceKeyPressed())
+                    //if (!engine.SpaceKeyPressed())
                         is_space = true;
             }
            
@@ -58,6 +59,7 @@ public class Interface : MonoBehaviour {
     // Get Arrows if Ability needs it
     private void Get_Space_Arrows()
     {
+        /*
         if (Input.GetKeyDown(KeyCode.RightArrow))
             engine.SpaceKeyPressed(Direction.Right);
         else if (Input.GetKeyDown(KeyCode.LeftArrow))
@@ -66,6 +68,7 @@ public class Interface : MonoBehaviour {
             engine.SpaceKeyPressed(Direction.Down);
         else if (Input.GetKeyDown(KeyCode.UpArrow))
             engine.SpaceKeyPressed(Direction.Up);
+            */
     }
 
     private void Get_Lean_Undo()
@@ -100,34 +103,15 @@ public class Interface : MonoBehaviour {
         //Take Arrows to move or lean
 
         if (Input.GetKey(KeyCode.RightArrow))
-            if (!engine.ArrowKeyPressed(Direction.Right))
-            {
-                is_lean = true;
-                lean_direction = Direction.Right;
-                Lean();
-            }
+            api.MovePressed(Direction.Right);
+
         if (Input.GetKey(KeyCode.LeftArrow))
-            if (!engine.ArrowKeyPressed(Direction.Left))
-            {
-                is_lean = true;
-                lean_direction = Direction.Left;
-                Lean();
-            }
+            api.MovePressed(Direction.Left);
 
         if (Input.GetKey(KeyCode.DownArrow))
-            if (!engine.ArrowKeyPressed(Direction.Down))
-            {
-                is_lean = true;
-                lean_direction = Direction.Up;
-                Lean();
-            }
+            api.MovePressed(Direction.Down);
         if (Input.GetKey(KeyCode.UpArrow))
-            if (!engine.ArrowKeyPressed(Direction.Up))
-            {
-                is_lean = true;
-                lean_direction = Direction.Up;
-                Lean();
-            }
+            api.MovePressed(Direction.Up);
     }
 
 
@@ -164,7 +148,7 @@ public class Interface : MonoBehaviour {
     {
         if(is_lean)
         {
-            engine.Absorb(lean_direction);
+           // engine.Absorb(lean_direction);
             return true;
         }
         return false;
