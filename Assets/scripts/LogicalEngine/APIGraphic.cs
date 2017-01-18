@@ -22,6 +22,16 @@ public class APIGraphic{
         logicalengine.graphic_MoveAnimationFinished(player_obj.GetComponent<Player>());
     }
     
+    public void Fall(Player player, Vector2 position)
+    {
+
+    }
+
+    public void FallOnto(Player player, Vector2 position, Unit fallonunit)
+    {
+
+    }
+
     public void MovePlayerToBranch(Player player, Vector2 position, bool isonramp)
     {
 

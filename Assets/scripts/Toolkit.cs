@@ -193,12 +193,86 @@ public sealed class Toolkit{
         return false;
     }
 
-    /*public Unit GetUnitToFallOn(List<Unit> units, Direction dir)
+    public static Unit GetUnitToFallOn(List<Unit> units, Direction dir)
     {
         if(units[0] is Ramp && units[1] is Ramp)
         {
-            if
+            switch (dir)
+            {
+                case Direction.Up:
+                    if (((Ramp)units[0]).type == 2 && ((Ramp)units[0]).type == 3)
+                        return units[0];
+                    return units[1];
+                case Direction.Right:
+                    if (((Ramp)units[0]).type == 3 && ((Ramp)units[0]).type == 4)
+                        return units[0];
+                    return units[1];
+                case Direction.Down:
+                    if (((Ramp)units[0]).type == 1 && ((Ramp)units[0]).type == 4)
+                        return units[0];
+                    return units[1];
+                case Direction.Left:
+                    if (((Ramp)units[0]).type == 1 && ((Ramp)units[0]).type == 2)
+                        return units[0];
+                    return units[1];
+                default: return units[0];
+            }
         }
-    }*/
+        else if(units[0] is Branch && units[1] is Player)
+        {
+            return units[0];
+        }
+        else if(units[1] is Branch && units[0] is Player)
+        {
+            return units[1];
+        }
+        else if(units[0] is Ramp && units[1] is Player)
+        {
+            switch (dir)
+            {
+                case Direction.Up:
+                    if (((Ramp)units[0]).type == 2 && ((Ramp)units[0]).type == 3)
+                        return units[0];
+                    return units[1];
+                case Direction.Right:
+                    if (((Ramp)units[0]).type == 3 && ((Ramp)units[0]).type == 4)
+                        return units[0];
+                    return units[1];
+                case Direction.Down:
+                    if (((Ramp)units[0]).type == 1 && ((Ramp)units[0]).type == 4)
+                        return units[0];
+                    return units[1];
+                case Direction.Left:
+                    if (((Ramp)units[0]).type == 1 && ((Ramp)units[0]).type == 2)
+                        return units[0];
+                    return units[1];
+                default: return units[0];
+            }
+        }
+        else if (units[1] is Ramp && units[0] is Player)
+        {
+            switch (dir)
+            {
+                case Direction.Up:
+                    if (((Ramp)units[1]).type == 2 && ((Ramp)units[1]).type == 3)
+                        return units[1];
+                    return units[0];
+                case Direction.Right:
+                    if (((Ramp)units[1]).type == 3 && ((Ramp)units[1]).type == 4)
+                        return units[1];
+                    return units[0];
+                case Direction.Down:
+                    if (((Ramp)units[1]).type == 1 && ((Ramp)units[1]).type == 4)
+                        return units[1];
+                    return units[0];
+                case Direction.Left:
+                    if (((Ramp)units[1]).type == 1 && ((Ramp)units[1]).type == 2)
+                        return units[1];
+                    return units[0];
+                default: return units[1];
+            }
+        }
+        return null;
+    }
 }
 

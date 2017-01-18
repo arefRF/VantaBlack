@@ -89,30 +89,44 @@ public class LogicalEngine {
         bool flag = true;
         for(int i=0; i<database.player.Count; i++)
         {
-            List<Unit> units;
-            Vector2 nextpos;
-            while(flag)
-            {
-                nextpos = Toolkit.VectorSum(database.player[i].position, Toolkit.DirectiontoVector(database.gravity_direction));
-                units = GetUnits(nextpos);
-                if(units.Count != 0)
-                {
-                    if(units.Count == 1)
-                    {
-                        units[0].fallOn(database.player[i], Toolkit.ReverseDirection(database.gravity_direction));
-                        flag = false;
-                        break;
-                    }
-                    else
-                    {
-                        
-                    }
-                }
-            }
-
+            
 
         }
         apiinput.PlayerMoveFinished();
+    }
+    public void ApplyGravity_Player(Player player)
+    {
+        List<Unit> units;
+        Vector2 nextpos;
+        nextpos = Toolkit.VectorSum(player.position, Toolkit.DirectiontoVector(database.gravity_direction));
+        units = GetUnits(nextpos);
+        if (units.Count != 0)
+        {
+            if (units.Count == 1)
+            {
+                units[0].fallOn(player, Toolkit.ReverseDirection(database.gravity_direction));
+                
+            }
+            else
+            {
+                Unit fallonunit = Toolkit.GetUnitToFallOn(units, Toolkit.ReverseDirection(database.gravity_direction));
+                fallonunit.fallOn(player, Toolkit.ReverseDirection(database.gravity_direction));
+                return;
+            }
+        }
+        database.units[(int)player.position.x, (int)player.position.y].Remove(database.player[i]);
+        database.units[(int)nextpos.x, (int)nextpos.y].Add(player);
+        apigraphic.Fall(player, nextpos);
+    }
+
+    public void FallFinished(Player player, bool isonunit)
+    {
+        if (isonunit)
+        {
+            player.state = PlayerState.Steady;
+        }
+        else
+            ApplyGravity_Player(player);
     }
 
     public void Lean(Player player, Direction direction)
