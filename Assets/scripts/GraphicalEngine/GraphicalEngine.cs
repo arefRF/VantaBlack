@@ -24,9 +24,7 @@ public class GraphicalEngine : MonoBehaviour {
         database = Starter.GetDataBase();
         top_rotate = 75;
         api = engine.apigraphic;
-        
-
-        //ui = GameObject.Find("Canvas").GetComponent<UI>();
+       
     }
 	// Use this for initialization
 
@@ -65,17 +63,6 @@ public class GraphicalEngine : MonoBehaviour {
             case Direction.Left: database.player.transform.position = Toolkit.VectorSum(database.player.transform.position, new Vector2(-2, 0)); break;
         }
     }
-
-    public void _jump(int height)
-    {
-        switch (database.gravity_direction)
-        {
-            case Direction.Down: database.player.transform.position = Toolkit.VectorSum(database.player.transform.position, new Vector2(0, height)); break;
-            case Direction.Up: database.player.transform.position = Toolkit.VectorSum(database.player.transform.position, new Vector2(0, -height)); break;
-            case Direction.Right: database.player.transform.position = Toolkit.VectorSum(database.player.transform.position, new Vector2(-height, 0)); break;
-            case Direction.Left: database.player.transform.position = Toolkit.VectorSum(database.player.transform.position, new Vector2(2, height)); break;
-        }
-    }
     */
     [MethodImpl(MethodImplOptions.Synchronized)]
     public  void _move(Player player, Vector2 position)
@@ -96,45 +83,6 @@ public class GraphicalEngine : MonoBehaviour {
     {
         obj.transform.position = pos;
         return true;
-    }
-
-    public void _lean_right()
-    {
-
-        player.transform.GetChild(0).transform.position = new Vector3(lean_move, 0, 0) + player.transform.GetChild(0).transform.position;
-    }
-
-    public void _lean_right_undo()
-    {
-        player.transform.GetChild(0).transform.position = new Vector3(-lean_move, 0, 0) + player.transform.GetChild(0).transform.position;
-    }
-
-    public void _lean_top()
-    {
-        player.transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0,0,90));
-    }
-
-    public void _lean_top_undo()
-    {
-        if(player.move_direction[0]==Direction.Right)
-            player.transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0, 0, 0));
-        else
-            player.transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0, 180, 0));
-    }
-    public void _lean_left()
-    {
-        player.transform.GetChild(0).transform.position = new Vector3(-lean_move, 0, 0) + player.transform.GetChild(0).transform.position;
-
-    }
-
-    public void _lean_left_undo()
-    {
-        player.transform.GetChild(0).transform.position = new Vector3(lean_move, 0, 0) + player.transform.GetChild(0).transform.position;
-    }
-
-    public void _right_light()
-    {
-        //ui._right_light();
     }
 
     public void _gravity()
@@ -194,6 +142,7 @@ public class GraphicalEngine : MonoBehaviour {
         }
         //Starter.GetEngine().DoneMoving();
     } 
+
     public void _Player_Change_Ability()
     {
         string path = @"player\";
@@ -225,13 +174,6 @@ public class GraphicalEngine : MonoBehaviour {
         player.transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0, rot, 0));
         
 
-    }
-
-    public void _Container_Change_Sprite(Container container)
-    {
-        
-        string path = @"blocks\";
-        container.obj.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load(path, typeof(Sprite));
     }
 
     */

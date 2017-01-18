@@ -5,7 +5,7 @@ using System;
 
 public class Player : Unit
 {
-    public Ability ability;
+    public List<Ability> abilities;
     public List<Direction> move_direction;
     public Direction direction { get; set; }
     public PlayerState state { get; set; }
@@ -23,6 +23,16 @@ public class Player : Unit
         api.engine_Move(this, dir);
         return true;
     }
+
+    public void Absorb(Container container)
+    {
+        container.PlayerAbsorb(this);
+    }
+
+    public void Release(Container container)
+    {
+        container.PlayerRelease(this);
+    }  
 
     public override bool PlayerMoveInto(Direction dir)
     {
