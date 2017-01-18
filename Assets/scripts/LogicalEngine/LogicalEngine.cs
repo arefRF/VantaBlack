@@ -91,7 +91,7 @@ public class LogicalEngine {
     {
         for(int i=0; i<database.player.Count; i++)
         {
-
+            database.player[i].Move(direction);
         }
     }
 }
