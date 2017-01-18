@@ -29,7 +29,7 @@ public class APIGraphic{
 
     public void FallOnto(Player player, Vector2 position, Unit fallonunit)
     {
-
+        player.gameObject.transform.position = position;
     }
 
     public void MovePlayerToBranch(Player player, Vector2 position, bool isonramp)

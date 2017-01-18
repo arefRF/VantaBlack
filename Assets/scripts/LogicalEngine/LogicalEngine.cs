@@ -89,7 +89,7 @@ public class LogicalEngine {
         bool flag = true;
         for(int i=0; i<database.player.Count; i++)
         {
-            
+            ApplyGravity_Player(database.player[i]);
 
         }
         apiinput.PlayerMoveFinished();
