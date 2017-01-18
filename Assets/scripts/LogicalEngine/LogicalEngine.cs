@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 public class LogicalEngine {
 
-    APIGraphic apigraphic;
-    APIInput apiinput;
-    APIUnit apiunit;
+    public APIGraphic apigraphic;
+    public APIInput apiinput;
+    public APIUnit apiunit;
     Database database;
     SubEngine_Initializer initializer;
     int sizeX, sizeY;
