@@ -105,7 +105,7 @@ public class LogicalEngine {
             if (units.Count == 1)
             {
                 units[0].fallOn(player, Toolkit.ReverseDirection(database.gravity_direction));
-                
+                return;
             }
             else
             {
