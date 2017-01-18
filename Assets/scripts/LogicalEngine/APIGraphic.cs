@@ -14,6 +14,7 @@ public class APIGraphic{
 
     public void MovePlayer(Player player, Vector2 position, bool isonramp)
     {
+        Debug.Log("move move moe");
         graphicalengine._move(player, position);
     }
     

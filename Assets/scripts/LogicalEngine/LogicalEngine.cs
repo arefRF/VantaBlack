@@ -40,6 +40,7 @@ public class LogicalEngine {
 
     public void MovePlayer(Player player, Direction dir)
     {
+        bool simplemove = true;
         apiinput.PlayerMoveStarted();
         List<Unit> units = GetUnits(player.position);
         bool onramp = false;
@@ -63,16 +64,20 @@ public class LogicalEngine {
                     newpos = Toolkit.VectorSum(Toolkit.VectorSum(player.position, Toolkit.DirectiontoVector(dir)), Toolkit.DirectiontoVector(database.gravity_direction));
                 else
                     newpos = units[i].position;
-                apigraphic.MovePlayerToBranch(player, newpos, onramp);
+                simplemove = false;
+                apigraphic.MovePlayerOnRamp(player, newpos, onramp);
                 break;
             }
             if(units[i] is Branch)
             {
+                simplemove = false;
                 apigraphic.MovePlayerToBranch(player, newpos, onramp);
                 apiinput.PlayerMoveFinished();
                 break;
             }
         }
+        if(simplemove)
+            apigraphic.MovePlayer(player, newpos, onramp);
         database.units[(int)player.position.x, (int)player.position.y].Remove(player);
         database.units[(int)newpos.x, (int)newpos.y].Add(player);
         player.position = newpos;

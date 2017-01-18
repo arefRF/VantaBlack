@@ -13,7 +13,7 @@ public class Unit : MonoBehaviour {
 
 
 
-   // public abstract bool CanMove(UnitType unittype);
+    // public abstract bool CanMove(UnitType unittype);
 
     public virtual bool PlayerMoveInto(Direction dir)
     {
