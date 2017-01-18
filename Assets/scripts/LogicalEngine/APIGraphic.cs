@@ -24,7 +24,7 @@ public class APIGraphic{
     
     public void Fall(Player player, Vector2 position)
     {
-
+        player.gameObject.transform.position = position;
     }
 
     public void FallOnto(Player player, Vector2 position, Unit fallonunit)
@@ -63,6 +63,7 @@ public class APIGraphic{
 
            }
     }
+
 
     public void LeanFinished(Player player)
     {
