@@ -40,7 +40,7 @@ public class LogicalEngine {
 
     public void MovePlayer(Player player, Direction dir)
     {
-        Debug.Log(player);
+        apiinput.PlayerMoveStarted();
         List<Unit> units = GetUnits(player.position);
         bool onramp = false;
         Vector2 newpos = Toolkit.VectorSum(Toolkit.DirectiontoVector(dir), player.position);
@@ -71,6 +71,7 @@ public class LogicalEngine {
         apigraphic.MovePlayer(player, newpos);
         player.position = newpos;
         Applygravity();
+        apiinput.PlayerMoveFinished();
     }
 
     private void Applygravity()
