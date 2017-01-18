@@ -23,7 +23,7 @@ public class PlayerGraphics : MonoBehaviour {
     public void Player_Move(GameObject player,Direction dir)
     {
         Vector2 end = (Vector2)player.transform.position + (Vector2)Toolkit.DirectiontoVector(dir);
-        GameObject.Find("Interface").GetComponent<Interface>().Player_Move_Started();
+        GameObject.Find("Interface").GetComponent<GetInput>().Player_Move_Started();
         StartCoroutine(Player_Move_Coroutine(player,end));
     }
 
@@ -51,7 +51,7 @@ public class PlayerGraphics : MonoBehaviour {
             yield return null;
         }
 
-        GameObject.Find("Interface").GetComponent<Interface>().Player_Move_Finished();
+        GameObject.Find("Interface").GetComponent<GetInput>().Player_Move_Finished();
         
     }
 

@@ -7,6 +7,7 @@ public class APIInput{
 
     public void MovePressed(Direction dir)
     {
+        Debug.Log(dir);
         engine.Input_Move(dir);
     }
 }

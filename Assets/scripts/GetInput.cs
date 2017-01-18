@@ -1,11 +1,10 @@
 ﻿using UnityEngine;
-using System.Collections.Generic;
+using System.Collections;
 
-public class Interface : MonoBehaviour {
-    
+public class GetInput : MonoBehaviour {
     private LogicalEngine engine;
     private static LogicalEngine staticengine;
-    
+
     Database database;
 
     public APIInput api;
@@ -14,27 +13,29 @@ public class Interface : MonoBehaviour {
     private bool is_lean;
     private bool is_space;
     private bool is_walking;
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
         database = Starter.GetDataBase();
-        engine = Starter.GetEngine();        
+        engine = Starter.GetEngine();
         is_lean = false;
         is_space = false;
         is_walking = false;
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update()
+    {
         if (database.state == State.Idle)
         {
             if (is_lean)
             {
                 // Absorb or Static Container or Undo Lean
                 Get_Lean_Undo();
-               // if (Input.GetKeyDown(KeyCode.A))
-                    //engine.Absorb(lean_direction);
-               // else if (Input.GetKeyDown(KeyCode.Space))
-                   // engine.UseContainerBlockSwitch(lean_direction);
+                // if (Input.GetKeyDown(KeyCode.A))
+                //engine.Absorb(lean_direction);
+                // else if (Input.GetKeyDown(KeyCode.Space))
+                // engine.UseContainerBlockSwitch(lean_direction);
 
             }
             else if (is_space)
@@ -46,13 +47,13 @@ public class Interface : MonoBehaviour {
             }
             else
             {
-                if(!is_walking)
+                if (!is_walking)
                     Get_Move();
                 if (Input.GetKeyDown(KeyCode.Space))
                     //if (!engine.SpaceKeyPressed())
-                        is_space = true;
+                    is_space = true;
             }
-           
+
         }
     }
 
@@ -87,7 +88,7 @@ public class Interface : MonoBehaviour {
     {
         is_lean = false;
     }
-   
+
     private void Lean()
     {
         Debug.Log("Leaning");
@@ -95,13 +96,12 @@ public class Interface : MonoBehaviour {
 
     private void Get_Ability()
     {
-         
+
     }
     private void Get_Move()
     {
 
         //Take Arrows to move or lean
-
         if (Input.GetKey(KeyCode.RightArrow))
             api.MovePressed(Direction.Right);
 
@@ -119,7 +119,7 @@ public class Interface : MonoBehaviour {
 
     private bool _lean_action()
     {
-        if(is_lean)
+        if (is_lean)
         {
             //engine.SwitchAction(lean_direction);
             return true;
@@ -128,10 +128,10 @@ public class Interface : MonoBehaviour {
     }
     private void Set_Camera(Vector3 pos)
     {
-        
-         pos = Toolkit.VectorSum(Camera.main.transform.position, pos);
-         pos.z = -10;
-         Camera.main.transform.position = pos;
+
+        pos = Toolkit.VectorSum(Camera.main.transform.position, pos);
+        pos.z = -10;
+        Camera.main.transform.position = pos;
 
     }
 
@@ -146,9 +146,9 @@ public class Interface : MonoBehaviour {
     }
     private bool _lean_absorb()
     {
-        if(is_lean)
+        if (is_lean)
         {
-           // engine.Absorb(lean_direction);
+            // engine.Absorb(lean_direction);
             return true;
         }
         return false;
