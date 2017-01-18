@@ -91,8 +91,12 @@ public class LogicalEngine {
 
     public void Lean(Player player, Direction direction)
     {
-        player.lean = true;
-        player.leandirection = direction;
+        if (!player.lean)
+        {
+            player.lean = true;
+            player.leandirection = direction;
+            apigraphic.Lean(player);
+        }
     }
 
     public List<Unit> GetUnits(Vector2 position)
@@ -104,11 +108,14 @@ public class LogicalEngine {
     {
         for(int i=0; i<database.player.Count; i++)
         {
-            if (!database.player[i].Move(direction))
+            if (!database.player[i].lean)
             {
-                Lean(database.player[i], direction);
+                if (!database.player[i].Move(direction))
+                {
+                    Lean(database.player[i], direction);
+                    apiinput.PlayerMoveFinished();
+                }
             }
-                
         }
     }
 
