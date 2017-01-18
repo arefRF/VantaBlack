@@ -114,7 +114,7 @@ public class LogicalEngine {
                 return;
             }
         }
-        database.units[(int)player.position.x, (int)player.position.y].Remove(database.player[i]);
+        database.units[(int)player.position.x, (int)player.position.y].Remove(player);
         database.units[(int)nextpos.x, (int)nextpos.y].Add(player);
         apigraphic.Fall(player, nextpos);
     }
