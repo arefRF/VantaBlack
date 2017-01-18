@@ -76,16 +76,9 @@ public class GraphicalEngine : MonoBehaviour {
     }
 
     [MethodImpl(MethodImplOptions.Synchronized)]
-    public  void _move(Direction dir)
+    public  void _move(Player player, Vector2 position)
     {
-        
-        switch (dir)
-        {
-            case Direction.Down: database.player.transform.position = Toolkit.VectorSum(database.player.transform.position, new Vector2(0, -1)); break;
-            case Direction.Up: database.player.transform.position = Toolkit.VectorSum(database.player.transform.position, new Vector2(0, 1)); break;
-            case Direction.Right: database.player.transform.position = Toolkit.VectorSum(database.player.transform.position, new Vector2(1, 0)); break;
-            case Direction.Left: database.player.transform.position = Toolkit.VectorSum(database.player.transform.position, new Vector2(-1, 0)); break;
-        }
+        player.transform.position = position;
     }
 
     [MethodImpl(MethodImplOptions.Synchronized)]

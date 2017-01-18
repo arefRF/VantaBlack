@@ -7,22 +7,43 @@ public class LogicalEngine {
     APIInput apiinput;
     APIUnit apiunit;
     Database database;
-
-    public LogicalEngine()
+    SubEngine_Initializer initializer;
+    int sizeX, sizeY;
+    public LogicalEngine(int x, int y)
     {
+        sizeX = x;
+        sizeY = y;
+        apigraphic = new APIGraphic();
+        apiinput = new APIInput();
+        apiunit = new APIUnit();
+        database = Starter.GetDataBase();
+        initializer = new SubEngine_Initializer(x,y);
+    }
 
+    public void Run()
+    {
+        initializer.init();
+        database.state = State.Idle;
     }
 
     public void MoveUnit(Unit unit, Vector2 position)
     {
-
+        if(unit is Box)
+        {
+            
+        }
+        else
+        {
+            //apigraphic.
+        }
     }
 
     public void MovePlayer(Player player, Direction dir)
     {
         List<Unit> units = GetUnits(player.position);
         bool onramp = false;
-        for(int i=0; i<units.Count; i++)
+        Vector2 newpos = Toolkit.VectorSum(Toolkit.DirectiontoVector(dir), player.position);
+        for (int i=0; i<units.Count; i++)
         {
             if(units[i] is Ramp)
             {
@@ -38,11 +59,22 @@ public class LogicalEngine {
             if(units[i] is Ramp)
             {
                 if (onramp)
-                {
-                    apigraphic.MovePlayerOnRampFromRamp(player, Toolkit.VectorSum(Toolkit.VectorSum(player.position, Toolkit.DirectiontoVector(dir)), Toolkit.DirectiontoVector(database.gravity_direction)));
-                }
+                    newpos = Toolkit.VectorSum(Toolkit.VectorSum(player.position, Toolkit.DirectiontoVector(dir)), Toolkit.DirectiontoVector(database.gravity_direction));
+                else
+                    newpos = units[i].position;
+                break;
             }
         }
+        database.units[(int)player.position.x, (int)player.position.y].Remove(player);
+        database.units[(int)newpos.x, (int)newpos.y].Add(player);
+        apigraphic.MovePlayer(player, newpos);
+        player.position = newpos;
+        Applygravity();
+    }
+
+    private void Applygravity()
+    {
+
     }
 
     public void Lean(Player player, Direction direction)
@@ -53,5 +85,13 @@ public class LogicalEngine {
     public List<Unit> GetUnits(Vector2 position)
     {
         return database.units[(int)position.x, (int)position.y];
+    }
+
+    public void Input_Move(Direction direction)
+    {
+        for(int i=0; i<database.player.Count; i++)
+        {
+
+        }
     }
 }

@@ -4,11 +4,11 @@ using System.Collections.Generic;
 public class APIUnit {
     LogicalEngine engine;
 
-    public void Move(Unit unit, Direction dir)
+    public void engine_Move(Unit unit, Direction dir)
     {
         if(unit is Player)
         {
-            engine.MovePlayer((Player)unit, Toolkit.VectorSum(unit.position, Toolkit.DirectiontoVector(dir)));
+            engine.MovePlayer((Player)unit, dir);
         }
         else
         {
@@ -16,13 +16,19 @@ public class APIUnit {
         }
     }
 
-    public void Lean(Player player, Direction dir)
+    public void engine_Lean(Player player, Direction dir)
     {
         engine.Lean(player, dir);
     }
 
-    public List<Unit> GetUnits(Unit unit, Direction dir)
+    public List<Unit> engine_GetUnits(Unit unit, Direction dir)
     {
         return engine.GetUnits(Toolkit.VectorSum(Toolkit.DirectiontoVector(dir), unit.position));
+    }
+
+    public void unit_Move(Unit unit, Direction dir)
+    {
+        if (unit is Player)
+            ((Player)unit).Move(dir);
     }
 }

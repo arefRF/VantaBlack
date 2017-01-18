@@ -10,8 +10,7 @@ public class Database {
         turn = i;
     }
 
-    public LogicalEngine logicalengine;
-    public GameObject player;
+    public List<GameObject> player;
     public readonly int numberOfSnapshot = 5;
     public int snapShotCount;
     public Direction gravity_direction;
@@ -26,8 +25,6 @@ public class Database {
     private Direction GravityDirection;
     
     public List<Snapshot> snapshots;
-
-    public bool ACTIVE_RED, ACTIVE_BLUE, ACTIVE_GREEN, ACTIVE_PURPLE, ACTIVE_LIGHTBLUE;
 }
 
 
@@ -42,10 +39,10 @@ public class TimeLaps
     public GameObject gameobject;
     public TimeLaps(int lifetime, GameObject gameobject)
     {
-        this.lifetime = lifetime + Starter.GetEngine().database.turn;
+        this.lifetime = lifetime + Starter.GetDataBase().turn;
         this.gameobject = gameobject;
         position = gameobject.transform.position;
-        time = Starter.GetEngine().database.turn;
+        time = Starter.GetDataBase().turn;
     }
 }
 

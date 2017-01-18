@@ -20,13 +20,12 @@ public class Starter : MonoBehaviour{
         staticengine = logicalengine;
         database.gravity_direction = Gravity_Directin;
         database.state = State.Busy;
-        database.logicalengine = logicalengine;
         staticengine = logicalengine;
         GameObject.Find("Graphical").GetComponent<GraphicalEngine>().database = database;
         GameObject.Find("Graphical").GetComponent<GraphicalEngine>().player = database.player.GetComponent<Player>();
 
 
-        logicalengine.run();
+        logicalengine.Run();
     }
 
     public static Database GetDataBase()

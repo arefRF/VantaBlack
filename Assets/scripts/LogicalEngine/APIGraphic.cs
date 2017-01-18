@@ -9,9 +9,9 @@ public class APIGraphic{
 
     public void MovePlayer(Player player, Vector2 position)
     {
-
+        graphicalengine._move(player, position);
     }
-
+    
     public void MovePlayerOnRamp(Player player, Vector2 position)
     {
 
