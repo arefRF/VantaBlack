@@ -10,17 +10,22 @@ public class Player : Unit
     public Direction direction { get; set; }
     public PlayerState state { get; set; }
 
+    public Direction leandirection;
+    public bool lean;
 
     public bool Move(Direction dir)
     {
-        Debug.Log(dir);
+        bool flag = false;
         List<Unit> list  = api.engine_GetUnits(this, dir);
         for(int i = 0; i < list.Count; i++)
         {
+            flag = true;
             if (!list[i].PlayerMoveInto(Toolkit.ReverseDirection(dir)))
                 return false;
         }
         Debug.Log("Move");
+        if(flag)
+
         api.engine_Move(this, dir);
         return true;
     }

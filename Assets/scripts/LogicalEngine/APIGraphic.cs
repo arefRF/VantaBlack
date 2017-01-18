@@ -12,17 +12,17 @@ public class APIGraphic{
         graphicalengine = GameObject.Find("Graphical").GetComponent<GraphicalEngine>();
     }
 
-    public void MovePlayer(Player player, Vector2 position)
+    public void MovePlayer(Player player, Vector2 position, bool isonramp)
     {
         graphicalengine._move(player, position);
     }
     
-    public void MovePlayerOnRamp(Player player, Vector2 position)
+    public void MovePlayerToBranch(Player player, Vector2 position, bool isonramp)
     {
 
     }
 
-    public void MovePlayerOnRampFromRamp(Player player, Vector2 postition)
+    public void MovePlayerOnRamp(Player player, Vector2 position, bool isonramp)
     {
 
     }
@@ -34,6 +34,16 @@ public class APIGraphic{
 
 
     public void MoveObject(Unit u)
+    {
+
+    }
+
+    public void Lean(Player player)
+    {
+
+    }
+
+    public void LeanFinished(Player player)
     {
 
     }

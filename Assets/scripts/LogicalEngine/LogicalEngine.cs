@@ -59,16 +59,22 @@ public class LogicalEngine {
         {
             if(units[i] is Ramp)
             {
-                if (onramp)
+                if (onramp) 
                     newpos = Toolkit.VectorSum(Toolkit.VectorSum(player.position, Toolkit.DirectiontoVector(dir)), Toolkit.DirectiontoVector(database.gravity_direction));
                 else
                     newpos = units[i].position;
+                apigraphic.MovePlayerToBranch(player, newpos, onramp);
+                break;
+            }
+            if(units[i] is Branch)
+            {
+                apigraphic.MovePlayerToBranch(player, newpos, onramp);
+                apiinput.PlayerMoveFinished();
                 break;
             }
         }
         database.units[(int)player.position.x, (int)player.position.y].Remove(player);
         database.units[(int)newpos.x, (int)newpos.y].Add(player);
-        apigraphic.MovePlayer(player, newpos);
         player.position = newpos;
         Applygravity();
         apiinput.PlayerMoveFinished();
@@ -81,7 +87,8 @@ public class LogicalEngine {
 
     public void Lean(Player player, Direction direction)
     {
-
+        player.lean = true;
+        player.leandirection = direction;
     }
 
     public List<Unit> GetUnits(Vector2 position)
