@@ -4,6 +4,11 @@ using System.Collections.Generic;
 public class APIUnit {
     LogicalEngine engine;
 
+    public APIUnit()
+    {
+        engine = Starter.GetEngine();
+    }
+
     public void engine_Move(Unit unit, Direction dir)
     {
         if(unit is Player)

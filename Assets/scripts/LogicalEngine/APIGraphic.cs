@@ -6,6 +6,11 @@ public class APIGraphic{
     LogicalEngine logicalengine;
     GraphicalEngine graphicalengine;
 
+    public APIGraphic()
+    {
+        logicalengine = Starter.GetEngine();
+        graphicalengine = GameObject.Find("Graphical").GetComponent<GraphicalEngine>();
+    }
 
     public void MovePlayer(Player player, Vector2 position)
     {
