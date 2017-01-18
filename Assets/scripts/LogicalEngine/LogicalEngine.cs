@@ -107,6 +107,13 @@ public class LogicalEngine {
 
     public void ArrowkeyReleased(Direction direction)
     {
-
+        for(int i=0; i<database.player.Count; i++)
+        {
+            if (database.player[i].lean)
+            {
+                database.player[i].lean = false;
+                apigraphic.LeanFinished(database.player[i]);
+            }
+        }
     }
 }
