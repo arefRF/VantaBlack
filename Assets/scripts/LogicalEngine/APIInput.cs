@@ -5,14 +5,13 @@ public class APIInput{
 
     LogicalEngine engine;
 
-    public APIInput()
+    public APIInput(LogicalEngine engine)
     {
-        engine = Starter.GetEngine();
+        this.engine = engine;
     }
 
     public void MovePressed(Direction dir)
     {
-        Debug.Log(dir);
         engine.Input_Move(dir);
     }
 }

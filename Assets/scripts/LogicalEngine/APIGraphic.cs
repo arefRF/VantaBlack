@@ -6,9 +6,9 @@ public class APIGraphic{
     LogicalEngine logicalengine;
     GraphicalEngine graphicalengine;
 
-    public APIGraphic()
+    public APIGraphic(LogicalEngine logicalengine)
     {
-        logicalengine = Starter.GetEngine();
+        this.logicalengine = logicalengine;
         graphicalengine = GameObject.Find("Graphical").GetComponent<GraphicalEngine>();
     }
 

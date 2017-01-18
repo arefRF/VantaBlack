@@ -4,9 +4,9 @@ using System.Collections.Generic;
 public class APIUnit {
     LogicalEngine engine;
 
-    public APIUnit()
+    public APIUnit(LogicalEngine engine)
     {
-        engine = Starter.GetEngine();
+        this.engine = engine;
     }
 
     public void engine_Move(Unit unit, Direction dir)

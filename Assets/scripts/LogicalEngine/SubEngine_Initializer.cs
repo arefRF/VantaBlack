@@ -5,14 +5,16 @@ public class SubEngine_Initializer{
 
     private List<Unit>[,] units;
     int x, y;
+    APIUnit api;
 
-    public SubEngine_Initializer(int x, int y)
+    public SubEngine_Initializer(int x, int y, APIUnit api)
     {
         this.x = x;
         this.y = y;
+        this.api = api;
     }
 
-    public void init()
+    public List<Unit>[,] init()
     {
         Unit.Code = 0;
         units = new List<Unit>[x,y];
@@ -42,8 +44,10 @@ public class SubEngine_Initializer{
                     default: Debug.Log(obj.tag + " Not supported"); break;
                 }
                 units[i, j][units[i, j].Count - 1].codeNumber = Unit.Code;
+                units[i, j][units[i, j].Count - 1].api = api;
                 Unit.Code++;
             }
         }
+        return units;
     }
 }

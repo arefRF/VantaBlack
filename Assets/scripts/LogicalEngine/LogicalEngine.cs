@@ -13,16 +13,16 @@ public class LogicalEngine {
     {
         sizeX = x;
         sizeY = y;
-        apigraphic = new APIGraphic();
-        apiinput = new APIInput();
-        apiunit = new APIUnit();
+        apigraphic = new APIGraphic(this);
+        apiinput = new APIInput(this);
+        apiunit = new APIUnit(this);
         database = Starter.GetDataBase();
-        initializer = new SubEngine_Initializer(x,y);
+        initializer = new SubEngine_Initializer(x,y, apiunit);
     }
 
     public void Run()
     {
-        initializer.init();
+        database.units = initializer.init();
         database.state = State.Idle;
     }
 
@@ -40,6 +40,7 @@ public class LogicalEngine {
 
     public void MovePlayer(Player player, Direction dir)
     {
+        Debug.Log(player);
         List<Unit> units = GetUnits(player.position);
         bool onramp = false;
         Vector2 newpos = Toolkit.VectorSum(Toolkit.DirectiontoVector(dir), player.position);
