@@ -85,6 +85,7 @@ public class LogicalEngine {
 
     public List<Unit> GetUnits(Vector2 position)
     {
+        Debug.Log(position);
         return database.units[(int)position.x, (int)position.y];
     }
 

@@ -45,6 +45,7 @@ public class SubEngine_Initializer{
                 }
                 units[i, j][units[i, j].Count - 1].codeNumber = Unit.Code;
                 units[i, j][units[i, j].Count - 1].api = api;
+                units[i, j][units[i, j].Count - 1].position = units[i, j][units[i, j].Count - 1].transform.position;
                 Unit.Code++;
             }
         }
