@@ -5,8 +5,7 @@ public class DebugUnit  {
 
     public static void _Debug_Player(Player player)
     {
-        Debug.Log("movabale: "+player.movable);
-        Debug.Log(player.layer);
+        
         
     }
 }

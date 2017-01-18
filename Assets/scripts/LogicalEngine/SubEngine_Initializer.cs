@@ -29,7 +29,7 @@ public class SubEngine_Initializer{
                 switch (obj.tag)
                 {
                     case "Box": units[i, j].Add(obj.GetComponent<Box>()); break;
-                    case "Branch": units[i, j].Add(obj.GetComponent<Branch>(); break;
+                    case "Branch": units[i, j].Add(obj.GetComponent<Branch>()); break;
                     case "Dynamic Container": units[i, j].Add(obj.GetComponent<DynamicContainer>()); break;
                     case "Static Container": units[i, j].Add(obj.GetComponent<StaticContainer>()); break;
                     case "Sipmle Container": units[i, j].Add(obj.GetComponent<SimpleContainer>()); break;

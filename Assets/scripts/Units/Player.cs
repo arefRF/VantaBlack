@@ -14,14 +14,14 @@ public class Player : Unit
     public bool Move(Direction dir)
     {
         
-        List<Unit> list  = api.GetUnits(this, dir);
+        List<Unit> list  = api.engine_GetUnits(this, dir);
         for(int i = 0; i < list.Count; i++)
         {
             if (!list[i].PlayerMoveInto(Toolkit.ReverseDirection(dir))) ;
                 return false;
         }
 
-        api.Move(this, dir);
+        api.engine_Move(this, dir);
         return true;
     }
 

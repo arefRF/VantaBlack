@@ -18,3 +18,8 @@ public abstract  class Unit : MonoBehaviour {
     public abstract bool PlayerMoveInto(Direction dir);
 }
 
+public class CloneableUnit
+{
+
+}
+

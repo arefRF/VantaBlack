@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public class Starter : MonoBehaviour{
     public Database database;
     public LogicalEngine logicalengine;
     public int x, y;
     public Direction Gravity_Directin;
-    public GameObject player;
+    public List<GameObject> player;
     public static LogicalEngine staticengine;
     void Awake()
     {
@@ -22,7 +22,6 @@ public class Starter : MonoBehaviour{
         database.state = State.Busy;
         staticengine = logicalengine;
         GameObject.Find("Graphical").GetComponent<GraphicalEngine>().database = database;
-        GameObject.Find("Graphical").GetComponent<GraphicalEngine>().player = database.player.GetComponent<Player>();
 
 
         logicalengine.Run();

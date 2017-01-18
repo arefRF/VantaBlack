@@ -14,14 +14,12 @@ public class GraphicalEngine : MonoBehaviour {
     private Vector2 player_pos;
     private float lean_offset = 0.2f;
     private float top_rotate;
-    public Player player { get; set; }
 
     private float lean_move = 0.2f;
     void Start()
     {
 
         database = Starter.GetDataBase();
-        player = database.player.GetComponent<Player>();
         top_rotate = 75;
 
         //ui = GameObject.Find("Canvas").GetComponent<UI>();
@@ -29,7 +27,7 @@ public class GraphicalEngine : MonoBehaviour {
 	// Use this for initialization
 
 
-    public void Refresh()
+    /*public void Refresh()
     {
         for(int i=0; i<database.units.GetLength(0); i++)
         {
@@ -41,9 +39,9 @@ public class GraphicalEngine : MonoBehaviour {
                 }
             }
         }
-    }
+    }*/
 
-    public void Refresh(Unit u)
+    /*public void Refresh(Unit u)
     {
         u.obj.transform.position = u.position;
         switch (u.unitType)
@@ -51,9 +49,9 @@ public class GraphicalEngine : MonoBehaviour {
             case UnitType.Player: _Player_Change_Ability(); _Player_Change_Direction(); break;
             case UnitType.Container: _Container_Change_Sprite((Container)u); break;
         }
-    }
+    }*/
 
-    public void _blink(Direction dir)
+    /*public void _blink(Direction dir)
     {
         switch (dir)
         {
@@ -74,13 +72,14 @@ public class GraphicalEngine : MonoBehaviour {
             case Direction.Left: database.player.transform.position = Toolkit.VectorSum(database.player.transform.position, new Vector2(2, height)); break;
         }
     }
-
+    */
     [MethodImpl(MethodImplOptions.Synchronized)]
     public  void _move(Player player, Vector2 position)
     {
         player.transform.position = position;
     }
 
+    /*
     [MethodImpl(MethodImplOptions.Synchronized)]
     public static void MoveObject(GameObject obj, Vector2 position)
     {
@@ -231,5 +230,5 @@ public class GraphicalEngine : MonoBehaviour {
         container.obj.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load(path, typeof(Sprite));
     }
 
-
+    */
 }

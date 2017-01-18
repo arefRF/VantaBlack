@@ -3,10 +3,10 @@ using System.Collections;
 
 public class APIInput{
 
-    LogicalEngine logical;
+    LogicalEngine engine;
 
     public void MovePressed(Direction dir)
     {
-
+        engine.Input_Move(dir);
     }
 }
