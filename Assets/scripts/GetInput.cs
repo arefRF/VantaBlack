@@ -21,6 +21,7 @@ public class GetInput : MonoBehaviour {
         is_lean = false;
         is_space = false;
         is_walking = false;
+        api = engine.apiinput;
     }
 
     // Update is called once per frame
