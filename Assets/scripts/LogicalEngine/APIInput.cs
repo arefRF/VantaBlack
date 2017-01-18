@@ -24,7 +24,6 @@ public class APIInput{
 
     public void PlayerMoveStarted()
     {
-        Debug.Log("move started");
         input.Player_Move_Started();
     }
 
