@@ -104,7 +104,11 @@ public class LogicalEngine {
     {
         for(int i=0; i<database.player.Count; i++)
         {
-            database.player[i].Move(direction);
+            if (!database.player[i].Move(direction))
+            {
+                Lean(database.player[i], direction);
+            }
+                
         }
     }
 
