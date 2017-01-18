@@ -86,6 +86,32 @@ public class LogicalEngine {
 
     private void Applygravity()
     {
+        bool flag = true;
+        for(int i=0; i<database.player.Count; i++)
+        {
+            List<Unit> units;
+            Vector2 nextpos;
+            while(flag)
+            {
+                nextpos = Toolkit.VectorSum(database.player[i].position, Toolkit.DirectiontoVector(database.gravity_direction));
+                units = GetUnits(nextpos);
+                if(units.Count != 0)
+                {
+                    if(units.Count == 1)
+                    {
+                        units[0].fallOn(database.player[i], Toolkit.ReverseDirection(database.gravity_direction));
+                        flag = false;
+                        break;
+                    }
+                    else
+                    {
+                        
+                    }
+                }
+            }
+
+
+        }
         apiinput.PlayerMoveFinished();
     }
 

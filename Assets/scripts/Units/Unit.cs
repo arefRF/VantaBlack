@@ -29,6 +29,11 @@ public class Unit : MonoBehaviour {
         return true;
     }
 
+    public virtual void fallOn(Unit fallingunit, Direction dir)
+    {
+
+    }
+
 }
 
 public class CloneableUnit

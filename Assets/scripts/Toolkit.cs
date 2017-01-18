@@ -193,16 +193,12 @@ public sealed class Toolkit{
         return false;
     }
 
-    public static Ramp GetRamp(Unit unit)
+    /*public Unit GetUnitToFallOn(List<Unit> units, Direction dir)
     {
-        Database database = Starter.GetDataBase();
-        for (int i = 0; i < database.units[(int)unit.position.x, (int)unit.position.y].Count; i++)
+        if(units[0] is Ramp && units[1] is Ramp)
         {
-            Unit u = database.units[(int)unit.position.x, (int)unit.position.y][i];
-            if (u.unitType == UnitType.Ramp)
-                return (Ramp)u;
+            if
         }
-        return null;
-    }
+    }*/
 }
 
