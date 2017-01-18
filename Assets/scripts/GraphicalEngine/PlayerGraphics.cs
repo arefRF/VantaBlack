@@ -4,10 +4,13 @@ using System.Collections;
 public class PlayerGraphics : MonoBehaviour {
     public float move_time = 1;
     private Animator animation;
-
+    private APIGraphic api;
+    private LogicalEngine engine;
     void Start()
     {
+        engine = Starter.GetEngine();
         animation = GetComponent<Animator>();
+        api = engine.apigraphic;
     }
 
     private void Rotate_Left_Finished()
@@ -20,10 +23,8 @@ public class PlayerGraphics : MonoBehaviour {
     {
         animation.SetInteger("State", 0);
     }
-    public void Player_Move(GameObject player,Direction dir)
+    public void Player_Move(GameObject player,Vector2 end)
     {
-        Vector2 end = (Vector2)player.transform.position + (Vector2)Toolkit.DirectiontoVector(dir);
-        GameObject.Find("Interface").GetComponent<GetInput>().Player_Move_Started();
         StartCoroutine(Player_Move_Coroutine(player,end));
     }
 
@@ -50,8 +51,8 @@ public class PlayerGraphics : MonoBehaviour {
             obj.transform.position = new_pos;
             yield return null;
         }
-
-        GameObject.Find("Interface").GetComponent<GetInput>().Player_Move_Finished();
+        api.MovePlayerFinished(obj);
+        
         
     }
 

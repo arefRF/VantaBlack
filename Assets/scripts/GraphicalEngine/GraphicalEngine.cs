@@ -14,13 +14,17 @@ public class GraphicalEngine : MonoBehaviour {
     private Vector2 player_pos;
     private float lean_offset = 0.2f;
     private float top_rotate;
-
+    private PlayerGraphics pl_graphics;
+    private APIGraphic api;
+    private LogicalEngine engine;
     private float lean_move = 0.2f;
     void Start()
     {
-
+        engine = Starter.GetEngine();
         database = Starter.GetDataBase();
         top_rotate = 75;
+        api = engine.apigraphic;
+        
 
         //ui = GameObject.Find("Canvas").GetComponent<UI>();
     }
@@ -76,7 +80,7 @@ public class GraphicalEngine : MonoBehaviour {
     [MethodImpl(MethodImplOptions.Synchronized)]
     public  void _move(Player player, Vector2 position)
     {
-        player.transform.position = position;
+        player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject,position);
     }
 
     /*

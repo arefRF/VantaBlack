@@ -17,6 +17,11 @@ public class APIGraphic{
         Debug.Log("move move moe");
         graphicalengine._move(player, position);
     }
+
+    public void MovePlayerFinished(GameObject player_obj)
+    {
+
+    }
     
     public void MovePlayerToBranch(Player player, Vector2 position, bool isonramp)
     {
