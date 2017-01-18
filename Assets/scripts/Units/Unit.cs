@@ -20,11 +20,13 @@ public class Unit : MonoBehaviour {
         return false;
     }
 
-    public void Move(Direction dir)
+    public virtual bool Move(Direction dir)
     {
         List<Unit> units = api.engine_GetUnits(this, dir);
         if (units.Count != 0)
-            return;
+            return false;
+        api.unit_Move(this, dir);
+        return true;
     }
 
 }

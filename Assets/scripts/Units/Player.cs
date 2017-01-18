@@ -13,7 +13,7 @@ public class Player : Unit
     public Direction leandirection;
     public bool lean;
 
-    public bool Move(Direction dir)
+    public override bool Move(Direction dir)
     {
         List<Unit> list  = api.engine_GetUnits(this, dir);
         for(int i = 0; i < list.Count; i++) {

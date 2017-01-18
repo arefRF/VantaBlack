@@ -30,22 +30,22 @@ public class SubEngine_Initializer{
                 GameObject obj = parent.transform.GetChild(j).gameObject;
                 switch (obj.tag)
                 {
-                    case "Box": units[i, j].Add(obj.GetComponent<Box>()); break;
-                    case "Branch": units[i, j].Add(obj.GetComponent<Branch>()); break;
-                    case "Dynamic Container": units[i, j].Add(obj.GetComponent<DynamicContainer>()); break;
-                    case "Static Container": units[i, j].Add(obj.GetComponent<StaticContainer>()); break;
-                    case "Sipmle Container": units[i, j].Add(obj.GetComponent<SimpleContainer>()); break;
-                    case "Gate": units[i, j].Add(obj.GetComponent<Gate>()); break;
-                    case "Pointer": units[i, j].Add(obj.GetComponent<PointerContainer>()); break;
-                    case "Player": units[i, j].Add(obj.GetComponent<Player>()); break;
-                    case "Ramp": units[i, j].Add(obj.GetComponent<Ramp>()); break;
-                    case "Rock": units[i, j].Add(obj.GetComponent<Rock>()); break;
-                    case "Vision": units[i, j].Add(obj.GetComponent<Vision>()); break;
+                    case "Box": units[(int)obj.transform.position.x, (int)obj.transform.position.y].Add(obj.GetComponent<Box>()); break;
+                    case "Branch": units[(int)obj.transform.position.x, (int)obj.transform.position.y].Add(obj.GetComponent<Branch>()); break;
+                    case "Dynamic Container": units[(int)obj.transform.position.x, (int)obj.transform.position.y].Add(obj.GetComponent<DynamicContainer>()); break;
+                    case "Static Container": units[(int)obj.transform.position.x, (int)obj.transform.position.y].Add(obj.GetComponent<StaticContainer>()); break;
+                    case "Sipmle Container": units[(int)obj.transform.position.x, (int)obj.transform.position.y].Add(obj.GetComponent<SimpleContainer>()); break;
+                    case "Gate": units[(int)obj.transform.position.x, (int)obj.transform.position.y].Add(obj.GetComponent<Gate>()); break;
+                    case "Pointer": units[(int)obj.transform.position.x, (int)obj.transform.position.y].Add(obj.GetComponent<PointerContainer>()); break;
+                    case "Player": units[(int)obj.transform.position.x, (int)obj.transform.position.y].Add(obj.GetComponent<Player>()); break;
+                    case "Ramp": units[(int)obj.transform.position.x, (int)obj.transform.position.y].Add(obj.GetComponent<Ramp>()); break;
+                    case "Rock": units[(int)obj.transform.position.x, (int)obj.transform.position.y].Add(obj.GetComponent<Rock>()); break;
+                    case "Vision": units[(int)obj.transform.position.x, (int)obj.transform.position.y].Add(obj.GetComponent<Vision>()); break;
                     default: Debug.Log(obj.tag + " Not supported"); break;
                 }
-                units[i, j][units[i, j].Count - 1].codeNumber = Unit.Code;
-                units[i, j][units[i, j].Count - 1].api = api;
-                units[i, j][units[i, j].Count - 1].position = units[i, j][units[i, j].Count - 1].transform.position;
+                units[(int)obj.transform.position.x, (int)obj.transform.position.y][units[(int)obj.transform.position.x, (int)obj.transform.position.y].Count - 1].codeNumber = Unit.Code;
+                units[(int)obj.transform.position.x, (int)obj.transform.position.y][units[(int)obj.transform.position.x, (int)obj.transform.position.y].Count - 1].api = api;
+                units[(int)obj.transform.position.x, (int)obj.transform.position.y][units[(int)obj.transform.position.x, (int)obj.transform.position.y].Count - 1].position = units[(int)obj.transform.position.x, (int)obj.transform.position.y][units[(int)obj.transform.position.x, (int)obj.transform.position.y].Count - 1].transform.position;
                 Unit.Code++;
             }
         }

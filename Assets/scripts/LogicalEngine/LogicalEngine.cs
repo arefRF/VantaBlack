@@ -24,6 +24,7 @@ public class LogicalEngine {
     {
         database.units = initializer.init();
         database.state = State.Idle;
+        Debug.Log(database.units[8,1].Count);
     }
 
     public void MoveUnit(Unit unit, Vector2 position)
@@ -96,7 +97,6 @@ public class LogicalEngine {
 
     public List<Unit> GetUnits(Vector2 position)
     {
-        Debug.Log(position);
         return database.units[(int)position.x, (int)position.y];
     }
 
