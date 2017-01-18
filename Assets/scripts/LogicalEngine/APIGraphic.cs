@@ -45,12 +45,23 @@ public class APIGraphic{
 
     public void Lean(Player player)
     {
+           PlayerGraphics gl = player.GetComponent<PlayerGraphics>();
+           switch (player.leandirection)
+           {
+               case Direction.Right: gl.Lean_Right(); break;
+               case Direction.Left: gl.Lean_Left(); break;
 
+           }
     }
 
     public void LeanFinished(Player player)
     {
-
+        PlayerGraphics gl = player.GetComponent<PlayerGraphics>();
+        switch (player.leandirection)
+        {
+            case Direction.Right: gl.Lean_Right_Finished(); break;
+            case Direction.Left: gl.Lean_Left_Finished(); break;
+        }
     }
 
 }

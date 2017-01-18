@@ -13,15 +13,27 @@ public class PlayerGraphics : MonoBehaviour {
         api = engine.apigraphic;
     }
 
-    private void Rotate_Left_Finished()
+
+    public void Lean_Right()
     {
-        animation.SetInteger("State", 0);
-        gameObject.transform.rotation = Quaternion.Euler(new Vector3(0, 180, 0));
+        gameObject.transform.position = (Vector2)gameObject.transform.position + new Vector2(0.2f,0);
     }
 
-    private void Rotate_Right_Finished()
+    public void Lean_Left()
     {
-        animation.SetInteger("State", 0);
+        gameObject.transform.position = (Vector2)gameObject.transform.position + new Vector2(-0.2f, 0);
+    }
+    public void Lean_Left_Finished()
+    {
+        // animation.SetInteger("State", 0);
+        // gameObject.transform.rotation = Quaternion.Euler(new Vector3(0, 180, 0));
+        gameObject.transform.position = (Vector2)gameObject.transform.position + new Vector2(0.2f, 0);
+    }
+
+    public void Lean_Right_Finished()
+    {
+       // animation.SetInteger("State", 0);
+        gameObject.transform.position = (Vector2)gameObject.transform.position + new Vector2(-0.2f, 0);
     }
     public void Player_Move(GameObject player,Vector2 end)
     {

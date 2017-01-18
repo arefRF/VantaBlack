@@ -20,7 +20,6 @@ public class Player : Unit
             if (!list[i].PlayerMoveInto(Toolkit.ReverseDirection(dir)))
                 return false;
         }
-        Debug.Log("Move");
         api.engine_Move(this, dir);
         return true;
     }
