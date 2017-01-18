@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public abstract  class Unit : MonoBehaviour {
+public class Unit : MonoBehaviour {
     public Vector2 position { get; set; }
     public UnitType unitType { get; set; }
     public GameObject obj { get; set; }
@@ -15,7 +15,16 @@ public abstract  class Unit : MonoBehaviour {
 
    // public abstract bool CanMove(UnitType unittype);
 
-    public abstract bool PlayerMoveInto(Direction dir);
+    public virtual bool PlayerMoveInto(Direction dir)
+    {
+        return false;
+    }
+
+    public void Move(Direction dir)
+    {
+
+    }
+
 }
 
 public class CloneableUnit
