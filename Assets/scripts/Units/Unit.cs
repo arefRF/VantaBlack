@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public class Unit : MonoBehaviour {
     public Vector2 position { get; set; }
@@ -22,7 +22,9 @@ public class Unit : MonoBehaviour {
 
     public void Move(Direction dir)
     {
-
+        List<Unit> units = api.engine_GetUnits(this, dir);
+        if (units.Count != 0)
+            return;
     }
 
 }

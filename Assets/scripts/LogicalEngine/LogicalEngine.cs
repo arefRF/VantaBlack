@@ -81,13 +81,11 @@ public class LogicalEngine {
         database.units[(int)player.position.x, (int)player.position.y].Remove(player);
         database.units[(int)newpos.x, (int)newpos.y].Add(player);
         player.position = newpos;
-        Applygravity();
-        apiinput.PlayerMoveFinished();
     }
 
     private void Applygravity()
     {
-
+        apiinput.PlayerMoveFinished();
     }
 
     public void Lean(Player player, Direction direction)
@@ -120,5 +118,10 @@ public class LogicalEngine {
                 apigraphic.LeanFinished(database.player[i]);
             }
         }
+    }
+
+    public void graphic_MoveAnimationFinished(Player player)
+    {
+        Applygravity();
     }
 }

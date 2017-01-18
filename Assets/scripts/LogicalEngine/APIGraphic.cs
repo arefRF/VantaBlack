@@ -20,7 +20,7 @@ public class APIGraphic{
 
     public void MovePlayerFinished(GameObject player_obj)
     {
-
+        logicalengine.graphic_MoveAnimationFinished(player_obj.GetComponent<Player>());
     }
     
     public void MovePlayerToBranch(Player player, Vector2 position, bool isonramp)
