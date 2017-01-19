@@ -10,8 +10,13 @@ public class Player : Unit
     public Direction direction { get; set; }
     public PlayerState state { get; set; }
 
-    public Direction leandirection;
-    public bool lean;
+    public Direction leandirection { get; set; }
+    public bool lean { get; set; }
+
+    public void Awake()
+    {
+        direction = move_direction[0];
+    }
 
     public override bool Move(Direction dir)
     {

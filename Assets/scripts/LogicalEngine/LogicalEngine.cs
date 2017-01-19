@@ -159,10 +159,27 @@ public class LogicalEngine {
         {
             if (!database.player[i].lean)
             {
-                if (!database.player[i].Move(direction))
+                for(int j=0; j<database.player[i].move_direction.Count; j++)
                 {
-                    Lean(database.player[i], direction);
-                    apiinput.PlayerMoveFinished();
+                    if(database.player[i].move_direction[j] == direction)
+                    {
+                        if(direction == database.player[i].direction)
+                        {
+                            Debug.Log("ajab");
+                            if (!database.player[i].Move(direction))
+                            {
+                                Lean(database.player[i], direction);
+                                apiinput.PlayerMoveFinished();
+                            }
+                        }
+                        else
+                        {
+                            Debug.Log("oino");
+                            Direction olddir = database.player[i].direction;
+                            database.player[i].direction = direction;
+                            apigraphic.PlayerChangeDirection(database.player[i], olddir, database.player[i].direction);
+                        }
+                    }
                 }
             }
         }
@@ -223,6 +240,11 @@ public class LogicalEngine {
     public void graphic_AbsorbReleaseFinished(Player player)
     {
 
+    }
+
+    public void graphic_PlayerChangeDirectionFinished(Player player)
+    {
+        apiinput.PlayerMoveFinished();
     }
 
     public void UnitToGraphic_Land(Unit unit, Unit landingunit,Vector2 landingposition)
