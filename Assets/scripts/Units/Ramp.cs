@@ -4,7 +4,7 @@ using System;
 
 public class Ramp : Unit {
     public Direction direction;
-    public int type { get; set;}
+    public int type;
 
     public override bool PlayerMoveInto(Direction dir)
     {
