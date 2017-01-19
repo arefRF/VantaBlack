@@ -26,6 +26,17 @@ public class GraphicalEngine : MonoBehaviour {
         api = engine.apigraphic;
        
     }
+
+
+    public void Move_Object(GameObject obj, Vector2 pos)
+    {
+        
+    }
+
+    private IEnumerator Move_Object_Coroutine()
+    {
+        yield return null;
+    }
 	// Use this for initialization
 
 

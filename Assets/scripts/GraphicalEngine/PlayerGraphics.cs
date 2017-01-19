@@ -78,13 +78,16 @@ public class PlayerGraphics : MonoBehaviour {
     public void Block_To_Ramp_Move(Vector2 position,Direction dir,int type)
     {
         Vector2 plus = Toolkit.DirectiontoVector(dir);
+        Vector2 end = position;
         plus = new Vector2(0.5f * plus.x, 0.5f * plus.y);
         position += plus;
-        StartCoroutine(Player_Move_Coroutine(position, false));
+        Debug.Log(position);
+        StartCoroutine(Ramp_Move_Coroutine(position,end,type));
     }
 
     private void Block_To_Ramp_Move_Part2(Vector2 position,int type)
     {
+        
         Vector2 end2 = position;
         int x = 1, y = 1;
         if (type == 3 || type == 4)
@@ -131,7 +134,7 @@ public class PlayerGraphics : MonoBehaviour {
             transform.position = new_pos;
             yield return null;
         }
-        Block_To_Ramp_Move_Part2(end2, type);
+        api.MovePlayerFinished(gameObject);
     }
 
 }
