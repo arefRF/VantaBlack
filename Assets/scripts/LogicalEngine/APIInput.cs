@@ -7,6 +7,15 @@ public class APIInput{
     public GetInput input { get; set; }
     
   
+    public bool Action_Key()
+    {
+        return true;
+    }
+
+    public void Action_Key(Direction dir)
+    {
+
+    }
     
     public APIInput(LogicalEngine engine)
     {
