@@ -30,7 +30,10 @@ public class LogicalEngine {
     {
         if(!(unit is Box))
         {
-            
+            for(int i=0; i<unit.ConnectedUnits.Count; i++)
+            {
+
+            }
         }
         else
         {

@@ -51,7 +51,7 @@ public class SubEngine_Initializer{
                 Unit.Code++;
             }
             for (int j = 0; j < connectedunits.Count; j++)
-                connectedunits[i].SetConnectedUnits(connectedunits);
+                connectedunits[j].SetConnectedUnits(connectedunits);
         }
         return units;
     }
