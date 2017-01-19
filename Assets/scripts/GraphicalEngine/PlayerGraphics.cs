@@ -57,7 +57,7 @@ public class PlayerGraphics : MonoBehaviour {
     }
     public void Player_Move(GameObject player,Vector2 end)
     {
-        StartCoroutine(Player_Move_Coroutine(end,true,0));
+        StartCoroutine(Player_Move_Coroutine(end,true));
     }
 
     public void Player_Change_Direction(Player player,Direction dir)
@@ -72,7 +72,7 @@ public class PlayerGraphics : MonoBehaviour {
     public void Ramp_To_Ramp_Move(Vector2 position)
     {
         position += new Vector2(0.5f,0.5f);
-        StartCoroutine(Player_Move_Coroutine(position,true,0));
+        StartCoroutine(Player_Move_Coroutine(position,true));
     }
 
     public void Block_To_Ramp_Move(Vector2 position,Direction dir,int type)
@@ -80,12 +80,20 @@ public class PlayerGraphics : MonoBehaviour {
         Vector2 plus = Toolkit.DirectiontoVector(dir);
         plus = new Vector2(0.5f * plus.x, 0.5f * plus.y);
         position += plus;
-        StartCoroutine(Player_Move_Coroutine(position, false, type));
+        StartCoroutine(Player_Move_Coroutine(position, false));
     }
 
     private void Block_To_Ramp_Move_Part2(Vector2 position,int type)
     {
-
+        Vector2 end2 = position;
+        int x = 1, y = 1;
+        if (type == 3 || type == 4)
+            x = -1;
+        if (type == 2 || type == 3)
+            y = -1;
+        Vector2 plus = new Vector2(0.5f * x, 0.5f * y);
+        position += plus;
+        StartCoroutine(Ramp_Move_Coroutine(position,position,type));
     }
     private void Change_Direction_Finished()
     {
@@ -98,7 +106,7 @@ public class PlayerGraphics : MonoBehaviour {
 
     }
 
-    private IEnumerator Player_Move_Coroutine(Vector2 end,bool call_finish, int type)
+    private IEnumerator Player_Move_Coroutine(Vector2 end,bool call_finish)
     {
         float remain_distance = ((Vector2)transform.position - end).sqrMagnitude;
         while(remain_distance > float.Epsilon)
@@ -110,9 +118,20 @@ public class PlayerGraphics : MonoBehaviour {
         }
         if (call_finish)
             api.MovePlayerFinished(gameObject);
-        else
-            Block_To_Ramp_Move_Part2(end,type);
 
+    }
+
+    private IEnumerator Ramp_Move_Coroutine(Vector2 end, Vector2 end2, int type)
+    {
+        float remain_distance = ((Vector2)transform.position - end).sqrMagnitude;
+        while (remain_distance > float.Epsilon)
+        {
+            remain_distance = ((Vector2)transform.position - end).sqrMagnitude;
+            Vector2 new_pos = Vector2.MoveTowards(transform.position, end, Time.deltaTime * 1 / move_time);
+            transform.position = new_pos;
+            yield return null;
+        }
+        Block_To_Ramp_Move_Part2(end2, type);
     }
 
 }
