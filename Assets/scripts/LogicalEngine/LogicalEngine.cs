@@ -235,16 +235,16 @@ public class LogicalEngine {
         apigraphic.LandOnRamp((Player)unit, landingposition, landingunit, landingtype);
     }
 
-    public void UnitToGraphic_Absorb(Player player, Container container, Ability ability)
+    public void UnitToGraphic_Absorb(Player player, Container container, AbilityType ability)
     {
 
     }
 
-    public void UnitToGraphic_Release(Player player, Container container, Ability ability)
+    public void UnitToGraphic_Release(Player player, Container container, AbilityType ability)
     {
 
     }
-    public void UnitToGraphic_Swap(Player player, Container container, Ability ability)
+    public void UnitToGraphic_Swap(Player player, Container container, AbilityType ability)
     {
 
     }

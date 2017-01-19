@@ -2,13 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 public class Container : ParentContainer {
-    public List<Ability> abilities;
+    public List<AbilityType> abilities;
     public int capacity = 4;
 
 
     void Start()
     {
-        abilities = new List<Ability>();
+        
     }
 
 
@@ -20,7 +20,7 @@ public class Container : ParentContainer {
             PlayerAbsorbAbilities(player);
         else
         {
-            if (abilities[0].abilitytype == player.abilities[0].abilitytype)
+            if (abilities[0] == player.abilities[0])
                 PlayerAbsorbAbilities(player);
             else
                 Swap(player);
@@ -29,7 +29,7 @@ public class Container : ParentContainer {
 
     private void Swap(Player player)
     {
-        List<Ability> temp = abilities;
+        List<AbilityType> temp = abilities;
         abilities = player.abilities;
         player.abilities = temp;
     }
@@ -60,7 +60,7 @@ public class Container : ParentContainer {
             PlayerReleaseAbilities(player);
         else
         {
-            if (player.abilities[0].abilitytype == abilities[0].abilitytype)
+            if (player.abilities[0] == abilities[0])
                 PlayerReleaseAbilities(player);
             else
                 Swap(player);

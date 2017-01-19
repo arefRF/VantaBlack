@@ -5,7 +5,7 @@ using System;
 
 public class Player : Unit
 {
-    public List<Ability> abilities;
+    public List<AbilityType> abilities;
     public List<Direction> move_direction;
     public Direction direction { get; set; }
     public PlayerState state { get; set; }
