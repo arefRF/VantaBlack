@@ -12,7 +12,7 @@ public class APIGraphic{
         graphicalengine = GameObject.Find("Graphical").GetComponent<GraphicalEngine>();
     }
 
-    public void MovePlayer(Player player, Vector2 position, bool isonramp)
+    public void MovePlayer(Player player, Vector2 position, bool wasonramp)
     {
         player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
     }
@@ -44,9 +44,12 @@ public class APIGraphic{
         player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
     }
 
-    public void MovePlayerOnRamp(Player player, Vector2 position, bool isonramp)
+    public void MovePlayerOnRamp(Player player, Vector2 position, bool was_on_ramp,Direction dir, int type)
     {
-
+        if (was_on_ramp)
+            player.GetComponent<PlayerGraphics>().Ramp_To_Ramp_Move(position);
+        else
+            player.GetComponent<PlayerGraphics>().Block_To_Ramp_Move(position,dir,type);
     }
 
     public void Jump(Player player, Vector2 position)

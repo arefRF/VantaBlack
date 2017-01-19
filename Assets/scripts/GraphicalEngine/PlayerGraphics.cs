@@ -57,7 +57,7 @@ public class PlayerGraphics : MonoBehaviour {
     }
     public void Player_Move(GameObject player,Vector2 end)
     {
-        StartCoroutine(Player_Move_Coroutine(player,end));
+        StartCoroutine(Player_Move_Coroutine(end,true,0));
     }
 
     public void Player_Change_Direction(Player player,Direction dir)
@@ -69,6 +69,24 @@ public class PlayerGraphics : MonoBehaviour {
             animation.SetInteger("State", -1);
     }
 
+    public void Ramp_To_Ramp_Move(Vector2 position)
+    {
+        position += new Vector2(0.5f,0.5f);
+        StartCoroutine(Player_Move_Coroutine(position,true,0));
+    }
+
+    public void Block_To_Ramp_Move(Vector2 position,Direction dir,int type)
+    {
+        Vector2 plus = Toolkit.DirectiontoVector(dir);
+        plus = new Vector2(0.5f * plus.x, 0.5f * plus.y);
+        position += plus;
+        StartCoroutine(Player_Move_Coroutine(position, false, type));
+    }
+
+    private void Block_To_Ramp_Move_Part2(Vector2 position,int type)
+    {
+
+    }
     private void Change_Direction_Finished()
     {
         animation.SetInteger("State", 0);
@@ -80,19 +98,21 @@ public class PlayerGraphics : MonoBehaviour {
 
     }
 
-    private IEnumerator Player_Move_Coroutine(GameObject obj , Vector2 end)
+    private IEnumerator Player_Move_Coroutine(Vector2 end,bool call_finish, int type)
     {
-        float remain_distance = ((Vector2)obj.transform.position - end).sqrMagnitude;
+        float remain_distance = ((Vector2)transform.position - end).sqrMagnitude;
         while(remain_distance > float.Epsilon)
         {
-            remain_distance = ((Vector2)obj.transform.position - end).sqrMagnitude;
-            Vector3 new_pos = Vector3.MoveTowards(obj.transform.position, end, Time.deltaTime * 1 / move_time);
-            obj.transform.position = new_pos;
+            remain_distance = ((Vector2)transform.position - end).sqrMagnitude;
+            Vector2 new_pos = Vector2.MoveTowards(transform.position, end, Time.deltaTime * 1 / move_time);
+            transform.position = new_pos;
             yield return null;
         }
-        api.MovePlayerFinished(obj);
-        
-        
+        if (call_finish)
+            api.MovePlayerFinished(gameObject);
+        else
+            Block_To_Ramp_Move_Part2(end,type);
+
     }
 
 }
