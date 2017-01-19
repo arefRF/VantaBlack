@@ -48,8 +48,11 @@ public class GetInput : MonoBehaviour {
                 if (!is_walking)
                     Get_Move();
                 if (Input.GetKeyDown(KeyCode.Space))
+                {
                     //if (!engine.SpaceKeyPressed())
                     is_space = true;
+                }
+                if(Input.GetKey(KeyCode.W))
             }
 
         }

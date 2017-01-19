@@ -5,8 +5,9 @@ public class APIInput{
 
     LogicalEngine engine;
     public GetInput input { get; set; }
+    
   
-
+    
     public APIInput(LogicalEngine engine)
     {
         this.engine = engine;
