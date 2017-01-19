@@ -73,6 +73,11 @@ public class PlayerGraphics : MonoBehaviour {
     {
 
     }
+
+    public void ChangeDirection(Direction dir)
+    {
+
+    }
     private IEnumerator Player_Move_Coroutine(GameObject obj , Vector2 end)
     {
         float remain_distance = ((Vector2)obj.transform.position - end).sqrMagnitude;

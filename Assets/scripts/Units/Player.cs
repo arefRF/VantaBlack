@@ -29,6 +29,15 @@ public class Player : Unit
         container.PlayerAbsorb(this);
     }
 
+    public bool Action()
+    {
+        return true;
+    }
+
+    public void Action(Direction dir)
+    {
+
+    }
     public void Release(Container container)
     {
         container.PlayerRelease(this);

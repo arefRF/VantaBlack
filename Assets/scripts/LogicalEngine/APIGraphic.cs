@@ -94,4 +94,9 @@ public class APIGraphic{
     {
 
     }
+
+    public void ChangeDirection(Player player)
+    {
+        
+    }
 }
