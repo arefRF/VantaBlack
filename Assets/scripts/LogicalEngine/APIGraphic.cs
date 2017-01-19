@@ -52,6 +52,16 @@ public class APIGraphic{
             player.GetComponent<PlayerGraphics>().Block_To_Ramp_Move(position,dir,type);
     }
 
+    public void MoveGameObject(GameObject obj, Vector2 pos)
+    {
+        
+    }
+
+    public void MoveGameObjectFinished(GameObject obj)
+    {
+
+    }
+
     public void Jump(Player player, Vector2 position)
     {
 
