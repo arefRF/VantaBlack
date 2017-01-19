@@ -31,4 +31,9 @@ public class APIInput{
     {
         engine.ArrowkeyReleased(dir);
     }
+
+    public void AbsorbRelease(Direction dir)
+    {
+        engine.Input_AbsorbRlease(dir);
+    }
 }
