@@ -69,6 +69,11 @@ public class PlayerGraphics : MonoBehaviour {
             animation.SetInteger("State", -1);
     }
 
+    private void Change_Direction_Finished()
+    {
+        animation.SetInteger("State", 0);
+    }
+
     public void Player_Roll(GameObject player,Direction dir,int number)
     {
 
