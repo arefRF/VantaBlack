@@ -97,7 +97,11 @@ public class APIGraphic{
 
     public void PlayerChangeDirection(Player player, Direction olddirection, Direction newdirection)
     {
-        logicalengine.graphic_PlayerChangeDirectionFinished(player);
+        player.GetComponent<PlayerGraphics>().Player_Change_Direction(player, newdirection);
+    }
 
+    public void PlayerChangeDirectionFinished(Player player)
+    {
+        logicalengine.graphic_PlayerChangeDirectionFinished(player);
     }
 }
