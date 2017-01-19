@@ -6,7 +6,7 @@ public class LogicalEngine {
     public APIGraphic apigraphic;
     public APIInput apiinput;
     public APIUnit apiunit;
-    Database database;
+    public Database database;
     SubEngine_Initializer initializer;
     int sizeX, sizeY;
     public LogicalEngine(int x, int y)
@@ -73,11 +73,10 @@ public class LogicalEngine {
             {
                 simplemove = false;
                 apigraphic.MovePlayerToBranch(player, newpos, onramp);
-                apiinput.PlayerMoveFinished();
                 break;
             }
         }
-        if(simplemove)
+        if (simplemove)
             apigraphic.MovePlayer(player, newpos, onramp);
         database.units[(int)player.position.x, (int)player.position.y].Remove(player);
         database.units[(int)newpos.x, (int)newpos.y].Add(player);
@@ -86,13 +85,11 @@ public class LogicalEngine {
 
     private void Applygravity()
     {
-        bool flag = true;
         for(int i=0; i<database.player.Count; i++)
         {
-            
-
+            ApplyGravity_Player(database.player[i]);
         }
-        apiinput.PlayerMoveFinished();
+        //apiinput.PlayerMoveFinished();
     }
     public void ApplyGravity_Player(Player player)
     {
@@ -105,28 +102,41 @@ public class LogicalEngine {
             if (units.Count == 1)
             {
                 units[0].fallOn(player, Toolkit.ReverseDirection(database.gravity_direction));
-                return;
+                
             }
             else
             {
                 Unit fallonunit = Toolkit.GetUnitToFallOn(units, Toolkit.ReverseDirection(database.gravity_direction));
                 fallonunit.fallOn(player, Toolkit.ReverseDirection(database.gravity_direction));
-                return;
+                
             }
         }
-        database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-        database.units[(int)nextpos.x, (int)nextpos.y].Add(player);
-        apigraphic.Fall(player, nextpos);
+        else
+        {
+            database.units[(int)player.position.x, (int)player.position.y].Remove(player);
+            database.units[(int)nextpos.x, (int)nextpos.y].Add(player);
+            player.position = nextpos;
+            apigraphic.Fall(player, nextpos);
+            
+        }
     }
 
-    public void FallFinished(Player player, bool isonunit)
+    public void graphic_FallFinished(Player player)
     {
+        bool isonunit = true;
+        if (GetUnits(Toolkit.VectorSum(Toolkit.DirectiontoVector(database.gravity_direction), player.position)).Count == 0)
+            isonunit = false;
         if (isonunit)
         {
             player.state = PlayerState.Steady;
         }
         else
             ApplyGravity_Player(player);
+    }
+
+    public void graphic_LandFinished(Player player)
+    {
+        player.state = PlayerState.Steady;
     }
 
     public void Lean(Player player, Direction direction)
@@ -174,5 +184,16 @@ public class LogicalEngine {
     public void graphic_MoveAnimationFinished(Player player)
     {
         Applygravity();
+        apiinput.PlayerMoveFinished();
+    }
+
+    public void UnitToGraphic_Land(Unit unit, Unit landingunit,Vector2 landingposition)
+    {
+        apigraphic.Land((Player)unit, landingposition, landingunit);
+    }
+
+    public void UnitToGraphic_LandOnRamp(Unit unit, Ramp landingunit, Vector2 landingposition, int landingtype)
+    {
+        apigraphic.LandOnRamp((Player)unit, landingposition, landingunit, landingtype);
     }
 }

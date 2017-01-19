@@ -25,16 +25,22 @@ public class APIGraphic{
     public void Fall(Player player, Vector2 position)
     {
         player.gameObject.transform.position = position;
+        logicalengine.graphic_FallFinished(player);
     }
 
-    public void FallOnto(Player player, Vector2 position, Unit fallonunit)
+    public void Land(Player player, Vector2 position, Unit fallonunit)
     {
+        logicalengine.graphic_LandFinished(player);
+    }
 
+    public void LandOnRamp(Player player, Vector2 position, Unit fallonunit, int landtype)
+    {
+        logicalengine.graphic_LandFinished(player);
     }
 
     public void MovePlayerToBranch(Player player, Vector2 position, bool isonramp)
     {
-
+        player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
     }
 
     public void MovePlayerOnRamp(Player player, Vector2 position, bool isonramp)

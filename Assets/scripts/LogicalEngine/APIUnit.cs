@@ -31,9 +31,20 @@ public class APIUnit {
         return engine.GetUnits(Toolkit.VectorSum(Toolkit.DirectiontoVector(dir), unit.position));
     }
 
+    public void engine_Land(Unit unit, Unit laningunit, Direction landingdirection)
+    {
+        Vector2 landingpos = Toolkit.VectorSum(Toolkit.DirectiontoVector(engine.database.gravity_direction), unit.position);
+        engine.UnitToGraphic_Land(laningunit, unit,landingpos);
+    }
+
+    public void engine_LandOnRamp(Ramp ramp, Unit landingunit, int ramptype)
+    {
+        engine.UnitToGraphic_LandOnRamp(landingunit, ramp, ramp.position, ramptype);
+    }
     public void unit_Move(Unit unit, Direction dir)
     {
         if (unit is Player)
             ((Player)unit).Move(dir);
     }
+
 }
