@@ -52,7 +52,14 @@ public class GetInput : MonoBehaviour {
                     //if (!engine.SpaceKeyPressed())
                     is_space = true;
                 }
-                if(Input.GetKey(KeyCode.W))
+                if (Input.GetKeyDown(KeyCode.W))
+                    api.AbsorbRelease(Direction.Up);
+                if (Input.GetKeyDown(KeyCode.S))
+                    api.AbsorbRelease(Direction.Down);
+                if (Input.GetKeyDown(KeyCode.A))
+                    api.AbsorbRelease(Direction.Left);
+                if (Input.GetKeyDown(KeyCode.D))
+                    api.AbsorbRelease(Direction.Right);
             }
 
         }
