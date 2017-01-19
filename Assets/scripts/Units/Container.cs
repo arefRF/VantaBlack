@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
+
 public class Container : ParentContainer {
     public List<AbilityType> abilities;
     public int capacity = 4;
@@ -69,5 +71,10 @@ public class Container : ParentContainer {
     public override bool PlayerMoveInto(Direction dir)
     {
         return false;
+    }
+
+    public override void Action(Player player, Direction dir)
+    {
+        return;
     }
 }

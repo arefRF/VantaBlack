@@ -11,7 +11,7 @@ public class Unit : MonoBehaviour {
 
     public static int Code = 0;
 
-
+    public List<Unit> ConnectedUnits { get; set; }
 
     // public abstract bool CanMove(UnitType unittype);
 
@@ -34,6 +34,23 @@ public class Unit : MonoBehaviour {
         api.engine_Land(this, fallingunit, dir);
     }
 
+    public virtual bool CanMove(Direction dir)
+    {
+        List<Unit> units = api.engine_GetUnits(this, dir);
+        if (units.Count != 0)
+            return false;
+        return true;
+    }
+
+    public void SetConnectedUnits(List<Unit> units)
+    {
+        for(int i=0; i<units.Count; i++)
+        {
+            if (units[i] == this)
+                continue;
+            ConnectedUnits.Add(units[i]);
+        }
+    }
 }
 
 public class CloneableUnit

@@ -25,6 +25,7 @@ public class SubEngine_Initializer{
         for(int i=0; i<input.transform.childCount; i++)
         {
             GameObject parent = input.transform.GetChild(i).gameObject;
+            List<Unit> connectedunits = new List<Unit>();
             for(int j=0; j<parent.transform.childCount; j++)
             {
                 GameObject obj = parent.transform.GetChild(j).gameObject;
@@ -43,11 +44,14 @@ public class SubEngine_Initializer{
                     case "Vision": units[(int)obj.transform.position.x, (int)obj.transform.position.y].Add(obj.GetComponent<Vision>()); break;
                     default: Debug.Log(obj.tag + " Not supported"); break;
                 }
+                connectedunits.Add(units[(int)obj.transform.position.x, (int)obj.transform.position.y][units[(int)obj.transform.position.x, (int)obj.transform.position.y].Count - 1]);
                 units[(int)obj.transform.position.x, (int)obj.transform.position.y][units[(int)obj.transform.position.x, (int)obj.transform.position.y].Count - 1].codeNumber = Unit.Code;
                 units[(int)obj.transform.position.x, (int)obj.transform.position.y][units[(int)obj.transform.position.x, (int)obj.transform.position.y].Count - 1].api = api;
                 units[(int)obj.transform.position.x, (int)obj.transform.position.y][units[(int)obj.transform.position.x, (int)obj.transform.position.y].Count - 1].position = units[(int)obj.transform.position.x, (int)obj.transform.position.y][units[(int)obj.transform.position.x, (int)obj.transform.position.y].Count - 1].transform.position;
                 Unit.Code++;
             }
+            for (int j = 0; j < connectedunits.Count; j++)
+                connectedunits[i].SetConnectedUnits(connectedunits);
         }
         return units;
     }

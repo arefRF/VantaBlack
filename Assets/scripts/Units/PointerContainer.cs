@@ -19,4 +19,9 @@ public class PointerContainer : ParentContainer {
     {
         throw new NotImplementedException();
     }
+
+    public override void Action(Player player, Direction dir)
+    {
+        throw new NotImplementedException();
+    }
 }

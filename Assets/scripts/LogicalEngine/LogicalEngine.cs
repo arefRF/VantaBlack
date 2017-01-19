@@ -26,16 +26,17 @@ public class LogicalEngine {
         database.state = State.Idle;
     }
 
-    public void MoveUnit(Unit unit, Vector2 position)
+    public bool MoveUnit(Unit unit, Vector2 position)
     {
-        if(unit is Box)
+        if(!(unit is Box))
         {
             
         }
         else
         {
-            //apigraphic.
+            
         }
+        return false;
     }
 
     public void MovePlayer(Player player, Direction dir)
@@ -65,7 +66,7 @@ public class LogicalEngine {
                 else
                     newpos = units[i].position;
                 simplemove = false;
-                apigraphic.MovePlayerOnRamp(player, newpos, onramp);
+                apigraphic.MovePlayerOnRamp(player, newpos, onramp, dir, ((Ramp)units[i]).type);
                 break;
             }
             if(units[i] is Branch)
@@ -165,7 +166,6 @@ public class LogicalEngine {
                     {
                         if(direction == database.player[i].direction)
                         {
-                            Debug.Log("ajab");
                             if (!database.player[i].Move(direction))
                             {
                                 Lean(database.player[i], direction);
@@ -174,9 +174,9 @@ public class LogicalEngine {
                         }
                         else
                         {
-                            Debug.Log("oino");
                             Direction olddir = database.player[i].direction;
                             database.player[i].direction = direction;
+                            apiinput.PlayerMoveStarted();
                             apigraphic.PlayerChangeDirection(database.player[i], olddir, database.player[i].direction);
                         }
                     }
