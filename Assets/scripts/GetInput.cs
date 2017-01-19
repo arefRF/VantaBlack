@@ -49,9 +49,11 @@ public class GetInput : MonoBehaviour {
                     Get_Move();
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
-                    //if (!engine.SpaceKeyPressed())
-                    is_space = true;
+                    if (!api.Action_Key())
+                        is_space = true;
                 }
+                if (is_space)
+                    Get_Space_Arrows();
                 if (Input.GetKeyDown(KeyCode.W))
                     api.AbsorbRelease(Direction.Up);
                 if (Input.GetKeyDown(KeyCode.S))
@@ -68,16 +70,14 @@ public class GetInput : MonoBehaviour {
     // Get Arrows if Ability needs it
     private void Get_Space_Arrows()
     {
-        /*
         if (Input.GetKeyDown(KeyCode.RightArrow))
-            engine.SpaceKeyPressed(Direction.Right);
+           api.Action_Key(Direction.Right);
         else if (Input.GetKeyDown(KeyCode.LeftArrow))
-            engine.SpaceKeyPressed(Direction.Left);
+            api.Action_Key(Direction.Left);
         else if (Input.GetKeyDown(KeyCode.DownArrow))
-            engine.SpaceKeyPressed(Direction.Down);
+            api.Action_Key(Direction.Down);
         else if (Input.GetKeyDown(KeyCode.UpArrow))
-            engine.SpaceKeyPressed(Direction.Up);
-            */
+            api.Action_Key(Direction.Up);
     }
 
     private void Get_Lean_Undo()
