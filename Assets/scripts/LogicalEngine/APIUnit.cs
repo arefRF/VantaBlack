@@ -31,6 +31,11 @@ public class APIUnit {
         return engine.GetUnits(Toolkit.VectorSum(Toolkit.DirectiontoVector(dir), unit.position));
     }
 
+    public List<Unit> engine_GetUnits(Vector2 position)
+    {
+        return engine.GetUnits(position);
+    }
+
     public void engine_Land(Unit unit, Unit laningunit, Direction landingdirection)
     {
         Vector2 landingpos = Toolkit.VectorSum(Toolkit.DirectiontoVector(engine.database.gravity_direction), unit.position);

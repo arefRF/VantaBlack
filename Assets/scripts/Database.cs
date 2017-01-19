@@ -21,10 +21,10 @@ public class Database {
     public int[,] checkPointPositions;
     public int Ysize { get; set; }
     public int Xsize { get; set; }
-
-    private Direction GravityDirection;
     
     public List<Snapshot> snapshots;
+
+    public static Direction GravityDirection;
 }
 
 

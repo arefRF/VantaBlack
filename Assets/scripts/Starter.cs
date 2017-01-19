@@ -21,6 +21,7 @@ public class Starter : MonoBehaviour{
         logicalengine = new LogicalEngine(x, y);
         staticengine = logicalengine;
         database.gravity_direction = Gravity_Directin;
+        Database.GravityDirection = database.gravity_direction;
         database.state = State.Busy;
         staticengine = logicalengine;
         GameObject.Find("Graphical").GetComponent<GraphicalEngine>().database = database;

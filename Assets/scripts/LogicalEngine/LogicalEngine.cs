@@ -32,7 +32,7 @@ public class LogicalEngine {
         {
             for(int i=0; i<unit.ConnectedUnits.Count; i++)
             {
-
+                //unit.ConnectedUnits[i].
             }
         }
         else
@@ -56,10 +56,7 @@ public class LogicalEngine {
                 onramp = true;
             }
         }
-        if (onramp)
-            units = GetUnits(Toolkit.VectorSum(Toolkit.VectorSum(player.position, Toolkit.DirectiontoVector(dir)), Toolkit.DirectiontoVector(database.gravity_direction)));
-        else
-            units = GetUnits(Toolkit.VectorSum(player.position, Toolkit.DirectiontoVector(dir)));
+        units = GetUnits(Toolkit.VectorSum(Toolkit.VectorSum(player.position, Toolkit.DirectiontoVector(dir)), Toolkit.DirectiontoVector(database.gravity_direction)));
         for(int i=0; i<units.Count; i++)
         {
             if(units[i] is Ramp)
@@ -267,6 +264,7 @@ public class LogicalEngine {
 
     public void graphic_MoveAnimationFinished(Player player)
     {
+        Debug.Log("move animation finished");
         Applygravity();
         apiinput.PlayerMoveFinished();
     }
