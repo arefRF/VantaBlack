@@ -23,6 +23,26 @@ public class PlayerGraphics : MonoBehaviour {
     {
         gameObject.transform.position = (Vector2)gameObject.transform.position + new Vector2(-0.2f, 0);
     }
+
+    public void Lean_Up()
+    {
+        gameObject.transform.position = (Vector2)gameObject.transform.position + new Vector2(0, 0.2f);
+    }
+
+    public void Lean_Down()
+    {
+        gameObject.transform.position = (Vector2)gameObject.transform.position + new Vector2( 0, -0.2f);
+    }
+
+    public void Lean_Down_Finished()
+    {
+        gameObject.transform.position = (Vector2)gameObject.transform.position + new Vector2(0, 0.2f);
+    }
+
+    public void Lean_Up_Finished()
+    {
+        gameObject.transform.position = (Vector2)gameObject.transform.position + new Vector2(0, -0.2f);
+    }
     public void Lean_Left_Finished()
     {
         // animation.SetInteger("State", 0);

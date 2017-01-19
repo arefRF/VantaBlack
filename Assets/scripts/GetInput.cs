@@ -92,11 +92,6 @@ public class GetInput : MonoBehaviour {
             api.ArrowRelease(Direction.Up);
     }
 
-    private void Lean()
-    {
-        Debug.Log("Leaning");
-    }
-
     private void Get_Ability()
     {
 

@@ -67,7 +67,8 @@ public class APIGraphic{
            {
                case Direction.Right: gl.Lean_Right(); break;
                case Direction.Left: gl.Lean_Left(); break;
-
+               case Direction.Up: gl.Lean_Up(); break;
+               case Direction.Down: gl.Lean_Down(); break;
            }
     }
 
@@ -79,6 +80,8 @@ public class APIGraphic{
         {
             case Direction.Right: gl.Lean_Right_Finished(); break;
             case Direction.Left: gl.Lean_Left_Finished(); break;
+            case Direction.Up: gl.Lean_Up_Finished(); break;
+            case Direction.Down: gl.Lean_Down_Finished(); break;
         }
     }
 
