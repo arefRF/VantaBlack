@@ -36,6 +36,7 @@ public class APIGraphic{
     public void LandOnRamp(Player player, Vector2 position, Unit fallonunit, int landtype)
     {
         logicalengine.graphic_LandFinished(player);
+        player.gameObject.transform.position = position;
     }
 
     public void MovePlayerToBranch(Player player, Vector2 position, bool isonramp)
