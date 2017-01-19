@@ -60,7 +60,7 @@ public class PlayerGraphics : MonoBehaviour {
         StartCoroutine(Player_Move_Coroutine(player,end));
     }
 
-    public void Player_Change_Direction(GameObject player,Direction dir)
+    public void Player_Change_Direction(Player player,Direction dir)
     {
 
         if (dir == Direction.Right)
@@ -73,6 +73,7 @@ public class PlayerGraphics : MonoBehaviour {
     {
 
     }
+
     private IEnumerator Player_Move_Coroutine(GameObject obj , Vector2 end)
     {
         float remain_distance = ((Vector2)obj.transform.position - end).sqrMagnitude;

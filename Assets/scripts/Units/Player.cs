@@ -33,7 +33,6 @@ public class Player : Unit
     {
         container.PlayerAbsorb(this);
     }
-
     public void Release(Container container)
     {
         container.PlayerRelease(this);
