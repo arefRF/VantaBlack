@@ -47,17 +47,17 @@ public class APIUnit {
             ((Player)unit).Move(dir);
     }
 
-    public void Absorb(Player player, Container container, Ability ability)
+    public void Absorb(Player player, Container container, AbilityType ability)
     {
         engine.UnitToGraphic_Absorb(player, container, ability);
     }
 
-    public void Release(Player player, Container container, Ability ability)
+    public void Release(Player player, Container container, AbilityType ability)
     {
         engine.UnitToGraphic_Release(player, container, ability);
     }
 
-    public void Swap(Player player, Container container, Ability ability)
+    public void Swap(Player player, Container container, AbilityType ability)
     {
         engine.UnitToGraphic_Swap(player, container, ability);
     }
