@@ -36,21 +36,20 @@ public class Container : ParentContainer {
 
     private void PlayerAbsorbAbilities(Player player)
     {
-            if(player.abilities.Count<4)
-            {
-                player.abilities.Add(abilities[0]);
-                abilities.RemoveAt(0);
-            }
-            
+        if(player.abilities.Count<4)
+        {
+            player.abilities.Add(abilities[0]);
+            abilities.RemoveAt(0);
+        }
     }
 
     private void PlayerReleaseAbilities(Player player)
     {
-            if(abilities.Count<4)
-            {
-                abilities.Add(player.abilities[0]);
-                player.abilities.RemoveAt(0);
-            }
+        if(abilities.Count<4)
+        {
+            abilities.Add(player.abilities[0]);
+            player.abilities.RemoveAt(0);
+        }
    }
 
     public void PlayerRelease(Player player)

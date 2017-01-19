@@ -81,4 +81,13 @@ public class APIGraphic{
         }
     }
 
+    public void Absorb(Player player, Container container)
+    {
+
+    }
+
+    public void Release(Player player, Container container)
+    {
+
+    }
 }

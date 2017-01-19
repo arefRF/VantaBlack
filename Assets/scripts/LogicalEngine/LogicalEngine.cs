@@ -24,7 +24,6 @@ public class LogicalEngine {
     {
         database.units = initializer.init();
         database.state = State.Idle;
-        Debug.Log(database.units[8,1].Count);
     }
 
     public void MoveUnit(Unit unit, Vector2 position)
@@ -40,7 +39,7 @@ public class LogicalEngine {
     }
 
     public void MovePlayer(Player player, Direction dir)
-    {
+    {   
         bool simplemove = true;
         apiinput.PlayerMoveStarted();
         List<Unit> units = GetUnits(player.position);
@@ -169,6 +168,40 @@ public class LogicalEngine {
         }
     }
 
+    public void Input_AbsorbRlease(Direction dir)
+    {
+        for(int i=0; i<database.player.Count; i++)
+        {
+            if (database.player[i].lean)
+            {
+                if (database.player[i].leandirection == dir)
+                {
+                    List<Unit> units = GetUnits(Toolkit.VectorSum(database.player[i].position, Toolkit.DirectiontoVector(dir)));
+                    for (int j = 0; j < units.Count; j++)
+                    {
+                        if (units[j] is Container)
+                        {
+                            database.player[i].Release((Container)units[j]);
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    List<Unit> units = GetUnits(Toolkit.VectorSum(database.player[i].position, Toolkit.DirectiontoVector(Toolkit.ReverseDirection(dir))));
+                    for (int j = 0; j < units.Count; j++)
+                    {
+                        if (units[j] is Container)
+                        {
+                            database.player[i].Absorb((Container)units[j]);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     public void ArrowkeyReleased(Direction direction)
     {
         for(int i=0; i<database.player.Count; i++)
@@ -187,6 +220,11 @@ public class LogicalEngine {
         apiinput.PlayerMoveFinished();
     }
 
+    public void graphic_AbsorbReleaseFinished(Player player)
+    {
+
+    }
+
     public void UnitToGraphic_Land(Unit unit, Unit landingunit,Vector2 landingposition)
     {
         apigraphic.Land((Player)unit, landingposition, landingunit);
@@ -195,5 +233,19 @@ public class LogicalEngine {
     public void UnitToGraphic_LandOnRamp(Unit unit, Ramp landingunit, Vector2 landingposition, int landingtype)
     {
         apigraphic.LandOnRamp((Player)unit, landingposition, landingunit, landingtype);
+    }
+
+    public void UnitToGraphic_Absorb(Player player, Container container, Ability ability)
+    {
+
+    }
+
+    public void UnitToGraphic_Release(Player player, Container container, Ability ability)
+    {
+
+    }
+    public void UnitToGraphic_Swap(Player player, Container container, Ability ability)
+    {
+
     }
 }
