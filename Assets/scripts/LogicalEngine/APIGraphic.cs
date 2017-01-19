@@ -94,4 +94,9 @@ public class APIGraphic{
     {
 
     }
+
+    public void PlayerChangeDirection(Player player, Direction olddirection, Direction newdirection)
+    {
+        logicalengine.graphic_PlayerChangeDirectionFinished(player);
+    }
 }
