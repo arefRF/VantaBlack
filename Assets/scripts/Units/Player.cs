@@ -33,16 +33,6 @@ public class Player : Unit
     {
         container.PlayerAbsorb(this);
     }
-
-    public bool Action()
-    {
-        return true;
-    }
-
-    public void Action(Direction dir)
-    {
-
-    }
     public void Release(Container container)
     {
         container.PlayerRelease(this);
@@ -52,6 +42,33 @@ public class Player : Unit
     {
         return false;
     }
-    
+
+    public bool Action()
+    {
+        switch (abilities[0])
+        {
+            case AbilityType.Fuel: return false;
+            case AbilityType.Direction: return true;
+            case AbilityType.Jump: return true;
+            case AbilityType.Blink: return false;
+            case AbilityType.Gravity: return false;
+            case AbilityType.Rope: return false;
+            default: return false;
+        }
+    }
+
+    public bool Action(Direction dir)
+    {
+        switch (abilities[0])
+        {
+            case AbilityType.Fuel: return true;
+            case AbilityType.Direction: return false;
+            case AbilityType.Jump: return false;
+            case AbilityType.Blink: return true;
+            case AbilityType.Gravity: return true;
+            case AbilityType.Rope: return true;
+            default: return false;
+        }
+    }
 }
 

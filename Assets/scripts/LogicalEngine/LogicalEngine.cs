@@ -231,6 +231,37 @@ public class LogicalEngine {
         }
     }
 
+    public void ActionKeyPressed()
+    {
+        for(int i=0; i<database.player.Count; i++)
+        {
+            if (database.player[i].lean)
+            {
+                Vector2 newpos = Toolkit.VectorSum(database.player[i].position, Toolkit.DirectiontoVector(database.player[i].leandirection));
+                List<Unit> units = GetUnits(newpos);
+                for(int j=0; j<units.Count; j++)
+                {
+                    if (units[i] is ParentContainer)
+                        ((ParentContainer)units[i]).Action(database.player[i], Toolkit.ReverseDirection(database.player[i].leandirection));
+                }
+            }
+            else
+            {
+                database.player[i].Action();
+            }
+        }
+    }
+
+    public void ActionKeyPressed(Direction dir)
+    {
+        for(int i=0; i<database.player.Count; i++)
+        {
+            if (database.player[i].lean)
+                continue;
+            database.player[i].Action(dir);
+        }
+    }
+
     public void graphic_MoveAnimationFinished(Player player)
     {
         Applygravity();
