@@ -274,5 +274,16 @@ public sealed class Toolkit{
         }
         return null;
     }
+
+    public static bool IsInsideBranch(Player player)
+    {
+        Database database = Starter.GetDataBase();
+        for (int i=0; i<database.units[(int)player.position.x, (int)player.position.y].Count; i++)
+        {
+            if (database.units[(int)player.position.x, (int)player.position.y][i] is Branch)
+                return true;
+        }
+        return false;
+    }
 }
 

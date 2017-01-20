@@ -26,13 +26,19 @@ public class LogicalEngine {
         database.state = State.Idle;
     }
 
-    public bool MoveUnit(Unit unit, Vector2 position)
+    public bool MoveUnit(Unit unit, Direction dir)
     {
         if(!(unit is Box))
         {
             for(int i=0; i<unit.ConnectedUnits.Count; i++)
+                if (!unit.ConnectedUnits[i].CanMove(dir))
+                    return false;
+            for (int i = 0; i < unit.ConnectedUnits.Count; i++)
             {
-                //unit.ConnectedUnits[i].
+                Unit u = unit.ConnectedUnits[i];
+                Vector2 newpos = Toolkit.VectorSum(u.position, Toolkit.DirectiontoVector(dir));
+                database.units[(int)u.position.x, (int)u.position.y].Remove(u);
+
             }
         }
         else
@@ -43,46 +49,155 @@ public class LogicalEngine {
     }
 
     public void MovePlayer(Player player, Direction dir)
-    {   
-        bool simplemove = true;
-        apiinput.PlayerMoveStarted();
-        List<Unit> units = GetUnits(player.position);
-        bool onramp = false;
-        Vector2 newpos = Toolkit.VectorSum(Toolkit.DirectiontoVector(dir), player.position);
-        for (int i=0; i<units.Count; i++)
+    {
+        Vector2 nextpos;
+        if (player.onramp)
         {
-            if(units[i] is Ramp)
+            List<Unit> units = GetUnits(Toolkit.VectorSum(player.position, Toolkit.DirectiontoVector(database.gravity_direction)));
+            Ramp ramp;
+            bool goingup = true;
+            if (units[0] is Ramp)
+                ramp = (Ramp)units[0];
+            else
+                ramp = (Ramp)units[1];
+            switch (database.gravity_direction)
             {
-                onramp = true;
+                case Direction.Down:
+                    switch (dir)
+                    {
+                        case Direction.Right: if (ramp.type == 1) goingup = false; break;
+                        case Direction.Left: if (ramp.type == 4) goingup = false; break;
+                    }
+                    break;
+                case Direction.Right:
+                    switch (dir)
+                    {
+                        case Direction.Up: if (ramp.type == 4) goingup = false; break;
+                        case Direction.Down: if (ramp.type == 3) goingup = false; break;
+                    }
+                    break;
+                case Direction.Up:
+                    switch (dir)
+                    {
+                        case Direction.Right: if (ramp.type == 2) goingup = false; break;
+                        case Direction.Left: if (ramp.type == 3) goingup = false; break;
+                    }
+                    break;
+                case Direction.Left:
+                    switch (dir)
+                    {
+                        case Direction.Up: if (ramp.type == 1) goingup = false; break;
+                        case Direction.Down: if (ramp.type == 2) goingup = false; break;
+                    }
+                    break;
             }
-        }
-        units = GetUnits(Toolkit.VectorSum(Toolkit.VectorSum(player.position, Toolkit.DirectiontoVector(dir)), Toolkit.DirectiontoVector(database.gravity_direction)));
-        for(int i=0; i<units.Count; i++)
-        {
-            if(units[i] is Ramp)
+            if (goingup)
             {
-                if (onramp) 
-                    newpos = Toolkit.VectorSum(Toolkit.VectorSum(player.position, Toolkit.DirectiontoVector(dir)), Toolkit.DirectiontoVector(database.gravity_direction));
+                nextpos = Toolkit.VectorSum(player.position, Toolkit.VectorSum(Toolkit.DirectiontoVector(Toolkit.ReverseDirection(database.gravity_direction)), Toolkit.DirectiontoVector(dir)));
+                units = GetUnits(nextpos);
+                if (units.Count == 0)
+                {
+                    units = GetUnits(Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction)));
+                    if (units.Count == 0)
+                    {
+                        apigraphic.MovePlayer_Ramp_3(player, nextpos);
+                    }
+                    else
+                    {
+                        if (units[0] is Ramp)
+                        {
+                            apigraphic.MovePlayer_Ramp_5(player, Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction)));
+                        }
+                        else
+                        {
+                            apigraphic.MovePlayer_Ramp_2(player, nextpos);
+                        }
+                    }
+                }
                 else
-                    newpos = units[i].position;
-                simplemove = false;
-                apigraphic.MovePlayerOnRamp(player, newpos, onramp, dir, ((Ramp)units[i]).type);
-                break;
+                {
+                    apigraphic.MovePlayer_Ramp_1(player, nextpos);
+                }
             }
-            if(units[i] is Branch)
+            else
             {
-                simplemove = false;
-                apigraphic.MovePlayerToBranch(player, newpos, onramp);
-                break;
+                nextpos = Toolkit.VectorSum(player.position, Toolkit.DirectiontoVector(dir));
+                units = GetUnits(nextpos);
+                if(units.Count != 0)
+                {
+                    apigraphic.MovePlayer_Ramp_4(player, nextpos);
+                }
+                else
+                {
+                    units = GetUnits(Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction)));
+                    if (units[0] is Ramp)
+                        apigraphic.MovePlayer_Ramp_1(player, Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction)));
+                    else
+                        apigraphic.MovePlayer_Ramp_2(player, nextpos);
+                }
             }
         }
-        if (simplemove)
-            apigraphic.MovePlayer(player, newpos, onramp);
-        database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-        database.units[(int)newpos.x, (int)newpos.y].Add(player);
-        player.position = newpos;
+        else
+        {
+            if (Toolkit.IsInsideBranch(player))
+            {
+                nextpos = Toolkit.VectorSum(player.position, Toolkit.DirectiontoVector(dir));
+                Vector2 temp = Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction));
+                List<Unit> units = GetUnits(temp);
+                if(units.Count != 0)
+                {
+                    if(units[0] is Ramp)
+                    {
+                        apigraphic.MovePlayer_Branch_3(player, temp, ((Ramp)units[0]).type);
+                    }
+                    else
+                    {
+                        apigraphic.MovePlayer_Branch_1(player, nextpos);
+                    }
+                }
+                else
+                {
+                    apigraphic.MovePlayer_Branch_2(player, nextpos);
+                }
+            }
+            else
+            {
+                nextpos = nextpos = Toolkit.VectorSum(player.position, Toolkit.DirectiontoVector(dir));
+                Vector2 temp = Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction));
+                List<Unit> units = GetUnits(nextpos);
+                if (units.Count != 0)
+                {
+                    if(units[0] is Branch)
+                    {
+                        apigraphic.MovePlayer_Simple_2(player, nextpos);
+                    }
+                    else if(units[0] is Ramp)
+                    {
+                        apigraphic.MovePlayer_Simple_3(player, nextpos, ((Ramp)units[0]).type);
+                    }
+                }
+                else
+                {
+                    units = GetUnits(temp);
+                    if(units.Count != 0)
+                    {
+                        if(units[0] is Ramp)
+                        {
+                            apigraphic.MovePlayer_Simple_5(player, temp, ((Ramp)units[0]).type);
+                        }
+                        else
+                        {
+                            apigraphic.MovePlayer_Simple_1(player, nextpos);
+                        }
+                    }
+                    else
+                    {
+                        apigraphic.MovePlayer_Simple_4(player, nextpos);
+                    }
+                }
+            }
+        }
     }
-
     private void Applygravity()
     {
         for(int i=0; i<database.player.Count; i++)
@@ -95,6 +210,25 @@ public class LogicalEngine {
     {
         List<Unit> units;
         Vector2 nextpos;
+        units = GetUnits(player.position);
+        if(units.Count == 2)
+        {
+            Ramp ramp = null;
+            if (units[0] is Ramp)
+                ramp = (Ramp)units[0];
+            else if (units[1] is Ramp)
+                ramp = (Ramp)units[1];
+            if (ramp != null)
+            {
+                switch (database.gravity_direction)
+                {
+                    case Direction.Down: if (ramp.type == 1 || ramp.type == 4) return; break;
+                    case Direction.Left: if (ramp.type == 1 || ramp.type == 2) return; break;
+                    case Direction.Right: if (ramp.type == 3 || ramp.type == 4) return; break;
+                    case Direction.Up: if (ramp.type == 2 || ramp.type == 3) return; break;
+                }
+            }
+        }
         nextpos = Toolkit.VectorSum(player.position, Toolkit.DirectiontoVector(database.gravity_direction));
         units = GetUnits(nextpos);
         if (units.Count != 0)

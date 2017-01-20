@@ -11,7 +11,58 @@ public class APIGraphic{
         this.logicalengine = logicalengine;
         graphicalengine = GameObject.Find("Graphical").GetComponent<GraphicalEngine>();
     }
+    public void MovePlayer_Ramp_1(Player player, Vector2 position)
+    {
 
+    }
+    public void MovePlayer_Ramp_2(Player player, Vector2 position)
+    {
+
+    }
+    public void MovePlayer_Ramp_3(Player player, Vector2 position)
+    {
+
+    }
+    public void MovePlayer_Ramp_4(Player player, Vector2 position)
+    {
+
+    }
+    public void MovePlayer_Ramp_5(Player player, Vector2 position)
+    {
+
+    }
+    public void MovePlayer_Simple_1(Player player, Vector2 position)
+    {
+
+    }
+    public void MovePlayer_Simple_2(Player player, Vector2 position)
+    {
+
+    }
+    public void MovePlayer_Simple_3(Player player, Vector2 position, int ramptype)
+    {
+
+    }
+    public void MovePlayer_Simple_4(Player player, Vector2 position)
+    {
+
+    }
+    public void MovePlayer_Simple_5(Player player, Vector2 position , int ramptype)
+    {
+
+    }
+    public void MovePlayer_Branch_1(Player player, Vector2 position)
+    {
+
+    }
+    public void MovePlayer_Branch_2(Player player, Vector2 position)
+    {
+
+    }
+    public void MovePlayer_Branch_3(Player player, Vector2 position, int ramptype)
+    {
+
+    }
     public void MovePlayer(Player player, Vector2 position, bool wasonramp)
     {
         player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);

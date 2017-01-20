@@ -17,7 +17,7 @@ public class APIUnit {
         }
         else
         {
-            engine.MoveUnit(unit, Toolkit.VectorSum(unit.position, Toolkit.DirectiontoVector(dir)));
+            //engine.MoveUnit(unit, Toolkit.VectorSum(unit.position, Toolkit.DirectiontoVector(dir)));
         }
     }
 

@@ -13,6 +13,8 @@ public class Player : Unit
     public Direction leandirection { get; set; }
     public bool lean { get; set; }
 
+    public bool onramp { get; set; }
+
     public void Awake()
     {
         direction = move_direction[0];
