@@ -22,9 +22,59 @@ public class Player : Unit
 
     public override bool Move(Direction dir)
     {
-        List<Unit> list  = api.engine_GetUnits(this, dir);
-        for(int i = 0; i < list.Count; i++) {
-            if (!list[i].PlayerMoveInto(Toolkit.ReverseDirection(dir)))
+        Ramp ramp = null;
+        List<Unit> units  = api.engine_GetUnits(this, dir);
+        onramp = false;
+        List<Unit> temp = api.engine_GetUnits(position);
+        for (int i = 0; i < temp.Count; i++)
+        {
+            if (temp[i] is Ramp)
+            {
+                ramp = (Ramp)temp[i];
+                onramp = true;
+            }
+        }
+        if (onramp)
+        {
+            bool goingup = true;
+            Direction gravitydirection = Starter.GetDataBase().gravity_direction;
+            switch (gravitydirection)
+            {
+                case Direction.Down:
+                    switch (dir)
+                    {
+                        case Direction.Right: if (ramp.type == 1) goingup = false; break;
+                        case Direction.Left: if (ramp.type == 4) goingup = false; break;
+                    }
+                    break;
+                case Direction.Right:
+                    switch (dir)
+                    {
+                        case Direction.Up: if (ramp.type == 4) goingup = false; break;
+                        case Direction.Down: if (ramp.type == 3) goingup = false; break;
+                    }
+                    break;
+                case Direction.Up:
+                    switch (dir)
+                    {
+                        case Direction.Right: if (ramp.type == 2) goingup = false; break;
+                        case Direction.Left: if (ramp.type == 3) goingup = false; break;
+                    }
+                    break;
+                case Direction.Left:
+                    switch (dir)
+                    {
+                        case Direction.Up: if (ramp.type == 1) goingup = false; break;
+                        case Direction.Down: if (ramp.type == 2) goingup = false; break;
+                    }
+                    break;
+            }
+            if(goingup)
+                units = api.engine_GetUnits(Toolkit.VectorSum(Toolkit.VectorSum(Toolkit.DirectiontoVector(Toolkit.ReverseDirection(gravitydirection)), Toolkit.DirectiontoVector(dir)), position));
+        }
+        for (int i = 0; i < units.Count; i++) {
+            Debug.Log(units[i]);
+            if (!units[i].PlayerMoveInto(Toolkit.ReverseDirection(dir)))
                 return false;
         }
         api.engine_Move(this, dir);

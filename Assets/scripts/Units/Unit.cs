@@ -37,8 +37,20 @@ public class Unit : MonoBehaviour {
     public virtual bool CanMove(Direction dir)
     {
         List<Unit> units = api.engine_GetUnits(this, dir);
-        if (units.Count != 0)
-            return false;
+        for(int i=0; i<units.Count; i++)
+        {
+            bool flag = false;
+            for (int j=0; j<ConnectedUnits.Count; j++)
+            {
+                if(units[i] == ConnectedUnits[j])
+                {
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag)
+                return false;
+        }
         return true;
     }
 

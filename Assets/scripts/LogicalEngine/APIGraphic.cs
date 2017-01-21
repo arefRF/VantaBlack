@@ -13,56 +13,70 @@ public class APIGraphic{
     }
     public void MovePlayer_Ramp_1(Player player, Vector2 position)
     {
-
+        Debug.Log("ramp1");
+        player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
     }
     public void MovePlayer_Ramp_2(Player player, Vector2 position)
     {
-
+        Debug.Log("ramp2");
+        player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
     }
     public void MovePlayer_Ramp_3(Player player, Vector2 position)
     {
-
+        Debug.Log("ramp3");
+        player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
     }
     public void MovePlayer_Ramp_4(Player player, Vector2 position)
     {
-
+        Debug.Log("ramp4");
+        player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
     }
     public void MovePlayer_Ramp_5(Player player, Vector2 position)
     {
-
+        Debug.Log("ramp5");
+        player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
     }
     public void MovePlayer_Simple_1(Player player, Vector2 position)
     {
-
+        Debug.Log("simple1");
+        player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
     }
     public void MovePlayer_Simple_2(Player player, Vector2 position)
     {
-
+        Debug.Log("simple2");
+        player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
     }
     public void MovePlayer_Simple_3(Player player, Vector2 position, int ramptype)
     {
-
+        Debug.Log("simple3");
+        player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
     }
     public void MovePlayer_Simple_4(Player player, Vector2 position)
     {
-
+        Debug.Log("simple4");
+        player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
     }
     public void MovePlayer_Simple_5(Player player, Vector2 position , int ramptype)
     {
-
+        Debug.Log("simple5");
+        player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
     }
     public void MovePlayer_Branch_1(Player player, Vector2 position)
     {
-
+        Debug.Log("branch1");
+        player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
     }
     public void MovePlayer_Branch_2(Player player, Vector2 position)
     {
-
+        Debug.Log("branch2");
+        player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
     }
     public void MovePlayer_Branch_3(Player player, Vector2 position, int ramptype)
     {
-
+        Debug.Log("branch3");
+        player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
     }
+
     public void MovePlayer(Player player, Vector2 position, bool wasonramp)
     {
         player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
@@ -70,7 +84,7 @@ public class APIGraphic{
 
     public void MovePlayerFinished(GameObject player_obj)
     {
-        logicalengine.graphic_MoveAnimationFinished(player_obj.GetComponent<Player>());
+        logicalengine.graphic_PlayerMoveAnimationFinished(player_obj.GetComponent<Player>());
     }
     
     public void Fall(Player player, Vector2 position)
@@ -105,7 +119,8 @@ public class APIGraphic{
 
     public void MoveGameObject(GameObject obj, Vector2 pos)
     {
-        
+        obj.transform.position = pos;
+        logicalengine.graphic_GameObjectMoveAnimationFinished(obj);
     }
 
     public void MoveGameObjectFinished(GameObject obj)
