@@ -13,6 +13,8 @@ public class Unit : MonoBehaviour {
 
     public List<Unit> ConnectedUnits { get; set; }
 
+    public List<Unit> players { get; set; }
+
     // public abstract bool CanMove(UnitType unittype);
 
     public virtual bool PlayerMoveInto(Direction dir)
@@ -37,8 +39,14 @@ public class Unit : MonoBehaviour {
     public virtual bool CanMove(Direction dir)
     {
         List<Unit> units = api.engine_GetUnits(this, dir);
+        players = new List<Unit>();
         for(int i=0; i<units.Count; i++)
         {
+            if(units[i] is Player)
+            {
+                players.Add(units[i]);
+                continue;
+            }
             bool flag = false;
             for (int j=0; j<ConnectedUnits.Count; j++)
             {
@@ -50,6 +58,13 @@ public class Unit : MonoBehaviour {
             }
             if (!flag)
                 return false;
+        }
+        int bound = players.Count;
+        for (int i=0; i < bound; i++)
+        {
+            if (!players[i].CanMove(dir))
+                return false;
+            players.AddRange(players[i].players);
         }
         return true;
     }
