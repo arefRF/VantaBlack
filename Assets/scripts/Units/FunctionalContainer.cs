@@ -4,7 +4,7 @@ using System;
 
 public class FunctionalContainer : Container {
     public Direction direction;
-    bool forward;
+    bool on;
     int moved;
 
     public void Start()
@@ -22,13 +22,13 @@ public class FunctionalContainer : Container {
             return;
         switch (abilities[0])
         {
-            case AbilityType.Fuel: Action_Fuel(player); forward = !forward; break;
+            case AbilityType.Fuel: Action_Fuel(player); on = !on; break;
         }
     }
 
     private void Action_Fuel(Player player)
     {
-        Direction dir = direction;
+       /* Direction dir = direction;
         if (forward)
             dir = Toolkit.ReverseDirection(direction);
         int number = moved;
@@ -50,7 +50,7 @@ public class FunctionalContainer : Container {
                 ConnectedUnits[i].Move(dir);
             }
             moved = k;
-        }
+        }*/
 
     }
 }

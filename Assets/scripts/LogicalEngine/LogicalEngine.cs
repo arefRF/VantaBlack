@@ -24,7 +24,6 @@ public class LogicalEngine {
     {
         database.units = initializer.init();
         database.state = State.Idle;
-        MoveUnit(database.units[6, 0][0], Direction.Up);
     }
 
     public bool MoveUnit(Unit unit, Direction dir)
