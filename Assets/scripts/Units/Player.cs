@@ -23,6 +23,7 @@ public class Player : Unit
     public override bool Move(Direction dir)
     {
         Ramp ramp = null;
+        Debug.Log(api);
         List<Unit> units  = api.engine_GetUnits(this, dir);
         onramp = false;
         List<Unit> temp = api.engine_GetUnits(position);
