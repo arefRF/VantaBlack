@@ -32,7 +32,14 @@ public class FunctionalContainer : Container {
         int temp = 0;
         for(int i=0; i<moved; i++)
         {
-            //if()
+            if (api.MoveUnit(this, dir))
+                temp++;
+            else
+            {
+                api.AddToStuckList(this);
+                break;
+            }
         }
+        moved = temp;
     }
 }

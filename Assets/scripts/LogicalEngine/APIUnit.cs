@@ -66,4 +66,15 @@ public class APIUnit {
     {
         engine.UnitToGraphic_Swap(player, container, ability);
     }
+
+    public bool MoveUnit(Unit unit, Direction direction)
+    {
+        return engine.MoveUnit(unit, direction);
+    }
+    public void AddToStuckList(Unit unit)
+    {
+        if (!engine.stuckedunits.Contains(unit))
+            engine.stuckedunits.Add(unit);
+    }
+
 }

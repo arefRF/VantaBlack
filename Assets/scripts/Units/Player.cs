@@ -23,7 +23,6 @@ public class Player : Unit
     public override bool Move(Direction dir)
     {
         Ramp ramp = null;
-        Debug.Log(api);
         List<Unit> units  = api.engine_GetUnits(this, dir);
         onramp = false;
         List<Unit> temp = api.engine_GetUnits(position);
@@ -74,7 +73,6 @@ public class Player : Unit
                 units = api.engine_GetUnits(Toolkit.VectorSum(Toolkit.VectorSum(Toolkit.DirectiontoVector(Toolkit.ReverseDirection(gravitydirection)), Toolkit.DirectiontoVector(dir)), position));
         }
         for (int i = 0; i < units.Count; i++) {
-            Debug.Log(units[i]);
             if (!units[i].PlayerMoveInto(Toolkit.ReverseDirection(dir)))
                 return false;
         }

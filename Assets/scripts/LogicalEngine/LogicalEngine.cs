@@ -9,10 +9,12 @@ public class LogicalEngine {
     public Database database;
     SubEngine_Initializer initializer;
     int sizeX, sizeY;
+    public List<Unit> stuckedunits;
     public LogicalEngine(int x, int y)
     {
         sizeX = x;
         sizeY = y;
+        stuckedunits = new List<Unit>();
         apigraphic = new APIGraphic(this);
         apiinput = new APIInput(this);
         apiunit = new APIUnit(this);
@@ -69,6 +71,7 @@ public class LogicalEngine {
 
     public void MovePlayer(Player player, Direction dir)
     {
+        Debug.Log("moveing");
         Vector2 nextpos;
         apiinput.PlayerMoveStarted();
         if (player.onramp)

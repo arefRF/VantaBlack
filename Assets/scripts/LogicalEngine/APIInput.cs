@@ -46,4 +46,14 @@ public class APIInput{
     {
         engine.Input_AbsorbRlease(dir);
     }
+
+    public void ContainerAction()
+    {
+
+    }
+
+    public void ContainerActionFinished()
+    {
+
+    }
 }
