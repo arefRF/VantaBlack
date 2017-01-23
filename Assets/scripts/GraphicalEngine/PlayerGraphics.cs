@@ -68,11 +68,25 @@ public class PlayerGraphics : MonoBehaviour {
         else if (dir == Direction.Left)
             animation.SetInteger("State", -1);
     }
-
-    public void Ramp_To_Ramp_Move(Vector2 position)
+    
+    public void Ramp_To_Block_Move()
     {
-        position += new Vector2(0.5f,0.5f);
-        StartCoroutine(Player_Move_Coroutine(position,true));
+
+    }
+
+    public void Ramp_To_Fall()
+    {
+
+    }
+
+    public void Ramp_To_Corner()
+    {
+
+    }
+
+    public void Ramp_To_Sharp()
+    {
+
     }
 
     public void Block_To_Ramp_Move(Vector2 position,Direction dir,int type)
@@ -81,9 +95,24 @@ public class PlayerGraphics : MonoBehaviour {
         Vector2 end = position;
         plus = new Vector2(0.5f * plus.x, 0.5f * plus.y);
         position += plus;
-        Debug.Log(position);
         StartCoroutine(Ramp_Move_Coroutine(position,end,type));
     }
+
+    public void Branch_To_Block_Move()
+    {
+
+    }
+
+    public void Branch_To_Fall()
+    {
+
+    }
+
+    public void Branch_To_Ramp_Move()
+    {
+        
+    }
+
 
     private void Block_To_Ramp_Move_Part2(Vector2 position,int type)
     {

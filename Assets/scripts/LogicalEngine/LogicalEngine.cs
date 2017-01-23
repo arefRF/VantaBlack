@@ -24,7 +24,7 @@ public class LogicalEngine {
     {
         database.units = initializer.init();
         database.state = State.Idle;
-        MoveUnit(database.units[6, 1][0], Direction.Up);
+        MoveUnit(database.units[6, 0][0], Direction.Up);
     }
 
     public bool MoveUnit(Unit unit, Direction dir)
@@ -35,21 +35,12 @@ public class LogicalEngine {
             Debug.Log(unit.CanMove(dir));
             if (!unit.CanMove(dir))
                 return false;
+            shouldmove.AddRange(unit.players);
             for (int i = 0; i < unit.ConnectedUnits.Count; i++)
             {
-                List<Unit> temp = GetUnits(Toolkit.VectorSum(unit.ConnectedUnits[i].position, Toolkit.DirectiontoVector(dir)));
-                for(int j=0; j<temp.Count; j++)
-                {
-                    if(temp[j] is Player)
-                    {
-                        if (temp[j].CanMove(dir))
-                            shouldmove.Add(temp[j]);
-                        else
-                            return false;
-                    }
-                }
                 if (!unit.ConnectedUnits[i].CanMove(dir))
                     return false;
+                shouldmove.AddRange(unit.ConnectedUnits[i].players);
             }
             for (int i = 0; i < unit.ConnectedUnits.Count; i++)
             {
@@ -58,6 +49,12 @@ public class LogicalEngine {
                 database.units[(int)u.position.x, (int)u.position.y].Remove(u);
                 u.position = newpos;
                 database.units[(int)u.position.x, (int)u.position.y].Add(u);
+            }
+            for(int i=0; i<shouldmove.Count; i++)
+            {
+                database.units[(int)shouldmove[i].position.x, (int)shouldmove[i].position.y].Remove(shouldmove[i]);
+                shouldmove[i].position = Toolkit.VectorSum(shouldmove[i].position, Toolkit.DirectiontoVector(dir));
+                apigraphic.MoveGameObject(shouldmove[i].gameObject, shouldmove[i].position);
             }
             database.units[(int)unit.position.x, (int)unit.position.y].Remove(unit);
             unit.position = Toolkit.VectorSum(unit.position, Toolkit.DirectiontoVector(dir));

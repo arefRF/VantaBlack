@@ -81,6 +81,37 @@ public class Player : Unit
         return true;
     }
 
+    public override bool CanMove(Direction dir)
+    {
+        List<Unit> units = api.engine_GetUnits(this, dir);
+        players = new List<Unit>();
+        for (int i = 0; i < units.Count; i++)
+        {
+            if (units[i] is Player)
+            {
+                players.Add(units[i]);
+                continue;
+            }
+            else if (units[i] is Branch)
+            {
+                continue;
+            }
+            else
+                return false;
+        }
+        for (int i = 0; i < players.Count; i++)
+        {
+            if (!players[i].CanMove(dir))
+                return false;
+        }
+        int bound = players.Count;
+        for(int i = 0; i< bound; i++)
+        {
+            players.AddRange(players[i].players);
+        }
+        return true;
+    }
+
     public void Absorb(Container container)
     {
         container.PlayerAbsorb(this);
