@@ -5,7 +5,7 @@ using System;
 public class FunctionalContainer : Container {
     public Direction direction;
     bool on;
-    int moved;
+    public int moved;
 
     public override bool PlayerMoveInto(Direction dir)
     {
@@ -14,6 +14,7 @@ public class FunctionalContainer : Container {
 
     public override void Action(Player player, Direction dir)
     {
+        Debug.Log("container found");
         if (abilities.Count == 0)
             return;
         switch (abilities[0])
@@ -24,6 +25,8 @@ public class FunctionalContainer : Container {
 
     private void Action_Fuel(Player player)
     {
+        Debug.Log("action fuel");
+        Debug.Log(moved);
         Direction dir = direction;
         if (on)
         {
