@@ -9,10 +9,14 @@ public class LogicalEngine {
     public Database database;
     SubEngine_Initializer initializer;
     int sizeX, sizeY;
+    public List<Unit> stuckedunits;
+    Object lock_move;
     public LogicalEngine(int x, int y)
     {
+        lock_move = new Object();
         sizeX = x;
         sizeY = y;
+        stuckedunits = new List<Unit>();
         apigraphic = new APIGraphic(this);
         apiinput = new APIInput(this);
         apiunit = new APIUnit(this);
@@ -24,52 +28,56 @@ public class LogicalEngine {
     {
         database.units = initializer.init();
         database.state = State.Idle;
-        MoveUnit(database.units[6, 0][0], Direction.Up);
     }
 
     public bool MoveUnit(Unit unit, Direction dir)
     {
-        List<Unit> shouldmove = new List<Unit>();
-        if(!(unit is Box))
+        lock (lock_move)
         {
-            Debug.Log(unit.CanMove(dir));
-            if (!unit.CanMove(dir))
-                return false;
-            shouldmove.AddRange(unit.players);
-            for (int i = 0; i < unit.ConnectedUnits.Count; i++)
+            List<Unit> shouldmove = new List<Unit>();
+            if (!(unit is Box))
             {
-                if (!unit.ConnectedUnits[i].CanMove(dir))
+                Debug.Log("moving unit");
+                if (!unit.CanMove(dir))
                     return false;
-                shouldmove.AddRange(unit.ConnectedUnits[i].players);
+                shouldmove.AddRange(unit.players);
+                for (int i = 0; i < unit.ConnectedUnits.Count; i++)
+                {
+                    if (!unit.ConnectedUnits[i].CanMove(dir))
+                        return false;
+                    shouldmove.AddRange(unit.ConnectedUnits[i].players);
+                }
+                for (int i = 0; i < unit.ConnectedUnits.Count; i++)
+                {
+                    Unit u = unit.ConnectedUnits[i];
+                    Vector2 newpos = Toolkit.VectorSum(u.position, Toolkit.DirectiontoVector(dir));
+                    database.units[(int)u.position.x, (int)u.position.y].Remove(u);
+                    u.position = newpos;
+                    database.units[(int)u.position.x, (int)u.position.y].Add(u);
+                }
+                Debug.Log("shoud move: " + shouldmove.Count);
+                for (int i = 0; i < shouldmove.Count; i++)
+                {
+                    database.units[(int)shouldmove[i].position.x, (int)shouldmove[i].position.y].Remove(shouldmove[i]);
+                    shouldmove[i].position = Toolkit.VectorSum(shouldmove[i].position, Toolkit.DirectiontoVector(dir));
+                    apigraphic.MoveGameObject(shouldmove[i].gameObject, shouldmove[i].position);
+                }
+                database.units[(int)unit.position.x, (int)unit.position.y].Remove(unit);
+                unit.position = Toolkit.VectorSum(unit.position, Toolkit.DirectiontoVector(dir));
+                database.units[(int)unit.position.x, (int)unit.position.y].Add(unit);
+                apigraphic.MoveGameObject(unit.transform.parent.gameObject, Toolkit.VectorSum(unit.transform.parent.gameObject.transform.position, Toolkit.DirectiontoVector(dir)));
             }
-            for (int i = 0; i < unit.ConnectedUnits.Count; i++)
+            else
             {
-                Unit u = unit.ConnectedUnits[i];
-                Vector2 newpos = Toolkit.VectorSum(u.position, Toolkit.DirectiontoVector(dir));
-                database.units[(int)u.position.x, (int)u.position.y].Remove(u);
-                u.position = newpos;
-                database.units[(int)u.position.x, (int)u.position.y].Add(u);
+
             }
-            for(int i=0; i<shouldmove.Count; i++)
-            {
-                database.units[(int)shouldmove[i].position.x, (int)shouldmove[i].position.y].Remove(shouldmove[i]);
-                shouldmove[i].position = Toolkit.VectorSum(shouldmove[i].position, Toolkit.DirectiontoVector(dir));
-                apigraphic.MoveGameObject(shouldmove[i].gameObject, shouldmove[i].position);
-            }
-            database.units[(int)unit.position.x, (int)unit.position.y].Remove(unit);
-            unit.position = Toolkit.VectorSum(unit.position, Toolkit.DirectiontoVector(dir));
-            database.units[(int)unit.position.x, (int)unit.position.y].Add(unit);
-            apigraphic.MoveGameObject(unit.transform.parent.gameObject, Toolkit.VectorSum(unit.transform.parent.gameObject.transform.position, Toolkit.DirectiontoVector(dir)));
+            return true;
         }
-        else
-        {
-            
-        }
-        return false;
     }
 
     public void MovePlayer(Player player, Direction dir)
     {
+        Debug.Log("moveing");
         Vector2 nextpos;
         apiinput.PlayerMoveStarted();
         if (player.onramp)
@@ -424,6 +432,7 @@ public class LogicalEngine {
 
     public void ActionKeyPressed()
     {
+        Debug.Log("pressed");
         for(int i=0; i<database.player.Count; i++)
         {
             if (database.player[i].lean)
