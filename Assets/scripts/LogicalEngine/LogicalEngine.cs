@@ -65,6 +65,7 @@ public class LogicalEngine {
                 database.units[(int)unit.position.x, (int)unit.position.y].Remove(unit);
                 unit.position = Toolkit.VectorSum(unit.position, Toolkit.DirectiontoVector(dir));
                 database.units[(int)unit.position.x, (int)unit.position.y].Add(unit);
+                Debug.Log("Move Unit");
                 apigraphic.MoveGameObject(unit.transform.parent.gameObject, Toolkit.VectorSum(unit.transform.parent.gameObject.transform.position, Toolkit.DirectiontoVector(dir)));
             }
             else
@@ -357,29 +358,28 @@ public class LogicalEngine {
     {
         for(int i=0; i<database.player.Count; i++)
         {
-            if (!database.player[i].lean)
+            if (!database.player[i].lean )
             {
-                for(int j=0; j<database.player[i].move_direction.Count; j++)
+                if (database.player[i].Can_Move_Direction(direction))
                 {
-                    if(database.player[i].move_direction[j] == direction)
+                    if (database.player[i].Should_Change_Direction(direction))
                     {
-                        if(direction == database.player[i].direction)
-                        {
-                            if (!database.player[i].Move(direction))
-                            {
-                                Lean(database.player[i], direction);
-                                apiinput.PlayerMoveFinished();
-                            }
-                        }
-                        else
-                        {
-                            Direction olddir = database.player[i].direction;
-                            database.player[i].direction = direction;
-                            apiinput.PlayerMoveStarted();
-                            apigraphic.PlayerChangeDirection(database.player[i], olddir, database.player[i].direction);
-                        }
+                        Direction olddir = database.player[i].direction;
+                        database.player[i].direction = direction;
+                        apiinput.PlayerMoveStarted();
+                        apigraphic.PlayerChangeDirection(database.player[i], olddir, database.player[i].direction);
+                    }
+                    else if (!database.player[i].Move(direction))
+                    {
+                        Lean(database.player[i], direction);
+                        apiinput.PlayerMoveFinished();
                     }
                 }
+                else if (database.player[i].Can_Lean(direction))
+                {
+                    Lean(database.player[i], direction);
+                    apiinput.PlayerMoveFinished();
+                }   
             }
         }
     }

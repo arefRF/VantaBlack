@@ -17,6 +17,6 @@ public class DynamicContainer : FunctionalContainer {
 
     public override bool PlayerMoveInto(Direction dir)
     {
-        throw new NotImplementedException();
+        return false;
     }
 }

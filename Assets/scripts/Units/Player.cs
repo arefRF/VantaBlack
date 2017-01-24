@@ -14,10 +14,35 @@ public class Player : Unit
     public bool lean { get; set; }
 
     public bool onramp { get; set; }
+    public Direction gravity {get;set; }
 
     public void Awake()
     {
         direction = move_direction[0];
+    }
+
+    public bool Should_Change_Direction(Direction dir)
+    {
+        for (int i = 0; i < move_direction.Count; i++)
+            if (dir == move_direction[i])
+                if (dir != direction)
+                    return true;
+        return false;
+    }
+
+    public bool Can_Move_Direction(Direction dir)
+    {
+        for (int i = 0; i < move_direction.Count; i++)
+            if (dir == move_direction[i])
+                return true;
+        return false;
+    }
+    public bool Can_Lean( Direction dir)
+    {
+        if (dir == Direction.Up || dir == Direction.Down)
+            return true;
+        else
+            return false;
     }
 
     public override bool Move(Direction dir)
