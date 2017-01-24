@@ -15,6 +15,7 @@ public class APIGraphic{
     //Ramp to Ramp
     public void MovePlayer_Ramp_1(Player player, Vector2 position)
     {
+        Debug.Log("Ramp to Ramp");
         float x = position.x - player.transform.position.x;
         float y = position.y - player.transform.position.y;
         x = x / Mathf.Abs(x);
@@ -44,11 +45,11 @@ public class APIGraphic{
         player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
     }
 
-    //ramp to sharp
+    //Ramp to sharp
     public void MovePlayer_Ramp_5(Player player, Vector2 position)
     {
-        Debug.Log("ramp5");
-        player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
+        Debug.Log("Ramp to Sharp");
+        player.gameObject.GetComponent<PlayerGraphics>().Ramp_To_Sharp(position,4);
     }
 
     //  Block to Block
@@ -68,12 +69,13 @@ public class APIGraphic{
     // Block to Ramp
     public void MovePlayer_Simple_3(Player player, Vector2 position, int ramptype)
     {
-        Debug.Log("Block ro Ramp");
-        float x = position.x - player.transform.position.x;
-        float y = position.y - player.transform.position.y;
-        x = x / Mathf.Abs(x);
-        y = y / Mathf.Abs(y);
-        position += new Vector2( x  , y * 0.4f);
+        Debug.Log("Block to ramp simple 3");
+        int x = 1, y = 1;
+        if (ramptype == 3 || ramptype == 4)
+            x = -1;
+        if (ramptype == 2 || ramptype == 3)
+            y = -1;
+        position += new Vector2( x * 0.4f  , y * 0.4f);
         player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
     }
 
@@ -87,12 +89,13 @@ public class APIGraphic{
     // Block to Ramp (tekrari)
     public void MovePlayer_Simple_5(Player player, Vector2 position , int ramptype)
     {
-        Debug.Log("Block ro Ramp");
-        float x = position.x - player.transform.position.x;
-        float y = position.y - player.transform.position.y;
-        x = x / Mathf.Abs(x);
-        y = y / Mathf.Abs(y);
-        position += new Vector2(0.4f*x, 0.4f *-y);
+        Debug.Log("Simple 5");
+        int x = 1, y = 1;
+        if (ramptype == 3 || ramptype == 4)
+            x = -1;
+        if (ramptype == 2 || ramptype == 3)
+            y = -1;
+        position += new Vector2(x * 0.4f, y * 0.4f);
         player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
     }
 
@@ -119,6 +122,7 @@ public class APIGraphic{
 
     public void MovePlayer(Player player, Vector2 position, bool wasonramp)
     {
+        Debug.Log("Move Player");
         player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
     }
 
