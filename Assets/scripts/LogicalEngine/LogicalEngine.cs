@@ -288,6 +288,7 @@ public class LogicalEngine {
             {
                 switch (database.gravity_direction)
                 {
+
                     case Direction.Down: if (ramp.type == 1 || ramp.type == 4) return; break;
                     case Direction.Left: if (ramp.type == 1 || ramp.type == 2) return; break;
                     case Direction.Right: if (ramp.type == 3 || ramp.type == 4) return; break;
@@ -349,6 +350,15 @@ public class LogicalEngine {
         }
     }
 
+    private Ramp Has_Ramp(List<Unit> units)
+    {
+        for(int i = 0; i < units.Count; i++)
+        {
+            if (units[i] is Ramp)
+                return (Ramp)units[i];
+        }
+        return null;
+    }
     public List<Unit> GetUnits(Vector2 position)
     {
         return database.units[(int)position.x, (int)position.y];
