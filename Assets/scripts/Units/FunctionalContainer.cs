@@ -26,7 +26,6 @@ public class FunctionalContainer : Container {
     private void Action_Fuel(Player player)
     {
         Debug.Log("action fuel");
-        Debug.Log(moved);
         Direction dir = direction;
         if (on)
         {

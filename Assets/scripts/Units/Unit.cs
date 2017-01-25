@@ -75,7 +75,6 @@ public class Unit : MonoBehaviour {
     public virtual List<Unit> EffectedUnits(Direction dir)
     {
         List<Unit> units = api.engine_GetUnits(this, dir);
-        Debug.Log(Toolkit.VectorSum(this.position, Toolkit.DirectiontoVector(dir)));
         List<Unit> result = new List<Unit>();
         for(int i=0; i<units.Count; i++)
         {
