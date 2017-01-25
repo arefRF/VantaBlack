@@ -143,8 +143,7 @@ public class Player : Unit
     public void Release(Container container)
     {
         container.PlayerRelease(this);
-    }  
-
+    }
     public override bool PlayerMoveInto(Direction dir)
     {
         return false;

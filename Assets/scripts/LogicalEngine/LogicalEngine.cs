@@ -421,7 +421,7 @@ public class LogicalEngine {
     {
         for(int i=0; i<database.player.Count; i++)
         {
-            if (database.player[i].lean)
+            if (database.player[i].lean) //for absorb
             {
                 if (database.player[i].leandirection == dir)
                 {
@@ -435,7 +435,7 @@ public class LogicalEngine {
                         }
                     }
                 }
-                else
+                else // for release
                 {
                     List<Unit> units = GetUnits(Toolkit.VectorSum(database.player[i].position, Toolkit.DirectiontoVector(Toolkit.ReverseDirection(dir))));
                     for (int j = 0; j < units.Count; j++)
