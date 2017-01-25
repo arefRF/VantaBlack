@@ -57,7 +57,6 @@ public class PlayerGraphics : MonoBehaviour {
     }
     public void Player_Move(GameObject player,Vector2 end)
     {
-        Debug.Log("Player Move (gl)");
         StartCoroutine(Player_Move_Coroutine(end,true));
     }
 
@@ -95,6 +94,7 @@ public class PlayerGraphics : MonoBehaviour {
         Vector2 end = position + new Vector2(x * 0.4f, y * 0.4f);
         float x1 = position.x - transform.position.x;
         position += new Vector2(-x1/2, 1);
+        Debug.Log(position);
         StartCoroutine(Ramp_Move_Coroutine(position,end));
         
     }
@@ -133,7 +133,6 @@ public class PlayerGraphics : MonoBehaviour {
    
     private IEnumerator Player_Move_Coroutine(Vector2 end,bool call_finish)
     {
-        Debug.Log("Player Co");
         float remain_distance = ((Vector2)transform.position - end).sqrMagnitude;
         while(remain_distance > float.Epsilon)
         {
