@@ -96,8 +96,11 @@ public class Unit : MonoBehaviour {
         {
             if(units[i] is Player)
             {
-                result.Add(units[i]);
-                result.AddRange(units[i].EffectedUnits(dir));
+                if (units[i].CanMove(dir))
+                {
+                    result.Add(units[i]);
+                    result.AddRange(units[i].EffectedUnits(dir));
+                }
             }
         }
         return result;
