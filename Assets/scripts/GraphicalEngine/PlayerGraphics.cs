@@ -79,9 +79,11 @@ public class PlayerGraphics : MonoBehaviour {
 
     }
 
-    public void Ramp_To_Corner()
+    public void Ramp_To_Corner(Vector2 position)
     {
-
+        float x1 = position.x - transform.position.x;
+        position += new Vector2(-x1 / 2, 0.4f);
+        Player_Move(gameObject,position);
     }
 
     public void Ramp_To_Sharp(Vector2 position,int ramptype)
