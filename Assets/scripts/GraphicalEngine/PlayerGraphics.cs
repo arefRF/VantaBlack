@@ -86,6 +86,7 @@ public class PlayerGraphics : MonoBehaviour {
 
     public void Ramp_To_Sharp(Vector2 position,int ramptype)
     {
+        Debug.Log("Ramp Type" + ramptype);
         int x = 1, y = 1;
         if (ramptype == 3 || ramptype == 4)
             x = -1;
@@ -126,10 +127,6 @@ public class PlayerGraphics : MonoBehaviour {
     {
 
     }
-
-
-    
-
    
     private IEnumerator Player_Move_Coroutine(Vector2 end,bool call_finish)
     {

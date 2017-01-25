@@ -46,10 +46,10 @@ public class APIGraphic{
     }
 
     //Ramp to sharp
-    public void MovePlayer_Ramp_5(Player player, Vector2 position)
+    public void MovePlayer_Ramp_5(Player player, Vector2 position,int type)
     {
         Debug.Log("Ramp to Sharp");
-        player.gameObject.GetComponent<PlayerGraphics>().Ramp_To_Sharp(position,4);
+        player.gameObject.GetComponent<PlayerGraphics>().Ramp_To_Sharp(position,type);
     }
 
     //  Block to Block
