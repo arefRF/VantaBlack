@@ -67,9 +67,7 @@ public class Unit : MonoBehaviour {
             players.AddRange(players[i].players);
         }
         //friction
-        bound = players.Count;
-        List<Unit> effectedunits = EffectedUnits(Toolkit.ReverseDirection(Starter.GetDataBase().gravity_direction));
-        players.AddRange(effectedunits);
+        players.AddRange(EffectedUnits(Toolkit.ReverseDirection(Starter.GetDataBase().gravity_direction)));
         return true;
     }
 
