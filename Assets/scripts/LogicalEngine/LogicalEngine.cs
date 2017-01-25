@@ -37,7 +37,6 @@ public class LogicalEngine {
             List<Unit> shouldmove = new List<Unit>();
             if (!(unit is Box))
             {
-                Debug.Log("moving unit");
                 if (!unit.CanMove(dir))
                     return false;
                 shouldmove.AddRange(unit.players);
@@ -58,9 +57,6 @@ public class LogicalEngine {
                 database.units[(int)unit.position.x, (int)unit.position.y].Remove(unit);
                 unit.position = Toolkit.VectorSum(unit.position, Toolkit.DirectiontoVector(dir));
                 database.units[(int)unit.position.x, (int)unit.position.y].Add(unit);
-                Debug.Log("Move Unit");
-
-                Debug.Log("shoud move: " + shouldmove.Count);
                 for (int i = 0; i < shouldmove.Count; i++)
                 {
                     for (int j = i + 1; j < shouldmove.Count; j++)
