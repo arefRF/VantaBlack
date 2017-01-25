@@ -275,6 +275,10 @@ public sealed class Toolkit{
         return null;
     }
 
+
+
+
+
     public static bool IsInsideBranch(Player player)
     {
         Database database = Starter.GetDataBase();
@@ -284,6 +288,20 @@ public sealed class Toolkit{
                 return true;
         }
         return false;
+    }
+
+    public static Direction Comparison(Vector2 source, Vector2 sink)
+    {
+        if(source.x > sink.x)
+            return Direction.Right;
+        else
+        {
+            if (source.y > sink.y)
+                return Direction.Up;
+            else if (source.y == sink.y)
+                return Direction.Left;
+        }
+        return Direction.Down;
     }
 }
 

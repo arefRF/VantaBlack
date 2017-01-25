@@ -31,9 +31,10 @@ public class Unit : MonoBehaviour {
         return true;
     }
 
-    public virtual void fallOn(Unit fallingunit, Direction dir)
+    public virtual Vector2 fallOn(Unit fallingunit, Direction dir)
     {
         api.engine_Land(this, fallingunit, dir);
+        return new Vector2(0,0);
     }
 
     public virtual bool CanMove(Direction dir)
@@ -66,7 +67,24 @@ public class Unit : MonoBehaviour {
                 return false;
             players.AddRange(players[i].players);
         }
+        //friction
+        players.AddRange(EffectedUnits(Toolkit.ReverseDirection(Starter.GetDataBase().gravity_direction)));
         return true;
+    }
+
+    public virtual List<Unit> EffectedUnits(Direction dir)
+    {
+        List<Unit> units = api.engine_GetUnits(this, dir);
+        List<Unit> result = new List<Unit>();
+        for(int i=0; i<units.Count; i++)
+        {
+            if(units[i] is Player)
+            {
+                result.Add(units[i]);
+                result.AddRange(units[i].EffectedUnits(dir));
+            }
+        }
+        return result;
     }
 
     public void SetConnectedUnits(List<Unit> units)

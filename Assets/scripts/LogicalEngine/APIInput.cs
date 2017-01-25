@@ -9,6 +9,7 @@ public class APIInput{
   
     public bool Action_Key()
     {
+        engine.ActionKeyPressed();
         return true;
     }
 
@@ -45,5 +46,15 @@ public class APIInput{
     public void AbsorbRelease(Direction dir)
     {
         engine.Input_AbsorbRlease(dir);
+    }
+
+    public void ContainerAction()
+    {
+        engine.ActionKeyPressed();
+    }
+
+    public void ContainerActionFinished()
+    {
+
     }
 }

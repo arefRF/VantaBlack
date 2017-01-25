@@ -26,7 +26,6 @@ public class Starter : MonoBehaviour{
         staticengine = logicalengine;
         GameObject.Find("Graphical").GetComponent<GraphicalEngine>().database = database;
 
-
         logicalengine.Run();
     }
 
@@ -38,5 +37,9 @@ public class Starter : MonoBehaviour{
     public static LogicalEngine GetEngine()
     {
         return staticengine;
+    }
+    public static Direction GetGravityDirection()
+    {
+        return staticengine.database.gravity_direction;
     }
 }

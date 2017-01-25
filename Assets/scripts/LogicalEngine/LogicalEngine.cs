@@ -9,10 +9,14 @@ public class LogicalEngine {
     public Database database;
     SubEngine_Initializer initializer;
     int sizeX, sizeY;
+    public List<Unit> stuckedunits;
+    Object lock_move;
     public LogicalEngine(int x, int y)
     {
+        lock_move = new Object();
         sizeX = x;
         sizeY = y;
+        stuckedunits = new List<Unit>();
         apigraphic = new APIGraphic(this);
         apiinput = new APIInput(this);
         apiunit = new APIUnit(this);
@@ -24,54 +28,66 @@ public class LogicalEngine {
     {
         database.units = initializer.init();
         database.state = State.Idle;
-        MoveUnit(database.units[6, 0][0], Direction.Up);
     }
 
     public bool MoveUnit(Unit unit, Direction dir)
     {
-        List<Unit> shouldmove = new List<Unit>();
-        if(!(unit is Box))
+        lock (lock_move)
         {
-            Debug.Log(unit.CanMove(dir));
-            if (!unit.CanMove(dir))
-                return false;
-            shouldmove.AddRange(unit.players);
-            for (int i = 0; i < unit.ConnectedUnits.Count; i++)
+            List<Unit> shouldmove = new List<Unit>();
+            if (!(unit is Box))
             {
-                if (!unit.ConnectedUnits[i].CanMove(dir))
+                if (!unit.CanMove(dir))
                     return false;
-                shouldmove.AddRange(unit.ConnectedUnits[i].players);
+                shouldmove.AddRange(unit.players);
+                for (int i = 0; i < unit.ConnectedUnits.Count; i++)
+                {
+                    if (!unit.ConnectedUnits[i].CanMove(dir))
+                        return false;
+                    shouldmove.AddRange(unit.ConnectedUnits[i].players);
+                }
+                for (int i = 0; i < unit.ConnectedUnits.Count; i++)
+                {
+                    Unit u = unit.ConnectedUnits[i];
+                    Vector2 newpos = Toolkit.VectorSum(u.position, Toolkit.DirectiontoVector(dir));
+                    database.units[(int)u.position.x, (int)u.position.y].Remove(u);
+                    u.position = newpos;
+                    database.units[(int)u.position.x, (int)u.position.y].Add(u);
+                }
+                database.units[(int)unit.position.x, (int)unit.position.y].Remove(unit);
+                unit.position = Toolkit.VectorSum(unit.position, Toolkit.DirectiontoVector(dir));
+                database.units[(int)unit.position.x, (int)unit.position.y].Add(unit);
+                for (int i = 0; i < shouldmove.Count; i++)
+                {
+                    for (int j = i + 1; j < shouldmove.Count; j++)
+                    {
+                        if (shouldmove[i] == shouldmove[j])
+                            shouldmove.RemoveAt(j);
+                    }
+                    if (shouldmove[i].CanMove(dir))
+                    {
+                        database.units[(int)shouldmove[i].position.x, (int)shouldmove[i].position.y].Remove(shouldmove[i]);
+                        shouldmove[i].position = Toolkit.VectorSum(shouldmove[i].position, Toolkit.DirectiontoVector(dir));
+                        database.units[(int)shouldmove[i].position.x, (int)shouldmove[i].position.y].Add(shouldmove[i]);
+                        apigraphic.MoveGameObject(shouldmove[i].gameObject, dir);
+                    }
+                }
+
+                apigraphic.MoveGameObject(unit.transform.parent.gameObject, dir);
             }
-            for (int i = 0; i < unit.ConnectedUnits.Count; i++)
+            else
             {
-                Unit u = unit.ConnectedUnits[i];
-                Vector2 newpos = Toolkit.VectorSum(u.position, Toolkit.DirectiontoVector(dir));
-                database.units[(int)u.position.x, (int)u.position.y].Remove(u);
-                u.position = newpos;
-                database.units[(int)u.position.x, (int)u.position.y].Add(u);
+
             }
-            for(int i=0; i<shouldmove.Count; i++)
-            {
-                database.units[(int)shouldmove[i].position.x, (int)shouldmove[i].position.y].Remove(shouldmove[i]);
-                shouldmove[i].position = Toolkit.VectorSum(shouldmove[i].position, Toolkit.DirectiontoVector(dir));
-                apigraphic.MoveGameObject(shouldmove[i].gameObject, shouldmove[i].position);
-            }
-            database.units[(int)unit.position.x, (int)unit.position.y].Remove(unit);
-            unit.position = Toolkit.VectorSum(unit.position, Toolkit.DirectiontoVector(dir));
-            database.units[(int)unit.position.x, (int)unit.position.y].Add(unit);
-            apigraphic.MoveGameObject(unit.transform.parent.gameObject, Toolkit.VectorSum(unit.transform.parent.gameObject.transform.position, Toolkit.DirectiontoVector(dir)));
+            return true;
         }
-        else
-        {
-            
-        }
-        return false;
     }
 
     public void MovePlayer(Player player, Direction dir)
     {
         Vector2 nextpos;
         apiinput.PlayerMoveStarted();
+        Debug.Log(player.onramp);
         if (player.onramp)
         {
             List<Unit> units = GetUnits(player.position);
@@ -130,8 +146,9 @@ public class LogicalEngine {
                         if (units[0] is Ramp)
                         {
                             database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                            apigraphic.MovePlayer_Ramp_5(player, Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction)));
-                            player.position = nextpos;
+                            Vector2 temp = Toolkit.VectorSum(player.position, Toolkit.DirectiontoVector(dir));
+                            apigraphic.MovePlayer_Ramp_5(player, Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction)),((Ramp)units[0]).type);
+                            player.position = temp;
                         }
                         else
                         {
@@ -155,7 +172,13 @@ public class LogicalEngine {
                 if(units.Count != 0)
                 {
                     database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                    apigraphic.MovePlayer_Ramp_4(player, nextpos);
+                    if (((Ramp)units[0]).ComingOnRampSide(player.position))
+                        apigraphic.MovePlayer_Ramp_4(player, nextpos);
+                    else
+                    {
+                        nextpos = Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction));
+                        apigraphic.MovePlayer_Ramp_3(player, nextpos);
+                    }
                     player.position = nextpos;
                 }
                 else
@@ -233,8 +256,17 @@ public class LogicalEngine {
                         if(units[0] is Ramp)
                         {
                             database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                            apigraphic.MovePlayer_Simple_5(player, temp, ((Ramp)units[0]).type);
-                            player.position = temp;
+                            if (((Ramp)units[0]).ComingOnRampSide(player.position))
+                            {
+                                apigraphic.MovePlayer_Simple_5(player, temp, ((Ramp)units[0]).type);
+                                player.position = temp;
+                            }
+                            else
+                            {
+                                apigraphic.MovePlayer_Simple_1(player, nextpos);
+                                player.position = nextpos;
+                            }
+                            
                         }
                         else
                         {
@@ -273,17 +305,34 @@ public class LogicalEngine {
             Ramp ramp = null;
             if (units[0] is Ramp)
                 ramp = (Ramp)units[0];
-            else if (units[1] is Ramp)
-                ramp = (Ramp)units[1];
             if (ramp != null)
             {
                 switch (database.gravity_direction)
                 {
+
                     case Direction.Down: if (ramp.type == 1 || ramp.type == 4) return; break;
                     case Direction.Left: if (ramp.type == 1 || ramp.type == 2) return; break;
                     case Direction.Right: if (ramp.type == 3 || ramp.type == 4) return; break;
                     case Direction.Up: if (ramp.type == 2 || ramp.type == 3) return; break;
                 }
+            }
+            if (units[1] is Ramp)
+                ramp = (Ramp)units[1];
+            if (ramp != null)
+            {
+                switch (database.gravity_direction)
+                {
+
+                    case Direction.Down: if (ramp.type == 1 || ramp.type == 4) return; break;
+                    case Direction.Left: if (ramp.type == 1 || ramp.type == 2) return; break;
+                    case Direction.Right: if (ramp.type == 3 || ramp.type == 4) return; break;
+                    case Direction.Up: if (ramp.type == 2 || ramp.type == 3) return; break;
+                }
+            }
+            if(ramp != null)
+            {
+                ramp.fallOn(player, Toolkit.ReverseDirection(database.gravity_direction));
+                return;
             }
         }
         nextpos = Toolkit.VectorSum(player.position, Toolkit.DirectiontoVector(database.gravity_direction));
@@ -292,8 +341,10 @@ public class LogicalEngine {
         {
             if (units.Count == 1)
             {
-                units[0].fallOn(player, Toolkit.ReverseDirection(database.gravity_direction));
-                
+                database.units[(int)player.position.x, (int)player.position.y].Remove(player);
+                player.position = units[0].fallOn(player, Toolkit.ReverseDirection(database.gravity_direction));
+                database.units[(int)player.position.x, (int)player.position.y].Add(player);
+
             }
             else
             {
@@ -340,6 +391,15 @@ public class LogicalEngine {
         }
     }
 
+    private Ramp Has_Ramp(List<Unit> units)
+    {
+        for(int i = 0; i < units.Count; i++)
+        {
+            if (units[i] is Ramp)
+                return (Ramp)units[i];
+        }
+        return null;
+    }
     public List<Unit> GetUnits(Vector2 position)
     {
         return database.units[(int)position.x, (int)position.y];
@@ -349,29 +409,28 @@ public class LogicalEngine {
     {
         for(int i=0; i<database.player.Count; i++)
         {
-            if (!database.player[i].lean)
+            if (!database.player[i].lean )
             {
-                for(int j=0; j<database.player[i].move_direction.Count; j++)
+                if (database.player[i].Can_Move_Direction(direction))
                 {
-                    if(database.player[i].move_direction[j] == direction)
+                    if (database.player[i].Should_Change_Direction(direction))
                     {
-                        if(direction == database.player[i].direction)
-                        {
-                            if (!database.player[i].Move(direction))
-                            {
-                                Lean(database.player[i], direction);
-                                apiinput.PlayerMoveFinished();
-                            }
-                        }
-                        else
-                        {
-                            Direction olddir = database.player[i].direction;
-                            database.player[i].direction = direction;
-                            apiinput.PlayerMoveStarted();
-                            apigraphic.PlayerChangeDirection(database.player[i], olddir, database.player[i].direction);
-                        }
+                        Direction olddir = database.player[i].direction;
+                        database.player[i].direction = direction;
+                        apiinput.PlayerMoveStarted();
+                        apigraphic.PlayerChangeDirection(database.player[i], olddir, database.player[i].direction);
+                    }
+                    else if (!database.player[i].Move(direction))
+                    {
+                        Lean(database.player[i], direction);
+                        apiinput.PlayerMoveFinished();
                     }
                 }
+                else if (database.player[i].Can_Lean(direction))
+                {
+                    Lean(database.player[i], direction);
+                    apiinput.PlayerMoveFinished();
+                }   
             }
         }
     }
@@ -380,7 +439,7 @@ public class LogicalEngine {
     {
         for(int i=0; i<database.player.Count; i++)
         {
-            if (database.player[i].lean)
+            if (database.player[i].lean) //for absorb
             {
                 if (database.player[i].leandirection == dir)
                 {
@@ -394,7 +453,7 @@ public class LogicalEngine {
                         }
                     }
                 }
-                else
+                else // for release
                 {
                     List<Unit> units = GetUnits(Toolkit.VectorSum(database.player[i].position, Toolkit.DirectiontoVector(Toolkit.ReverseDirection(dir))));
                     for (int j = 0; j < units.Count; j++)
@@ -472,14 +531,23 @@ public class LogicalEngine {
     {
         apiinput.PlayerMoveFinished();
     }
-
+    public void graphic_PlayerLandFinished(Player player)
+    {
+        
+    }
     public void UnitToGraphic_Land(Unit unit, Unit landingunit,Vector2 landingposition)
     {
+        database.units[(int)landingposition.x, (int)landingposition.y].Remove(landingunit);
+        landingunit.position = landingposition;
+        database.units[(int)landingposition.x, (int)landingposition.y].Add(landingunit);
         apigraphic.Land((Player)unit, landingposition, landingunit);
     }
 
     public void UnitToGraphic_LandOnRamp(Unit unit, Ramp landingunit, Vector2 landingposition, int landingtype)
     {
+        database.units[(int)landingposition.x, (int)landingposition.y].Remove(landingunit);
+        landingunit.position = landingposition;
+        database.units[(int)landingposition.x, (int)landingposition.y].Add(landingunit);
         apigraphic.LandOnRamp((Player)unit, landingposition, landingunit, landingtype);
     }
 

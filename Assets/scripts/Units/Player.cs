@@ -14,10 +14,35 @@ public class Player : Unit
     public bool lean { get; set; }
 
     public bool onramp { get; set; }
+    public Direction gravity {get;set; }
 
     public void Awake()
     {
         direction = move_direction[0];
+    }
+
+    public bool Should_Change_Direction(Direction dir)
+    {
+        for (int i = 0; i < move_direction.Count; i++)
+            if (dir == move_direction[i])
+                if (dir != direction)
+                    return true;
+        return false;
+    }
+
+    public bool Can_Move_Direction(Direction dir)
+    {
+        for (int i = 0; i < move_direction.Count; i++)
+            if (dir == move_direction[i])
+                return true;
+        return false;
+    }
+    public bool Can_Lean( Direction dir)
+    {
+        if (dir == Direction.Up || dir == Direction.Down)
+            return true;
+        else
+            return false;
     }
 
     public override bool Move(Direction dir)
@@ -31,7 +56,10 @@ public class Player : Unit
             if (temp[i] is Ramp)
             {
                 ramp = (Ramp)temp[i];
-                onramp = true;
+                if (ramp.IsOnRampSide(Toolkit.ReverseDirection(Starter.GetGravityDirection())))
+                {
+                    onramp = true;
+                }
             }
         }
         if (onramp)
@@ -73,7 +101,6 @@ public class Player : Unit
                 units = api.engine_GetUnits(Toolkit.VectorSum(Toolkit.VectorSum(Toolkit.DirectiontoVector(Toolkit.ReverseDirection(gravitydirection)), Toolkit.DirectiontoVector(dir)), position));
         }
         for (int i = 0; i < units.Count; i++) {
-            Debug.Log(units[i]);
             if (!units[i].PlayerMoveInto(Toolkit.ReverseDirection(dir)))
                 return false;
         }
@@ -119,8 +146,7 @@ public class Player : Unit
     public void Release(Container container)
     {
         container.PlayerRelease(this);
-    }  
-
+    }
     public override bool PlayerMoveInto(Direction dir)
     {
         return false;

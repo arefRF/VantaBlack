@@ -14,7 +14,7 @@ public class Container : ParentContainer {
     }
 
 
-    public void PlayerAbsorb(Player player)
+    public virtual void PlayerAbsorb(Player player)
     {
         if (abilities.Count == 0)
             return;
@@ -45,7 +45,7 @@ public class Container : ParentContainer {
         }
     }
 
-    private void PlayerReleaseAbilities(Player player)
+    protected void PlayerReleaseAbilities(Player player)
     {
         if(abilities.Count<4)
         {
@@ -54,7 +54,7 @@ public class Container : ParentContainer {
         }
    }
 
-    public void PlayerRelease(Player player)
+    public virtual void PlayerRelease(Player player)
     {
         if (player.abilities.Count == 0)
             return;

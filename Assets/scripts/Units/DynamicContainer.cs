@@ -2,12 +2,12 @@
 using System.Collections;
 using System;
 
-public class DynamicContainer : Container {
+public class DynamicContainer : FunctionalContainer {
     
 
     // Use this for initialization
     void Start () {
-	
+        moved = abilities.Count;
 	}
 	
 	// Update is called once per frame
@@ -17,6 +17,6 @@ public class DynamicContainer : Container {
 
     public override bool PlayerMoveInto(Direction dir)
     {
-        throw new NotImplementedException();
+        return false;
     }
 }
