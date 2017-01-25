@@ -47,8 +47,6 @@ public class GraphicalEngine : MonoBehaviour {
         api.MoveGameObjectFinished(obj);
     }
 	// Use this for initialization
-
-
     /*public void Refresh()
     {
         for(int i=0; i<database.units.GetLength(0); i++)

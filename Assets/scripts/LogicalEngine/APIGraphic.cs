@@ -20,7 +20,6 @@ public class APIGraphic{
         float y = position.y - player.transform.position.y;
         x = x / Mathf.Abs(x);
         y = y / Mathf.Abs(y);
-        position += new Vector2(x, y);
         player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
     }
     
