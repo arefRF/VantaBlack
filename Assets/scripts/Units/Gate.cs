@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using UnityEditor.SceneManagement;
 public class Gate : Container {
 
     public string sceneName;
@@ -24,6 +24,23 @@ public class Gate : Container {
         PlayerReleaseAbilities(player);
     }
 
+    public override void PlayerReleaseAbilities(Player player)
+    {
+        if (abilities.Count < capacity)
+        {
+            abilities.Add(player.abilities[0]);
+            player.abilities.RemoveAt(0);
+        }
+        if(abilities.Count == capacity)
+        {
+            Change_Scene();
+        }
+    }
+
+    private void Change_Scene()
+    {
+        EditorSceneManager.LoadScene(sceneName);
+    }
     public override void PlayerAbsorb(Player player)
     {
         return;
