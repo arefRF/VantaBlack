@@ -19,8 +19,14 @@ public class Gate : Container {
     {
         if (capacity == abilities.Count)
             return;
-        if (player.abilities[0] != AbilityType.Key)
+        try {
+            if (player.abilities[0] != AbilityType.Key)
+                return;
+        }
+        catch
+        {
             return;
+        }
         PlayerReleaseAbilities(player);
     }
 
