@@ -78,7 +78,7 @@ public class LogicalEngine {
 
     public void MovePlayer(Player player, Direction dir)
     {
-        Debug.Log("moveing");
+        Debug.Log("moving");
         Vector2 nextpos;
         apiinput.PlayerMoveStarted();
         if (player.onramp)
@@ -139,8 +139,9 @@ public class LogicalEngine {
                         if (units[0] is Ramp)
                         {
                             database.units[(int)player.position.x, (int)player.position.y].Remove(player);
+                            Vector2 temp = Toolkit.VectorSum(player.position, Toolkit.DirectiontoVector(dir));
                             apigraphic.MovePlayer_Ramp_5(player, Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction)));
-                            player.position = nextpos;
+                            player.position = temp;
                         }
                         else
                         {
@@ -277,12 +278,25 @@ public class LogicalEngine {
         List<Unit> units;
         Vector2 nextpos;
         units = GetUnits(player.position);
+        Debug.Log(player.position);
         if(units.Count == 2)
         {
+            Debug.Log("ramp found");
             Ramp ramp = null;
             if (units[0] is Ramp)
                 ramp = (Ramp)units[0];
-            else if (units[1] is Ramp)
+            if (ramp != null)
+            {
+                switch (database.gravity_direction)
+                {
+
+                    case Direction.Down: if (ramp.type == 1 || ramp.type == 4) return; break;
+                    case Direction.Left: if (ramp.type == 1 || ramp.type == 2) return; break;
+                    case Direction.Right: if (ramp.type == 3 || ramp.type == 4) return; break;
+                    case Direction.Up: if (ramp.type == 2 || ramp.type == 3) return; break;
+                }
+            }
+            if (units[1] is Ramp)
                 ramp = (Ramp)units[1];
             if (ramp != null)
             {
@@ -294,6 +308,12 @@ public class LogicalEngine {
                     case Direction.Right: if (ramp.type == 3 || ramp.type == 4) return; break;
                     case Direction.Up: if (ramp.type == 2 || ramp.type == 3) return; break;
                 }
+            }
+            if(ramp != null)
+            {
+                Debug.Log("falling on ramp");
+                ramp.fallOn(player, Toolkit.ReverseDirection(database.gravity_direction));
+                return;
             }
         }
         nextpos = Toolkit.VectorSum(player.position, Toolkit.DirectiontoVector(database.gravity_direction));
@@ -491,14 +511,24 @@ public class LogicalEngine {
     {
         apiinput.PlayerMoveFinished();
     }
-
+    public void graphic_PlayerLandFinished(Player player)
+    {
+        
+    }
     public void UnitToGraphic_Land(Unit unit, Unit landingunit,Vector2 landingposition)
     {
+        Debug.Log(landingposition);
+        database.units[(int)landingposition.x, (int)landingposition.y].Remove(landingunit);
+        landingunit.position = landingposition;
+        database.units[(int)landingposition.x, (int)landingposition.y].Add(landingunit);
         apigraphic.Land((Player)unit, landingposition, landingunit);
     }
 
     public void UnitToGraphic_LandOnRamp(Unit unit, Ramp landingunit, Vector2 landingposition, int landingtype)
     {
+        database.units[(int)landingposition.x, (int)landingposition.y].Remove(landingunit);
+        landingunit.position = landingposition;
+        database.units[(int)landingposition.x, (int)landingposition.y].Add(landingunit);
         apigraphic.LandOnRamp((Player)unit, landingposition, landingunit, landingtype);
     }
 

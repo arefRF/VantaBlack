@@ -38,8 +38,7 @@ public class APIUnit {
 
     public void engine_Land(Unit unit, Unit laningunit, Direction landingdirection)
     {
-        Vector2 landingpos = Toolkit.VectorSum(Toolkit.DirectiontoVector(engine.database.gravity_direction), unit.position);
-        engine.UnitToGraphic_Land(laningunit, unit,landingpos);
+        engine.UnitToGraphic_Land(laningunit, unit, unit.position);
     }
 
     public void engine_LandOnRamp(Ramp ramp, Unit landingunit, int ramptype)
