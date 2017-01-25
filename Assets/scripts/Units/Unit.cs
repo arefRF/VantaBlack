@@ -34,7 +34,7 @@ public class Unit : MonoBehaviour {
     public virtual Vector2 fallOn(Unit fallingunit, Direction dir)
     {
         api.engine_Land(this, fallingunit, dir);
-        return new Vector2(0,0);
+        return fallingunit.position;
     }
 
     public virtual bool CanMove(Direction dir)

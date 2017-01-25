@@ -154,6 +154,8 @@ public class Player : Unit
 
     public bool Action()
     {
+        if (abilities.Count == 0)
+            return false;
         switch (abilities[0])
         {
             case AbilityType.Fuel: return false;

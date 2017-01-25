@@ -87,7 +87,6 @@ public class LogicalEngine {
     {
         Vector2 nextpos;
         apiinput.PlayerMoveStarted();
-        Debug.Log(player.onramp);
         if (player.onramp)
         {
             List<Unit> units = GetUnits(player.position);
