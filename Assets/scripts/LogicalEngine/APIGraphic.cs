@@ -154,7 +154,7 @@ public class APIGraphic{
     }
 
 
-    public void MoveGameObject(GameObject obj, Vector2 pos)
+    public void MoveGameObject(GameObject obj, Direction dir)
     {
         obj.transform.position = pos;
         logicalengine.graphic_GameObjectMoveAnimationFinished(obj);
