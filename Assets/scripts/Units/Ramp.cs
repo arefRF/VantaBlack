@@ -49,8 +49,6 @@ public class Ramp : Unit {
                 if (units[i] is Ramp)
                 {
                     Ramp ramp = (Ramp)units[i];
-                    Debug.Log(type);
-                    Debug.Log(ramp.type);
                     switch (type)
                     {
                         case 1:
@@ -102,7 +100,6 @@ public class Ramp : Unit {
     public override List<Unit> EffectedUnits(Direction dir)
     {
         List<Unit> units = api.engine_GetUnits(this.position);
-        Debug.Log(Toolkit.VectorSum(this.position, Toolkit.DirectiontoVector(dir)));
         List<Unit> result = new List<Unit>();
         for (int i = 0; i < units.Count; i++)
         {

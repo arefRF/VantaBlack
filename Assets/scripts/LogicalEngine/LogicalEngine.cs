@@ -85,7 +85,6 @@ public class LogicalEngine {
 
     public void MovePlayer(Player player, Direction dir)
     {
-        Debug.Log("moving");
         Vector2 nextpos;
         apiinput.PlayerMoveStarted();
         if (player.onramp)
@@ -147,7 +146,7 @@ public class LogicalEngine {
                         {
                             database.units[(int)player.position.x, (int)player.position.y].Remove(player);
                             Vector2 temp = Toolkit.VectorSum(player.position, Toolkit.DirectiontoVector(dir));
-                            apigraphic.MovePlayer_Ramp_5(player, Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction)));
+                            apigraphic.MovePlayer_Ramp_5(player, Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction)),((Ramp)units[0]).type);
                             player.position = temp;
                         }
                         else
@@ -285,10 +284,8 @@ public class LogicalEngine {
         List<Unit> units;
         Vector2 nextpos;
         units = GetUnits(player.position);
-        Debug.Log(player.position);
         if(units.Count == 2)
         {
-            Debug.Log("ramp found");
             Ramp ramp = null;
             if (units[0] is Ramp)
                 ramp = (Ramp)units[0];
@@ -318,7 +315,6 @@ public class LogicalEngine {
             }
             if(ramp != null)
             {
-                Debug.Log("falling on ramp");
                 ramp.fallOn(player, Toolkit.ReverseDirection(database.gravity_direction));
                 return;
             }
@@ -469,7 +465,6 @@ public class LogicalEngine {
 
     public void ActionKeyPressed()
     {
-        Debug.Log("pressed");
         for(int i=0; i<database.player.Count; i++)
         {
             if (database.player[i].lean)
@@ -524,7 +519,6 @@ public class LogicalEngine {
     }
     public void UnitToGraphic_Land(Unit unit, Unit landingunit,Vector2 landingposition)
     {
-        Debug.Log(landingposition);
         database.units[(int)landingposition.x, (int)landingposition.y].Remove(landingunit);
         landingunit.position = landingposition;
         database.units[(int)landingposition.x, (int)landingposition.y].Add(landingunit);
