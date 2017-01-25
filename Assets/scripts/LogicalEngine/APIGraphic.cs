@@ -88,13 +88,13 @@ public class APIGraphic{
     // Block to Ramp (tekrari)
     public void MovePlayer_Simple_5(Player player, Vector2 position , int ramptype)
     {
-        Debug.Log("Simple 5");
+       Debug.Log("Simple 5");
         int x = 1, y = 1;
         if (ramptype == 3 || ramptype == 4)
             x = -1;
         if (ramptype == 2 || ramptype == 3)
             y = -1;
-        position += new Vector2(x * 0.4f, y * 0.4f);
+        position += new Vector2(x * 0.4f, y * 0.4f); 
         player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
     }
 
@@ -155,13 +155,14 @@ public class APIGraphic{
 
     public void MoveGameObject(GameObject obj, Direction dir)
     {
-        obj.transform.position = (Vector2) obj.transform.position + Toolkit.DirectiontoVector(dir);
-        logicalengine.graphic_GameObjectMoveAnimationFinished(obj);
+        Vector2 pos = (Vector2) obj.transform.position + Toolkit.DirectiontoVector(dir);
+        graphicalengine.Move_Object(obj, pos);
+       
     }
 
     public void MoveGameObjectFinished(GameObject obj)
     {
-
+        logicalengine.graphic_GameObjectMoveAnimationFinished(obj);
     }
 
     public void Jump(Player player, Vector2 position)

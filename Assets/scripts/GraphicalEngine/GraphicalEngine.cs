@@ -30,12 +30,21 @@ public class GraphicalEngine : MonoBehaviour {
 
     public void Move_Object(GameObject obj, Vector2 pos)
     {
-        
+        StartCoroutine(Move_Object_Coroutine(obj,pos));
     }
 
-    private IEnumerator Move_Object_Coroutine()
+    private IEnumerator Move_Object_Coroutine(GameObject obj,Vector2 end)
     {
-        yield return null;
+        float remain_distance = ((Vector2)obj.transform.position - end).sqrMagnitude;
+        float move_time = 1f;
+        while (remain_distance > float.Epsilon)
+        {
+            remain_distance = ((Vector2)obj.transform.position - end).sqrMagnitude;
+            Vector3 new_pos = Vector3.MoveTowards(obj.transform.position, end, Time.deltaTime * 1 / move_time);
+            obj.transform.position = new_pos;
+            yield return null;
+        }
+        api.MoveGameObjectFinished(obj);
     }
 	// Use this for initialization
 
