@@ -289,5 +289,19 @@ public sealed class Toolkit{
         }
         return false;
     }
+
+    public static Direction Comparison(Vector2 source, Vector2 sink)
+    {
+        if(source.x > sink.x)
+            return Direction.Right;
+        else
+        {
+            if (source.y > sink.y)
+                return Direction.Up;
+            else if (source.y == sink.y)
+                return Direction.Left;
+        }
+        return Direction.Down;
+    }
 }
 

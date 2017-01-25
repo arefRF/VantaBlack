@@ -56,7 +56,10 @@ public class Player : Unit
             if (temp[i] is Ramp)
             {
                 ramp = (Ramp)temp[i];
-                onramp = true;
+                if (ramp.IsOnRampSide(Toolkit.ReverseDirection(Starter.GetGravityDirection())))
+                {
+                    onramp = true;
+                }
             }
         }
         if (onramp)

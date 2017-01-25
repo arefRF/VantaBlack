@@ -38,4 +38,8 @@ public class Starter : MonoBehaviour{
     {
         return staticengine;
     }
+    public static Direction GetGravityDirection()
+    {
+        return staticengine.database.gravity_direction;
+    }
 }

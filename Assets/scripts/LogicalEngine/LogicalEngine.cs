@@ -87,6 +87,7 @@ public class LogicalEngine {
     {
         Vector2 nextpos;
         apiinput.PlayerMoveStarted();
+        Debug.Log(player.onramp);
         if (player.onramp)
         {
             List<Unit> units = GetUnits(player.position);
@@ -171,7 +172,13 @@ public class LogicalEngine {
                 if(units.Count != 0)
                 {
                     database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                    apigraphic.MovePlayer_Ramp_4(player, nextpos);
+                    if (((Ramp)units[0]).ComingOnRampSide(player.position))
+                        apigraphic.MovePlayer_Ramp_4(player, nextpos);
+                    else
+                    {
+                        nextpos = Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction));
+                        apigraphic.MovePlayer_Ramp_3(player, nextpos);
+                    }
                     player.position = nextpos;
                 }
                 else
@@ -249,8 +256,17 @@ public class LogicalEngine {
                         if(units[0] is Ramp)
                         {
                             database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                            apigraphic.MovePlayer_Simple_5(player, temp, ((Ramp)units[0]).type);
-                            player.position = temp;
+                            if (((Ramp)units[0]).ComingOnRampSide(player.position))
+                            {
+                                apigraphic.MovePlayer_Simple_5(player, temp, ((Ramp)units[0]).type);
+                                player.position = temp;
+                            }
+                            else
+                            {
+                                apigraphic.MovePlayer_Simple_1(player, nextpos);
+                                player.position = nextpos;
+                            }
+                            
                         }
                         else
                         {
@@ -325,8 +341,10 @@ public class LogicalEngine {
         {
             if (units.Count == 1)
             {
-                units[0].fallOn(player, Toolkit.ReverseDirection(database.gravity_direction));
-                
+                database.units[(int)player.position.x, (int)player.position.y].Remove(player);
+                player.position = units[0].fallOn(player, Toolkit.ReverseDirection(database.gravity_direction));
+                database.units[(int)player.position.x, (int)player.position.y].Add(player);
+
             }
             else
             {

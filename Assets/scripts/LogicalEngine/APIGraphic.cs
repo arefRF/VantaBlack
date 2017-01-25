@@ -41,6 +41,7 @@ public class APIGraphic{
     // Ramp to corner
     public void MovePlayer_Ramp_4(Player player, Vector2 position)
     {
+        Debug.Log("ramp 4");
         player.gameObject.GetComponent<PlayerGraphics>().Ramp_To_Corner(position);
     }
 

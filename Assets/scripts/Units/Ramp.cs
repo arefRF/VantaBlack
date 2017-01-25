@@ -112,34 +112,83 @@ public class Ramp : Unit {
         return result;
     }
 
-    public override void fallOn(Unit fallingunit, Direction dir)
+    public override Vector2 fallOn(Unit fallingunit, Direction dir)
     {
         switch (dir)
         {
             case Direction.Up:
                 if (type == 2 || type == 3)
+                {
                     api.engine_Land(this, fallingunit, dir);
+                    return fallingunit.position;
+                }
                 else
+                {
                     api.engine_LandOnRamp(this, fallingunit, type);
-                return;
+                    return position;
+                }
             case Direction.Right:
                 if (type == 3 || type == 4)
+                {
                     api.engine_Land(this, fallingunit, dir);
+                    return fallingunit.position;
+                }
                 else
+                {
                     api.engine_LandOnRamp(this, fallingunit, type);
-                return;
+                    return position;
+                }
             case Direction.Down:
                 if (type == 1 || type == 4)
+                {
                     api.engine_Land(this, fallingunit, dir);
+                    return fallingunit.position;
+                }
                 else
+                {
                     api.engine_LandOnRamp(this, fallingunit, type);
-                return;
+                    return position;
+                }
             case Direction.Left:
                 if (type == 1 || type == 2)
+                {
                     api.engine_Land(this, fallingunit, dir);
+                    return fallingunit.position;
+                }
                 else
+                {
                     api.engine_LandOnRamp(this, fallingunit, type);
-                return;
+                    return position;
+                }
+            default: return position;
+        }
+    }
+
+    public bool IsOnRampSide(Direction d)
+    {
+        switch(type)
+        {
+            case 1: if (d == Direction.Up || d == Direction.Right) return true; return false;
+            case 2: if (d == Direction.Down || d == Direction.Right) return true; return false;
+            case 3: if (d == Direction.Down || d == Direction.Left) return true; return false;
+            case 4: if (d == Direction.Up || d == Direction.Left) return true; return false;
+        }
+        return false;
+    }
+
+    public bool ComingOnRampSide(Vector2 pos)
+    {
+        switch (Starter.GetGravityDirection()){
+            case Direction.Down:
+                switch (type)
+                {
+                    case 1: if (pos.x < position.x) return true; return false;
+                    case 2: return false;
+                    case 3: return false;
+                    case 4: if (pos.x > position.x) return true; return false;
+                    default: return false;
+                }
+            default: return false;
         }
     }
 }
