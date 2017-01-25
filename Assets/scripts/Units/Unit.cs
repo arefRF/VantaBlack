@@ -69,21 +69,7 @@ public class Unit : MonoBehaviour {
         //friction
         bound = players.Count;
         List<Unit> effectedunits = EffectedUnits(Toolkit.ReverseDirection(Starter.GetDataBase().gravity_direction));
-        Debug.Log(effectedunits.Count);
-        for (int i = 0; i< effectedunits.Count; i++)
-        {
-            bool flag = true;
-            for(int j=0; j<bound; j++)
-            {
-                if(effectedunits[i] == players[j])
-                {
-                    flag = false;
-                    break;
-                }
-            }
-            if (flag)
-                players.Add(effectedunits[i]);
-        }
+        players.AddRange(effectedunits);
         return true;
     }
 
@@ -96,11 +82,8 @@ public class Unit : MonoBehaviour {
         {
             if(units[i] is Player)
             {
-                if (units[i].CanMove(dir))
-                {
-                    result.Add(units[i]);
-                    result.AddRange(units[i].EffectedUnits(dir));
-                }
+                result.Add(units[i]);
+                result.AddRange(units[i].EffectedUnits(dir));
             }
         }
         return result;

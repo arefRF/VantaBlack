@@ -55,18 +55,28 @@ public class LogicalEngine {
                     u.position = newpos;
                     database.units[(int)u.position.x, (int)u.position.y].Add(u);
                 }
-                Debug.Log("shoud move: " + shouldmove.Count);
-                for (int i = 0; i < shouldmove.Count; i++)
-                {
-                    database.units[(int)shouldmove[i].position.x, (int)shouldmove[i].position.y].Remove(shouldmove[i]);
-                    shouldmove[i].position = Toolkit.VectorSum(shouldmove[i].position, Toolkit.DirectiontoVector(dir));
-                    database.units[(int)shouldmove[i].position.x, (int)shouldmove[i].position.y].Add(shouldmove[i]);
-                    apigraphic.MoveGameObject(shouldmove[i].gameObject, dir);
-                }
                 database.units[(int)unit.position.x, (int)unit.position.y].Remove(unit);
                 unit.position = Toolkit.VectorSum(unit.position, Toolkit.DirectiontoVector(dir));
                 database.units[(int)unit.position.x, (int)unit.position.y].Add(unit);
                 Debug.Log("Move Unit");
+
+                Debug.Log("shoud move: " + shouldmove.Count);
+                for (int i = 0; i < shouldmove.Count; i++)
+                {
+                    for (int j = i + 1; j < shouldmove.Count; j++)
+                    {
+                        if (shouldmove[i] == shouldmove[j])
+                            shouldmove.RemoveAt(j);
+                    }
+                    if (shouldmove[i].CanMove(dir))
+                    {
+                        database.units[(int)shouldmove[i].position.x, (int)shouldmove[i].position.y].Remove(shouldmove[i]);
+                        shouldmove[i].position = Toolkit.VectorSum(shouldmove[i].position, Toolkit.DirectiontoVector(dir));
+                        database.units[(int)shouldmove[i].position.x, (int)shouldmove[i].position.y].Add(shouldmove[i]);
+                        apigraphic.MoveGameObject(shouldmove[i].gameObject, dir);
+                    }
+                }
+
                 apigraphic.MoveGameObject(unit.transform.parent.gameObject, dir);
             }
             else
