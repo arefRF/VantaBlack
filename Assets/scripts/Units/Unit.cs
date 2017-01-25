@@ -66,7 +66,41 @@ public class Unit : MonoBehaviour {
                 return false;
             players.AddRange(players[i].players);
         }
+        //friction
+        bound = players.Count;
+        List<Unit> effectedunits = EffectedUnits(Toolkit.ReverseDirection(Starter.GetDataBase().gravity_direction));
+        Debug.Log(effectedunits.Count);
+        for (int i = 0; i< effectedunits.Count; i++)
+        {
+            bool flag = true;
+            for(int j=0; j<bound; j++)
+            {
+                if(effectedunits[i] == players[j])
+                {
+                    flag = false;
+                    break;
+                }
+            }
+            if (flag)
+                players.Add(effectedunits[i]);
+        }
         return true;
+    }
+
+    public virtual List<Unit> EffectedUnits(Direction dir)
+    {
+        List<Unit> units = api.engine_GetUnits(this, dir);
+        Debug.Log(Toolkit.VectorSum(this.position, Toolkit.DirectiontoVector(dir)));
+        List<Unit> result = new List<Unit>();
+        for(int i=0; i<units.Count; i++)
+        {
+            if(units[i] is Player)
+            {
+                result.Add(units[i]);
+                result.AddRange(units[i].EffectedUnits(dir));
+            }
+        }
+        return result;
     }
 
     public void SetConnectedUnits(List<Unit> units)
