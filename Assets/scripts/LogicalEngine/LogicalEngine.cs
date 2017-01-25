@@ -60,13 +60,13 @@ public class LogicalEngine {
                 {
                     database.units[(int)shouldmove[i].position.x, (int)shouldmove[i].position.y].Remove(shouldmove[i]);
                     shouldmove[i].position = Toolkit.VectorSum(shouldmove[i].position, Toolkit.DirectiontoVector(dir));
-                    apigraphic.MoveGameObject(shouldmove[i].gameObject, shouldmove[i].position);
+                    apigraphic.MoveGameObject(shouldmove[i].gameObject, dir);
                 }
                 database.units[(int)unit.position.x, (int)unit.position.y].Remove(unit);
                 unit.position = Toolkit.VectorSum(unit.position, Toolkit.DirectiontoVector(dir));
                 database.units[(int)unit.position.x, (int)unit.position.y].Add(unit);
                 Debug.Log("Move Unit");
-                apigraphic.MoveGameObject(unit.transform.parent.gameObject, Toolkit.VectorSum(unit.transform.parent.gameObject.transform.position, Toolkit.DirectiontoVector(dir)));
+                apigraphic.MoveGameObject(unit.transform.parent.gameObject, dir);
             }
             else
             {
