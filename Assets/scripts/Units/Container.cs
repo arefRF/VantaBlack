@@ -45,7 +45,7 @@ public class Container : ParentContainer {
         }
     }
 
-    protected void PlayerReleaseAbilities(Player player)
+    public virtual void PlayerReleaseAbilities(Player player)
     {
         if(abilities.Count<4)
         {
