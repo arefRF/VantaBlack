@@ -85,8 +85,8 @@ public class SubEngine_Initializer{
                 {
                     if(units[i,j][k] is Container)
                         SetContainerSprite(units, units[i, j][k]);
-                    //else if (units[i, j][k] is Rock)
-                        //SetRockSprite(units, units[i, j][k]);
+                    else if (units[i, j][k] is Rock)
+                        SetRockSprite(units, units[i, j][k]);
                 }
             }
         }
@@ -107,15 +107,15 @@ public class SubEngine_Initializer{
             unit.gameObject.GetComponent<SpriteRenderer>().sprite = sprite_Rock[5];
         else if (notconnected[0] && notconnected[2])
             unit.gameObject.GetComponent<SpriteRenderer>().sprite = sprite_Rock[6];
-        else if (notconnected[0] && notconnected[1])
-            unit.gameObject.GetComponent<SpriteRenderer>().sprite = sprite_Rock[7];
         else if (notconnected[1] && notconnected[3])
+            unit.gameObject.GetComponent<SpriteRenderer>().sprite = sprite_Rock[7];
+        else if (notconnected[0] && notconnected[1])
             unit.gameObject.GetComponent<SpriteRenderer>().sprite = sprite_Rock[8];
         else if (notconnected[0] && notconnected[3])
             unit.gameObject.GetComponent<SpriteRenderer>().sprite = sprite_Rock[9];
-        else if (notconnected[2] && notconnected[3])
-            unit.gameObject.GetComponent<SpriteRenderer>().sprite = sprite_Rock[10];
         else if (notconnected[1] && notconnected[2])
+            unit.gameObject.GetComponent<SpriteRenderer>().sprite = sprite_Rock[10];
+        else if (notconnected[2] && notconnected[3])
             unit.gameObject.GetComponent<SpriteRenderer>().sprite = sprite_Rock[11];
         else if (notconnected[0])
             unit.gameObject.GetComponent<SpriteRenderer>().sprite = sprite_Rock[12];
