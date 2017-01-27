@@ -62,7 +62,6 @@ public class FunctionalContainer : Container {
             Debug.Log("move done");
             movedone = false;
             moved = 0;
-            on = !on;
             shouldmove = abilities.Count;
             return;
         }
@@ -87,7 +86,10 @@ public class FunctionalContainer : Container {
     }
     protected override void ContainerAbilityChanged(bool increased)
     {
-        Action_Fuel();
+        if (on)
+        {
+            
+        }
         shouldmove = abilities.Count;
     }
 }
