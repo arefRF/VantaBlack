@@ -160,7 +160,7 @@ public class LogicalEngine {
                 else
                 {
                     database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                    apigraphic.MovePlayer_Ramp_1(player, nextpos);
+                    apigraphic.MovePlayer_Ramp_1(player, nextpos,((Ramp)units[0]).type);
                     player.position = nextpos;
                 }
             }
@@ -186,7 +186,7 @@ public class LogicalEngine {
                     if (units[0] is Ramp)
                     {
                         database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                        apigraphic.MovePlayer_Ramp_1(player, Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction)));
+                        apigraphic.MovePlayer_Ramp_1(player, Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction)),((Ramp)units[0]).type);
                         player.position = nextpos;
                     }
                     else
