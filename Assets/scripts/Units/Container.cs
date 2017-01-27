@@ -32,7 +32,10 @@ public class Container : ParentContainer {
     private void Swap(Player player)
     {
         List<AbilityType> temp = abilities;
+        abilities = null;
+        ContainerAbilityChanged(false);
         abilities = player.abilities;
+        ContainerAbilityChanged(true);
         player.abilities = temp;
     }
 
@@ -42,6 +45,7 @@ public class Container : ParentContainer {
         {
             player.abilities.Add(abilities[0]);
             abilities.RemoveAt(0);
+            ContainerAbilityChanged(false);
         }
     }
 
@@ -51,6 +55,7 @@ public class Container : ParentContainer {
         {
             abilities.Add(player.abilities[0]);
             player.abilities.RemoveAt(0);
+            ContainerAbilityChanged(true);
         }
    }
 
@@ -67,6 +72,7 @@ public class Container : ParentContainer {
             else
                 Swap(player);
         }
+        
     }
     public override bool PlayerMoveInto(Direction dir)
     {
@@ -74,6 +80,11 @@ public class Container : ParentContainer {
     }
 
     public override void Action(Player player, Direction dir)
+    {
+        return;
+    }
+
+    protected virtual void ContainerAbilityChanged(bool increased)
     {
         return;
     }
