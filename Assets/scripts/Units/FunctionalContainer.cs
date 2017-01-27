@@ -26,6 +26,7 @@ public class FunctionalContainer : Container {
     public void Action_Fuel()
     {
         Debug.Log("action fuel");
+        Debug.Log(shouldmove);
         if (movedone)
         {
             Debug.Log("move done");
@@ -53,6 +54,42 @@ public class FunctionalContainer : Container {
             shouldmove = moved;
             moved = 0;
         }
-        
+    }
+    public void Action_Fuel_Continue()
+    {
+        if (movedone)
+        {
+            Debug.Log("move done");
+            movedone = false;
+            moved = 0;
+            shouldmove = abilities.Count;
+            return;
+        }
+        Direction dir = direction;
+        if (!on)
+        {
+            dir = Toolkit.ReverseDirection(dir);
+        }
+        if (api.MoveUnit(this, dir))
+        {
+            moved++;
+            if (moved == shouldmove)
+                movedone = true;
+        }
+        else
+        {
+            api.AddToStuckList(this);
+            on = !on;
+            shouldmove = moved;
+            moved = 0;
+        }
+    }
+    protected override void ContainerAbilityChanged(bool increased)
+    {
+        if (on)
+        {
+            
+        }
+        shouldmove = abilities.Count;
     }
 }
