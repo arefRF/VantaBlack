@@ -13,13 +13,15 @@ public class APIGraphic{
     }
 
     //Ramp to Ramp
-    public void MovePlayer_Ramp_1(Player player, Vector2 position)
+    public void MovePlayer_Ramp_1(Player player, Vector2 position,int ramptype)
     {
         Debug.Log("Ramp to Ramp");
-        float x = position.x - player.transform.position.x;
-        float y = position.y - player.transform.position.y;
-        x = x / Mathf.Abs(x);
-        y = y / Mathf.Abs(y);
+        int x = 1, y = 1;
+        if (ramptype == 3 || ramptype == 4)
+            x = -1;
+        if (ramptype == 2 || ramptype == 3)
+            y = -1;
+        position += new Vector2(x * 0.4f, y * 0.4f);
         player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
     }
     
@@ -141,10 +143,16 @@ public class APIGraphic{
         logicalengine.graphic_LandFinished(player);
     }
 
-    public void LandOnRamp(Player player, Vector2 position, Unit fallonunit, int landtype)
+    public void LandOnRamp(Player player, Vector2 position, Unit fallonunit, int ramptype)
     {
+        int x = 1, y = 1;
+        if (ramptype == 3 || ramptype == 4)
+            x = -1;
+        if (ramptype == 2 || ramptype == 3)
+            y = -1;
         logicalengine.graphic_LandFinished(player);
-        player.gameObject.transform.position = position;
+        
+        player.gameObject.transform.position =  (Vector2)position + new Vector2(x * 0.4f, y * 0.4f);
     }
 
     public void MovePlayerToBranch(Player player, Vector2 position, bool isonramp)
