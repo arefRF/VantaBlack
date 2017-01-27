@@ -4,9 +4,10 @@ using System;
 
 public class FunctionalContainer : Container {
     public Direction direction;
-    bool on;
+    public bool on;
     public int moved { get; set; }
     protected int shouldmove;
+    private bool movedone = false;
     public override bool PlayerMoveInto(Direction dir)
     {
         return false;
@@ -25,8 +26,15 @@ public class FunctionalContainer : Container {
     public void Action_Fuel()
     {
         Debug.Log("action fuel");
-        if (moved == abilities.Count)
+        if (movedone)
+        {
+            Debug.Log("move done");
+            movedone = false;
+            moved = 0;
+            on = !on;
+            shouldmove = abilities.Count;
             return;
+        }
         Direction dir = direction;
         if (on)
         {
@@ -36,16 +44,14 @@ public class FunctionalContainer : Container {
         {
             moved++;
             if (moved == shouldmove)
-            {
-                on = !on;
-                moved = 0;
-            }
+                movedone = true;
         }
         else
         {
             api.AddToStuckList(this);
             on = !on;
             shouldmove = moved;
+            moved = 0;
         }
         
     }
