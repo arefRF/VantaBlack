@@ -153,16 +153,16 @@ public class APIGraphic{
     }
 
 
-    public void MoveGameObject(GameObject obj, Direction dir)
+    public void MoveGameObject(GameObject obj, Direction dir, Unit unit)
     {
         Vector2 pos = (Vector2) obj.transform.position + Toolkit.DirectiontoVector(dir);
-        graphicalengine.Move_Object(obj, pos);
+        graphicalengine.Move_Object(obj, pos, unit);
        
     }
 
-    public void MoveGameObjectFinished(GameObject obj)
+    public void MoveGameObjectFinished(GameObject obj, Unit unit)
     {
-        logicalengine.graphic_GameObjectMoveAnimationFinished(obj);
+        logicalengine.graphic_GameObjectMoveAnimationFinished(obj, unit);
     }
 
     public void Jump(Player player, Vector2 position)

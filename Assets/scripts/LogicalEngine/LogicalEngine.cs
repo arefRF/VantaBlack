@@ -73,7 +73,7 @@ public class LogicalEngine {
                     }
                 }
 
-                apigraphic.MoveGameObject(unit.transform.parent.gameObject, dir);
+                apigraphic.MoveGameObject(unit.transform.parent.gameObject, dir, unit);
             }
             else
             {
@@ -517,7 +517,7 @@ public class LogicalEngine {
         Applygravity();
         apiinput.PlayerMoveFinished();
     }
-    public void graphic_GameObjectMoveAnimationFinished(GameObject gameobject)
+    public void graphic_GameObjectMoveAnimationFinished(GameObject gameobject, Unit unit)
     {
 
     }
