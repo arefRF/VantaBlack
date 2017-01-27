@@ -123,6 +123,10 @@ public class Player : Unit
             {
                 continue;
             }
+            else if (units is Ramp)
+            {
+
+            }
             else
                 return false;
         }

@@ -7,7 +7,8 @@ public class DynamicContainer : FunctionalContainer {
 
     // Use this for initialization
     void Start () {
-        moved = abilities.Count;
+        moved = 0;
+        shouldmove = abilities.Count;
 	}
 	
 	// Update is called once per frame

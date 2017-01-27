@@ -132,8 +132,6 @@ public class SubEngine_Initializer{
     private void SetContainerSprite(List<Unit>[,] units, Unit unit)
     {
         bool[] notconnected = GetConnectedSides(units, unit);
-        for (int i = 0; i < 4; i++)
-            Debug.Log(notconnected[i]);
         if (notconnected[0] && notconnected[1] && notconnected[2] && notconnected[3])
             unit.gameObject.GetComponent<SpriteRenderer>().sprite = sprite_Container[1];
         else if (notconnected[0] && notconnected[1] && notconnected[2])
