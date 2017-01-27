@@ -69,7 +69,7 @@ public class LogicalEngine {
                         database.units[(int)shouldmove[i].position.x, (int)shouldmove[i].position.y].Remove(shouldmove[i]);
                         shouldmove[i].position = Toolkit.VectorSum(shouldmove[i].position, Toolkit.DirectiontoVector(dir));
                         database.units[(int)shouldmove[i].position.x, (int)shouldmove[i].position.y].Add(shouldmove[i]);
-                        apigraphic.MoveGameObject(shouldmove[i].gameObject, dir);
+                        apigraphic.MoveGameObject(shouldmove[i].gameObject, dir, null);
                     }
                 }
 
@@ -519,7 +519,13 @@ public class LogicalEngine {
     }
     public void graphic_GameObjectMoveAnimationFinished(GameObject gameobject, Unit unit)
     {
-
+        Debug.Log("gameobject animation finished");
+        if (unit == null)
+            return;
+        if(unit is FunctionalContainer)
+        {
+            ((FunctionalContainer)unit).Action_Fuel();
+        }
     }
     public void graphic_AbsorbReleaseFinished(Player player)
     {

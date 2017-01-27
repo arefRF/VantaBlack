@@ -6,7 +6,7 @@ public class FunctionalContainer : Container {
     public Direction direction;
     bool on;
     public int moved { get; set; }
-
+    protected int shouldmove;
     public override bool PlayerMoveInto(Direction dir)
     {
         return false;
@@ -18,14 +18,15 @@ public class FunctionalContainer : Container {
             return;
         switch (abilities[0])
         {
-            case AbilityType.Fuel: Action_Fuel(player); break; 
+            case AbilityType.Fuel: Action_Fuel(); break; 
         }
     }
 
-    private void Action_Fuel(Player player)
+    public void Action_Fuel()
     {
         Debug.Log("action fuel");
-        
+        if (moved == abilities.Count)
+            return;
         Direction dir = direction;
         if (on)
         {
@@ -34,13 +35,17 @@ public class FunctionalContainer : Container {
         if (api.MoveUnit(this, dir))
         {
             moved++;
-            if (moved == abilities.Count)
+            if (moved == shouldmove)
+            {
                 on = !on;
+                moved = 0;
+            }
         }
         else
         {
             api.AddToStuckList(this);
             on = !on;
+            shouldmove = moved;
         }
         
     }
