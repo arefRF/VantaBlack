@@ -52,7 +52,7 @@ public class FunctionalContainer : Container {
         else
         {
             api.AddToStuckList(this);
-            on = !on;
+            //on = !on;
             shouldmove = moved;
             moved = 0;
         }
