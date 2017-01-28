@@ -21,7 +21,7 @@ public class LogicalEngine {
         apiinput = new APIInput(this);
         apiunit = new APIUnit(this);
         database = Starter.GetDataBase();
-        initializer = new SubEngine_Initializer(x,y, apiunit);
+        initializer = new SubEngine_Initializer(x,y, this);
     }
 
     public void Run()

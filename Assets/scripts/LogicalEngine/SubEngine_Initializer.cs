@@ -6,14 +6,15 @@ public class SubEngine_Initializer{
     private List<Unit>[,] units;
     int x, y;
     APIUnit api;
-
+    LogicalEngine engine;
     public Sprite[] sprite_Container, sprite_Rock;
 
-    public SubEngine_Initializer(int x, int y, APIUnit api)
+    public SubEngine_Initializer(int x, int y, LogicalEngine engine)
     {
         this.x = x;
         this.y = y;
-        this.api = api;
+        this.engine = engine;
+        api = engine.apiunit;
 
         sprite_Container = new Sprite[16];
         sprite_Rock = new Sprite[16];
@@ -60,6 +61,7 @@ public class SubEngine_Initializer{
                     default: Debug.Log(obj.tag + " Not supported"); break;
                 }
                 units[(int)obj.transform.position.x, (int)obj.transform.position.y][units[(int)obj.transform.position.x, (int)obj.transform.position.y].Count - 1].ConnectedUnits = new List<Unit>();
+                engine.apigraphic.UnitChangeSprite(units[(int)obj.transform.position.x, (int)obj.transform.position.y][units[(int)obj.transform.position.x, (int)obj.transform.position.y].Count - 1]);
                 connectedunits.Add(units[(int)obj.transform.position.x, (int)obj.transform.position.y][units[(int)obj.transform.position.x, (int)obj.transform.position.y].Count - 1]);
                 units[(int)obj.transform.position.x, (int)obj.transform.position.y][units[(int)obj.transform.position.x, (int)obj.transform.position.y].Count - 1].codeNumber = Unit.Code;
                 units[(int)obj.transform.position.x, (int)obj.transform.position.y][units[(int)obj.transform.position.x, (int)obj.transform.position.y].Count - 1].api = api;
