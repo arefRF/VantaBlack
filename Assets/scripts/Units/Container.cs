@@ -27,6 +27,7 @@ public class Container : ParentContainer {
             else
                 Swap(player);
         }
+        api.ChangeSprite(this);
     }
 
     private void Swap(Player player)
@@ -57,6 +58,7 @@ public class Container : ParentContainer {
             player.abilities.RemoveAt(0);
             ContainerAbilityChanged(true);
         }
+
    }
 
     public virtual void PlayerRelease(Player player)
