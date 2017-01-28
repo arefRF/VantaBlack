@@ -28,12 +28,12 @@ public class GraphicalEngine : MonoBehaviour {
     }
 
 
-    public void Move_Object(GameObject obj, Vector2 pos)
+    public void Move_Object(GameObject obj,Unit unit, Vector2 pos)
     {
-        StartCoroutine(Move_Object_Coroutine(obj,pos));
+        StartCoroutine(Move_Object_Coroutine(obj,unit,pos));
     }
 
-    private IEnumerator Move_Object_Coroutine(GameObject obj,Vector2 end)
+    private IEnumerator Move_Object_Coroutine(GameObject obj, Unit unit,Vector2 end)
     {
         float remain_distance = ((Vector2)obj.transform.position - end).sqrMagnitude;
         float move_time = 1f;
@@ -44,11 +44,10 @@ public class GraphicalEngine : MonoBehaviour {
             obj.transform.position = new_pos;
             yield return null;
         }
-        api.MoveGameObjectFinished(obj);
+        api.MoveGameObjectFinished(obj,unit);
     }
+
 	// Use this for initialization
-
-
     /*public void Refresh()
     {
         for(int i=0; i<database.units.GetLength(0); i++)

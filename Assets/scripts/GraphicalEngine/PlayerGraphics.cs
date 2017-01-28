@@ -91,9 +91,11 @@ public class PlayerGraphics : MonoBehaviour {
         Debug.Log("Ramp Type" + ramptype);
         int x = 1, y = 1;
         if (ramptype == 3 || ramptype == 4)
+
             x = -1;
         if (ramptype == 2 || ramptype == 3)
             y = -1;
+
         Vector2 end = position + new Vector2(x * 0.4f, y * 0.4f);
         float x1 = position.x - transform.position.x;
         position += new Vector2(-x1/2, 1);
@@ -132,6 +134,7 @@ public class PlayerGraphics : MonoBehaviour {
    
     private IEnumerator Player_Move_Coroutine(Vector2 end,bool call_finish)
     {
+        Player player = gameObject.GetComponent<Player>();
         float remain_distance = ((Vector2)transform.position - end).sqrMagnitude;
         while(remain_distance > float.Epsilon)
         {
@@ -147,6 +150,7 @@ public class PlayerGraphics : MonoBehaviour {
 
     private IEnumerator Ramp_Move_Coroutine(Vector2 end, Vector2 end2)
     {
+        Player player = gameObject.GetComponent<Player>();
         Debug.Log("Ramp Co");
         float remain_distance = ((Vector2)transform.position - end).sqrMagnitude;
         while (remain_distance > float.Epsilon)

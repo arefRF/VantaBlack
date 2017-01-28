@@ -6,7 +6,7 @@ public class Unit : MonoBehaviour {
     public UnitType unitType { get; set; }
     public GameObject obj { get; set; }
     public long codeNumber { get; set; }
-
+    public Vector2 target_pos { get; set; }
     public APIUnit api { get; set; }
 
     public static int Code = 0;

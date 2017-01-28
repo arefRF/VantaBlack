@@ -32,6 +32,12 @@ public class Player : Unit
 
     public bool Can_Move_Direction(Direction dir)
     {
+        if (Can_Lean(dir))
+        {
+            Vector2 pos = Toolkit.VectorSum(position, Toolkit.DirectiontoVector(dir));
+            if (Toolkit.IsInsideBranch(pos))
+                return true;
+        }
         for (int i = 0; i < move_direction.Count; i++)
             if (dir == move_direction[i])
                 return true;
@@ -122,6 +128,17 @@ public class Player : Unit
             else if (units[i] is Branch)
             {
                 continue;
+            }
+            else if (units[i] is Ramp)
+            {
+                Ramp ramp = (Ramp)units[i];
+                switch (dir)
+                {
+                    case Direction.Up: if (ramp.type != 2 && ramp.type != 3) return false; break;
+                    case Direction.Right: if (ramp.type != 3 && ramp.type != 4) return false; break;
+                    case Direction.Left: if (ramp.type != 1 && ramp.type != 2) return false; break;
+                    case Direction.Down: if (ramp.type != 1 && ramp.type != 4) return false; break;
+                }
             }
             else
                 return false;

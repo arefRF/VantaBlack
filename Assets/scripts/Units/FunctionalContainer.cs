@@ -4,9 +4,10 @@ using System;
 
 public class FunctionalContainer : Container {
     public Direction direction;
-    bool on;
-    public int moved;
-
+    public bool on;
+    public int moved { get; set; }
+    protected int shouldmove;
+    private bool movedone = false;
     public override bool PlayerMoveInto(Direction dir)
     {
         return false;
@@ -14,34 +15,98 @@ public class FunctionalContainer : Container {
 
     public override void Action(Player player, Direction dir)
     {
-        Debug.Log("container found");
         if (abilities.Count == 0)
             return;
         switch (abilities[0])
         {
-            case AbilityType.Fuel: Action_Fuel(player); on = !on; break;
+            case AbilityType.Fuel: Action_Fuel(); break; 
         }
     }
 
-    private void Action_Fuel(Player player)
+    public void Action_Fuel()
     {
-        Debug.Log("action fuel");
+        Debug.Log("should move: " + shouldmove);
+        api.RemoveFromStuckList(this);
+        if (movedone)
+        {
+            Debug.Log("move done");
+            movedone = false;
+            moved = 0;
+            on = !on;
+            shouldmove = abilities.Count;
+            if (abilities.Count == 0)
+                on = false;
+            return;
+        }
         Direction dir = direction;
         if (on)
         {
             dir = Toolkit.ReverseDirection(dir);
         }
-        int temp = 0;
-        for(int i=0; i<moved; i++)
+        if (api.MoveUnit(this, dir))
         {
-            if (api.MoveUnit(this, dir))
-                temp++;
-            else
-            {
-                api.AddToStuckList(this);
-                break;
-            }
+            moved++;
+            if (moved == shouldmove)
+                movedone = true;
         }
-        moved = temp;
+        else
+        {
+            api.AddToStuckList(this);
+            //on = !on;
+            shouldmove = moved;
+            moved = 0;
+        }
+    }
+    public void Action_Fuel_Continue(Direction dir)
+    {
+        if (api.MoveUnit(this, dir))
+        {
+            moved = abilities.Count;
+            movedone = true;
+            on = !on;
+            shouldmove = abilities.Count;
+        }
+        else
+        {
+            api.AddToStuckList(this);
+        }
+    }
+
+    public void Action_Fuel_Stucked()
+    {
+        if (movedone)
+        {
+            return;
+        }
+
+    }
+    protected override void ContainerAbilityChanged(bool increased)
+    {
+        Debug.Log("increased: " + increased);
+        Debug.Log("on: " + on);
+        if (increased && abilities.Count == 1)
+        {
+            shouldmove = 1;
+            return;
+        }
+        if (on)
+        {
+            if (increased)
+                Action_Fuel_Continue(direction);
+            else
+                Action_Fuel_Continue(Toolkit.ReverseDirection(direction));
+        }
+        else if (api.isStucked(this))
+        {
+            if (!increased)
+                Action_Fuel_Continue(Toolkit.ReverseDirection(direction));
+        }
+        else
+        {
+            if (increased)
+                shouldmove++;
+            else
+                shouldmove--;
+        }
     }
 }

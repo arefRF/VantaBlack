@@ -69,11 +69,11 @@ public class LogicalEngine {
                         database.units[(int)shouldmove[i].position.x, (int)shouldmove[i].position.y].Remove(shouldmove[i]);
                         shouldmove[i].position = Toolkit.VectorSum(shouldmove[i].position, Toolkit.DirectiontoVector(dir));
                         database.units[(int)shouldmove[i].position.x, (int)shouldmove[i].position.y].Add(shouldmove[i]);
-                        apigraphic.MoveGameObject(shouldmove[i].gameObject, dir);
+                        apigraphic.MoveGameObject(shouldmove[i].gameObject, dir, null);
                     }
                 }
 
-                apigraphic.MoveGameObject(unit.transform.parent.gameObject, dir);
+                apigraphic.MoveGameObject(unit.transform.parent.gameObject, dir, unit);
             }
             else
             {
@@ -160,7 +160,7 @@ public class LogicalEngine {
                 else
                 {
                     database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                    apigraphic.MovePlayer_Ramp_1(player, nextpos);
+                    apigraphic.MovePlayer_Ramp_1(player, nextpos,((Ramp)units[0]).type);
                     player.position = nextpos;
                 }
             }
@@ -186,7 +186,7 @@ public class LogicalEngine {
                     if (units[0] is Ramp)
                     {
                         database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                        apigraphic.MovePlayer_Ramp_1(player, Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction)));
+                        apigraphic.MovePlayer_Ramp_1(player, Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction)),((Ramp)units[0]).type);
                         player.position = nextpos;
                     }
                     else
@@ -301,6 +301,8 @@ public class LogicalEngine {
         units = GetUnits(player.position);
         if(units.Count == 2)
         {
+            if (units[0] is Branch || units[1] is Branch)
+                return;
             Ramp ramp = null;
             if (units[0] is Ramp)
                 ramp = (Ramp)units[0];
@@ -517,9 +519,15 @@ public class LogicalEngine {
         Applygravity();
         apiinput.PlayerMoveFinished();
     }
-    public void graphic_GameObjectMoveAnimationFinished(GameObject gameobject)
+    public void graphic_GameObjectMoveAnimationFinished(GameObject gameobject, Unit unit)
     {
-
+        if (unit == null)
+            return;
+        CheckStuckedUnit();
+        if(unit is FunctionalContainer)
+        {
+            ((FunctionalContainer)unit).Action_Fuel();
+        }
     }
     public void graphic_AbsorbReleaseFinished(Player player)
     {
@@ -562,5 +570,19 @@ public class LogicalEngine {
     public void UnitToGraphic_Swap(Player player, Container container, AbilityType ability)
     {
 
+    }
+
+    public void CheckStuckedUnit()
+    {
+        for(int i=0; i<stuckedunits.Count; i++)
+        {
+            Unit u = stuckedunits[i];
+            stuckedunits.RemoveAt(i);
+            if(u is FunctionalContainer)
+            {
+                ((FunctionalContainer)u).Action_Fuel();
+            }
+        }
+           
     }
 }

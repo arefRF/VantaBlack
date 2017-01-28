@@ -7,11 +7,26 @@ public class SubEngine_Initializer{
     int x, y;
     APIUnit api;
 
+    public Sprite[] sprite_Container, sprite_Rock;
+
     public SubEngine_Initializer(int x, int y, APIUnit api)
     {
         this.x = x;
         this.y = y;
         this.api = api;
+
+        sprite_Container = new Sprite[16];
+        sprite_Rock = new Sprite[16];
+        string containerrootpath = "Containers\\Box";
+        string rockrootpath = "Containers\\Rock";
+        for (int i=1; i < 16; i++)
+        {
+            string containerpath = containerrootpath + " " + i;
+            sprite_Container[i] = Resources.Load<Sprite>(containerpath);
+            string rockpath = rockrootpath + "" + i;
+            sprite_Rock[i] = Resources.Load<Sprite>(rockpath);
+        }
+        sprite_Rock[0] = Resources.Load<Sprite>(rockrootpath + "-full");
     }
 
     public List<Unit>[,] init()
@@ -54,6 +69,125 @@ public class SubEngine_Initializer{
             for (int j = 0; j < connectedunits.Count; j++)
                 connectedunits[j].SetConnectedUnits(connectedunits);
         }
+
+        SetSprites(units);
+
         return units;
+    }
+
+    private void SetSprites(List<Unit>[,] units)
+    {
+        for(int i=0;i< x; i++)
+        {
+            for(int j=0; j< y; j++)
+            {
+                for(int k=0; k<units[i,j].Count; k++)
+                {
+                    if(units[i,j][k] is Container)
+                        SetContainerSprite(units, units[i, j][k]);
+                    else if (units[i, j][k] is Rock)
+                        SetRockSprite(units, units[i, j][k]);
+                }
+            }
+        }
+    }
+
+    private void SetRockSprite(List<Unit>[,] units, Unit unit)
+    {
+        bool[] notconnected = GetConnectedSides(units, unit);
+        if (notconnected[0] && notconnected[1] && notconnected[2] && notconnected[3])
+            unit.gameObject.GetComponent<SpriteRenderer>().sprite = sprite_Rock[1];
+        else if (notconnected[0] && notconnected[1] && notconnected[2])
+            unit.gameObject.GetComponent<SpriteRenderer>().sprite = sprite_Rock[2];
+        else if (notconnected[0] && notconnected[2] && notconnected[3])
+            unit.gameObject.GetComponent<SpriteRenderer>().sprite = sprite_Rock[3];
+        else if (notconnected[0] && notconnected[1] && notconnected[3])
+            unit.gameObject.GetComponent<SpriteRenderer>().sprite = sprite_Rock[4];
+        else if (notconnected[1] && notconnected[2] && notconnected[3])
+            unit.gameObject.GetComponent<SpriteRenderer>().sprite = sprite_Rock[5];
+        else if (notconnected[0] && notconnected[2])
+            unit.gameObject.GetComponent<SpriteRenderer>().sprite = sprite_Rock[6];
+        else if (notconnected[1] && notconnected[3])
+            unit.gameObject.GetComponent<SpriteRenderer>().sprite = sprite_Rock[7];
+        else if (notconnected[0] && notconnected[1])
+            unit.gameObject.GetComponent<SpriteRenderer>().sprite = sprite_Rock[8];
+        else if (notconnected[0] && notconnected[3])
+            unit.gameObject.GetComponent<SpriteRenderer>().sprite = sprite_Rock[9];
+        else if (notconnected[1] && notconnected[2])
+            unit.gameObject.GetComponent<SpriteRenderer>().sprite = sprite_Rock[10];
+        else if (notconnected[2] && notconnected[3])
+            unit.gameObject.GetComponent<SpriteRenderer>().sprite = sprite_Rock[11];
+        else if (notconnected[0])
+            unit.gameObject.GetComponent<SpriteRenderer>().sprite = sprite_Rock[12];
+        else if (notconnected[1])
+            unit.gameObject.GetComponent<SpriteRenderer>().sprite = sprite_Rock[13];
+        else if (notconnected[2])
+            unit.gameObject.GetComponent<SpriteRenderer>().sprite = sprite_Rock[14];
+        else if (notconnected[3])
+            unit.gameObject.GetComponent<SpriteRenderer>().sprite = sprite_Rock[15];
+        else
+            unit.gameObject.GetComponent<SpriteRenderer>().sprite = sprite_Rock[0];
+    }
+
+    private void SetContainerSprite(List<Unit>[,] units, Unit unit)
+    {
+        bool[] notconnected = GetConnectedSides(units, unit);
+        if (notconnected[0] && notconnected[1] && notconnected[2] && notconnected[3])
+            unit.gameObject.GetComponent<SpriteRenderer>().sprite = sprite_Container[1];
+        else if (notconnected[0] && notconnected[1] && notconnected[2])
+            unit.gameObject.GetComponent<SpriteRenderer>().sprite = sprite_Container[2];
+        else if (notconnected[0] && notconnected[2] && notconnected[3])
+            unit.gameObject.GetComponent<SpriteRenderer>().sprite = sprite_Container[3];
+        else if (notconnected[0] && notconnected[1] && notconnected[3])
+            unit.gameObject.GetComponent<SpriteRenderer>().sprite = sprite_Container[4];
+        else if (notconnected[1] && notconnected[2] && notconnected[3])
+            unit.gameObject.GetComponent<SpriteRenderer>().sprite = sprite_Container[5];
+        else if (notconnected[0] && notconnected[2])
+            unit.gameObject.GetComponent<SpriteRenderer>().sprite = sprite_Container[6];
+        else if (notconnected[0] && notconnected[1])
+            unit.gameObject.GetComponent<SpriteRenderer>().sprite = sprite_Container[7];
+        else if (notconnected[1] && notconnected[3])
+            unit.gameObject.GetComponent<SpriteRenderer>().sprite = sprite_Container[8];
+        else if (notconnected[0] && notconnected[3])
+            unit.gameObject.GetComponent<SpriteRenderer>().sprite = sprite_Container[9];
+        else if (notconnected[2] && notconnected[3])
+            unit.gameObject.GetComponent<SpriteRenderer>().sprite = sprite_Container[10];
+        else if (notconnected[1] && notconnected[2])
+            unit.gameObject.GetComponent<SpriteRenderer>().sprite = sprite_Container[11];
+        else if (notconnected[0])
+            unit.gameObject.GetComponent<SpriteRenderer>().sprite = sprite_Container[12];
+        else if (notconnected[1])
+            unit.gameObject.GetComponent<SpriteRenderer>().sprite = sprite_Container[13];
+        else if (notconnected[2])
+            unit.gameObject.GetComponent<SpriteRenderer>().sprite = sprite_Container[14];
+        else if (notconnected[3])
+            unit.gameObject.GetComponent<SpriteRenderer>().sprite = sprite_Container[15];
+    }
+
+    private bool[] GetConnectedSides(List<Unit>[,] units, Unit unit)
+    {
+        bool[] result = new bool[4];
+        result[0] = !IsConnectedFromPosition(units, unit, Toolkit.VectorSum(unit.position, new Vector2(0, 1)));
+        result[1] = !IsConnectedFromPosition(units, unit, Toolkit.VectorSum(unit.position, new Vector2(1, 0)));
+        result[2] = !IsConnectedFromPosition(units, unit, Toolkit.VectorSum(unit.position, new Vector2(0, -1)));
+        result[3] = !IsConnectedFromPosition(units, unit, Toolkit.VectorSum(unit.position, new Vector2(-1, 0)));
+        return result;
+    }
+
+    private bool IsConnectedFromPosition(List<Unit>[,] units, Unit unit, Vector2 pos)
+    {
+        try
+        {
+            for (int i = 0; i < units[(int)pos.x, (int)pos.y].Count; i++)
+            {
+                Unit u = units[(int)pos.x, (int)pos.y][i];
+                if (u.gameObject.transform.parent == unit.gameObject.transform.parent)
+                {
+                    return true;
+                }
+            }
+        }
+        catch { }
+        return false;
     }
 }
