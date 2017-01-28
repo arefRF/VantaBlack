@@ -95,6 +95,7 @@ public class PlayerGraphics : MonoBehaviour {
             x = -1;
         if (ramptype == 2 || ramptype == 3)
             y = -1;
+
         Vector2 end = position + new Vector2(x * 0.4f, y * 0.4f);
         float x1 = position.x - transform.position.x;
         position += new Vector2(-x1/2, 1);
@@ -134,10 +135,10 @@ public class PlayerGraphics : MonoBehaviour {
     private IEnumerator Player_Move_Coroutine(Vector2 end,bool call_finish)
     {
         Player player = gameObject.GetComponent<Player>();
-        float remain_distance = ((Vector2)transform.position - player.target_pos).sqrMagnitude;
+        float remain_distance = ((Vector2)transform.position - end).sqrMagnitude;
         while(remain_distance > float.Epsilon)
         {
-            remain_distance = ((Vector2)transform.position - player.target_pos).sqrMagnitude;
+            remain_distance = ((Vector2)transform.position - end).sqrMagnitude;
             Vector2 new_pos = Vector2.MoveTowards(transform.position, end, Time.deltaTime * 1 / move_time);
             transform.position = new_pos;
             yield return null;
@@ -151,10 +152,10 @@ public class PlayerGraphics : MonoBehaviour {
     {
         Player player = gameObject.GetComponent<Player>();
         Debug.Log("Ramp Co");
-        float remain_distance = ((Vector2)transform.position - player.target_pos).sqrMagnitude;
+        float remain_distance = ((Vector2)transform.position - end).sqrMagnitude;
         while (remain_distance > float.Epsilon)
         {
-            remain_distance = ((Vector2)transform.position - player.target_pos).sqrMagnitude;
+            remain_distance = ((Vector2)transform.position - end).sqrMagnitude;
             Vector2 new_pos = Vector2.MoveTowards(transform.position, end, Time.deltaTime * 1 / move_time);
             transform.position = new_pos;
             yield return null;
