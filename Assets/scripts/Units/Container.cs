@@ -27,6 +27,7 @@ public class Container : ParentContainer {
             else
                 Swap(player);
         }
+        
     }
 
     private void Swap(Player player)
@@ -46,6 +47,7 @@ public class Container : ParentContainer {
             player.abilities.Add(abilities[0]);
             abilities.RemoveAt(0);
             ContainerAbilityChanged(false);
+            api.ChangeSprite(this);
         }
     }
 
@@ -56,7 +58,9 @@ public class Container : ParentContainer {
             abilities.Add(player.abilities[0]);
             player.abilities.RemoveAt(0);
             ContainerAbilityChanged(true);
+            api.ChangeSprite(this);
         }
+
    }
 
     public virtual void PlayerRelease(Player player)
