@@ -522,6 +522,7 @@ public class LogicalEngine {
         Debug.Log("gameobject animation finished");
         if (unit == null)
             return;
+        CheckStuckedUnit();
         if(unit is FunctionalContainer)
         {
             ((FunctionalContainer)unit).Action_Fuel();
@@ -568,5 +569,19 @@ public class LogicalEngine {
     public void UnitToGraphic_Swap(Player player, Container container, AbilityType ability)
     {
 
+    }
+
+    public void CheckStuckedUnit()
+    {
+        for(int i=0; i<stuckedunits.Count; i++)
+        {
+            Unit u = stuckedunits[i];
+            stuckedunits.RemoveAt(i);
+            if(u is FunctionalContainer)
+            {
+                ((FunctionalContainer)u).Action_Fuel();
+            }
+        }
+           
     }
 }

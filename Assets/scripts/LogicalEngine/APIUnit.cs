@@ -78,4 +78,19 @@ public class APIUnit {
             engine.stuckedunits.Add(unit);
     }
 
+    public void RemoveFromStuckList(Unit unit)
+    {
+        engine.stuckedunits.Remove(unit);
+    }
+
+    public bool isStucked(Unit unit)
+    {
+        for(int i=0; i<engine.stuckedunits.Count; i++)
+        {
+            if (engine.stuckedunits[i] == unit)
+                return true;
+        }
+        return false;
+    }
+
 }

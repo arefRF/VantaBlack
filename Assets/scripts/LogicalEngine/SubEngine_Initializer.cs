@@ -176,14 +176,18 @@ public class SubEngine_Initializer{
 
     private bool IsConnectedFromPosition(List<Unit>[,] units, Unit unit, Vector2 pos)
     {
-        for(int i=0; i<units[(int)pos.x, (int)pos.y].Count; i++)
+        try
         {
-            Unit u = units[(int)pos.x, (int)pos.y][i];
-            if (u.gameObject.transform.parent == unit.gameObject.transform.parent)
+            for (int i = 0; i < units[(int)pos.x, (int)pos.y].Count; i++)
             {
-                return true;
+                Unit u = units[(int)pos.x, (int)pos.y][i];
+                if (u.gameObject.transform.parent == unit.gameObject.transform.parent)
+                {
+                    return true;
+                }
             }
         }
+        catch { }
         return false;
     }
 }
