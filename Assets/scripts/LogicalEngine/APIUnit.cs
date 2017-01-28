@@ -93,4 +93,8 @@ public class APIUnit {
         return false;
     }
 
+    public void ChangeSprite(Unit unit)
+    {
+        engine.apigraphic.UnitChangeSprite(unit);
+    }
 }
