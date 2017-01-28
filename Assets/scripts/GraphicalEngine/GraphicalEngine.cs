@@ -47,9 +47,16 @@ public class GraphicalEngine : MonoBehaviour {
 
     public void Simple_Container(SimpleContainer container)
     {
+        Container_Change_Number(container);
+    }
+
+    public void Container_Change_Number(Container container)
+    {
+
         string lights = @"Containers\";
         switch (container.abilities.Count)
         {
+            case 0: lights += ""; break;
             case 1: lights += "Lights 1"; break;
             case 2: lights += "Lights 2"; break;
             case 3: lights += "Lights 3"; break;
@@ -58,7 +65,6 @@ public class GraphicalEngine : MonoBehaviour {
         }
         container.transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load(lights, typeof(Sprite));
     }
-
   
     public void Dynamic_Container(DynamicContainer container)
     {
@@ -71,6 +77,7 @@ public class GraphicalEngine : MonoBehaviour {
             case Direction.Down: rot = 270; break;
         }
         container.transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0,0,rot));
+        Container_Change_Number(container);
     }
 
     
