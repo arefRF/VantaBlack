@@ -47,16 +47,37 @@ public class GraphicalEngine : MonoBehaviour {
 
     public void Simple_Container(SimpleContainer container)
     {
+        Container_Change_Number(container);
+    }
+
+    public void Container_Change_Number(Container container)
+    {
+
         string lights = @"Containers\";
         switch (container.abilities.Count)
         {
-            case 1: lights = "Lights 1"; break;
-            case 2: lights = "Lights 2"; break;
-            case 3: lights = "Lights 3"; break;
-            case 4: lights = "Lights 4"; break;
-            default: lights = "Lights Infinite"; break;
+            case 0: lights += ""; break;
+            case 1: lights += "Lights 1"; break;
+            case 2: lights += "Lights 2"; break;
+            case 3: lights += "Lights 3"; break;
+            case 4: lights += "Lights 4"; break;
+            default: lights += "Lights Infinite"; break;
         }
         container.transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load(lights, typeof(Sprite));
+    }
+  
+    public void Dynamic_Container(DynamicContainer container)
+    {
+        int rot = 0;
+        switch (container.direction)
+        {
+            case Direction.Right: rot = 0; break;
+            case Direction.Left: rot = 180; break;
+            case Direction.Up: rot = 90; break;
+            case Direction.Down: rot = 270; break;
+        }
+        container.transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0,0,rot));
+        Container_Change_Number(container);
     }
 
     
