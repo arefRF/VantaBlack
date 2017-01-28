@@ -289,6 +289,16 @@ public sealed class Toolkit{
         }
         return false;
     }
+    public static bool IsInsideBranch(Vector2 position)
+    {
+        Database database = Starter.GetDataBase();
+        for (int i = 0; i < database.units[(int)position.x, (int)position.y].Count; i++)
+        {
+            if (database.units[(int)position.x, (int)position.y][i] is Branch)
+                return true;
+        }
+        return false;
+    }
 
     public static Direction Comparison(Vector2 source, Vector2 sink)
     {

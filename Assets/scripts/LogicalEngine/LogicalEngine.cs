@@ -301,6 +301,8 @@ public class LogicalEngine {
         units = GetUnits(player.position);
         if(units.Count == 2)
         {
+            if (units[0] is Branch || units[1] is Branch)
+                return;
             Ramp ramp = null;
             if (units[0] is Ramp)
                 ramp = (Ramp)units[0];
