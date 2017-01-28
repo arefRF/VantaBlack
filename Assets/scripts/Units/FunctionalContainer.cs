@@ -25,8 +25,7 @@ public class FunctionalContainer : Container {
 
     public void Action_Fuel()
     {
-        Debug.Log("action fuel");
-        Debug.Log(shouldmove);
+        Debug.Log("should move: " + shouldmove);
         api.RemoveFromStuckList(this);
         if (movedone)
         {
@@ -35,6 +34,8 @@ public class FunctionalContainer : Container {
             moved = 0;
             on = !on;
             shouldmove = abilities.Count;
+            if (abilities.Count == 0)
+                on = false;
             return;
         }
         Direction dir = direction;
@@ -62,6 +63,7 @@ public class FunctionalContainer : Container {
         {
             moved = abilities.Count;
             movedone = true;
+            on = !on;
             shouldmove = abilities.Count;
         }
         else
@@ -80,8 +82,13 @@ public class FunctionalContainer : Container {
     }
     protected override void ContainerAbilityChanged(bool increased)
     {
-        Debug.Log("called");
-        Debug.Log(on);
+        Debug.Log("increased: " + increased);
+        Debug.Log("on: " + on);
+        if (increased && abilities.Count == 1)
+        {
+            shouldmove = 1;
+            return;
+        }
         if (on)
         {
             if (increased)
@@ -91,8 +98,15 @@ public class FunctionalContainer : Container {
         }
         else if (api.isStucked(this))
         {
-            if(!increased)
+            if (!increased)
                 Action_Fuel_Continue(Toolkit.ReverseDirection(direction));
+        }
+        else
+        {
+            if (increased)
+                shouldmove++;
+            else
+                shouldmove--;
         }
     }
 }

@@ -519,7 +519,6 @@ public class LogicalEngine {
     }
     public void graphic_GameObjectMoveAnimationFinished(GameObject gameobject, Unit unit)
     {
-        Debug.Log("gameobject animation finished");
         if (unit == null)
             return;
         CheckStuckedUnit();
