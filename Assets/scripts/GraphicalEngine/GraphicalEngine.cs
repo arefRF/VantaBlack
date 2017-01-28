@@ -60,6 +60,18 @@ public class GraphicalEngine : MonoBehaviour {
     }
 
   
+    public void Dynamic_Container(DynamicContainer container)
+    {
+        int rot = 0;
+        switch (container.direction)
+        {
+            case Direction.Right: rot = 0; break;
+            case Direction.Left: rot = 180; break;
+            case Direction.Up: rot = 90; break;
+            case Direction.Down: rot = 270; break;
+        }
+        container.transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0,0,rot));
+    }
 
     
 }
