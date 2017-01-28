@@ -32,6 +32,12 @@ public class Player : Unit
 
     public bool Can_Move_Direction(Direction dir)
     {
+        if (Can_Lean(dir))
+        {
+            Vector2 pos = Toolkit.VectorSum(position, Toolkit.DirectiontoVector(dir));
+            if (Toolkit.IsInsideBranch(pos))
+                return true;
+        }
         for (int i = 0; i < move_direction.Count; i++)
             if (dir == move_direction[i])
                 return true;
