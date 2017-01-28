@@ -50,14 +50,16 @@ public class GraphicalEngine : MonoBehaviour {
         string lights = @"Containers\";
         switch (container.abilities.Count)
         {
-            case 1: lights = "Lights 1"; break;
-            case 2: lights = "Lights 2"; break;
-            case 3: lights = "Lights 3"; break;
-            case 4: lights = "Lights 4"; break;
-            default: lights = "Lights Infinite"; break;
+            case 1: lights += "Lights 1"; break;
+            case 2: lights += "Lights 2"; break;
+            case 3: lights += "Lights 3"; break;
+            case 4: lights += "Lights 4"; break;
+            default: lights += "Lights Infinite"; break;
         }
         container.transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load(lights, typeof(Sprite));
     }
+
+  
 
     
 }
