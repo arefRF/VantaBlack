@@ -227,4 +227,11 @@ public class APIGraphic{
     {
         logicalengine.graphic_PlayerChangeDirectionFinished(player);
     }
+
+    public void UnitChangeSprite(Unit unit)
+    {
+        if (unit is SimpleContainer)
+            graphicalengine.Simple_Container((SimpleContainer)unit);
+
+    }
 }
