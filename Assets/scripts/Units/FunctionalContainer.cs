@@ -30,6 +30,8 @@ public class FunctionalContainer : Container {
         api.RemoveFromStuckList(this);
         if (first)
             on = !on;
+        if (stucklevel != 0)
+            return;
         if (movedone)
         {
             Debug.Log("move done");
@@ -66,6 +68,7 @@ public class FunctionalContainer : Container {
             }
             if (first && stucklevel == 0)
                 stucklevel++;
+            Debug.Log(stucklevel);
             api.AddToStuckList(this);
             shouldmove = moved;
             moved = 0;
