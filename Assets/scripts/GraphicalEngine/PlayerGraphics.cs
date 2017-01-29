@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class PlayerGraphics : MonoBehaviour {
-    public float move_time = 1;
+    public float move_time = 0.5f;
     private Animator animation;
     private APIGraphic api;
     private LogicalEngine engine;
