@@ -22,42 +22,42 @@ public class APIGraphic{
         if (ramptype == 2 || ramptype == 3)
             y = -1;
         position += new Vector2(x * 0.4f, y * 0.4f);
-        player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
+        player.GetComponent<PlayerPhysics>().Ramp_To_Ramp_Move(position);
     }
     
     // Ramp to Block
     public void MovePlayer_Ramp_2(Player player, Vector2 position)
-    {
-        Debug.Log("ramp2");
-        player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
+    { 
+        player.GetComponent<PlayerPhysics>().Simple_Move(position);
     }
 
     //Ramp to fall
     public void MovePlayer_Ramp_3(Player player, Vector2 position)
     {
-        Debug.Log("ramp3");
-        player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
+        Debug.Log("Ramp to Fall");
+        player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
     }
 
     // Ramp to corner
     public void MovePlayer_Ramp_4(Player player, Vector2 position)
     {
-        Debug.Log("ramp 4");
-        player.gameObject.GetComponent<PlayerGraphics>().Ramp_To_Corner(position);
+        Debug.Log("ramp to corner");
+        player.gameObject.GetComponent<PlayerPhysics>().Ramp_To_Corner_Move(position);
     }
 
     //Ramp to sharp
     public void MovePlayer_Ramp_5(Player player, Vector2 position,int type)
     {
         Debug.Log("Ramp to Sharp");
-        player.gameObject.GetComponent<PlayerGraphics>().Ramp_To_Sharp(position,type);
+        player.gameObject.GetComponent<PlayerPhysics>().Ramp_To_Sharp_Move(position);
     }
 
     //  Block to Block
     public void MovePlayer_Simple_1(Player player, Vector2 position)
     {
         Debug.Log("simple1");
-        player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
+        //player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
+        player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
     }
 
     // Block to Branch
@@ -77,14 +77,15 @@ public class APIGraphic{
         if (ramptype == 2 || ramptype == 3)
             y = -1;
         position += new Vector2( x * 0.4f  , y * 0.4f);
-        player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
+        player.GetComponent<PlayerPhysics>().Block_To_Ramp_Move(position);
+        //player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
     }
 
     // Block to fall
     public void MovePlayer_Simple_4(Player player, Vector2 position)
     {
         Debug.Log("simple4");
-        player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
+        player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
     }
 
     // Block to Ramp (tekrari)
@@ -96,35 +97,30 @@ public class APIGraphic{
             x = -1;
         if (ramptype == 2 || ramptype == 3)
             y = -1;
-        position += new Vector2(x * 0.4f, y * 0.4f); 
-        player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
+        position += new Vector2(x * 0.4f, y * 0.4f);
+        player.GetComponent<PlayerPhysics>().Block_To_Ramp_Move(position);
+        //player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
     }
 
     // Branch to Block
     public void MovePlayer_Branch_1(Player player, Vector2 position)
     {
         Debug.Log("branch1");
-        player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
+        player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
     }
 
     // Branch to Fall
     public void MovePlayer_Branch_2(Player player, Vector2 position)
     {
         Debug.Log("branch2");
-        player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
+        player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
     }
 
     // Branch to Ramp
     public void MovePlayer_Branch_3(Player player, Vector2 position, int ramptype)
     {
         Debug.Log("branch3");
-        player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
-    }
-
-    public void MovePlayer(Player player, Vector2 position, bool wasonramp)
-    {
-        Debug.Log("Move Player");
-        player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
+        player.gameObject.GetComponent<PlayerPhysics>().Block_To_Ramp_Move(position);
     }
 
     public void MovePlayerFinished(GameObject player_obj)
@@ -199,13 +195,7 @@ public class APIGraphic{
     public void LeanFinished(Player player)
     {
         PlayerGraphics gl = player.GetComponent<PlayerGraphics>();
-        switch (player.leandirection)
-        {
-            case Direction.Right: gl.Lean_Right_Finished(); break;
-            case Direction.Left: gl.Lean_Left_Finished(); break;
-            case Direction.Up: gl.Lean_Up_Finished(); break;
-            case Direction.Down: gl.Lean_Down_Finished(); break;
-        }
+        gl.Lean_Finished();
     }
 
     public void Absorb(Player player, Container container)
