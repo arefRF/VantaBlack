@@ -8,6 +8,10 @@ public sealed class Toolkit{
         return new Vector2(a.x + b.x, a.y + b.y);
     }
 
+    public static Vector2 VectorSum(Vector2 a, Direction d)
+    {
+        return VectorSum(a, DirectiontoVector(d));
+    }
 
     public static Direction VectorToDirection(Vector2 vector)
     {
@@ -127,21 +131,74 @@ public sealed class Toolkit{
         return null;
     }
 
-    public static void RemoveUnit(Unit u)
+    public static bool IsHigherThan(Vector2 position1, Vector2 position2)
     {
-        Database database = Starter.GetDataBase();
-        database.units[(int)u.position.x, (int)u.position.y].Remove(u);
+        Direction gravity_direction = Starter.GetGravityDirection();
+        switch (gravity_direction)
+        {
+            case Direction.Down: if (position1.y > position2.y) return true; return false;
+            case Direction.Left: if (position1.x > position2.x) return true; return false;
+            case Direction.Up: if (position1.y < position2.y) return true; return false;
+            case Direction.Right: if (position1.x < position2.x) return true; return false;
+            default: return false;
+        }
     }
 
-    public static void AddUnit(Unit u)
+    public static bool CanplayerGoOnRampSideFromFromNoneRamp(Ramp ramp, Direction gravitydirection, Direction comingfromdirection)
     {
-        Database database = Starter.GetDataBase();
-        if (u.unitType == UnitType.Wall)
+        switch (ramp.type)
         {
-            return;
+            case 1:
+                switch (gravitydirection)
+                {
+                    case Direction.Down: if (comingfromdirection == Direction.Left) return true; return false;
+                    case Direction.Left: if (comingfromdirection == Direction.Down) return true; return false;
+                    default: return false;
+                }
+            case 2:
+                switch (gravitydirection)
+                {
+                    case Direction.Left: if (comingfromdirection == Direction.Up) return true; return false;
+                    case Direction.Up: if (comingfromdirection == Direction.Left) return true; return false;
+                    default: return false;
+                }
+            case 3:
+                switch (gravitydirection)
+                {
+                    case Direction.Right: if (comingfromdirection == Direction.Up) return true; return false;
+                    case Direction.Up: if (comingfromdirection == Direction.Right) return true; return false;
+                    default: return false;
+                }
+            case 4:
+                switch (gravitydirection)
+                {
+                    case Direction.Down: if (comingfromdirection == Direction.Right) return true; return false;
+                    case Direction.Right: if (comingfromdirection == Direction.Down) return true; return false;
+                    default: return false;
+                }
+            default: return false;
         }
-        database.units[(int)u.position.x, (int)u.position.y].Add(u);
     }
+
+    public static bool CanplayerGoOnRampSideFromRamp(Ramp ramp, Direction gravitydirection, Direction comingfromdirection)
+    {
+        switch (gravitydirection)
+        {
+            case Direction.Down:
+                switch (ramp.type)
+                {
+                    case 1: if (comingfromdirection == Direction.Left) return true; return false;
+                    case 3: if (comingfromdirection == Direction.Left) return true; return false;
+                    case 4: if (comingfromdirection == Direction.Right) return true; return false;
+                    default: return false;
+                }
+            case Direction.Left: if (comingfromdirection == Direction.Up || comingfromdirection == Direction.Down) return true; return false;
+            case Direction.Up: if (comingfromdirection == Direction.Left || comingfromdirection == Direction.Right) return true; return false;
+            case Direction.Right: if (comingfromdirection == Direction.Up || comingfromdirection == Direction.Left) return true; return false;
+            default: return false;
+        }
+    }
+
     public static void AddUnitToPosition(Unit u, Vector2 position)
     {
         Database database = Starter.GetDataBase();
@@ -167,18 +224,6 @@ public sealed class Toolkit{
         }
 
         return null;
-    }
-
-    public static bool IsVoid(Vector2 position)
-    {
-        Database database = Starter.GetDataBase();
-        for(int i=0; i<database.units[(int)position.x, (int)position.y].Count; i++)
-        {
-            Unit u = database.units[(int)position.x, (int)position.y][i];
-            if (u.unitType == UnitType.Block || u.unitType == UnitType.BlockSwitch || u.unitType == UnitType.Box || u.unitType == UnitType.Container || u.unitType == UnitType.Player || u.unitType == UnitType.Rock)
-                return false;
-        }
-        return true;
     }
 
     public static bool IsOnRamp(Unit unit)
@@ -312,6 +357,111 @@ public sealed class Toolkit{
                 return Direction.Left;
         }
         return Direction.Down;
+    }
+
+
+    public static bool IsEmpty(Vector2 position)
+    {
+        List<Unit>[,] units = Starter.GetDataBase().units;
+        if (units[(int)position.x, (int)position.y].Count == 0)
+            return true;
+        return false;
+    }
+    public static bool IsdoubleRamp(Vector2 position)
+    {
+        List<Unit>[,] units = Starter.GetDataBase().units;
+        int counter = 0;
+        for (int i = 0; i < units[(int)position.x, (int)position.y].Count; i++)
+        {
+            if (units[(int)position.x, (int)position.y][i] is Ramp)
+                counter++;
+        }
+        if (counter == 2)
+            return true;
+        return false;
+    }
+
+    public static bool HasRamp(Vector2 position)
+    {
+        List<Unit>[,] units = Starter.GetDataBase().units;
+        for (int i=0; i<units[(int)position.x, (int)position.y].Count; i++)
+        {
+            if (units[(int)position.x, (int)position.y][i] is Ramp)
+                return true;
+        }
+        return false;
+    }
+    public static bool HasBranch(Vector2 position)
+    {
+        List<Unit>[,] units = Starter.GetDataBase().units;
+        for (int i = 0; i < units[(int)position.x, (int)position.y].Count; i++)
+        {
+            if (units[(int)position.x, (int)position.y][i] is Branch)
+                return true;
+        }
+        return false;
+    }
+    public static bool HasContainer(Vector2 position)
+    {
+        List<Unit>[,] units = Starter.GetDataBase().units;
+        for (int i = 0; i < units[(int)position.x, (int)position.y].Count; i++)
+        {
+            if (units[(int)position.x, (int)position.y][i] is Container)
+                return true;
+        }
+        return false;
+    }
+    public static bool HasRock(Vector2 position)
+    {
+        List<Unit>[,] units = Starter.GetDataBase().units;
+        for (int i = 0; i < units[(int)position.x, (int)position.y].Count; i++)
+        {
+            if (units[(int)position.x, (int)position.y][i] is Rock)
+                return true;
+        }
+        return false;
+    }
+    public static bool HasGate(Vector2 position)
+    {
+        List<Unit>[,] units = Starter.GetDataBase().units;
+        for (int i = 0; i < units[(int)position.x, (int)position.y].Count; i++)
+        {
+            if (units[(int)position.x, (int)position.y][i] is Gate)
+                return true;
+        }
+        return false;
+    }
+
+    public static Unit GetUnit(Vector2 position)
+    {
+        List<Unit>[,] units = Starter.GetDataBase().units;
+        for (int i = 0; i < units[(int)position.x, (int)position.y].Count; i++)
+        {
+            if (!(units[(int)position.x, (int)position.y][i] is Player))
+                return units[(int)position.x, (int)position.y][i];
+        }
+        return null;
+    }
+    public static Ramp GetRamp(Vector2 position)
+    {
+        List<Unit>[,] units = Starter.GetDataBase().units;
+        for (int i = 0; i < units[(int)position.x, (int)position.y].Count; i++)
+        {
+            if (units[(int)position.x, (int)position.y][i] is Ramp)
+                return (Ramp)units[(int)position.x, (int)position.y][i];
+        }
+        return null;
+    }
+
+    public static Branch GetBranch(Vector2 position)
+    {
+        List<Unit>[,] units = Starter.GetDataBase().units;
+        for (int i = 0; i < units[(int)position.x, (int)position.y].Count; i++)
+        {
+            if (units[(int)position.x, (int)position.y][i] is Branch)
+                return (Branch)units[(int)position.x, (int)position.y][i];
+        }
+        return null;
     }
 }
 

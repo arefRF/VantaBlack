@@ -57,6 +57,7 @@ public class Player : Unit
         List<Unit> units  = api.engine_GetUnits(this, dir);
         onramp = false;
         List<Unit> temp = api.engine_GetUnits(position);
+        bool goingup = true;
         for (int i = 0; i < temp.Count; i++)
         {
             if (temp[i] is Ramp)
@@ -69,8 +70,7 @@ public class Player : Unit
             }
         }
         if (onramp)
-        {
-            bool goingup = true;
+        { 
             Direction gravitydirection = Starter.GetDataBase().gravity_direction;
             switch (gravitydirection)
             {
@@ -167,6 +167,50 @@ public class Player : Unit
     public override bool PlayerMoveInto(Direction dir)
     {
         return false;
+    }
+
+    public override void ApplyGravity(Direction gravitydirection, List<Unit>[,] units)
+    {
+        if (Toolkit.HasRamp(position) || Toolkit.HasBranch(position))
+            return;
+        while (true)
+        {
+            Vector2 pos = Toolkit.VectorSum(position, gravitydirection);
+            if (Toolkit.IsEmpty(pos)) //empty space
+            {
+                api.RemoveFromDatabase(this);
+                position = pos;
+                api.AddToDatabase(this);
+                continue;
+            }
+            else if (Toolkit.HasRamp(pos)) //ramp
+            {
+                if (Toolkit.IsdoubleRamp(pos))
+                {
+                    api.graphicalengine_Land(this, position);
+                }
+                else
+                {
+                    Vector2 temp = Toolkit.GetRamp(pos).fallOn(this, Toolkit.ReverseDirection(gravitydirection));
+                    if (temp == position)
+                    {
+                        api.graphicalengine_Land(this, position);
+                    }
+                    else
+                    {
+                        api.RemoveFromDatabase(this);
+                        position = temp;
+                        api.AddToDatabase(this);
+                        api.graphicalengine_LandOnRamp(this, position);
+                    }
+                }
+            }
+            else //Block
+            {
+                api.graphicalengine_Land(this, position);
+            }
+            break;
+        }
     }
 
     public bool Action()

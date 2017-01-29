@@ -96,6 +96,11 @@ public class Unit : MonoBehaviour {
             ConnectedUnits.Add(units[i]);
         }
     }
+
+    public virtual void ApplyGravity(Direction gravitydirection, List<Unit>[,] units)
+    {
+        return;
+    }
 }
 
 public class CloneableUnit

@@ -47,25 +47,27 @@ public class APIUnit {
         Debug.Log(landingunit.position);
         Debug.Log("landing on ramp");
     }
+
+    public void graphicalengine_Land(Unit unit, Vector2 landposition)
+    {
+        engine.apigraphic.Land((Player)unit, landposition, Toolkit.GetUnit(landposition));
+        
+    }
+
+    public void graphicalengine_Fall(Unit unit, Vector2 fallposition)
+    {
+        engine.apigraphic.Fall((Player)unit, fallposition);
+    }
+
+    public void graphicalengine_LandOnRamp(Unit unit, Vector2 landposition)
+    {
+        Ramp ramp = Toolkit.GetRamp(landposition);
+        engine.apigraphic.LandOnRamp((Player)unit, landposition, ramp, ramp.type);
+    }
     public void unit_Move(Unit unit, Direction dir)
     {
         if (unit is Player)
             ((Player)unit).Move(dir);
-    }
-
-    public void Absorb(Player player, Container container, AbilityType ability)
-    {
-        engine.UnitToGraphic_Absorb(player, container, ability);
-    }
-
-    public void Release(Player player, Container container, AbilityType ability)
-    {
-        engine.UnitToGraphic_Release(player, container, ability);
-    }
-
-    public void Swap(Player player, Container container, AbilityType ability)
-    {
-        engine.UnitToGraphic_Swap(player, container, ability);
     }
 
     public bool MoveUnit(Unit unit, Direction direction)
@@ -97,4 +99,15 @@ public class APIUnit {
     {
         engine.apigraphic.UnitChangeSprite(unit);
     }
+
+    public void RemoveFromDatabase(Unit unit)
+    {
+        engine.database.units[(int)unit.position.x, (int)unit.position.y].Remove(unit);
+    }
+
+    public void AddToDatabase(Unit unit)
+    {
+        engine.database.units[(int)unit.position.x, (int)unit.position.y].Add(unit);
+    }
+
 }
