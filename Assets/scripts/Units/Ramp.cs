@@ -182,10 +182,10 @@ public class Ramp : Unit {
             case Direction.Down:
                 switch (type)
                 {
-                    case 1: if (pos.x < position.x) return true; return false;
+                    case 1: if (pos.x > position.x) return true; return false;
                     case 2: return false;
                     case 3: return false;
-                    case 4: if (pos.x > position.x) return true; return false;
+                    case 4: if (pos.x < position.x) return true; return false;
                     default: return false;
                 }
             default: return false;

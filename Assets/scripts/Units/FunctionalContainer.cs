@@ -64,6 +64,8 @@ public class FunctionalContainer : Container {
                 flag = true;
                 stucklevel++;
             }
+            if (first && stucklevel == 0)
+                stucklevel++;
             api.AddToStuckList(this);
             shouldmove = moved;
             moved = 0;
