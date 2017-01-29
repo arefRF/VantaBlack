@@ -45,16 +45,16 @@ public class PlayerGraphics : MonoBehaviour {
     
     public void Player_Change_Direction(Player player,Direction dir)
     {
-
         if (dir == Direction.Right)
-            animation.SetInteger("State", 1);
+            transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0, 0, 0));
         else if (dir == Direction.Left)
-            animation.SetInteger("State", -1);
+            transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0, 180, 0));
+        api.PlayerChangeDirectionFinished(gameObject.GetComponent<Player>());
+
     }  
 
     private void Change_Direction_Finished()
     {
-        animation.SetInteger("State", 0);
         api.PlayerChangeDirectionFinished(gameObject.GetComponent<Player>());
     }
    
