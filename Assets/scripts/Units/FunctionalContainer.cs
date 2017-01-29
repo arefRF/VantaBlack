@@ -8,6 +8,7 @@ public class FunctionalContainer : Container {
     public int moved { get; set; }
     protected int shouldmove;
     private bool movedone = false;
+    private int stucklevel = 0;
     public override bool PlayerMoveInto(Direction dir)
     {
         return false;
@@ -19,27 +20,32 @@ public class FunctionalContainer : Container {
             return;
         switch (abilities[0])
         {
-            case AbilityType.Fuel: Action_Fuel(); break; 
+            case AbilityType.Fuel: Action_Fuel(true); break; 
         }
     }
 
-    public void Action_Fuel()
+    public void Action_Fuel(bool first)
     {
-        Debug.Log("should move: " + shouldmove);
+        gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = true;
         api.RemoveFromStuckList(this);
+        if (first)
+            on = !on;
         if (movedone)
         {
             Debug.Log("move done");
             movedone = false;
             moved = 0;
-            on = !on;
             shouldmove = abilities.Count;
             if (abilities.Count == 0)
                 on = false;
+            gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = false;
+            api.CheckstuckedList();
             return;
         }
+        if (shouldmove == 0)
+            shouldmove = abilities.Count;
         Direction dir = direction;
-        if (on)
+        if (!on)
         {
             dir = Toolkit.ReverseDirection(dir);
         }
@@ -51,24 +57,42 @@ public class FunctionalContainer : Container {
         }
         else
         {
+            Debug.Log("stucking");
+            bool flag = false;
+            if (moved != 0)
+            {
+                flag = true;
+                stucklevel++;
+            }
             api.AddToStuckList(this);
-            //on = !on;
             shouldmove = moved;
             moved = 0;
+            if (flag)
+            {
+                gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = false;
+                api.CheckstuckedList();
+            }
         }
     }
     public void Action_Fuel_Continue(Direction dir)
     {
+        if(abilities.Count == 0)
+        {
+            on = !on;
+        }
         if (api.MoveUnit(this, dir))
         {
+            Debug.Log("asknsdvndfjvfdjn");
             moved = abilities.Count;
             movedone = true;
-            on = !on;
             shouldmove = abilities.Count;
         }
         else
         {
+            Debug.Log("fmvdfm;fgkb;kfgmbkmf;kbmfkgmbf;");
             api.AddToStuckList(this);
+            stucklevel++;
+            Debug.Log(stucklevel);
         }
     }
 
@@ -94,7 +118,15 @@ public class FunctionalContainer : Container {
             if (increased)
                 Action_Fuel_Continue(direction);
             else
-                Action_Fuel_Continue(Toolkit.ReverseDirection(direction));
+            {
+                Debug.Log(stucklevel);
+                if (stucklevel < 1)
+                {
+                    Action_Fuel_Continue(Toolkit.ReverseDirection(direction));
+                }
+                else
+                    stucklevel--;
+            }
         }
         else if (api.isStucked(this))
         {

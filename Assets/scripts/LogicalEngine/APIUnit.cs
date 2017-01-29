@@ -89,8 +89,8 @@ public class APIUnit {
     {
         for(int i=0; i<engine.stuckedunits.Count; i++)
         {
-            if (engine.stuckedunits[i] == unit)
-                return true;
+                if (engine.stuckedunits[i] == unit)
+                    return true;
         }
         return false;
     }
@@ -110,4 +110,8 @@ public class APIUnit {
         engine.database.units[(int)unit.position.x, (int)unit.position.y].Add(unit);
     }
 
+    public void CheckstuckedList()
+    {
+        engine.CheckStuckedUnit();
+    }
 }
