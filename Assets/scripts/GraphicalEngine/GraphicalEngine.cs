@@ -68,6 +68,19 @@ public class GraphicalEngine : MonoBehaviour {
   
     public void Dynamic_Container(DynamicContainer container)
     {
+        string toggle = @"Containers\";
+        if (container.on)
+        {
+            toggle += "ABILITY FUEL ON";
+            container.transform.GetChild(3).gameObject.SetActive(true);
+        }
+        else
+        {
+            toggle += "ABILITY FUEL OFF";
+            container.transform.GetChild(3).gameObject.SetActive(false);
+        }
+        container.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load(toggle, typeof(Sprite));
+
         int rot = 0;
         switch (container.direction)
         {
@@ -78,6 +91,7 @@ public class GraphicalEngine : MonoBehaviour {
         }
         container.transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0,0,rot));
         Container_Change_Number(container);
+
     }
 
     

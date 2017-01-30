@@ -16,33 +16,34 @@ public class PlayerGraphics : MonoBehaviour {
 
     public void Lean_Right()
     {
-        transform.GetChild(0).localPosition =  new Vector2(0.2f,0);
+        transform.GetChild(0).localPosition +=  new Vector3(0.2f,0,0);
     }
 
     public void Lean_Left()
     {
-        transform.GetChild(0).localPosition = new Vector2(-0.2f, 0);
+        transform.GetChild(0).localPosition += new Vector3(-0.2f, 0,0);
     }
 
     public void Lean_Up()
     {
-        transform.GetChild(0).localPosition = new Vector2(0, 0.3f);
+        transform.GetChild(0).localPosition += new Vector3(0, 0.3f,0);
     }
 
     public void Lean_Down()
     {
-        transform.GetChild(0).localPosition =  new Vector2( 0, -0.3f);
+        transform.GetChild(0).localPosition +=  new Vector3( 0, -0.3f,0);
     }
 
     public void Lean_Finished()
     {
-        transform.GetChild(0).localPosition = new Vector2(0, 0);
+        transform.GetChild(0).localPosition = new Vector2(0, 0.4f);
     }
     public void Player_Move(GameObject player,Vector2 end)
     {
         StartCoroutine(Player_Move_Coroutine(end,true));
     }
     
+
     public void Player_Change_Direction(Player player,Direction dir)
     {
         if (dir == Direction.Right)

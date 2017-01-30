@@ -27,6 +27,7 @@ public class PlayerPhysics : MonoBehaviour
         {
             if (Mathf.Abs(target_pos.x - transform.position.x) < 0.05)
             {
+                Debug.Log("Passsed");
                 // if passed to destination
                 rb.velocity = new Vector2(0, 0);
                 velocity = new Vector2(0, 0);
@@ -47,6 +48,11 @@ public class PlayerPhysics : MonoBehaviour
         {
             // Part 2 of Ramp to Sharp Move
             Sharp_To_Ramp_Move();
+        }
+        else
+        {
+            Debug.Log(Physics2D.gravity);
+            rb.AddForce(new Vector2(0,7.25f));
         }
 
     }
@@ -74,6 +80,12 @@ public class PlayerPhysics : MonoBehaviour
         rb.velocity = velocity;
     }
 
+    public void Move_Player(Direction d)
+    {
+        rb.drag = 0;
+        rb.velocity = Toolkit.DirectiontoVector(d);
+        moving = true;
+    }
 
     private Vector2 Ramp_To_Sharp_Pos(Direction gravity,Vector2 position)
     {
@@ -133,10 +145,6 @@ public class PlayerPhysics : MonoBehaviour
         on_ramp = true;
         on_sharp = false;
     }
-   
-
-
-
     
     public void Ramp_To_Ramp_Move(Vector2 pos)
     {
@@ -160,18 +168,32 @@ public class PlayerPhysics : MonoBehaviour
     public void Ramp_To_Corner_Move(Vector2 pos)
     {
         target_pos = Ramp_To_Corner_Pos(Direction.Down,pos);
+        velocity = Ramp_To_Corner_Velocity(Direction.Down, pos);
         moving = true;
         rb.drag = 0;
+        Debug.Log(target_pos);
     }
 
+    private Vector2 Ramp_To_Corner_Velocity(Direction gravity,Vector2 target)
+    {
+        if(gravity == Direction.Down)
+        {
+            if (target.x - transform.position.x > 0)
+                return new Vector2(1, 0);
+            else
+                return new Vector2(-1, 0);
+        }
+
+        return new Vector2(0, 0);
+    }
     private Vector2 Ramp_To_Corner_Pos(Direction gravity,Vector2 target)
     {
         if(gravity == Direction.Down)
         {
             if (target.x - transform.position.x > 0)
-                return target + new Vector2(0.2f, 0);
+                return (Vector2)transform.position + new Vector2(0.1f, 0);
             else
-                return target + new Vector2(-0.2f, 0);
+                return (Vector2)transform.position + new Vector2(-0.1f, 0);
         }
 
         return new Vector2(0, 0);

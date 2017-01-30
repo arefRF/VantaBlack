@@ -180,6 +180,10 @@ public class APIGraphic{
 
     }
 
+    public void MovePlayerOnPlatform(Player player,Direction dir)
+    {
+        
+    }
     public void Lean(Player player)
     {
            PlayerGraphics gl = player.GetComponent<PlayerGraphics>();
