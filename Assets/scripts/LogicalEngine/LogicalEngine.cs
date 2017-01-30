@@ -232,6 +232,7 @@ public class LogicalEngine {
                 List<Unit> units = GetUnits(nextpos);
                 if (units.Count != 0)
                 {
+                    Debug.Log(units.Count);
                     if(units[0] is Branch)
                     {
                         database.units[(int)player.position.x, (int)player.position.y].Remove(player);
@@ -269,7 +270,13 @@ public class LogicalEngine {
                         if(units[0] is Ramp)
                         {
                             database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                            if (((Ramp)units[0]).ComingOnRampSide(player.position))
+                            if (Toolkit.IsdoubleRamp(units[0].position))
+                            {
+                                apigraphic.MovePlayer_Simple_1(player, nextpos);
+                                player.position = nextpos;
+                            }
+
+                            else if (((Ramp)units[0]).ComingOnRampSide(player.position))
                             {
                                 apigraphic.MovePlayer_Simple_5(player, temp, ((Ramp)units[0]).type);
                                 player.position = temp;
