@@ -29,9 +29,16 @@ public class FunctionalContainer : Container {
         gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = true;
         api.RemoveFromStuckList(this);
         if (first)
+        {
             on = !on;
-        if (stucklevel != 0)
+            api.RemoveFromStuckList(this);
+            stucklevel = 0;
+        }
+        else if (stucklevel != 0)
+        {
+            Debug.Log("wtf");
             return;
+        }
         if (movedone)
         {
             Debug.Log("move done");
