@@ -8,6 +8,7 @@ public class Starter : MonoBehaviour{
     public Direction Gravity_Directin;
     public List<GameObject> player;
     public static LogicalEngine staticengine;
+    public bool moveboolean;
     void Awake()
     {
         _Set_Everything();
@@ -25,7 +26,7 @@ public class Starter : MonoBehaviour{
         database.state = State.Busy;
         staticengine = logicalengine;
         GameObject.Find("Graphical").GetComponent<GraphicalEngine>().database = database;
-
+        logicalengine.movebool = moveboolean;
         logicalengine.Run();
     }
 
