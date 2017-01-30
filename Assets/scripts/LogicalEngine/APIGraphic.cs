@@ -77,7 +77,7 @@ public class APIGraphic{
         if (ramptype == 2 || ramptype == 3)
             y = -1;
         position += new Vector2( x * 0.4f  , y * 0.4f);
-        player.GetComponent<PlayerPhysics>().Block_To_Ramp_Move(position);
+        player.GetComponent<PlayerPhysics>().Block_To_Ramp_Move(position,ramptype);
         //player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
     }
 
@@ -97,8 +97,8 @@ public class APIGraphic{
             x = -1;
         if (ramptype == 2 || ramptype == 3)
             y = -1;
-        position += new Vector2(x * 0.4f, y * 0.4f);
-        player.GetComponent<PlayerPhysics>().Block_To_Ramp_Move(position);
+        position += new Vector2(x * 0.3f, y * 0.3f);
+        player.GetComponent<PlayerPhysics>().Block_To_Ramp_Move(position,ramptype);
         //player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
     }
 
@@ -120,7 +120,7 @@ public class APIGraphic{
     public void MovePlayer_Branch_3(Player player, Vector2 position, int ramptype)
     {
         Debug.Log("branch3");
-        player.gameObject.GetComponent<PlayerPhysics>().Block_To_Ramp_Move(position);
+        player.gameObject.GetComponent<PlayerPhysics>().Block_To_Ramp_Move(position,ramptype);
     }
 
     public void MovePlayerFinished(GameObject player_obj)
@@ -148,7 +148,7 @@ public class APIGraphic{
             y = -1;
         logicalengine.graphic_LandFinished(player);
         
-        player.gameObject.transform.position =  (Vector2)position + new Vector2(x * 0.4f, y * 0.4f);
+        player.gameObject.transform.position =  (Vector2)position + new Vector2(x * 0.3f, y * 0.3f);
     }
 
     public void MovePlayerToBranch(Player player, Vector2 position, bool isonramp)
@@ -207,6 +207,10 @@ public class APIGraphic{
 
     }
 
+    public void LeanStickMove(Player player,Direction dir)
+    {
+
+    }
     public void Release(Player player, Container container)
     {
 
