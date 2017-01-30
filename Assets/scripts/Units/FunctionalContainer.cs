@@ -31,6 +31,7 @@ public class FunctionalContainer : Container {
         if (first)
         {
             on = !on;
+            api.ChangeSprite(this);
             stucklevel = 0;
         }
         else if (stucklevel != 0)
@@ -47,7 +48,10 @@ public class FunctionalContainer : Container {
             moved = 0;
             shouldmove = abilities.Count;
             if (abilities.Count == 0)
+            {
                 on = false;
+                api.ChangeSprite(this);
+            }
             gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = false;
             api.CheckstuckedList();
             return;
