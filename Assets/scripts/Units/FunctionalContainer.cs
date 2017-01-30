@@ -31,14 +31,89 @@ public class FunctionalContainer : Container {
         if (first)
         {
             on = !on;
-            api.RemoveFromStuckList(this);
             stucklevel = 0;
         }
         else if (stucklevel != 0)
         {
+            api.AddToStuckList(this);
+            gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = false;
             Debug.Log("wtf");
             return;
         }
+        if (movedone)
+        {
+            Debug.Log("move done");
+            movedone = false;
+            moved = 0;
+            shouldmove = abilities.Count;
+            if (abilities.Count == 0)
+                on = false;
+            gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = false;
+            api.CheckstuckedList();
+            return;
+        }
+        if (shouldmove == 0)
+            shouldmove = abilities.Count;
+        Direction dir = direction;
+        if (!on)
+        {
+            dir = Toolkit.ReverseDirection(dir);
+        }
+        if (api.MoveUnit(this, dir))
+        {
+            moved++;
+            Debug.Log(moved);
+            if (moved == shouldmove)
+                movedone = true;
+        }
+        else
+        {
+            Debug.Log("stucking");
+            bool flag = false;
+            Debug.Log(moved);
+            if (moved != 0)
+            {
+                flag = true;
+                stucklevel++;
+            }
+            if (/*first && */stucklevel == 0)
+                stucklevel = abilities.Count - moved;
+            api.AddToStuckList(this);
+            shouldmove = moved;
+            moved = 0;
+            Debug.Log(flag);
+            if (flag)
+            {
+                api.CheckstuckedList(this);
+            }
+            gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = false;
+        }
+    }
+    public void Action_Fuel_Continue(Direction dir)
+    {
+        if(abilities.Count == 0)
+        {
+            on = !on;
+        }
+        if (api.MoveUnit(this, dir))
+        {
+            moved = abilities.Count;
+            movedone = true;
+            shouldmove = abilities.Count;
+        }
+        else
+        {
+            api.AddToStuckList(this);
+            stucklevel++;
+            Debug.Log(stucklevel);
+        }
+    }
+
+    public void Action_Fuel_Stucked()
+    {
+        Debug.Log("action fuel stucked");
+        gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = true;
+        api.RemoveFromStuckList(this);
         if (movedone)
         {
             Debug.Log("move done");
@@ -73,8 +148,6 @@ public class FunctionalContainer : Container {
                 flag = true;
                 stucklevel++;
             }
-            if (first && stucklevel == 0)
-                stucklevel++;
             Debug.Log(stucklevel);
             api.AddToStuckList(this);
             shouldmove = moved;
@@ -85,36 +158,6 @@ public class FunctionalContainer : Container {
                 api.CheckstuckedList();
             }
         }
-    }
-    public void Action_Fuel_Continue(Direction dir)
-    {
-        if(abilities.Count == 0)
-        {
-            on = !on;
-        }
-        if (api.MoveUnit(this, dir))
-        {
-            Debug.Log("asknsdvndfjvfdjn");
-            moved = abilities.Count;
-            movedone = true;
-            shouldmove = abilities.Count;
-        }
-        else
-        {
-            Debug.Log("fmvdfm;fgkb;kfgmbkmf;kbmfkgmbf;");
-            api.AddToStuckList(this);
-            stucklevel++;
-            Debug.Log(stucklevel);
-        }
-    }
-
-    public void Action_Fuel_Stucked()
-    {
-        if (movedone)
-        {
-            return;
-        }
-
     }
     protected override void ContainerAbilityChanged(bool increased)
     {
@@ -161,5 +204,10 @@ public class FunctionalContainer : Container {
             else
                 shouldmove--;
         }
+    }
+
+    public void ResetStuckLevel()
+    {
+        stucklevel = 0;
     }
 }

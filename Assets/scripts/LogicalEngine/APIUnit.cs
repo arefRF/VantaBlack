@@ -114,4 +114,9 @@ public class APIUnit {
     {
         engine.CheckStuckedUnit();
     }
+
+    public void CheckstuckedList(Unit exceptthis)
+    {
+        engine.CheckStuckedUnit(exceptthis);
+    }
 }

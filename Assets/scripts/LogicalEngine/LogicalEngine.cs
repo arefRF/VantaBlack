@@ -475,7 +475,7 @@ public class LogicalEngine {
         {
             ((FunctionalContainer)unit).Action_Fuel(false);
         }
-        CheckStuckedUnit();
+        CheckStuckedUnit(unit);
     }
     public void graphic_AbsorbReleaseFinished(Player player)
     {
@@ -515,8 +515,38 @@ public class LogicalEngine {
                 
             if (u is FunctionalContainer)
             {
+                Debug.Log("wtftwtftwtftwtwftwftwtfw");
+                Debug.Log(u.gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock);
                 if (!u.gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock)
                 {
+                    Debug.Log("fuck fuck fuck fuck fukc ufk");
+                    ((FunctionalContainer)u).ResetStuckLevel();
+                    stuckedunits.RemoveAt(i);
+                    ((FunctionalContainer)u).Action_Fuel(false);
+                }
+            }
+        }
+    }
+
+    public void CheckStuckedUnit(Unit ExceptThis)
+    {
+        Debug.Log("checkkkkkkkkkkking stucked list");
+        for (int i = 0; i < stuckedunits.Count; i++)
+        {
+            Unit u = stuckedunits[i];
+            if (u == ExceptThis)
+            {
+                Debug.Log("namusan?");
+                return;
+            }
+            if (u is FunctionalContainer)
+            {
+                Debug.Log("wtftwtftwtftwtwftwftwtfw");
+                Debug.Log(u.gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock);
+                if (!u.gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock)
+                {
+                    Debug.Log("fuck fuck fuck fuck fukc ufk");
+                    ((FunctionalContainer)u).ResetStuckLevel();
                     stuckedunits.RemoveAt(i);
                     ((FunctionalContainer)u).Action_Fuel(false);
                 }
