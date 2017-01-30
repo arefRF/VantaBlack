@@ -11,7 +11,6 @@ public class LogicalEngine {
     int sizeX, sizeY;
     public List<Unit> stuckedunits;
     Object lock_move;
-    public bool movebool;
     public LogicalEngine(int x, int y)
     {
         lock_move = new Object();
@@ -68,10 +67,7 @@ public class LogicalEngine {
                     database.units[(int)shouldmove[i].position.x, (int)shouldmove[i].position.y].Remove(shouldmove[i]);
                     shouldmove[i].position = Toolkit.VectorSum(shouldmove[i].position, Toolkit.DirectiontoVector(dir));
                     database.units[(int)shouldmove[i].position.x, (int)shouldmove[i].position.y].Add(shouldmove[i]);
-                    if(movebool)
-                        apigraphic.MovePlayerOnPlatform((Player)shouldmove[i], dir);
-                    else
-                        apigraphic.MoveGameObject(shouldmove[i].gameObject, dir, null);
+                    apigraphic.MovePlayerOnPlatform((Player)shouldmove[i], dir);
                 }
             }
 
