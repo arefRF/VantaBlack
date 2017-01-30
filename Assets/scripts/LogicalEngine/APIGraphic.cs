@@ -209,7 +209,7 @@ public class APIGraphic{
 
     public void LeanStickMove(Player player,Direction dir)
     {
-
+        player.GetComponent<PlayerPhysics>().Lean_Stick_Move(dir);
     }
     public void Release(Player player, Container container)
     {

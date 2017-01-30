@@ -93,8 +93,11 @@ public class PlayerPhysics : MonoBehaviour
             return new Vector2(1.1f, 0);
         else if (dir == Direction.Left)
             return new Vector2(-1.1f, 0);
+        else if (dir == Direction.Up)
+            return new Vector2(0, 1.1f);
         else
-            return new Vector2(0, 0);
+            return new Vector2(0, -1.1f);
+
     }
     public void Block_To_Ramp_Move(Vector2 pos, int type)
     {
@@ -194,6 +197,15 @@ public class PlayerPhysics : MonoBehaviour
         return new Vector2(0, 0);
     }
 
+
+    public void Lean_Stick_Move(Direction dir)
+    {
+        target_pos = Toolkit.DirectiontoVector(dir);
+        moving = true;
+        call_finish = false;
+        velocity = On_Platform_Move_Velocity(dir);
+        rb.drag = 0;
+    }
     private void Sharp_To_Ramp_Move(int type)
     {
         rb.drag = 0;
