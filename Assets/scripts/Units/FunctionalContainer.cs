@@ -91,6 +91,8 @@ public class FunctionalContainer : Container {
     }
     public void Action_Fuel_Continue(Direction dir)
     {
+        gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = true;
+        api.RemoveFromStuckList(this);
         if (abilities.Count == 0)
         {
             on = !on;
@@ -101,13 +103,16 @@ public class FunctionalContainer : Container {
             moved = abilities.Count;
             movedone = true;
             shouldmove = abilities.Count;
+            api.CheckstuckedList(this);
         }
         else
         {
+            Debug.Log("iininininininin");
             api.AddToStuckList(this);
             stucklevel++;
             Debug.Log(stucklevel);
         }
+        gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = false;
     }
     protected override void ContainerAbilityChanged(bool increased)
     {
@@ -126,8 +131,12 @@ public class FunctionalContainer : Container {
         }
         if (on)
         {
-            if (increased)
-                Action_Fuel_Continue(direction);
+            if (increased) {
+                if (stucklevel < 1)
+                    Action_Fuel_Continue(direction);
+                else
+                    stucklevel--;
+            }
             else
             {
                 if (stucklevel < 1)
@@ -135,7 +144,9 @@ public class FunctionalContainer : Container {
                     Action_Fuel_Continue(Toolkit.ReverseDirection(direction));
                 }
                 else
+                {
                     stucklevel--;
+                }
             }
         }
         else if (api.isStucked(this))

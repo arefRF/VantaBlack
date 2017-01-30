@@ -172,6 +172,8 @@ public class Player : Unit
 
     public override void ApplyGravity(Direction gravitydirection, List<Unit>[,] units)
     {
+        if (lean)
+            return;
         if (Toolkit.HasRamp(position) || Toolkit.HasBranch(position))
             return;
         while (true)
@@ -213,7 +215,17 @@ public class Player : Unit
             break;
         }
     }
-
+    public bool IsRelatedLean(GameObject parent)
+    {
+        List<Unit> units = api.engine_GetUnits(this, leandirection);
+        Debug.Log(Toolkit.VectorSum(this.position, leandirection));
+        for(int i=0; i<units.Count; i++)
+        {
+            if (parent == units[i].gameObject.transform.parent.gameObject)
+                return true;
+        }
+        return false;
+    }
     public bool Action()
     {
         if (abilities.Count == 0)
