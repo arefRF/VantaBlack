@@ -118,6 +118,15 @@ public class FunctionalContainer : Container {
     }
     protected override void ContainerAbilityChanged(bool increased)
     {
+        try
+        {
+            if (abilities[0] != AbilityType.Fuel)
+                return;
+        }
+        catch
+        {
+            return;
+        }
         Debug.Log("increased: " + increased);
         Debug.Log("on: " + on);
         if (increased && abilities.Count == 1)

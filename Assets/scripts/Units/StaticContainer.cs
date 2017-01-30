@@ -5,6 +5,7 @@ public class StaticContainer : FunctionalContainer {
 
     public void Start()
     {
-        moved = abilities.Count;
+        moved = 0;
+        shouldmove = abilities.Count;
     }
 }
