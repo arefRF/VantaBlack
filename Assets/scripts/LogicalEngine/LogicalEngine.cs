@@ -280,7 +280,7 @@ public class LogicalEngine {
                                 player.position = nextpos;
                             }
 
-                            else if (((Ramp)units[0]).ComingOnRampSide(player.position))
+                            else if (Toolkit.CanplayerGoOnRampSideFromFromNoneRamp(units[0] as Ramp, database.gravity_direction, Toolkit.ReverseDirection(dir)))
                             {
                                 apigraphic.MovePlayer_Simple_5(player, temp, ((Ramp)units[0]).type);
                                 player.position = temp;
@@ -509,8 +509,6 @@ public class LogicalEngine {
     public void CheckStuckedUnit()
     {
         Debug.Log("checing stucked list");
-        System.Diagnostics.StackTrace t = new System.Diagnostics.StackTrace();
-        Debug.Log(t);
         for (int i = 0; i < stuckedunits.Count; i++)
         {
             Unit u = stuckedunits[i];

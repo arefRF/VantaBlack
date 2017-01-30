@@ -57,7 +57,6 @@ public class Player : Unit
         List<Unit> units  = api.engine_GetUnits(this, dir);
         onramp = false;
         List<Unit> temp = api.engine_GetUnits(position);
-        Debug.Log("pos: " + position);
         bool goingup = true;
         for (int i = 0; i < temp.Count; i++)
         {
