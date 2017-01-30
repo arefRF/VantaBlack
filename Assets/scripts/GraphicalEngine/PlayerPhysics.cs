@@ -49,11 +49,6 @@ public class PlayerPhysics : MonoBehaviour
             // Part 2 of Ramp to Sharp Move
             Sharp_To_Ramp_Move();
         }
-        else
-        {
-            Debug.Log(Physics2D.gravity);
-            rb.AddForce(new Vector2(0,7.25f));
-        }
 
     }
 
