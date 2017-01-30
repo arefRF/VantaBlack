@@ -182,7 +182,7 @@ public class APIGraphic{
 
     public void MovePlayerOnPlatform(Player player,Direction dir)
     {
-        
+        player.GetComponent<PlayerPhysics>().On_Platform_Move(dir);
     }
     public void Lean(Player player)
     {
