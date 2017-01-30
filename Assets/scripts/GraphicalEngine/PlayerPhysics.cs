@@ -12,6 +12,7 @@ public class PlayerPhysics : MonoBehaviour
     private bool moving;
     private Vector2 velocity;
     private bool on_ramp;
+    private bool call_finish;
     private Rigidbody2D rb;
     void Start()
     {
@@ -27,11 +28,10 @@ public class PlayerPhysics : MonoBehaviour
         {
             if (Mathf.Abs(target_pos.x - transform.position.x) < 0.05)
             {
-                Debug.Log("Passsed");
                 // if passed to destination
                 rb.velocity = new Vector2(0, 0);
                 velocity = new Vector2(0, 0);
-                if(!on_sharp)
+                if(call_finish)
                     api.MovePlayerFinished(gameObject);
                 moving = false;
                 transform.position = target_pos;
@@ -49,9 +49,51 @@ public class PlayerPhysics : MonoBehaviour
             // Part 2 of Ramp to Sharp Move
             Sharp_To_Ramp_Move();
         }
+    }
+
+    // when platform is moving move the player
+    public void On_Platform_Move(Direction dir)
+    {
+        Debug.Log("On platform move");
+        Vector2 vel = On_Platform_Move_Velocity(dir);
+        // if in direction of gravity do nothing
+        if(!In_Direction_Of_Gravity(Direction.Down,dir))
+        {
+            moving = true;
+            call_finish = false;
+            target_pos = (Vector2)transform.position + Toolkit.DirectiontoVector(dir);
+            rb.drag = 0;
+            velocity = vel;
+        }
 
     }
 
+    private bool In_Direction_Of_Gravity(Direction gravity, Direction dir)
+    {
+        if (gravity == Direction.Down || gravity == Direction.Up)
+        {
+            if (dir == Direction.Down || dir == Direction.Up)
+                return true;
+            else
+                return false;
+        }
+        else
+        {
+            if (dir == Direction.Left || dir == Direction.Right)
+                return true;
+            else
+                return false;
+        }
+    }
+    private Vector2 On_Platform_Move_Velocity(Direction dir)
+    {
+        if (dir == Direction.Right)
+            return new Vector2(1.1f, 0);
+        else if (dir == Direction.Left)
+            return new Vector2(-1.1f, 0);
+        else
+            return new Vector2(0, 0);
+    }
     public void Block_To_Ramp_Move(Vector2 pos)
     {
         rb.drag = 0;
@@ -59,6 +101,7 @@ public class PlayerPhysics : MonoBehaviour
         velocity = (pos - (Vector2)transform.position) * 2;
         moving = true;
         on_ramp = true;
+        call_finish = true;
         rb.velocity = velocity;
     }
 
@@ -72,11 +115,13 @@ public class PlayerPhysics : MonoBehaviour
         moving = true;
         on_sharp = true;
         on_ramp = false;
+        call_finish = false;
         rb.velocity = velocity;
     }
 
     public void Move_Player(Direction d)
     {
+        call_finish = true;
         rb.drag = 0;
         rb.velocity = Toolkit.DirectiontoVector(d);
         moving = true;
@@ -148,10 +193,12 @@ public class PlayerPhysics : MonoBehaviour
         velocity = (pos - (Vector2)transform.position) * 1.2f;
         moving = true;
         on_ramp = true;
+        call_finish = true;
         rb.velocity = velocity;
     }
     public void Simple_Move(Vector2 pos)
     {
+        call_finish = true;
         on_ramp = false;
         rb.drag = 0;
         target_pos = pos;
@@ -162,6 +209,7 @@ public class PlayerPhysics : MonoBehaviour
 
     public void Ramp_To_Corner_Move(Vector2 pos)
     {
+        call_finish = true;
         target_pos = Ramp_To_Corner_Pos(Direction.Down,pos);
         velocity = Ramp_To_Corner_Velocity(Direction.Down, pos);
         moving = true;
