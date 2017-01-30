@@ -39,17 +39,17 @@ public class APIGraphic{
     }
 
     // Ramp to corner
-    public void MovePlayer_Ramp_4(Player player, Vector2 position)
+    public void MovePlayer_Ramp_4(Player player, Vector2 position,int type)
     {
         Debug.Log("ramp to corner");
-        player.gameObject.GetComponent<PlayerPhysics>().Ramp_To_Corner_Move(position);
+        player.gameObject.GetComponent<PlayerPhysics>().Ramp_To_Corner_Move(position,type);
     }
 
     //Ramp to sharp
     public void MovePlayer_Ramp_5(Player player, Vector2 position,int type)
     {
         Debug.Log("Ramp to Sharp");
-        player.gameObject.GetComponent<PlayerPhysics>().Ramp_To_Sharp_Move(position);
+        player.gameObject.GetComponent<PlayerPhysics>().Ramp_To_Sharp_Move(position,type);
     }
 
     //  Block to Block

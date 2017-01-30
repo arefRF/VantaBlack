@@ -14,6 +14,7 @@ public class PlayerPhysics : MonoBehaviour
     private bool on_ramp;
     private bool call_finish;
     private Rigidbody2D rb;
+    private int sharp_type;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -48,7 +49,7 @@ public class PlayerPhysics : MonoBehaviour
         else if (on_sharp)
         {
             // Part 2 of Ramp to Sharp Move
-            Sharp_To_Ramp_Move();
+            Sharp_To_Ramp_Move(sharp_type);
         }
     }
 
@@ -103,14 +104,14 @@ public class PlayerPhysics : MonoBehaviour
         moving = true;
         on_ramp = true;
         call_finish = true;
-       
+        Rotate_On_Ramp(type);
         
     }
 
 
     private void Rotate_On_Ramp(int type)
     {
-        transform.rotation = Quaternion.Euler(new Vector3(0, transform.rotation.y, 45));
+        transform.rotation = Quaternion.Euler(new Vector3(0, 0, Ramp_Rotation_Value(type)));
     }
     
     private float Ramp_Rotation_Value(int type)
@@ -118,11 +119,11 @@ public class PlayerPhysics : MonoBehaviour
         if (type == 4)
             return 45;
         else if (type == 1)
-            return -45;
+            return 315;
         else
             return 0;
     }
-    public void Ramp_To_Sharp_Move(Vector2 pos)
+    public void Ramp_To_Sharp_Move(Vector2 pos,int type)
     {
         rb.drag = 0;
         final_pos = pos;
@@ -192,7 +193,7 @@ public class PlayerPhysics : MonoBehaviour
         return new Vector2(0, 0);
     }
 
-    private void Sharp_To_Ramp_Move()
+    private void Sharp_To_Ramp_Move(int type)
     {
         rb.drag = 0;
         velocity = Sharp_To_Ramp_Velocity(Direction.Down, final_pos);
@@ -226,7 +227,7 @@ public class PlayerPhysics : MonoBehaviour
         Rotate_On_Block();
     }
 
-    public void Ramp_To_Corner_Move(Vector2 pos)
+    public void Ramp_To_Corner_Move(Vector2 pos,int type)
     {
         call_finish = true;
         target_pos = Ramp_To_Corner_Pos(Direction.Down,pos);
