@@ -134,6 +134,7 @@ public class PlayerPhysics : MonoBehaviour
         on_ramp = false;
         call_finish = false;
         rb.velocity = velocity;
+        sharp_type = type;
     }
 
     public void Move_Player(Direction d)
@@ -202,7 +203,7 @@ public class PlayerPhysics : MonoBehaviour
         on_ramp = true;
         on_sharp = false;
         call_finish = true;
-        transform.rotation = Quaternion.Euler(new Vector3(0, 0, 315));
+        Rotate_On_Ramp(type);
     }
     
     public void Ramp_To_Ramp_Move(Vector2 pos)
