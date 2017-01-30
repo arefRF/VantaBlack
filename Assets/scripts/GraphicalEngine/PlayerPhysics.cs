@@ -28,7 +28,8 @@ public class PlayerPhysics : MonoBehaviour
         {
             if (Mathf.Abs(target_pos.x - transform.position.x) < 0.05)
             {
-                // if passed to destination
+                // if passed or so near to destination
+                Debug.Log("passed");
                 rb.velocity = new Vector2(0, 0);
                 velocity = new Vector2(0, 0);
                 if(call_finish)
@@ -94,7 +95,7 @@ public class PlayerPhysics : MonoBehaviour
         else
             return new Vector2(0, 0);
     }
-    public void Block_To_Ramp_Move(Vector2 pos)
+    public void Block_To_Ramp_Move(Vector2 pos, int type)
     {
         rb.drag = 0;
         target_pos = pos;
@@ -102,10 +103,25 @@ public class PlayerPhysics : MonoBehaviour
         moving = true;
         on_ramp = true;
         call_finish = true;
-        rb.velocity = velocity;
+       
+        
     }
 
 
+    private void Rotate_On_Ramp(int type)
+    {
+        transform.rotation = Quaternion.Euler(new Vector3(0, transform.rotation.y, 45));
+    }
+    
+    private float Ramp_Rotation_Value(int type)
+    {
+        if (type == 4)
+            return 45;
+        else if (type == 1)
+            return -45;
+        else
+            return 0;
+    }
     public void Ramp_To_Sharp_Move(Vector2 pos)
     {
         rb.drag = 0;
@@ -184,6 +200,8 @@ public class PlayerPhysics : MonoBehaviour
         moving = true;
         on_ramp = true;
         on_sharp = false;
+        call_finish = true;
+        transform.rotation = Quaternion.Euler(new Vector3(0, 0, 315));
     }
     
     public void Ramp_To_Ramp_Move(Vector2 pos)
@@ -205,6 +223,7 @@ public class PlayerPhysics : MonoBehaviour
         velocity = (pos - (Vector2)transform.position) * 2;
         moving = true;
         rb.velocity = velocity;
+        Rotate_On_Block();
     }
 
     public void Ramp_To_Corner_Move(Vector2 pos)
@@ -240,6 +259,15 @@ public class PlayerPhysics : MonoBehaviour
         }
 
         return new Vector2(0, 0);
+    }
+
+    private void Rotate_On_Block()
+    {
+        transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
+        if (GetComponent<Player>().direction == Direction.Right)
+            transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0, 0, 0));
+        else if (GetComponent<Player>().direction == Direction.Left)
+            transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0, 180, 0)); 
     }
 
     private enum MoveType
