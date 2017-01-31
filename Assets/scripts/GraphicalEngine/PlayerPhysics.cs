@@ -14,6 +14,7 @@ public class PlayerPhysics : MonoBehaviour
     private bool on_ramp;
     private bool call_finish;
     private Rigidbody2D rb;
+    private int sharp_type;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -28,7 +29,8 @@ public class PlayerPhysics : MonoBehaviour
         {
             if (Mathf.Abs(target_pos.x - transform.position.x) < 0.05)
             {
-                // if passed to destination
+                // if passed or so near to destination
+                Debug.Log("passed");
                 rb.velocity = new Vector2(0, 0);
                 velocity = new Vector2(0, 0);
                 if(call_finish)
@@ -47,7 +49,7 @@ public class PlayerPhysics : MonoBehaviour
         else if (on_sharp)
         {
             // Part 2 of Ramp to Sharp Move
-            Sharp_To_Ramp_Move();
+            Sharp_To_Ramp_Move(sharp_type);
         }
     }
 
@@ -91,10 +93,13 @@ public class PlayerPhysics : MonoBehaviour
             return new Vector2(1.1f, 0);
         else if (dir == Direction.Left)
             return new Vector2(-1.1f, 0);
+        else if (dir == Direction.Up)
+            return new Vector2(0, 1.1f);
         else
-            return new Vector2(0, 0);
+            return new Vector2(0, -1.1f);
+
     }
-    public void Block_To_Ramp_Move(Vector2 pos)
+    public void Block_To_Ramp_Move(Vector2 pos, int type)
     {
         rb.drag = 0;
         target_pos = pos;
@@ -102,11 +107,26 @@ public class PlayerPhysics : MonoBehaviour
         moving = true;
         on_ramp = true;
         call_finish = true;
-        rb.velocity = velocity;
+        Rotate_On_Ramp(type);
+        
     }
 
 
-    public void Ramp_To_Sharp_Move(Vector2 pos)
+    private void Rotate_On_Ramp(int type)
+    {
+        transform.rotation = Quaternion.Euler(new Vector3(0, 0, Ramp_Rotation_Value(type)));
+    }
+    
+    private float Ramp_Rotation_Value(int type)
+    {
+        if (type == 4)
+            return 45;
+        else if (type == 1)
+            return 315;
+        else
+            return 0;
+    }
+    public void Ramp_To_Sharp_Move(Vector2 pos,int type)
     {
         rb.drag = 0;
         final_pos = pos;
@@ -117,6 +137,7 @@ public class PlayerPhysics : MonoBehaviour
         on_ramp = false;
         call_finish = false;
         rb.velocity = velocity;
+        sharp_type = type;
     }
 
     public void Move_Player(Direction d)
@@ -176,7 +197,16 @@ public class PlayerPhysics : MonoBehaviour
         return new Vector2(0, 0);
     }
 
-    private void Sharp_To_Ramp_Move()
+
+    public void Lean_Stick_Move(Direction dir)
+    {
+        target_pos = Toolkit.DirectiontoVector(dir);
+        moving = true;
+        call_finish = false;
+        velocity = On_Platform_Move_Velocity(dir);
+        rb.drag = 0;
+    }
+    private void Sharp_To_Ramp_Move(int type)
     {
         rb.drag = 0;
         velocity = Sharp_To_Ramp_Velocity(Direction.Down, final_pos);
@@ -184,6 +214,8 @@ public class PlayerPhysics : MonoBehaviour
         moving = true;
         on_ramp = true;
         on_sharp = false;
+        call_finish = true;
+        Rotate_On_Ramp(type);
     }
     
     public void Ramp_To_Ramp_Move(Vector2 pos)
@@ -205,9 +237,10 @@ public class PlayerPhysics : MonoBehaviour
         velocity = (pos - (Vector2)transform.position) * 2;
         moving = true;
         rb.velocity = velocity;
+        Rotate_On_Block();
     }
 
-    public void Ramp_To_Corner_Move(Vector2 pos)
+    public void Ramp_To_Corner_Move(Vector2 pos,int type)
     {
         call_finish = true;
         target_pos = Ramp_To_Corner_Pos(Direction.Down,pos);
@@ -240,6 +273,15 @@ public class PlayerPhysics : MonoBehaviour
         }
 
         return new Vector2(0, 0);
+    }
+
+    private void Rotate_On_Block()
+    {
+        transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
+        if (GetComponent<Player>().direction == Direction.Right)
+            transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0, 0, 0));
+        else if (GetComponent<Player>().direction == Direction.Left)
+            transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0, 180, 0)); 
     }
 
     private enum MoveType

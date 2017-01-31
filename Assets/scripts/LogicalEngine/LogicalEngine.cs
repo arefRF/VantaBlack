@@ -33,6 +33,7 @@ public class LogicalEngine {
     public bool MoveUnit(Unit unit, Direction dir)
     {
         List<Unit> shouldmove = new List<Unit>();
+        List<Unit> leanmove = new List<Unit>();
         if (!(unit is Box))
         {
             if (!unit.CanMove(dir))
@@ -52,15 +53,37 @@ public class LogicalEngine {
                 u.position = newpos;
                 database.units[(int)u.position.x, (int)u.position.y].Add(u);
             }
+            leanmove.AddRange(GetRelatedLeanedPlayers(unit.gameObject.transform.parent.gameObject));
             database.units[(int)unit.position.x, (int)unit.position.y].Remove(unit);
             unit.position = Toolkit.VectorSum(unit.position, Toolkit.DirectiontoVector(dir));
             database.units[(int)unit.position.x, (int)unit.position.y].Add(unit);
+            for(int i=0; i<leanmove.Count; i++)
+            {
+                for(int j=0; j<shouldmove.Count;j++)
+                {
+                    if(leanmove[i] == shouldmove[j])
+                    {
+                        shouldmove.RemoveAt(j);
+                        j--;
+                    }
+                }
+                if (leanmove[i].CanMove(dir))
+                {
+                    database.units[(int)leanmove[i].position.x, (int)leanmove[i].position.y].Remove(leanmove[i]);
+                    leanmove[i].position = Toolkit.VectorSum(leanmove[i].position, Toolkit.DirectiontoVector(dir));
+                    database.units[(int)leanmove[i].position.x, (int)leanmove[i].position.y].Add(leanmove[i]);
+                    apigraphic.LeanStickMove((Player)leanmove[i], dir);
+                }
+            }
             for (int i = 0; i < shouldmove.Count; i++)
             {
                 for (int j = i + 1; j < shouldmove.Count; j++)
                 {
                     if (shouldmove[i] == shouldmove[j])
+                    {
                         shouldmove.RemoveAt(j);
+                        j--;
+                    }
                 }
                 if (shouldmove[i].CanMove(dir))
                 {
@@ -78,6 +101,22 @@ public class LogicalEngine {
 
         }
         return true;
+    }
+
+    public List<Unit> GetRelatedLeanedPlayers(GameObject parent)
+    {
+        List<Unit> players = new List<Unit>();
+        for(int i=0; i<database.player.Count; i++)
+        {
+            if (database.player[i].lean)
+            {
+                Debug.Log("leaning");
+                if (database.player[i].IsRelatedLean(parent))
+                    players.Add(database.player[i]);
+            }
+        }
+        Debug.Log(players.Count);
+        return players;
     }
 
     public void MovePlayer(Player player, Direction dir)
@@ -170,7 +209,7 @@ public class LogicalEngine {
                     database.units[(int)player.position.x, (int)player.position.y].Remove(player);
                     if (((Ramp)units[0]).ComingOnRampSide(player.position))
                     {
-                        apigraphic.MovePlayer_Ramp_4(player, nextpos);
+                        apigraphic.MovePlayer_Ramp_4(player, nextpos, ((Ramp)units[0]).type);
                     }
                     else
                     {
@@ -422,6 +461,7 @@ public class LogicalEngine {
                 apigraphic.LeanFinished(database.player[i]);
             }
         }
+        Applygravity();
     }
 
     public void ActionKeyPressed()
