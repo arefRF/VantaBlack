@@ -15,14 +15,15 @@ public class PlayerPhysics : MonoBehaviour
     private bool call_finish;
     private Rigidbody2D rb;
     private int sharp_type;
+    private Quaternion sprite_rotation;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         engine = Starter.GetEngine();
         animation = GetComponent<Animator>();
         api = engine.apigraphic;
+        sprite_rotation = transform.GetChild(0).rotation;
     }
-
     void FixedUpdate()
     {
         if (moving)
@@ -115,20 +116,7 @@ public class PlayerPhysics : MonoBehaviour
     }
 
 
-    private void Rotate_On_Ramp(int type)
-    {
-        transform.rotation = Quaternion.Euler(new Vector3(0, 0, Ramp_Rotation_Value(type)));
-    }
     
-    private float Ramp_Rotation_Value(int type)
-    {
-        if (type == 4)
-            return 45;
-        else if (type == 1)
-            return 315;
-        else
-            return 0;
-    }
     public void Ramp_To_Sharp_Move(Vector2 pos,int type)
     {
         rb.isKinematic = false;
@@ -307,7 +295,31 @@ public class PlayerPhysics : MonoBehaviour
         if (GetComponent<Player>().direction == Direction.Right)
             transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0, 0, 0));
         else if (GetComponent<Player>().direction == Direction.Left)
-            transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0, 180, 0)); 
+            transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0, 180, 0));
+    }
+
+   private void Rotate_On_Ramp(int type)
+    {
+        Player player = GetComponent<Player>();
+        if (player.direction == Direction.Right)
+            transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0, 0, Ramp_Rotation_Value(type,player.direction)));
+        else if (player.direction == Direction.Left)
+            transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0, 180, Ramp_Rotation_Value(type,player.direction)));
+    }
+
+    private float Ramp_Rotation_Value(int type,Direction dir)
+    {
+        if (type == 4)
+        {
+            if (dir == Direction.Right)
+                return 45;
+            else
+                return -45;
+        }
+        else if (type == 1)
+            return 315;
+        else
+            return 0;
     }
 
     private enum MoveType
