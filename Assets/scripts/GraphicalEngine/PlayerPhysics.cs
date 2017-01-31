@@ -17,6 +17,7 @@ public class PlayerPhysics : MonoBehaviour
     private int sharp_type;
     private Quaternion sprite_rotation;
     private CircleCollider2D col;
+    private bool falling;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -49,6 +50,15 @@ public class PlayerPhysics : MonoBehaviour
         {
             // Part 2 of Ramp to Sharp Move
             Sharp_To_Ramp_Move(sharp_type);
+        }
+        else if (falling)
+        {
+            // has falled
+            if (Mathf.Abs(target_pos.x - transform.position.x) < 0.05)
+            {
+                api.Fall_Finish(GetComponent<Player>());
+                falling = false;
+            }
         }
     }
 
@@ -272,6 +282,8 @@ public class PlayerPhysics : MonoBehaviour
         on_ramp = false;
         rb.isKinematic = false;
         rb.drag = 0;
+        target_pos = pos;
+        falling = true;
     }
     public void Simple_Move(Vector2 pos)
     {
