@@ -184,7 +184,7 @@ public class Player : Unit
         bool falling = false;
         if (lean)
             return;
-        if (Toolkit.HasRamp(position) || Toolkit.HasBranch(position))
+        if (!Toolkit.IsEmpty(position))
             return;
         while (true)
         {
@@ -195,7 +195,6 @@ public class Player : Unit
                 position = pos;
                 api.AddToDatabase(this);
                 falling = true;
-                continue;
             }
             else if(falling)
             {
