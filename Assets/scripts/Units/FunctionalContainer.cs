@@ -12,6 +12,9 @@ public class FunctionalContainer : Container {
 
     public List<int> reservedmoveint;
     protected List<bool> reservedmovebool;
+
+    private bool resetstucked;
+    protected bool laston;
     public override bool PlayerMoveInto(Direction dir)
     {
         return false;
@@ -36,7 +39,9 @@ public class FunctionalContainer : Container {
         if (first)
         {
             on = !on;
+            laston = !on;
             api.ChangeSprite(this);
+            Debug.Log(on);
             if (on && stucklevel > 0)
             {
                 api.AddToStuckList(this);
@@ -45,8 +50,10 @@ public class FunctionalContainer : Container {
             }
             //stucklevel = 0;
         }
-        else if (stucklevel != 0)
+        else if (stucklevel != 0 && !resetstucked)
         {
+            laston = !on;
+            resetstucked = false;
             Debug.Log("not zero");
             api.AddToStuckList(this);
             gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = false;
@@ -54,6 +61,8 @@ public class FunctionalContainer : Container {
         }
         if (movedone)
         {
+            Debug.Log("move done");
+            resetstucked = false;
             movedone = false;
             moved = 0;
             shouldmove = abilities.Count;
@@ -68,6 +77,10 @@ public class FunctionalContainer : Container {
         }
         if (shouldmove == 0)
             shouldmove = abilities.Count;
+        if (laston == on)
+        {
+            shouldmove = stucklevel;
+        }
         Direction dir = direction;
         if (!on)
         {
@@ -75,12 +88,17 @@ public class FunctionalContainer : Container {
         }
         if (api.MoveUnit(this, dir))
         {
+            resetstucked = true;
+            laston = !on;
+            if (stucklevel > 0)
+                stucklevel--;
             moved++;
             if (moved == shouldmove)
                 movedone = true;
         }
         else
         {
+            laston = on;
             bool flag = false;
             Debug.Log(moved);
             if (moved != 0)
@@ -177,18 +195,20 @@ public class FunctionalContainer : Container {
 
     public override void CheckReservedList()
     {
+        Debug.Log(reservedmoveint[0]);
+        Debug.Log(reservedmovebool[0]);
         if (reservedmovebool.Count == 0)
             return;
-        int count = reservedmoveint[reservedmoveint.Count - 1];
-        bool increased = reservedmovebool[reservedmovebool.Count - 1];
-        reservedmoveint.RemoveAt(reservedmoveint.Count - 1);
-        reservedmovebool.RemoveAt(reservedmovebool.Count - 1);
+        int count = reservedmoveint[0];
+        bool increased = reservedmovebool[0];
+        reservedmoveint.RemoveAt(0);
+        reservedmovebool.RemoveAt(0);
         ContainerAbilityChanged(increased, count);
     }
 
     public void ResetStuckLevel()
     {
-        stucklevel = 0;
+        resetstucked = true;
     }
 
     protected override void AddToReservedMove(bool increased, int count)

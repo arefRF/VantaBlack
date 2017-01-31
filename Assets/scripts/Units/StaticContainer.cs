@@ -7,5 +7,6 @@ public class StaticContainer : FunctionalContainer {
     {
         moved = 0;
         shouldmove = abilities.Count;
+        laston = !on;
     }
 }

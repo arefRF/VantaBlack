@@ -11,6 +11,7 @@ public class DynamicContainer : FunctionalContainer {
         shouldmove = abilities.Count;
         reservedmoveint = new List<int>();
         reservedmovebool = new List<bool>();
+        laston = !on;
 	}
 	
 	// Update is called once per frame
