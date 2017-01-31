@@ -181,7 +181,7 @@ public class Player : Unit
 
     public override void ApplyGravity(Direction gravitydirection, List<Unit>[,] units)
     {
-        bool falling;
+        bool falling = false;
         if (lean)
             return;
         if (Toolkit.HasRamp(position) || Toolkit.HasBranch(position))
@@ -197,39 +197,43 @@ public class Player : Unit
                 falling = true;
                 continue;
             }
-            else if (Toolkit.HasRamp(pos)) //ramp
+            else if(falling)
             {
-                if (Toolkit.IsdoubleRamp(pos))
-                {
-                    api.graphicalengine_Land(this, position);
-                }
-                else
-                {
-                    Vector2 temp = Toolkit.GetRamp(pos).fallOn(this, Toolkit.ReverseDirection(gravitydirection));
-                    if (temp == position)
-                    {
-                        api.graphicalengine_Land(this, position);
-                    }
-                    else
-                    {
-                        api.RemoveFromDatabase(this);
-                        position = temp;
-                        api.AddToDatabase(this);
-                        api.graphicalengine_LandOnRamp(this, position);
-                    }
-                }
+                api.graphicalengine_Fall(this, position);
             }
-            else //Block
-            {
-                api.graphicalengine_Land(this, position);
-            }
-            break;
         }
     }
 
     public void FallFinished()
     {
-
+        Vector2 pos = Toolkit.VectorSum(position, Starter.GetGravityDirection());
+        
+        if (Toolkit.HasRamp(pos)) //ramp
+        {
+            if (Toolkit.IsdoubleRamp(pos))
+            {
+                api.graphicalengine_Land(this, position);
+            }
+            else
+            {
+                Vector2 temp = Toolkit.GetRamp(pos).fallOn(this, Toolkit.ReverseDirection(Starter.GetGravityDirection()));
+                if (temp == position)
+                {
+                    api.graphicalengine_Land(this, position);
+                }
+                else
+                {
+                    api.RemoveFromDatabase(this);
+                    position = temp;
+                    api.AddToDatabase(this);
+                    api.graphicalengine_LandOnRamp(this, position);
+                }
+            }
+        }
+        else //Block
+        {
+            api.graphicalengine_Land(this, position);
+        }
     }
 
     public bool IsRelatedLean(GameObject parent)
