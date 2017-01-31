@@ -36,6 +36,9 @@ public class FunctionalContainer : Container {
         api.RemoveFromStuckList(this);
         reservedmovebool.Clear();
         reservedmoveint.Clear();
+        int count = abilities.Count;
+        if (count != 0 && abilities[0] != AbilityType.Fuel)
+            count = 0;
         Debug.Log(shouldmove);
         if (first)
         {
@@ -67,8 +70,8 @@ public class FunctionalContainer : Container {
             resetstucked = false;
             movedone = false;
             moved = 0;
-            shouldmove = abilities.Count;
-            if (abilities.Count == 0)
+            shouldmove = count;
+            if (count == 0)
             {
                 on = false;
                 api.ChangeSprite(this);
@@ -78,7 +81,7 @@ public class FunctionalContainer : Container {
             return;
         }
         if (shouldmove == 0)
-            shouldmove = abilities.Count;
+            shouldmove = count;
         if (laston == on)
         {
             shouldmove = stucklevel;
@@ -109,7 +112,7 @@ public class FunctionalContainer : Container {
                 //stucklevel++;
             }
             if (/*first && */stucklevel == 0)
-                stucklevel = abilities.Count - moved;
+                stucklevel = count - moved;
             api.AddToStuckList(this);
             shouldmove = moved;
             moved = 0;
