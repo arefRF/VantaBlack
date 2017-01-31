@@ -16,9 +16,11 @@ public class PlayerPhysics : MonoBehaviour
     private Rigidbody2D rb;
     private int sharp_type;
     private Quaternion sprite_rotation;
+    private CircleCollider2D col;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        col = GetComponent<CircleCollider2D>();
         engine = Starter.GetEngine();
         animation = GetComponent<Animator>();
         api = engine.apigraphic;
@@ -46,7 +48,7 @@ public class PlayerPhysics : MonoBehaviour
         else if (on_ramp)
         {
             // not to let it move
-            rb.drag = 10000;
+            rb.isKinematic = true;
         }
         else if (on_sharp)
         {
@@ -104,9 +106,10 @@ public class PlayerPhysics : MonoBehaviour
     }
     public void Block_To_Ramp_Move(Vector2 pos, int type)
     {
+        col.radius = 1.5f;
         rb.isKinematic = false;
         rb.drag = 0;
-        target_pos = pos;
+        target_pos = pos + On_Ramp_Pos(type);
         velocity = (pos - (Vector2)transform.position) * 2;
         moving = true;
         on_ramp = true;
@@ -114,8 +117,6 @@ public class PlayerPhysics : MonoBehaviour
         Rotate_On_Ramp(type);
         
     }
-
-
     
     public void Ramp_To_Sharp_Move(Vector2 pos,int type)
     {
@@ -229,25 +230,47 @@ public class PlayerPhysics : MonoBehaviour
         Rotate_On_Ramp(type);
     }
     
-    public void Ramp_To_Ramp_Move(Vector2 pos)
+    public void Ramp_To_Ramp_Move(Vector2 pos,int type)
     {
+        col.radius = 1.5f;
         rb.isKinematic = false;
         rb.drag = 0;
-        target_pos = pos;
-        velocity = (pos - (Vector2)transform.position) * 1.2f;
+        target_pos = pos + On_Ramp_Pos(type);
+        velocity = Ramp_To_Ramp_Velocity(GetComponent<Player>().direction,type);
         moving = true;
         on_ramp = true;
         call_finish = true;
-        rb.velocity = velocity;
+        Rotate_On_Ramp(type);
+    }
+
+    private Vector2 Ramp_To_Ramp_Velocity(Direction dir,int type)
+    {
+        if(type == 4)
+        {
+            if (dir == Direction.Right)
+                return new Vector2(1, 1);
+            else if (dir == Direction.Left)
+                return new Vector2(-1, -1);
+
+        }
+        else if(type == 1)
+        {
+            if (dir == Direction.Right)
+                return new Vector2(1, -1);
+            else if (dir == Direction.Left)
+                return new Vector2(-1, 1);
+        }
+        return new Vector2(0, 0);
     }
     public void Simple_Move(Vector2 pos)
     {
+        col.radius = 2;
         rb.isKinematic = false;
         call_finish = true;
         on_ramp = false;
         rb.drag = 0;
         target_pos = pos;
-        velocity = (pos - (Vector2)transform.position) * 2;
+        velocity = Toolkit.DirectiontoVector(GetComponent<Player>().direction) * 2;
         moving = true;
         rb.velocity = velocity;
         Rotate_On_Block();
@@ -289,6 +312,16 @@ public class PlayerPhysics : MonoBehaviour
         return new Vector2(0, 0);
     }
 
+
+    private Vector2 On_Ramp_Pos(int type)
+    {
+        if (type == 4)
+            return new Vector2(-0.22f, 0.2f);
+        else if (type == 1)
+            return new Vector2(0.19f,0.25f);
+
+        return new Vector2(0, 0);
+    }
     private void Rotate_On_Block()
     {
         transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
@@ -317,7 +350,13 @@ public class PlayerPhysics : MonoBehaviour
                 return -45;
         }
         else if (type == 1)
-            return 315;
+        {
+            if (dir == Direction.Right)
+                return -45;
+            else
+                return 45;
+        }
+
         else
             return 0;
     }

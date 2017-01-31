@@ -15,19 +15,14 @@ public class APIGraphic{
     //Ramp to Ramp
     public void MovePlayer_Ramp_1(Player player, Vector2 position,int ramptype)
     {
-        Debug.Log("Ramp to Ramp");
-        int x = 1, y = 1;
-        if (ramptype == 3 || ramptype == 4)
-            x = -1;
-        if (ramptype == 2 || ramptype == 3)
-            y = -1;
-        position += new Vector2(x * 0.4f, y * 0.4f);
-        player.GetComponent<PlayerPhysics>().Ramp_To_Ramp_Move(position);
+        Debug.Log("Ramp To Ramp");
+        player.GetComponent<PlayerPhysics>().Ramp_To_Ramp_Move(position,ramptype);
     }
     
     // Ramp to Block
     public void MovePlayer_Ramp_2(Player player, Vector2 position)
-    { 
+    {
+        Debug.Log("Ramp To Block");
         player.GetComponent<PlayerPhysics>().Simple_Move(position);
     }
 
@@ -71,12 +66,6 @@ public class APIGraphic{
     public void MovePlayer_Simple_3(Player player, Vector2 position, int ramptype)
     {
         Debug.Log("Block to ramp simple 3");
-        int x = 1, y = 1;
-        if (ramptype == 3 || ramptype == 4)
-            x = -1;
-        if (ramptype == 2 || ramptype == 3)
-            y = -1;
-        position += new Vector2( x * 0.4f  , y * 0.4f);
         player.GetComponent<PlayerPhysics>().Block_To_Ramp_Move(position,ramptype);
         //player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
     }
@@ -91,13 +80,7 @@ public class APIGraphic{
     // Block to Ramp (tekrari)
     public void MovePlayer_Simple_5(Player player, Vector2 position , int ramptype)
     {
-       Debug.Log("Simple 5");
-        int x = 1, y = 1;
-        if (ramptype == 3 || ramptype == 4)
-            x = -1;
-        if (ramptype == 2 || ramptype == 3)
-            y = -1;
-        position += new Vector2(x * 0.3f, y * 0.3f);
+        Debug.Log("Block to ramp tekrari");
         player.GetComponent<PlayerPhysics>().Block_To_Ramp_Move(position,ramptype);
         //player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
     }
