@@ -489,9 +489,10 @@ public class LogicalEngine {
             {
                 database.player[i].lean = false;
                 apigraphic.LeanFinished(database.player[i]);
+                database.player[i].ApplyGravity(database.gravity_direction, database.units);
             }
         }
-        Applygravity();
+        //Applygravity();
     }
 
     public void ActionKeyPressed()

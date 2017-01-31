@@ -184,7 +184,7 @@ public class Player : Unit
         bool falling = false;
         if (lean)
             return;
-        if (!Toolkit.IsEmpty(position))
+        if (!Toolkit.IsEmpty(Toolkit.VectorSum(position, gravitydirection)))
             return;
         while (true)
         {
