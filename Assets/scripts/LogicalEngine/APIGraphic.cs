@@ -74,6 +74,7 @@ public class APIGraphic{
     public void MovePlayer_Simple_4(Player player, Vector2 position)
     {
         Debug.Log("simple4");
+        Debug.Log(position);
         player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
     }
 
@@ -113,17 +114,25 @@ public class APIGraphic{
     
     public void Fall(Player player, Vector2 position)
     {
+        Debug.Log("Fall");
         player.gameObject.transform.position = position;
         logicalengine.graphic_FallFinished(player);
     }
 
-    public void Land(Player player, Vector2 position, Unit fallonunit)
+    public void Fall_Finish(Player player)
     {
-        logicalengine.graphic_LandFinished(player);
+        
     }
 
+    public void Land(Player player, Vector2 position, Unit fallonunit)
+    {
+        Debug.Log("Land");
+        logicalengine.graphic_LandFinished(player);
+    }
+    
     public void LandOnRamp(Player player, Vector2 position, Unit fallonunit, int ramptype)
     {
+        Debug.Log("Land On Ramp");
         int x = 1, y = 1;
         if (ramptype == 3 || ramptype == 4)
             x = -1;
@@ -147,6 +156,8 @@ public class APIGraphic{
        
     }
 
+
+
     public void MoveGameObjectFinished(GameObject obj, Unit unit)
     {
         logicalengine.graphic_GameObjectMoveAnimationFinished(obj, unit);
@@ -165,6 +176,7 @@ public class APIGraphic{
 
     public void MovePlayerOnPlatform(Player player,Direction dir)
     {
+        Debug.Log("MoveOnPlatForm");
         player.GetComponent<PlayerPhysics>().On_Platform_Move(dir);
     }
     public void Lean(Player player)
@@ -192,6 +204,7 @@ public class APIGraphic{
 
     public void LeanStickMove(Player player,Direction dir)
     {
+        Debug.Log("Lean Stick Move");
         player.GetComponent<PlayerPhysics>().Lean_Stick_Move(dir);
     }
     public void Release(Player player, Container container)

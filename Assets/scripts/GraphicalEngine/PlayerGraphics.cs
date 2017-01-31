@@ -36,7 +36,7 @@ public class PlayerGraphics : MonoBehaviour {
 
     public void Lean_Finished()
     {
-        transform.GetChild(0).localPosition = new Vector2(0, 0.4f);
+        transform.GetChild(0).localPosition = new Vector2(0, 0);
     }
     public void Player_Move(GameObject player,Vector2 end)
     {
