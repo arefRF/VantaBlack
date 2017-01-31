@@ -318,7 +318,7 @@ public class LogicalEngine {
                             }
                             else
                             {
-                                apigraphic.MovePlayer_Simple_1(player, nextpos);
+                                apigraphic.MovePlayer_Simple_4(player, nextpos);
                                 player.position = nextpos;
                             }
                             

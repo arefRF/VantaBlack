@@ -186,7 +186,10 @@ public class Player : Unit
         if (Toolkit.HasRamp(position) || Toolkit.HasBranch(position))
             return;
         if (!Toolkit.IsEmpty(Toolkit.VectorSum(position, gravitydirection)))
+        {
+            FallFinished();
             return;
+        }
         while (true)
         {
             Vector2 pos = Toolkit.VectorSum(position, gravitydirection);
