@@ -77,7 +77,7 @@ public class APIGraphic{
         Debug.Log(position);
         player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
     }
-
+    
     // Block to Ramp (tekrari)
     public void MovePlayer_Simple_5(Player player, Vector2 position , int ramptype)
     {
@@ -93,7 +93,7 @@ public class APIGraphic{
         player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
     }
 
-    // Branch to Fall
+    // Branch to allall
     public void MovePlayer_Branch_2(Player player, Vector2 position)
     {
         Debug.Log("branch2");
@@ -121,7 +121,7 @@ public class APIGraphic{
 
     public void Fall_Finish(Player player)
     {
-        
+        player.FallFinished();
     }
 
     public void Land(Player player, Vector2 position, Unit fallonunit)
