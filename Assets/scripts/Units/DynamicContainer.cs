@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 using System;
 
 public class DynamicContainer : FunctionalContainer {
@@ -9,6 +9,8 @@ public class DynamicContainer : FunctionalContainer {
     void Start () {
         moved = 0;
         shouldmove = abilities.Count;
+        reservedmoveint = new List<int>();
+        reservedmovebool = new List<bool>();
 	}
 	
 	// Update is called once per frame

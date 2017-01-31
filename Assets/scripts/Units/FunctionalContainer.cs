@@ -9,6 +9,9 @@ public class FunctionalContainer : Container {
     protected int shouldmove;
     private bool movedone = false;
     private int stucklevel = 0;
+
+    public List<int> reservedmoveint;
+    protected List<bool> reservedmovebool;
     public override bool PlayerMoveInto(Direction dir)
     {
         return false;
@@ -28,6 +31,8 @@ public class FunctionalContainer : Container {
     {
         gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = true;
         api.RemoveFromStuckList(this);
+        reservedmovebool.Clear();
+        reservedmoveint.Clear();
         if (first)
         {
             on = !on;
@@ -81,7 +86,7 @@ public class FunctionalContainer : Container {
             if (moved != 0)
             {
                 flag = true;
-                stucklevel++;
+                //stucklevel++;
             }
             if (/*first && */stucklevel == 0)
                 stucklevel = abilities.Count - moved;
@@ -94,34 +99,34 @@ public class FunctionalContainer : Container {
                 api.CheckstuckedList(this);
             }
             gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = false;
+            Debug.Log(stucklevel);
         }
     }
-    public void Action_Fuel_Continue(Direction dir)
+    public void Action_Fuel_Continue(Direction dir,int count)
     {
         gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = true;
         api.RemoveFromStuckList(this);
-        if (abilities.Count == 0)
+        if (count == 0)
         {
             on = !on;
             api.ChangeSprite(this);
         }
         if (api.MoveUnit(this, dir))
         {
-            moved = abilities.Count;
+            moved = count;
             movedone = true;
-            shouldmove = abilities.Count;
+            shouldmove = count;
             api.CheckstuckedList(this);
         }
         else
         {
-            Debug.Log("iininininininin");
             api.AddToStuckList(this);
             stucklevel++;
-            Debug.Log(stucklevel);
+            CheckReservedList();
         }
         gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = false;
     }
-    protected override void ContainerAbilityChanged(bool increased)
+    protected override void ContainerAbilityChanged(bool increased, int count)
     {
         try
         {
@@ -131,7 +136,7 @@ public class FunctionalContainer : Container {
         catch
         {
         }
-        if (increased && abilities.Count == 1)
+        if (increased && count == 1)
         {
             shouldmove = 1;
             return;
@@ -140,7 +145,7 @@ public class FunctionalContainer : Container {
         {
             if (increased) {
                 if (stucklevel < 1)
-                    Action_Fuel_Continue(direction);
+                    Action_Fuel_Continue(direction, count);
                 else
                     stucklevel--;
             }
@@ -148,7 +153,7 @@ public class FunctionalContainer : Container {
             {
                 if (stucklevel < 1)
                 {
-                    Action_Fuel_Continue(Toolkit.ReverseDirection(direction));
+                    Action_Fuel_Continue(Toolkit.ReverseDirection(direction), count);
                 }
                 else
                 {
@@ -159,7 +164,7 @@ public class FunctionalContainer : Container {
         else if (api.isStucked(this))
         {
             if (!increased)
-                Action_Fuel_Continue(Toolkit.ReverseDirection(direction));
+                Action_Fuel_Continue(Toolkit.ReverseDirection(direction), count);
         }
         else
         {
@@ -170,8 +175,63 @@ public class FunctionalContainer : Container {
         }
     }
 
+    public override void CheckReservedList()
+    {
+        if (reservedmovebool.Count == 0)
+            return;
+        int count = reservedmoveint[reservedmoveint.Count - 1];
+        bool increased = reservedmovebool[reservedmovebool.Count - 1];
+        reservedmoveint.RemoveAt(reservedmoveint.Count - 1);
+        reservedmovebool.RemoveAt(reservedmovebool.Count - 1);
+        ContainerAbilityChanged(increased, count);
+    }
+
     public void ResetStuckLevel()
     {
         stucklevel = 0;
+    }
+
+    protected override void AddToReservedMove(bool increased, int count)
+    {
+        if (increased && count == 1)
+        {
+            shouldmove = 1;
+            return;
+        }
+        if (on)
+        {
+            if (increased)
+            {
+                if (stucklevel >= 1)
+                    stucklevel--;
+                /*else
+                    stucklevel--;*/
+            }
+            else
+            {
+                if (stucklevel >= 1)
+                {
+                    stucklevel--;
+                }
+                /*else
+                {
+                    stucklevel--;
+                }*/
+            }
+        }
+        else if (api.isStucked(this))
+        {
+            if (!increased)
+                return;
+        }
+        else
+        {
+            if (increased)
+                shouldmove++;
+            else
+                shouldmove--;
+        }
+        reservedmovebool.Add(increased);
+        reservedmoveint.Add(count);
     }
 }

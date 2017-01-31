@@ -48,6 +48,10 @@ public class APIInput{
         engine.Input_AbsorbRlease(dir);
     }
 
+    public void AbsorbReleaseHold(Direction dir)
+    {
+        engine.Input_AbsorbRleaseHold(dir);
+    }
     public void ContainerAction()
     {
         engine.ActionKeyPressed();

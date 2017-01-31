@@ -165,6 +165,15 @@ public class Player : Unit
     {
         container.PlayerRelease(this);
     }
+
+    public void AbsorbHold(Container container)
+    {
+        container.PlayerAbsorbHold(this);
+    }
+    public void ReleaseHold(Container container)
+    {
+        container.PlayerReleaseHold(this);
+    }
     public override bool PlayerMoveInto(Direction dir)
     {
         return false;

@@ -222,7 +222,7 @@ public class LogicalEngine {
                     {
                         database.units[(int)player.position.x, (int)player.position.y].Remove(player);
                         apigraphic.MovePlayer_Ramp_1(player, Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction)),((Ramp)units[0]).type);
-                        player.position = nextpos;
+                        player.position = Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction));
                     }
                     else
                     {
@@ -448,7 +448,39 @@ public class LogicalEngine {
             }
         }
     }
-
+    public void Input_AbsorbRleaseHold(Direction dir)
+    {
+        for (int i = 0; i < database.player.Count; i++)
+        {
+            if (database.player[i].lean) //for absorb
+            {
+                if (database.player[i].leandirection == dir)
+                {
+                    List<Unit> units = GetUnits(Toolkit.VectorSum(database.player[i].position, Toolkit.DirectiontoVector(dir)));
+                    for (int j = 0; j < units.Count; j++)
+                    {
+                        if (units[j] is Container)
+                        {
+                            database.player[i].ReleaseHold((Container)units[j]);
+                            break;
+                        }
+                    }
+                }
+                else // for release
+                {
+                    List<Unit> units = GetUnits(Toolkit.VectorSum(database.player[i].position, Toolkit.DirectiontoVector(Toolkit.ReverseDirection(dir))));
+                    for (int j = 0; j < units.Count; j++)
+                    {
+                        if (units[j] is Container)
+                        {
+                            database.player[i].AbsorbHold((Container)units[j]);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
     public void ArrowkeyReleased(Direction direction)
     {
         for(int i=0; i<database.player.Count; i++)
@@ -507,7 +539,7 @@ public class LogicalEngine {
         
         if(unit is FunctionalContainer)
         {
-            ((FunctionalContainer)unit).Action_Fuel(false);
+            apiunit.GameObjectAnimationFinished((FunctionalContainer)unit);
         }
         CheckStuckedUnit(unit);
     }

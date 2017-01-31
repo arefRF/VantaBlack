@@ -62,6 +62,14 @@ public class GetInput : MonoBehaviour {
                     api.AbsorbRelease(Direction.Left);
                 if (Input.GetKeyDown(KeyCode.D))
                     api.AbsorbRelease(Direction.Right);
+                if (Input.GetKeyDown(KeyCode.I))
+                    api.AbsorbReleaseHold(Direction.Up);
+                if (Input.GetKeyDown(KeyCode.K))
+                    api.AbsorbReleaseHold(Direction.Down);
+                if (Input.GetKeyDown(KeyCode.J))
+                    api.AbsorbReleaseHold(Direction.Left);
+                if (Input.GetKeyDown(KeyCode.L))
+                    api.AbsorbReleaseHold(Direction.Right);
             }
 
         }

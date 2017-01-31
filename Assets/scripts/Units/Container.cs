@@ -13,30 +13,13 @@ public class Container : ParentContainer {
         
     }
 
-
-    public virtual void PlayerAbsorb(Player player)
-    {
-        if (abilities.Count == 0)
-            return;
-        else if(player.abilities.Count == 0)
-            PlayerAbsorbAbilities(player);
-        else
-        {
-            if (abilities[0] == player.abilities[0])
-                PlayerAbsorbAbilities(player);
-            else
-                Swap(player);
-        }
-        
-    }
-
     private void Swap(Player player)
     {
         List<AbilityType> temp = abilities;
         abilities = null;
-        ContainerAbilityChanged(false);
+        ContainerAbilityChanged(false, 0);
         abilities = player.abilities;
-        ContainerAbilityChanged(true);
+        ContainerAbilityChanged(true, abilities.Count);
         player.abilities = temp;
     }
 
@@ -46,7 +29,7 @@ public class Container : ParentContainer {
         {
             player.abilities.Add(abilities[0]);
             abilities.RemoveAt(0);
-            ContainerAbilityChanged(false);
+            ContainerAbilityChanged(false, abilities.Count);
             api.ChangeSprite(this);
         }
     }
@@ -57,11 +40,26 @@ public class Container : ParentContainer {
         {
             abilities.Add(player.abilities[0]);
             player.abilities.RemoveAt(0);
-            ContainerAbilityChanged(true);
+            ContainerAbilityChanged(true, abilities.Count);
             api.ChangeSprite(this);
         }
 
    }
+    public virtual void PlayerAbsorb(Player player)
+    {
+        if (abilities.Count == 0)
+            return;
+        else if (player.abilities.Count == 0)
+            PlayerAbsorbAbilities(player);
+        else
+        {
+            if (abilities[0] == player.abilities[0])
+                PlayerAbsorbAbilities(player);
+            else
+                Swap(player);
+        }
+
+    }
 
     public virtual void PlayerRelease(Player player)
     {
@@ -78,6 +76,72 @@ public class Container : ParentContainer {
         }
         
     }
+
+    public virtual void PlayerAbsorbHold(Player player)
+    {
+        if (abilities.Count == 0)
+            return;
+        else if (player.abilities.Count == 0)
+        {
+            while (abilities.Count != 0 && player.abilities.Count < 4)
+                PlayerAbsorbAbilitiesHold(player);
+        }
+        else
+        {
+            if (abilities[0] == player.abilities[0])
+            {
+                while (abilities.Count != 0 && player.abilities.Count < 4)
+                    PlayerAbsorbAbilitiesHold(player);
+            }
+            /*else
+                Swap(player);*/
+        }
+        api.ChangeSprite(this);
+        if(this is FunctionalContainer && ((FunctionalContainer)this).on)
+            CheckReservedList();
+    }
+
+    public virtual void PlayerReleaseHold(Player player)
+    {
+        if (player.abilities.Count == 0)
+            return;
+        else if (abilities.Count == 0)
+        {
+            while(player.abilities.Count != 0 && abilities.Count < 4)
+                PlayerReleaseAbilitiesHold(player);
+        }
+        else
+        {
+            if (player.abilities[0] == abilities[0])
+            {
+                while (player.abilities.Count != 0 && abilities.Count < 4)
+                    PlayerReleaseAbilitiesHold(player);
+            }
+            /*else
+                Swap(player);*/
+        }
+        api.ChangeSprite(this);
+        if (this is FunctionalContainer && ((FunctionalContainer)this).on)
+            CheckReservedList();
+    }
+    public virtual void PlayerReleaseAbilitiesHold(Player player)
+    {
+        if (abilities.Count < 4)
+        {
+            abilities.Add(player.abilities[0]);
+            player.abilities.RemoveAt(0);
+            AddToReservedMove(true, abilities.Count);
+        }
+    }
+    private void PlayerAbsorbAbilitiesHold(Player player)
+    {
+        if (player.abilities.Count < 4)
+        {
+            player.abilities.Add(abilities[0]);
+            abilities.RemoveAt(0);
+            AddToReservedMove(false, abilities.Count);
+        }
+    }
     public override bool PlayerMoveInto(Direction dir)
     {
         return false;
@@ -88,7 +152,17 @@ public class Container : ParentContainer {
         return;
     }
 
-    protected virtual void ContainerAbilityChanged(bool increased)
+    protected virtual void ContainerAbilityChanged(bool increased, int count)
+    {
+        return;
+    }
+
+    protected virtual void AddToReservedMove(bool increased, int count)
+    {
+        return;
+    }
+
+    public virtual void CheckReservedList()
     {
         return;
     }

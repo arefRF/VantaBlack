@@ -119,4 +119,12 @@ public class APIUnit {
     {
         engine.CheckStuckedUnit(exceptthis);
     }
+
+    public void GameObjectAnimationFinished(FunctionalContainer unit)
+    {
+        if (unit.reservedmoveint.Count == 0)
+            unit.Action_Fuel(false);
+        else
+            unit.CheckReservedList();
+    }
 }
