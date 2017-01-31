@@ -36,19 +36,15 @@ public class PlayerPhysics : MonoBehaviour
                 Debug.Log("passed");
                 rb.velocity = new Vector2(0, 0);
                 velocity = new Vector2(0, 0);
-                if(call_finish)
+                rb.isKinematic = true;
+                if (call_finish)
                     api.MovePlayerFinished(gameObject);
                 moving = false;
                 transform.position = target_pos;
-                rb.isKinematic = true;
+                
             }
             else // To keep Velocity Constant
                 rb.velocity = velocity;
-        }
-        else if (on_ramp)
-        {
-            // not to let it move
-            rb.isKinematic = true;
         }
         else if (on_sharp)
         {
@@ -261,6 +257,13 @@ public class PlayerPhysics : MonoBehaviour
                 return new Vector2(-1, 1);
         }
         return new Vector2(0, 0);
+    }
+
+    public void Fall(Vector2 pos)
+    {
+        on_ramp = false;
+        rb.isKinematic = false;
+        rb.drag = 0;
     }
     public void Simple_Move(Vector2 pos)
     {
