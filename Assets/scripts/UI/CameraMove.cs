@@ -6,7 +6,6 @@ public class CameraMove : MonoBehaviour {
     public float y;
     private static int moving;
     private static bool is_moving;
-    public int number;
     public float moveTime = 0.1f;
     private float inverseMoveTime;
     public float zoom;
@@ -39,15 +38,11 @@ public class CameraMove : MonoBehaviour {
         {
             if (!is_moving)
             {
-                if (moving != number)
-                {
                     //Starter.GetEngine().camerapos = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, Camera.main.transform.position.z);
                     //Starter.GetEngine().camerasize = Camera.main.orthographicSize;
                     is_moving = true;
-                    moving = number;
                     StartCoroutine(Smooth_Move(new Vector3(x, y, -10)));
                     StartCoroutine(Smooth_Zoom(zoom));
-                }
             }
 
         }

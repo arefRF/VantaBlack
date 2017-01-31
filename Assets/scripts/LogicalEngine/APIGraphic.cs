@@ -115,7 +115,7 @@ public class APIGraphic{
     public void Fall(Player player, Vector2 position)
     {
         Debug.Log("Fall");
-        player.gameObject.transform.position = position;
+        player.GetComponent<PlayerPhysics>().Fall(position);
         logicalengine.graphic_FallFinished(player);
     }
 
