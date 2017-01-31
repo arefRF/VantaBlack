@@ -181,6 +181,7 @@ public class Player : Unit
 
     public override void ApplyGravity(Direction gravitydirection, List<Unit>[,] units)
     {
+        bool falling;
         if (lean)
             return;
         if (Toolkit.HasRamp(position) || Toolkit.HasBranch(position))
@@ -193,6 +194,7 @@ public class Player : Unit
                 api.RemoveFromDatabase(this);
                 position = pos;
                 api.AddToDatabase(this);
+                falling = true;
                 continue;
             }
             else if (Toolkit.HasRamp(pos)) //ramp
@@ -224,6 +226,12 @@ public class Player : Unit
             break;
         }
     }
+
+    public void FallFinished()
+    {
+
+    }
+
     public bool IsRelatedLean(GameObject parent)
     {
         List<Unit> units = api.engine_GetUnits(this, leandirection);    
