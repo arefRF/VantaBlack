@@ -56,6 +56,7 @@ public class APIUnit {
 
     public void graphicalengine_Fall(Unit unit, Vector2 fallposition)
     {
+        Debug.Log("falling");
         engine.apigraphic.Fall((Player)unit, fallposition);
     }
 
