@@ -183,6 +183,7 @@ public class FunctionalContainer : Container {
                     if (abilities.Count == 0)
                     {
                         on = false;
+                        api.RemoveFromStuckList(this);
                         api.ChangeSprite(this);
                     }
                 }
