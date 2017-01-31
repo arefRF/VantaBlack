@@ -200,6 +200,7 @@ public class Player : Unit
             else if(falling)
             {
                 api.graphicalengine_Fall(this, position);
+                break;
             }
         }
     }
