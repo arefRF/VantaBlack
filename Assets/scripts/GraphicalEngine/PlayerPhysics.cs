@@ -37,6 +37,7 @@ public class PlayerPhysics : MonoBehaviour
                     api.MovePlayerFinished(gameObject);
                 moving = false;
                 transform.position = target_pos;
+                rb.isKinematic = true;
             }
             else // To keep Velocity Constant
                 rb.velocity = velocity;
@@ -56,16 +57,17 @@ public class PlayerPhysics : MonoBehaviour
     // when platform is moving move the player
     public void On_Platform_Move(Direction dir)
     {
+        rb.isKinematic = false;
         Debug.Log("On platform move");
-        Vector2 vel = On_Platform_Move_Velocity(dir);
         // if in direction of gravity do nothing
         if(!In_Direction_Of_Gravity(Direction.Down,dir))
         {
+            Debug.Log("In DIrection of gravity");
             moving = true;
             call_finish = false;
             target_pos = (Vector2)transform.position + Toolkit.DirectiontoVector(dir);
             rb.drag = 0;
-            velocity = vel;
+            velocity = On_Platform_Move_Velocity(dir); ;
         }
 
     }
@@ -101,6 +103,7 @@ public class PlayerPhysics : MonoBehaviour
     }
     public void Block_To_Ramp_Move(Vector2 pos, int type)
     {
+        rb.isKinematic = false;
         rb.drag = 0;
         target_pos = pos;
         velocity = (pos - (Vector2)transform.position) * 2;
@@ -128,6 +131,7 @@ public class PlayerPhysics : MonoBehaviour
     }
     public void Ramp_To_Sharp_Move(Vector2 pos,int type)
     {
+        rb.isKinematic = false;
         rb.drag = 0;
         final_pos = pos;
         target_pos = Ramp_To_Sharp_Pos(Direction.Down,pos);
@@ -200,14 +204,33 @@ public class PlayerPhysics : MonoBehaviour
 
     public void Lean_Stick_Move(Direction dir)
     {
-        target_pos = Toolkit.DirectiontoVector(dir);
-        moving = true;
-        call_finish = false;
-        velocity = On_Platform_Move_Velocity(dir);
-        rb.drag = 0;
+        rb.isKinematic = false;
+        if (!In_Direction_Of_Gravity(Direction.Down, dir))
+        {
+            target_pos = (Vector2)transform.position + Toolkit.DirectiontoVector(dir);
+            moving = true;
+            call_finish = false;
+            velocity = Lean_Stick_Velocity(dir);
+            Debug.Log(velocity);
+            rb.drag = 0;
+            rb.isKinematic = true;
+        }
+    }
+
+    private Vector2 Lean_Stick_Velocity(Direction dir)
+    {
+        if (dir == Direction.Right)
+            return new Vector2(0.95f, 0);
+        else if (dir == Direction.Left)
+            return new Vector2(-1, 0);
+        else if (dir == Direction.Up)
+            return new Vector2(1, 0);
+        else
+            return new Vector2(-1, 0);
     }
     private void Sharp_To_Ramp_Move(int type)
     {
+        rb.isKinematic = false;
         rb.drag = 0;
         velocity = Sharp_To_Ramp_Velocity(Direction.Down, final_pos);
         target_pos = Sharp_To_Ramp_Pos(Direction.Down, final_pos);
@@ -220,6 +243,7 @@ public class PlayerPhysics : MonoBehaviour
     
     public void Ramp_To_Ramp_Move(Vector2 pos)
     {
+        rb.isKinematic = false;
         rb.drag = 0;
         target_pos = pos;
         velocity = (pos - (Vector2)transform.position) * 1.2f;
@@ -230,6 +254,7 @@ public class PlayerPhysics : MonoBehaviour
     }
     public void Simple_Move(Vector2 pos)
     {
+        rb.isKinematic = false;
         call_finish = true;
         on_ramp = false;
         rb.drag = 0;
@@ -242,6 +267,7 @@ public class PlayerPhysics : MonoBehaviour
 
     public void Ramp_To_Corner_Move(Vector2 pos,int type)
     {
+        rb.isKinematic = false;
         call_finish = true;
         target_pos = Ramp_To_Corner_Pos(Direction.Down,pos);
         velocity = Ramp_To_Corner_Velocity(Direction.Down, pos);
