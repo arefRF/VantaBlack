@@ -15,12 +15,19 @@ public class Container : ParentContainer {
 
     private void Swap(Player player)
     {
-        List<AbilityType> temp = abilities;
-        abilities = null;
-        ContainerAbilityChanged(false, 0);
+        List<AbilityType> temp = new List<AbilityType>();
+        for (int i = 0; i < abilities.Count; i++)
+            temp.Add(abilities[i]);
+        abilities.Clear();
         abilities = player.abilities;
-        ContainerAbilityChanged(true, abilities.Count);
         player.abilities = temp;
+        api.ChangeSprite(this);
+        if (this is FunctionalContainer) {
+            if ((player.abilities.Count != 0 && player.abilities[0] == AbilityType.Fuel) || (abilities.Count != 0 && abilities[0] == AbilityType.Fuel))
+                if(((FunctionalContainer)this).on)
+                    ((FunctionalContainer)this).Action_Fuel(true);
+        }
+            
     }
 
     private void PlayerAbsorbAbilities(Player player)
