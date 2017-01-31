@@ -33,7 +33,6 @@ public class PlayerPhysics : MonoBehaviour
             if (Mathf.Abs(target_pos.x - transform.position.x) < 0.05)
             {
                 // if passed or so near to destination
-                Debug.Log("passed");
                 rb.velocity = new Vector2(0, 0);
                 velocity = new Vector2(0, 0);
                 rb.isKinematic = true;
@@ -53,6 +52,17 @@ public class PlayerPhysics : MonoBehaviour
         }
     }
 
+    //ramp to fall
+    public void Ramp_To_Fall(Vector2 pos)
+    {
+        moving = true;
+        rb.isKinematic = false;
+        on_ramp = false;
+        target_pos = pos;
+        velocity =  pos - (Vector2)transform.position;
+
+    }
+
     // when platform is moving move the player
     public void On_Platform_Move(Direction dir)
     {
@@ -61,7 +71,6 @@ public class PlayerPhysics : MonoBehaviour
         // if in direction of gravity do nothing
         if(!In_Direction_Of_Gravity(Direction.Down,dir))
         {
-            Debug.Log("In DIrection of gravity");
             moving = true;
             call_finish = false;
             target_pos = (Vector2)transform.position + Toolkit.DirectiontoVector(dir);
@@ -196,7 +205,6 @@ public class PlayerPhysics : MonoBehaviour
             moving = true;
             call_finish = false;
             velocity = Lean_Stick_Velocity(dir);
-            Debug.Log(velocity);
             rb.drag = 0;
             rb.isKinematic = true;
         }
@@ -287,7 +295,6 @@ public class PlayerPhysics : MonoBehaviour
         velocity = Ramp_To_Corner_Velocity(Direction.Down, pos);
         moving = true;
         rb.drag = 0;
-        Debug.Log(target_pos);
     }
 
     private Vector2 Ramp_To_Corner_Velocity(Direction gravity,Vector2 target)
