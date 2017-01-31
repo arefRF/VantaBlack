@@ -45,13 +45,12 @@ public class FunctionalContainer : Container {
             on = !on;
             laston = !on;
             api.ChangeSprite(this);
-            if (on && stucklevel > 0)
+            if (!on && stucklevel > 0)
             {
                 api.AddToStuckList(this);
                 gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = false;
                 return;
             }
-            stucklevel = 0;
             //stucklevel = 0;
         }
         else if (stucklevel != 0 && !resetstucked)
@@ -122,6 +121,7 @@ public class FunctionalContainer : Container {
             }
             gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = false;
         }
+        Debug.Log(stucklevel);
     }
     public void Action_Fuel_Continue(Direction dir,int count)
     {
@@ -164,6 +164,7 @@ public class FunctionalContainer : Container {
         }
         if (on)
         {
+            Debug.Log(stucklevel);
             if (increased) {
                 if (stucklevel < 1)
                     Action_Fuel_Continue(direction, count);
@@ -179,13 +180,19 @@ public class FunctionalContainer : Container {
                 else
                 {
                     stucklevel--;
+                    if (abilities.Count == 0)
+                    {
+                        on = false;
+                        api.ChangeSprite(this);
+                    }
                 }
             }
         }
         else if (api.isStucked(this))
         {
-            if (!increased)
-                Action_Fuel_Continue(Toolkit.ReverseDirection(direction), count);
+            if(on)
+                if (!increased)
+                    Action_Fuel_Continue(Toolkit.ReverseDirection(direction), count);
         }
         else
         {
