@@ -62,7 +62,6 @@ public class Player : Unit
         {
             if (temp[i] is Ramp)
             {
-                Debug.Log(temp[i].position);
                 ramp = (Ramp)temp[i];
                 if (ramp.IsOnRampSide(Toolkit.ReverseDirection(Starter.GetGravityDirection())))
                 {
@@ -183,6 +182,8 @@ public class Player : Unit
     {
         bool falling = false;
         if (lean)
+            return;
+        if (Toolkit.HasRamp(position) || Toolkit.HasBranch(position))
             return;
         if (!Toolkit.IsEmpty(Toolkit.VectorSum(position, gravitydirection)))
             return;
