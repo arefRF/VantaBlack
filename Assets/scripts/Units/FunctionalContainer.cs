@@ -36,18 +36,19 @@ public class FunctionalContainer : Container {
         api.RemoveFromStuckList(this);
         reservedmovebool.Clear();
         reservedmoveint.Clear();
+        Debug.Log(shouldmove);
         if (first)
         {
             on = !on;
             laston = !on;
             api.ChangeSprite(this);
-            Debug.Log(on);
             if (on && stucklevel > 0)
             {
                 api.AddToStuckList(this);
                 gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = false;
                 return;
             }
+            stucklevel = 0;
             //stucklevel = 0;
         }
         else if (stucklevel != 0 && !resetstucked)
@@ -61,6 +62,7 @@ public class FunctionalContainer : Container {
         }
         if (movedone)
         {
+            //if (moved == abilities.Count)
             Debug.Log("move done");
             resetstucked = false;
             movedone = false;
@@ -111,13 +113,11 @@ public class FunctionalContainer : Container {
             api.AddToStuckList(this);
             shouldmove = moved;
             moved = 0;
-            Debug.Log(flag);
             if (flag)
             {
                 api.CheckstuckedList(this);
             }
             gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = false;
-            Debug.Log(stucklevel);
         }
     }
     public void Action_Fuel_Continue(Direction dir,int count)

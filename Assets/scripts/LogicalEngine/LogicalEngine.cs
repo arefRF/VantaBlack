@@ -218,10 +218,11 @@ public class LogicalEngine {
                 else
                 {
                     units = GetUnits(Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction)));
-                    if (units[0] is Ramp)
+                    if (Toolkit.HasRamp(Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction))))
                     {
+                        ramp = Toolkit.GetRamp(Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction)));
                         database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                        apigraphic.MovePlayer_Ramp_1(player, Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction)),((Ramp)units[0]).type);
+                        apigraphic.MovePlayer_Ramp_1(player, Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction)),ramp.type);
                         player.position = Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction));
                     }
                     else
@@ -382,6 +383,7 @@ public class LogicalEngine {
     }
     public List<Unit> GetUnits(Vector2 position)
     {
+        Debug.Log(database.units[(int)position.x, (int)position.y].Count);
         return database.units[(int)position.x, (int)position.y];
     }
 
@@ -489,9 +491,10 @@ public class LogicalEngine {
             {
                 database.player[i].lean = false;
                 apigraphic.LeanFinished(database.player[i]);
+                database.player[i].ApplyGravity(database.gravity_direction, database.units);
             }
         }
-        Applygravity();
+        //Applygravity();
     }
 
     public void ActionKeyPressed()
