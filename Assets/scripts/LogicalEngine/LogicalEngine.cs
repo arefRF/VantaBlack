@@ -110,12 +110,10 @@ public class LogicalEngine {
         {
             if (database.player[i].lean)
             {
-                Debug.Log("leaning");
                 if (database.player[i].IsRelatedLean(parent))
                     players.Add(database.player[i]);
             }
         }
-        Debug.Log(players.Count);
         return players;
     }
 

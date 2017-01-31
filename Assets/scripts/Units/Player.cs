@@ -217,8 +217,7 @@ public class Player : Unit
     }
     public bool IsRelatedLean(GameObject parent)
     {
-        List<Unit> units = api.engine_GetUnits(this, leandirection);
-        Debug.Log(Toolkit.VectorSum(this.position, leandirection));
+        List<Unit> units = api.engine_GetUnits(this, leandirection);    
         for(int i=0; i<units.Count; i++)
         {
             if (parent == units[i].gameObject.transform.parent.gameObject)

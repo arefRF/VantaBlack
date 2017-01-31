@@ -32,10 +32,17 @@ public class FunctionalContainer : Container {
         {
             on = !on;
             api.ChangeSprite(this);
-            stucklevel = 0;
+            if (on && stucklevel > 0)
+            {
+                api.AddToStuckList(this);
+                gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = false;
+                return;
+            }
+            //stucklevel = 0;
         }
         else if (stucklevel != 0)
         {
+            Debug.Log("not zero");
             api.AddToStuckList(this);
             gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = false;
             return;
