@@ -114,7 +114,7 @@ public class Player : Unit
         return true;
     }
 
-    public override bool CanMove(Direction dir)
+    public override bool CanMove(Direction dir, GameObject parent)
     {
         List<Unit> units = api.engine_GetUnits(this, dir);
         players = new List<Unit>();
@@ -140,12 +140,12 @@ public class Player : Unit
                     case Direction.Down: if (ramp.type != 1 && ramp.type != 4) return false; break;
                 }
             }
-            else
+            else if(units[i].transform.parent.gameObject != parent)
                 return false;
         }
         for (int i = 0; i < players.Count; i++)
         {
-            if (!players[i].CanMove(dir))
+            if (!players[i].CanMove(dir, parent))
                 return false;
         }
         int bound = players.Count;

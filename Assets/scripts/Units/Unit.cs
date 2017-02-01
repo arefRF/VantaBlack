@@ -37,7 +37,7 @@ public class Unit : MonoBehaviour {
         return fallingunit.position;
     }
 
-    public virtual bool CanMove(Direction dir)
+    public virtual bool CanMove(Direction dir, GameObject parent)
     {
         List<Unit> units = api.engine_GetUnits(this, dir);
         players = new List<Unit>();
@@ -63,7 +63,7 @@ public class Unit : MonoBehaviour {
         int bound = players.Count;
         for (int i=0; i < bound; i++)
         {
-            if (!players[i].CanMove(dir))
+            if (!players[i].CanMove(dir, parent))
                 return false;
             players.AddRange(players[i].players);
         }
