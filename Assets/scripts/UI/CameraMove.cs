@@ -4,7 +4,6 @@ using System.Collections;
 public class CameraMove : MonoBehaviour {
     public float x;
     public float y;
-    private static int moving;
     private static bool is_moving;
     public float moveTime = 0.1f;
     private float inverseMoveTime;
@@ -15,7 +14,6 @@ public class CameraMove : MonoBehaviour {
     {
         inverseZoomTime = 1f / zoomTime;
         inverseMoveTime = 1f / moveTime;
-        moving = 0;
         if (zoom == 0)
         {
             zoom = Camera.main.orthographicSize;

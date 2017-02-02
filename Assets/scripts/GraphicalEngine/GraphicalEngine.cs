@@ -13,7 +13,6 @@ public class GraphicalEngine : MonoBehaviour {
     private float fall_distance;
     private Vector2 player_pos;
     private float lean_offset = 0.2f;
-    private float top_rotate;
     private PlayerGraphics pl_graphics;
     private APIGraphic api;
     private LogicalEngine engine;
@@ -22,7 +21,6 @@ public class GraphicalEngine : MonoBehaviour {
     {
         engine = Starter.GetEngine();
         database = Starter.GetDataBase();
-        top_rotate = 75;
         api = engine.apigraphic;
        
     }
