@@ -27,10 +27,10 @@ public class APIGraphic{
     }
 
     //Ramp to fall
-    public void MovePlayer_Ramp_3(Player player, Vector2 position,int type)
+    public void MovePlayer_Ramp_3(Player player, Vector2 position)
     {
         Debug.Log("Ramp to Fall");
-        player.gameObject.GetComponent<PlayerPhysics>().Ramp_To_Fall(position,type);
+        player.gameObject.GetComponent<PlayerPhysics>().Ramp_To_Fall(position);
     }
 
     // Ramp to corner

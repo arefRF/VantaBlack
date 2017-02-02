@@ -30,9 +30,9 @@ public class PlayerPhysics : MonoBehaviour
     
 
     //ramp to fall
-    public void Ramp_To_Fall(Vector2 pos,int type)
+    public void Ramp_To_Fall(Vector2 pos)
     {
-       
+        StartCoroutine(Constant_Move(pos, move_time, true));
     }
 
     // when platform is moving move the player
@@ -71,7 +71,7 @@ public class PlayerPhysics : MonoBehaviour
     {
         Vector2 end1 = Ramp_To_Sharp_Pos(Direction.Down, pos);
         Vector2 end2 = pos + On_Ramp_Pos(type);
-        StartCoroutine(Ramp_To_Sharp_Coroutine(end1,end2,move_time,true));
+        StartCoroutine(Ramp_To_Sharp_Coroutine(end1,end2,move_time,true,type));
         sharp_type = type;
     }
 
@@ -203,15 +203,17 @@ public class PlayerPhysics : MonoBehaviour
     // ramp to corner move
     public void Ramp_To_Corner_Move(Vector2 pos,int type)
     {
-        pos =Ramp_To_Corner_Pos(Direction.Down, pos);
+        Rotate_On_Ramp(type);
+        pos += Ramp_To_Corner_Pos(Direction.Down, pos);
         StartCoroutine(Constant_Move(pos, move_time, true));
     }
 
 
     // ramp to sharp couroutine
     
-    private IEnumerator Ramp_To_Sharp_Coroutine(Vector2 end1, Vector2 end2, float move_time, bool call_finish)
+    private IEnumerator Ramp_To_Sharp_Coroutine(Vector2 end1, Vector2 end2, float move_time, bool call_finish,int type)
     {
+        // 1st part of mvoe
         float remain_distance = ((Vector2)player_transofrm.position - end1).sqrMagnitude;
         while (remain_distance > float.Epsilon)
         {
@@ -219,7 +221,10 @@ public class PlayerPhysics : MonoBehaviour
             player_transofrm.position = Vector3.MoveTowards(player_transofrm.position, end1, Time.deltaTime * 1 /  move_time);
             yield return null;
         }
+
+        // 2nd part of move
         remain_distance = ((Vector2)player_transofrm.position - end2).sqrMagnitude;
+        Rotate_On_Ramp(type);
         while(remain_distance > float.Epsilon)
         {
             remain_distance = ((Vector2)player_transofrm.position - end2).sqrMagnitude;
@@ -273,9 +278,9 @@ public class PlayerPhysics : MonoBehaviour
         if(gravity == Direction.Down)
         {
             if (target.x - transform.position.x > 0)
-                return (Vector2)transform.position + new Vector2(0.1f, 0);
+                return  new Vector2(-0.3f, 0.2f);
             else
-                return (Vector2)transform.position + new Vector2(-0.1f, 0);
+                return  new Vector2(0.3f, 0.2f);
         }
 
         return new Vector2(0, 0);
