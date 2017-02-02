@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UnityEditor.SceneManagement;
+using UnityEngine.SceneManagement;
 public class Gate : Container {
 
     public string sceneName;
@@ -45,7 +45,7 @@ public class Gate : Container {
 
     private void Change_Scene()
     {
-        EditorSceneManager.LoadScene(sceneName);
+       SceneManager.LoadScene(sceneName);
     }
     public override void PlayerAbsorb(Player player)
     {

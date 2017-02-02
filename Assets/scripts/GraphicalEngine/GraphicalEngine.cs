@@ -13,7 +13,6 @@ public class GraphicalEngine : MonoBehaviour {
     private float fall_distance;
     private Vector2 player_pos;
     private float lean_offset = 0.2f;
-    private float top_rotate;
     private PlayerGraphics pl_graphics;
     private APIGraphic api;
     private LogicalEngine engine;
@@ -22,7 +21,6 @@ public class GraphicalEngine : MonoBehaviour {
     {
         engine = Starter.GetEngine();
         database = Starter.GetDataBase();
-        top_rotate = 75;
         api = engine.apigraphic;
        
     }
@@ -47,6 +45,15 @@ public class GraphicalEngine : MonoBehaviour {
 
     public void Simple_Container(SimpleContainer container)
     {
+        if (container.abilities.Count != 0)
+        {
+            if (container.abilities[0] == AbilityType.Key)
+            {
+                container.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load("Doors\\Key", typeof(Sprite));
+            }
+        }
+        else
+            container.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load("", typeof(Sprite));
         Container_Change_Number(container);
     }
 
@@ -65,9 +72,16 @@ public class GraphicalEngine : MonoBehaviour {
         }
         container.transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load(lights, typeof(Sprite));
     }
+
+    public void Gate(Gate gate)
+    {
+        gate.GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load("Doors\\Door 2", typeof(Sprite));
+    }
   
     public void Dynamic_Container(DynamicContainer container)
     {
+
+        // On or Off Sprite
         string toggle = @"Containers\";
         if (container.on)
         {
@@ -81,16 +95,31 @@ public class GraphicalEngine : MonoBehaviour {
         }
         container.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load(toggle, typeof(Sprite));
 
-        int rot = 0;
-        switch (container.direction)
-        {
-            case Direction.Right: rot = 0; break;
-            case Direction.Left: rot = 180; break;
-            case Direction.Up: rot = 90; break;
-            case Direction.Down: rot = 270; break;
-        }
-        container.transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0,0,rot));
+        //Change Number of 
         Container_Change_Number(container);
+
+
+        // Rotation for Abilities with DIrection
+        if (container.abilities.Count != 0)
+        {
+            if (container.abilities[0] == AbilityType.Fuel)
+            {
+                int rot = 0;
+                switch (container.direction)
+                {
+                    case Direction.Right: rot = 0; break;
+                    case Direction.Left: rot = 180; break;
+                    case Direction.Up: rot = 90; break;
+                    case Direction.Down: rot = 270; break;
+                }
+                container.transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0, 0, rot));
+                
+            }
+            else if (container.abilities[0] == AbilityType.Key)
+            {
+                container.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load("Doors\\Key", typeof(Sprite));
+            }
+        }
 
     }
 
