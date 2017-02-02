@@ -18,6 +18,7 @@ public class PlayerPhysics : MonoBehaviour
     private Quaternion sprite_rotation;
     private CircleCollider2D col;
     private bool falling;
+    private Direction move_dir;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -27,11 +28,20 @@ public class PlayerPhysics : MonoBehaviour
         api = engine.apigraphic;
         sprite_rotation = transform.GetChild(0).rotation;
     }
-    void FixedUpdate()
+
+    private bool Has_Passed()
+    {
+        if (move_dir == Direction.Right || move_dir == Direction.Left)
+            return Mathf.Abs(target_pos.x - transform.position.x) < 0.05;
+        else
+            return Mathf.Abs(target_pos.y - transform.position.y) < 0.05;
+    }
+    void Update()
     {
         if (moving)
         {
-            if (Mathf.Abs(target_pos.x - transform.position.x) < 0.05)
+            Debug.Log("moving");
+            if (Has_Passed())
             {
                 // if passed or so near to destination
                 rb.velocity = new Vector2(0, 0);
@@ -41,10 +51,13 @@ public class PlayerPhysics : MonoBehaviour
                     api.MovePlayerFinished(gameObject);
                 moving = false;
                 transform.position = target_pos;
-                
+
             }
             else // To keep Velocity Constant
+            {
+                Debug.Log(rb.velocity);
                 rb.velocity = velocity;
+            }
         }
         else if (on_sharp)
         {
@@ -76,17 +89,14 @@ public class PlayerPhysics : MonoBehaviour
     // when platform is moving move the player
     public void On_Platform_Move(Direction dir)
     {
-        rb.isKinematic = false;
-        Debug.Log("On platform move");
-        // if in direction of gravity do nothing
-        if(!In_Direction_Of_Gravity(Direction.Down,dir))
-        {
+            move_dir = dir;
+            rb.isKinematic = true;
+            Debug.Log("On platform move");
             moving = true;
             call_finish = false;
             target_pos = (Vector2)transform.position + Toolkit.DirectiontoVector(dir);
             rb.drag = 0;
             velocity = On_Platform_Move_Velocity(dir); ;
-        }
 
     }
 
@@ -208,28 +218,26 @@ public class PlayerPhysics : MonoBehaviour
 
     public void Lean_Stick_Move(Direction dir)
     {
-        rb.isKinematic = false;
-        if (!In_Direction_Of_Gravity(Direction.Down, dir))
-        {
-            target_pos = (Vector2)transform.position + Toolkit.DirectiontoVector(dir);
-            moving = true;
-            call_finish = false;
-            velocity = Lean_Stick_Velocity(dir);
-            rb.drag = 0;
-            rb.isKinematic = true;
-        }
+        move_dir = dir;
+        rb.drag = 0;
+        rb.isKinematic = true;
+        target_pos = (Vector2)transform.position + Toolkit.DirectiontoVector(dir);
+        velocity = Lean_Stick_Velocity(dir);
+        moving = true;
+        call_finish = false;
+
     }
 
     private Vector2 Lean_Stick_Velocity(Direction dir)
     {
         if (dir == Direction.Right)
-            return new Vector2(0.95f, 0);
+            return new Vector2(1f, 0);
         else if (dir == Direction.Left)
             return new Vector2(-1, 0);
         else if (dir == Direction.Up)
-            return new Vector2(1, 0);
+            return new Vector2(0, 1);
         else
-            return new Vector2(-1, 0);
+            return new Vector2(0,-1);
     }
     private void Sharp_To_Ramp_Move(int type)
     {
@@ -246,6 +254,7 @@ public class PlayerPhysics : MonoBehaviour
     
     public void Ramp_To_Ramp_Move(Vector2 pos,int type)
     {
+        
         col.radius = 1.5f;
         rb.isKinematic = false;
         rb.drag = 0;
@@ -257,6 +266,25 @@ public class PlayerPhysics : MonoBehaviour
         Rotate_On_Ramp(type);
     }
 
+    private Direction Target_To_Direction(Vector2 target)
+    {
+        if (Mathf.Abs(transform.position.x - target.x) > Mathf.Abs(transform.position.y - target.y))
+        {
+            if (target.x > transform.position.x)
+                return Direction.Right;
+            else
+                return Direction.Left;
+
+        }
+        else
+        {
+            if (target.y > transform.position.y)
+                return Direction.Up;
+            else
+                return Direction.Down;
+        }
+             
+    }
     private Vector2 Ramp_To_Ramp_Velocity(Direction dir,int type)
     {
         if(type == 4)
@@ -287,6 +315,7 @@ public class PlayerPhysics : MonoBehaviour
     }
     public void Simple_Move(Vector2 pos)
     {
+        move_dir = Target_To_Direction(pos);
         col.radius = 2;
         rb.isKinematic = false;
         call_finish = true;

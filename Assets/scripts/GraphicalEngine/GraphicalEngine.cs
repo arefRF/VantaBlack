@@ -47,6 +47,15 @@ public class GraphicalEngine : MonoBehaviour {
 
     public void Simple_Container(SimpleContainer container)
     {
+        if (container.abilities.Count != 0)
+        {
+            if (container.abilities[0] == AbilityType.Key)
+            {
+                container.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load("Doors\\Key", typeof(Sprite));
+            }
+        }
+        else
+            container.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load("", typeof(Sprite));
         Container_Change_Number(container);
     }
 
@@ -64,6 +73,11 @@ public class GraphicalEngine : MonoBehaviour {
             default: lights += "Lights Infinite"; break;
         }
         container.transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load(lights, typeof(Sprite));
+    }
+
+    public void Gate(Gate gate)
+    {
+        gate.GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load("Doors\\Door 2", typeof(Sprite));
     }
   
     public void Dynamic_Container(DynamicContainer container)
@@ -102,6 +116,10 @@ public class GraphicalEngine : MonoBehaviour {
                 }
                 container.transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0, 0, rot));
                 
+            }
+            else if (container.abilities[0] == AbilityType.Key)
+            {
+                container.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load("Doors\\Key", typeof(Sprite));
             }
         }
 
