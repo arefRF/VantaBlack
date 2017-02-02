@@ -233,6 +233,7 @@ public class PlayerPhysics : MonoBehaviour
         }
         if (call_finish)
             api.MovePlayerFinished(gameObject);
+        api.Check_Camera(player);
     }
     // For Simple Constant Velocity Moves
     private IEnumerator Constant_Move(Vector2 end,float move_time,bool call_finish)
@@ -248,6 +249,7 @@ public class PlayerPhysics : MonoBehaviour
 
         if (call_finish)
             api.MovePlayerFinished(gameObject);
+        api.Check_Camera(player);
         move_type = MoveType.Idle;
         // if it needs Call Finished Move of API
     }
@@ -271,6 +273,7 @@ public class PlayerPhysics : MonoBehaviour
                 case MoveType.Falling: api.Fall_Finish(player); break;
             }
         }
+        api.Check_Camera(player);
 
     }
     private Vector2 Ramp_To_Corner_Pos(Direction gravity,Vector2 target)
