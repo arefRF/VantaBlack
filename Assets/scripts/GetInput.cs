@@ -12,6 +12,8 @@ public class GetInput : MonoBehaviour {
     private float camera_speed = 0.05f;
     private bool is_space;
     private bool is_walking;
+    private bool is_holding;
+    private Direction hold_direction;
     // Use this for initialization
     void Start()
     {
@@ -55,26 +57,52 @@ public class GetInput : MonoBehaviour {
                 if (is_space)
                     Get_Space_Arrows();
                 if (Input.GetKeyDown(KeyCode.W))
+                {
                     api.AbsorbRelease(Direction.Up);
+                    is_holding = true;
+                    hold_direction = Direction.Up;
+                    StartCoroutine(Wait_For_Absorb_Hold());
+                }
                 if (Input.GetKeyDown(KeyCode.S))
+                {
                     api.AbsorbRelease(Direction.Down);
+                    is_holding = true;
+                    hold_direction = Direction.Down;
+                    StartCoroutine(Wait_For_Absorb_Hold());
+                }
                 if (Input.GetKeyDown(KeyCode.A))
+                {
                     api.AbsorbRelease(Direction.Left);
+                    hold_direction = Direction.Left;
+                    is_holding = true;
+                    StartCoroutine(Wait_For_Absorb_Hold());
+                }
                 if (Input.GetKeyDown(KeyCode.D))
+                {
                     api.AbsorbRelease(Direction.Right);
-                if (Input.GetKeyDown(KeyCode.I))
-                    api.AbsorbReleaseHold(Direction.Up);
-                if (Input.GetKeyDown(KeyCode.K))
-                    api.AbsorbReleaseHold(Direction.Down);
-                if (Input.GetKeyDown(KeyCode.J))
-                    api.AbsorbReleaseHold(Direction.Left);
-                if (Input.GetKeyDown(KeyCode.L))
-                    api.AbsorbReleaseHold(Direction.Right);
+                    is_holding = true;
+                    hold_direction = Direction.Right;
+                    StartCoroutine(Wait_For_Absorb_Hold());
+                }
+                if (Input.GetKeyUp(KeyCode.D) || Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.S))
+                    is_holding = false;
             }
 
         }
     }
 
+    private IEnumerator Wait_For_Absorb_Hold()
+    {
+        yield return new WaitForSeconds(0.5f);
+        if (is_holding)
+            Hold_Absorb_Release();
+    }
+
+
+    private void Hold_Absorb_Release()
+    {
+        api.AbsorbReleaseHold(hold_direction);
+    }
     // Get Arrows if Ability needs it
     private void Get_Space_Arrows()
     {

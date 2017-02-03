@@ -33,6 +33,7 @@ public class APIGraphic{
         player.gameObject.GetComponent<PlayerPhysics>().Ramp_To_Fall(position);
     }
 
+  
     // Ramp to corner
     public void MovePlayer_Ramp_4(Player player, Vector2 position,int type)
     {
@@ -110,8 +111,12 @@ public class APIGraphic{
     public void MovePlayerFinished(GameObject player_obj)
     {
         logicalengine.graphic_PlayerMoveAnimationFinished(player_obj.GetComponent<Player>());
+           
     }
-    
+    public void Check_Camera(Player player)
+    {
+        player.GetComponent<PlayerGraphics>().Check_Camera();
+    }    
     public void Fall(Player player, Vector2 position)
     {
         Debug.Log("Fall");
@@ -227,6 +232,8 @@ public class APIGraphic{
         if (unit is SimpleContainer)
             graphicalengine.Simple_Container((SimpleContainer)unit);
         else if (unit is DynamicContainer)
-            graphicalengine.Dynamic_Container((DynamicContainer) unit);
+            graphicalengine.Dynamic_Container((DynamicContainer)unit);
+        else if (unit is Gate)
+            graphicalengine.Gate((Gate)unit);
     }
 }
