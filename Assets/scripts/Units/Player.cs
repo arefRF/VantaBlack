@@ -192,7 +192,10 @@ public class Player : Unit
         }
         while (true)
         {
+            Debug.Log("while");
             Vector2 pos = Toolkit.VectorSum(position, gravitydirection);
+            if (pos.y <= 0 || pos.x <= 0)
+                break;
             if (Toolkit.IsEmpty(pos)) //empty space
             {
                 api.RemoveFromDatabase(this);
@@ -205,13 +208,15 @@ public class Player : Unit
                 break;
             }
         }
+        Debug.Log("falllllllllllllllllllllllllllllllllllllllllllll");
         api.graphicalengine_Fall(this, position);
     }
 
     public void FallFinished()
     {
         Vector2 pos = Toolkit.VectorSum(position, Starter.GetGravityDirection());
-        
+        if (pos.x <= 0 || pos.y <= 0)
+            return;
         if (Toolkit.HasRamp(pos)) //ramp
         {
             if (Toolkit.IsdoubleRamp(pos))
