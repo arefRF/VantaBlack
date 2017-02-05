@@ -187,7 +187,6 @@ public class Player : Unit
             return;
         if (!Toolkit.IsEmpty(Toolkit.VectorSum(position, gravitydirection)))
         {
-            FallFinished();
             return;
         }
         while (true)
@@ -207,7 +206,6 @@ public class Player : Unit
                 break;
             }
         }
-        Debug.Log("falllllllllllllllllllllllllllllllllllllllllllll");
         api.graphicalengine_Fall(this, position);
     }
 

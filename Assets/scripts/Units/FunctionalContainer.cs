@@ -33,6 +33,7 @@ public class FunctionalContainer : Container {
 
     public void Action_Fuel(bool first)
     {
+        Debug.Log("fiiiiiiiiiiiiiiiiiiiirsssssst");
         gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = true;
         api.RemoveFromStuckList(this);
         reservedmovebool.Clear();
@@ -62,6 +63,10 @@ public class FunctionalContainer : Container {
                 }
             }
             //stucklevel = 0;
+        }
+        if (stucklevel > 0)
+        {
+            dir = stuckdirection;
         }
         else if (stucklevel != 0 && !resetstucked)
         {
@@ -101,6 +106,8 @@ public class FunctionalContainer : Container {
             if (stucklevel > 0)
                 stucklevel--;
             moved++;
+            Debug.Log(moved);
+            Debug.Log(shouldmove);
             if (moved == shouldmove)
                 movedone = true;
         }
@@ -128,6 +135,7 @@ public class FunctionalContainer : Container {
     }
     public void Action_Fuel_Continue(Direction dir,int count)
     {
+        Debug.Log("continueeeeeeeeeeeee");
         gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = true;
         api.RemoveFromStuckList(this);
         if (count == 0)
@@ -144,6 +152,7 @@ public class FunctionalContainer : Container {
         }
         else
         {
+            Debug.Log("in here");
             api.AddToStuckList(this);
             stuckdirection = dir;
             stucklevel++;
@@ -172,9 +181,16 @@ public class FunctionalContainer : Container {
                 if (stucklevel < 1)
                     Action_Fuel_Continue(direction, count);
                 else if (direction == stuckdirection)
+                {
                     stucklevel++;
+                    api.AddToStuckList(this);
+                }
                 else
+                {
                     stucklevel--;
+                    if (stucklevel == 0)
+                        api.RemoveFromStuckList(this);
+                }
             }
             else
             {
@@ -188,9 +204,10 @@ public class FunctionalContainer : Container {
                     if (abilities.Count == 0)
                     {
                         on = false;
-                        api.RemoveFromStuckList(this);
                         api.ChangeSprite(this);
                     }
+                    if (stucklevel == 0)
+                        api.RemoveFromStuckList(this);
                 }
             }
         }

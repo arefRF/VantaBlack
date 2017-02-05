@@ -15,7 +15,7 @@ public class PlayerPhysics : MonoBehaviour
     private Player player;
     private Vector2 real_end;
 
-    void Awake()
+    void Start()
     {
         engine = Starter.GetEngine();
         api = engine.apigraphic;

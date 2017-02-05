@@ -28,6 +28,7 @@ public class LogicalEngine {
     {
         database.units = initializer.init();
         database.state = State.Idle;
+        //Applygravity();
     }
 
     public bool MoveUnit(Unit unit, Direction dir)
@@ -342,7 +343,7 @@ public class LogicalEngine {
         }
         database.units[(int)player.position.x, (int)player.position.y].Add(player);
     }
-    private void Applygravity()
+    public void Applygravity()
     {
         for(int i=0; i<database.player.Count; i++)
         {
