@@ -6,19 +6,17 @@ public class PlayerPhysics : MonoBehaviour
     public float move_time = 0.5f;
     public float fall_acceleration = 3;
     public float fall_velocity = 1;
-
     private float platform_move_time = 1;
     private APIGraphic api;
     private LogicalEngine engine;
     private int sharp_type;
-    private CircleCollider2D col;
     private Transform player_transofrm;
     private MoveType move_type;
     private Player player;
     private Vector2 real_end;
-    void Start()
+
+    void Awake()
     {
-        col = GetComponent<CircleCollider2D>();
         engine = Starter.GetEngine();
         api = engine.apigraphic;
         player_transofrm = transform;
@@ -59,7 +57,7 @@ public class PlayerPhysics : MonoBehaviour
     }
     public void Block_To_Ramp_Move(Vector2 pos, int type)
     {
-        col.radius = 1.5f;
+
         Vector2 on_ramp = On_Ramp_Pos(type);
         pos = (Vector2)pos + on_ramp;
         StartCoroutine(Constant_Move(pos, move_time, true));
@@ -152,8 +150,6 @@ public class PlayerPhysics : MonoBehaviour
     
     public void Ramp_To_Ramp_Move(Vector2 pos,int type)
     {
-        
-        col.radius = 1.5f;
         Vector2 on_ramp_pos = On_Ramp_Pos(type);
         pos = (Vector2)pos + on_ramp_pos;
         StartCoroutine(Constant_Move(pos, move_time, true));
@@ -187,17 +183,13 @@ public class PlayerPhysics : MonoBehaviour
     }
     public void Simple_Move(Vector2 pos)
     {
-
-        col.radius = 2;
-        Rotate_On_Block();
-        Debug.Log(move_type);
-        if (move_type != MoveType.BlockToBlock)
+        if (move_type != MoveType.Falling)
         {
+            Rotate_On_Block();
             move_type = MoveType.BlockToBlock;
             StartCoroutine(Constant_Move(pos, move_time, true));
         }
-        else
-            real_end = pos;
+
     }
 
     // ramp to corner move
@@ -238,12 +230,11 @@ public class PlayerPhysics : MonoBehaviour
     // For Simple Constant Velocity Moves
     private IEnumerator Constant_Move(Vector2 end,float move_time,bool call_finish)
     {
-        real_end = end;
         float remain_distance = ((Vector2)player_transofrm.position - end).sqrMagnitude;
         while(remain_distance > float.Epsilon)
         {
-            remain_distance = ((Vector2)player_transofrm.position - real_end).sqrMagnitude;
-            player_transofrm.position = Vector3.MoveTowards(player_transofrm.position, real_end, Time.deltaTime * 1 / move_time);
+            remain_distance = ((Vector2)player_transofrm.position - end).sqrMagnitude;
+            player_transofrm.position = Vector2.MoveTowards(player_transofrm.position, end, Time.deltaTime * 1 / move_time);
             yield return null;
         }
 

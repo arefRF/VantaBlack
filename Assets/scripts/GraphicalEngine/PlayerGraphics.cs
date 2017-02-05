@@ -46,7 +46,6 @@ public class PlayerGraphics : MonoBehaviour {
     
     public void Check_Camera()
     {
-        Debug.Log("Check Camera");
         if(Mathf.Abs(unmoved_pos.x - transform.position.x)> camera_offset.x)
         {  
             StartCoroutine(Smooth_Move_Camera(new Vector3( Camera_Pos().x, Camera.main.transform.position.y, -15)));
