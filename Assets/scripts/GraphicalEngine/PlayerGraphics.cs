@@ -73,13 +73,10 @@ public class PlayerGraphics : MonoBehaviour {
 
         while (sqrRemainingDistance > float.Epsilon)
         {
+
             sqrRemainingDistance = (Camera.main.transform.position - end).sqrMagnitude;
             Vector3 newPostion = Vector3.MoveTowards(Camera.main.transform.position, end,  2 * Time.deltaTime);
-
-
             Camera.main.transform.position = newPostion;
-
-
             yield return null;
         }
  
