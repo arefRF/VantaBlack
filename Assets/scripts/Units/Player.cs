@@ -192,10 +192,9 @@ public class Player : Unit
         }
         while (true)
         {
-            Debug.Log("while");
             Vector2 pos = Toolkit.VectorSum(position, gravitydirection);
-            if (pos.y <= 0 || pos.x <= 0)
-                break;
+            /*if (pos.y <= 0 || pos.x <= 0)
+                break;*/
             if (Toolkit.IsEmpty(pos)) //empty space
             {
                 api.RemoveFromDatabase(this);

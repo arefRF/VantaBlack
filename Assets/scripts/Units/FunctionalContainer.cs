@@ -57,9 +57,9 @@ public class FunctionalContainer : Container {
                 {
                     api.AddToStuckList(this);
                     stuckdirection = dir;
+                    gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = false;
+                    return;
                 }
-                gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = false;
-                return;
             }
             //stucklevel = 0;
         }
