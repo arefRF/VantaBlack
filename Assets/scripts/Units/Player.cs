@@ -114,7 +114,7 @@ public class Player : Unit
         return true;
     }
 
-    public override bool CanMove(Direction dir)
+    public override bool CanMove(Direction dir, GameObject parent)
     {
         List<Unit> units = api.engine_GetUnits(this, dir);
         players = new List<Unit>();
@@ -140,12 +140,12 @@ public class Player : Unit
                     case Direction.Down: if (ramp.type != 1 && ramp.type != 4) return false; break;
                 }
             }
-            else
+            else if(units[i].transform.parent.gameObject != parent)
                 return false;
         }
         for (int i = 0; i < players.Count; i++)
         {
-            if (!players[i].CanMove(dir))
+            if (!players[i].CanMove(dir, parent))
                 return false;
         }
         int bound = players.Count;
@@ -192,7 +192,10 @@ public class Player : Unit
         }
         while (true)
         {
+            Debug.Log("while");
             Vector2 pos = Toolkit.VectorSum(position, gravitydirection);
+            if (pos.y <= 0 || pos.x <= 0)
+                break;
             if (Toolkit.IsEmpty(pos)) //empty space
             {
                 api.RemoveFromDatabase(this);
@@ -205,13 +208,15 @@ public class Player : Unit
                 break;
             }
         }
+        Debug.Log("falllllllllllllllllllllllllllllllllllllllllllll");
         api.graphicalengine_Fall(this, position);
     }
 
     public void FallFinished()
     {
         Vector2 pos = Toolkit.VectorSum(position, Starter.GetGravityDirection());
-        
+        if (pos.x <= 0 || pos.y <= 0)
+            return;
         if (Toolkit.HasRamp(pos)) //ramp
         {
             if (Toolkit.IsdoubleRamp(pos))

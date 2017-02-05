@@ -36,12 +36,12 @@ public class LogicalEngine {
         List<Unit> leanmove = new List<Unit>();
         if (!(unit is Box))
         {
-            if (!unit.CanMove(dir))
+            if (!unit.CanMove(dir, unit.transform.parent.gameObject))
                 return false;
             shouldmove.AddRange(unit.players);
             for (int i = 0; i < unit.ConnectedUnits.Count; i++)
             {
-                if (!unit.ConnectedUnits[i].CanMove(dir))
+                if (!unit.ConnectedUnits[i].CanMove(dir, unit.transform.parent.gameObject))
                     return false;
                 shouldmove.AddRange(unit.ConnectedUnits[i].players);
             }
@@ -67,7 +67,7 @@ public class LogicalEngine {
                         j--;
                     }
                 }
-                if (leanmove[i].CanMove(dir))
+                if (leanmove[i].CanMove(dir, unit.transform.parent.gameObject))
                 {
                     database.units[(int)leanmove[i].position.x, (int)leanmove[i].position.y].Remove(leanmove[i]);
                     leanmove[i].position = Toolkit.VectorSum(leanmove[i].position, Toolkit.DirectiontoVector(dir));
@@ -85,7 +85,7 @@ public class LogicalEngine {
                         j--;
                     }
                 }
-                if (shouldmove[i].CanMove(dir))
+                if (shouldmove[i].CanMove(dir, unit.transform.parent.gameObject))
                 {
                     database.units[(int)shouldmove[i].position.x, (int)shouldmove[i].position.y].Remove(shouldmove[i]);
                     shouldmove[i].position = Toolkit.VectorSum(shouldmove[i].position, Toolkit.DirectiontoVector(dir));

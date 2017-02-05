@@ -29,7 +29,7 @@ public class Ramp : Unit {
         return false;
     }
 
-    public override bool CanMove(Direction dir)
+    public override bool CanMove(Direction dir, GameObject parent)
     {
         List<Unit> units = api.engine_GetUnits(this, dir);
         players = new List<Unit>();
