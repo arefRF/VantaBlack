@@ -61,6 +61,7 @@ public class GetInput : MonoBehaviour {
                     api.AbsorbRelease(Direction.Up);
                     is_holding = true;
                     hold_direction = Direction.Up;
+                    StopAllCoroutines();
                     StartCoroutine(Wait_For_Absorb_Hold());
                 }
                 if (Input.GetKeyDown(KeyCode.S))
@@ -68,6 +69,7 @@ public class GetInput : MonoBehaviour {
                     api.AbsorbRelease(Direction.Down);
                     is_holding = true;
                     hold_direction = Direction.Down;
+                    StopAllCoroutines();
                     StartCoroutine(Wait_For_Absorb_Hold());
                 }
                 if (Input.GetKeyDown(KeyCode.A))
@@ -75,6 +77,7 @@ public class GetInput : MonoBehaviour {
                     api.AbsorbRelease(Direction.Left);
                     hold_direction = Direction.Left;
                     is_holding = true;
+                    StopAllCoroutines();
                     StartCoroutine(Wait_For_Absorb_Hold());
                 }
                 if (Input.GetKeyDown(KeyCode.D))
@@ -82,6 +85,7 @@ public class GetInput : MonoBehaviour {
                     api.AbsorbRelease(Direction.Right);
                     is_holding = true;
                     hold_direction = Direction.Right;
+                    StopAllCoroutines();
                     StartCoroutine(Wait_For_Absorb_Hold());
                 }
                 if (Input.GetKeyUp(KeyCode.D) || Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.S))
@@ -102,6 +106,7 @@ public class GetInput : MonoBehaviour {
     private void Hold_Absorb_Release()
     {
         api.AbsorbReleaseHold(hold_direction);
+        is_holding = false;
     }
     // Get Arrows if Ability needs it
     private void Get_Space_Arrows()
