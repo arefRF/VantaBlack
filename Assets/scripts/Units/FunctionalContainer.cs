@@ -67,6 +67,7 @@ public class FunctionalContainer : Container {
         if (stucklevel > 0)
         {
             dir = stuckdirection;
+            shouldmove = stucklevel;
         }
         else if (stucklevel != 0 && !resetstucked)
         {
@@ -196,11 +197,20 @@ public class FunctionalContainer : Container {
             {
                 if (stucklevel < 1)
                 {
+                    Debug.Log(count);
                     Action_Fuel_Continue(Toolkit.ReverseDirection(direction), count);
                 }
                 else
                 {
-                    stucklevel--;
+                    Debug.Log(direction);
+                    Debug.Log(stuckdirection);
+                    if (direction != stuckdirection)
+                    {
+                        stucklevel++;
+                        api.AddToStuckList(this);
+                    }
+                    else
+                        stucklevel--;
                     if (abilities.Count == 0)
                     {
                         on = false;
