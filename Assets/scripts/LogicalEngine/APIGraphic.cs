@@ -137,15 +137,9 @@ public class APIGraphic{
     
     public void LandOnRamp(Player player, Vector2 position, Unit fallonunit, int ramptype)
     {
+        player.GetComponent<PlayerPhysics>().Land_On_Ramp(ramptype);
         Debug.Log("Land On Ramp");
-        int x = 1, y = 1;
-        if (ramptype == 3 || ramptype == 4)
-            x = -1;
-        if (ramptype == 2 || ramptype == 3)
-            y = -1;
         logicalengine.graphic_LandFinished(player);
-        
-        player.gameObject.transform.position =  (Vector2)position + new Vector2(x * 0.3f, y * 0.3f);
     }
 
     public void MovePlayerToBranch(Player player, Vector2 position, bool isonramp)

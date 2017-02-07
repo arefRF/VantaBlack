@@ -74,6 +74,11 @@ public class PlayerPhysics : MonoBehaviour
         StartCoroutine(Block_To_Ramp_Coroutine(end1,end2,move_time,true,type));
         
     }
+    
+    public void Land_On_Ramp(int type)
+    {
+        Rotate_On_Ramp(type);
+    }
 
     private Vector2 Block_To_Ramp_Pos(int type)
     {

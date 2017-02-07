@@ -70,7 +70,7 @@ public class GraphicalEngine : MonoBehaviour {
             case 4: lights += "Lights 4"; break;
             default: lights += "Lights Infinite"; break;
         }
-        if (container.abilities[0] == AbilityType.Key)
+        if ( container.abilities.Count != 0 && container.abilities[0] == AbilityType.Key)
             lights = @"Containers\Lights Infinite";
         container.transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load(lights, typeof(Sprite));
     }
