@@ -23,7 +23,7 @@ public class APIGraphic{
     public void MovePlayer_Ramp_2(Player player, Vector2 position,int type)
     {
         Debug.Log("Ramp To Block");
-        player.GetComponent<PlayerPhysics>().Simple_Move(position);
+        player.GetComponent<PlayerPhysics>().Ramp_To_Block_Move(position,type);
     }
 
     //Ramp to fall
@@ -160,8 +160,6 @@ public class APIGraphic{
         graphicalengine.Move_Object(obj,unit, pos);
        
     }
-
-
 
     public void MoveGameObjectFinished(GameObject obj, Unit unit)
     {

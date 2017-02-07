@@ -42,27 +42,41 @@ public class PlayerPhysics : MonoBehaviour
 
     }
 
-   
-    private Vector2 On_Platform_Move_Velocity(Direction dir)
+    //ramp to block
+    public void Ramp_To_Block_Move(Vector2 pos,int type)
     {
-        if (dir == Direction.Right)
-            return new Vector2(1.1f, 0);
-        else if (dir == Direction.Left)
-            return new Vector2(-1.1f, 0);
-        else if (dir == Direction.Up)
-            return new Vector2(0, 1.1f);
-        else
-            return new Vector2(0, -1.1f);
+        Vector2 end1 = pos  +Ramp_To_Block_Pos(type);
+        StartCoroutine(Ramp_To_Block_Coroutine(end1, pos, move_time, true));
+        
+       
+    }
 
+    private Vector2 Ramp_To_Block_Pos(int type)
+    {
+        if(type == 4)
+        {
+            if (player.direction == Direction.Right)
+                return new Vector2(-0.5f, -0.1f);
+        }
+
+        return new Vector2(0, 0);
     }
     public void Block_To_Ramp_Move(Vector2 pos, int type)
     {
 
-        Vector2 on_ramp = On_Ramp_Pos(type);
-        pos = (Vector2)pos + on_ramp;
-        StartCoroutine(Constant_Move(pos, move_time, true));
-        Rotate_On_Ramp(type);
+        Vector2 end1 = pos + Block_To_Ramp_Pos();
+        Vector2 end2 = (Vector2)pos + On_Ramp_Pos(type);
+        StartCoroutine(Block_To_Ramp_Coroutine(end1,end2,move_time,true,type));
         
+    }
+
+    private Vector2 Block_To_Ramp_Pos()
+    {
+        if (player.direction == Direction.Left)
+            return new Vector2(0.2f, 0.7f);
+        else if (player.direction == Direction.Right)
+            return new Vector2(-0.4f, 0);
+        return new Vector2(0, 0);
     }
     
     public void Ramp_To_Sharp_Move(Vector2 pos,int type)
@@ -86,17 +100,6 @@ public class PlayerPhysics : MonoBehaviour
 
         return new Vector2(0, 0);
     }
-    private Vector2 Ramp_To_Sharp_Velocity(Direction gravity, Vector2 position)
-    {
-        if (gravity == Direction.Down)
-        {
-            if (position.x - transform.position.x > 0)
-                return new Vector2(1, 1);
-            else
-                return new Vector2(-1, 1);
-        }
-        return new Vector2(0, 0);
-    }
 
     private Vector2 Sharp_To_Ramp_Pos(Direction gravity, Vector2 position)
     {
@@ -111,18 +114,6 @@ public class PlayerPhysics : MonoBehaviour
         return new Vector2(0, 0);
     }
 
-    private Vector2 Sharp_To_Ramp_Velocity(Direction gravity, Vector2 position)
-    {
-        if (gravity == Direction.Down)
-        {
-            if (position.x - transform.position.x > 0)
-                return new Vector2(1, -1);
-            else
-                return new Vector2(-1, -1);
-        }
-        return new Vector2(0, 0);
-    }
-
 
     public void Lean_Stick_Move(Direction dir)
     {
@@ -131,23 +122,14 @@ public class PlayerPhysics : MonoBehaviour
         StartCoroutine(Constant_Move(target,platform_move_time,false));
     }
 
-    private Vector2 Lean_Stick_Velocity(Direction dir)
-    {
-        if (dir == Direction.Right)
-            return new Vector2(1f, 0);
-        else if (dir == Direction.Left)
-            return new Vector2(-1, 0);
-        else if (dir == Direction.Up)
-            return new Vector2(0, 1);
-        else
-            return new Vector2(0,-1);
-    }
     private void Sharp_To_Ramp_Move(int type)
     {
 
         Rotate_On_Ramp(type);
     }
     
+
+    //ramp to ramp
     public void Ramp_To_Ramp_Move(Vector2 pos,int type)
     {
         Vector2 on_ramp_pos = On_Ramp_Pos(type);
@@ -155,26 +137,8 @@ public class PlayerPhysics : MonoBehaviour
         StartCoroutine(Constant_Move(pos, move_time, true));
         Rotate_On_Ramp(type);
     }
-    private Vector2 Ramp_To_Ramp_Velocity(Direction dir,int type)
-    {
-        if(type == 4)
-        {
-            if (dir == Direction.Right)
-                return new Vector2(1, 1);
-            else if (dir == Direction.Left)
-                return new Vector2(-1, -1);
-
-        }
-        else if(type == 1)
-        {
-            if (dir == Direction.Right)
-                return new Vector2(1, -1);
-            else if (dir == Direction.Left)
-                return new Vector2(-1, 1);
-        }
-        return new Vector2(0, 0);
-    }
-
+   
+    //fall 
     public void Fall(Vector2 pos)
     {
         StopAllCoroutines();
@@ -201,8 +165,52 @@ public class PlayerPhysics : MonoBehaviour
     }
 
 
-    // ramp to sharp couroutine
-    
+    // block to ramp co
+    private IEnumerator Block_To_Ramp_Coroutine(Vector2 end1, Vector2 end2, float mvoe_time, bool call_finish,int type)
+    {
+        float remain_distance = ((Vector2)player_transofrm.position - end1).sqrMagnitude;
+        while (remain_distance > float.Epsilon)
+        {
+            remain_distance = ((Vector2)player_transofrm.position - end1).sqrMagnitude;
+            player_transofrm.position = Vector3.MoveTowards(player_transofrm.position, end1, Time.deltaTime * 1 / move_time);
+            yield return null;
+        }
+        remain_distance = ((Vector2)player_transofrm.position - end2).sqrMagnitude;
+        Rotate_On_Ramp(type);
+        while (remain_distance > float.Epsilon)
+        {
+            remain_distance = ((Vector2)player_transofrm.position - end2).sqrMagnitude;
+            player_transofrm.position = Vector3.MoveTowards(player.transform.position, end2, Time.deltaTime * 1 / move_time);
+            yield return null;
+        }
+        if (call_finish)
+            api.MovePlayerFinished(gameObject);
+        api.Check_Camera(player);
+       
+    }
+
+    private IEnumerator Ramp_To_Block_Coroutine(Vector2 end1,Vector2 end2,float mvoe_time,bool call_finish)
+    {
+        float remain_distance = ((Vector2)player_transofrm.position - end1).sqrMagnitude;
+        while(remain_distance > float.Epsilon)
+        {
+            remain_distance = ((Vector2)player_transofrm.position - end1).sqrMagnitude;
+            player_transofrm.position = Vector3.MoveTowards(player_transofrm.position, end1, Time.deltaTime * 1 / move_time);
+            yield return null;
+        }
+        remain_distance = ((Vector2)player_transofrm.position - end2).sqrMagnitude;
+        Rotate_On_Block();
+        while (remain_distance > float.Epsilon)
+        {
+            remain_distance = ((Vector2)player_transofrm.position - end2).sqrMagnitude;
+            player_transofrm.position = Vector3.MoveTowards(player.transform.position, end2, Time.deltaTime * 1 / move_time);
+            yield return null;
+        }
+        if (call_finish)
+            api.MovePlayerFinished(gameObject);
+        api.Check_Camera(player);
+        
+    }
     private IEnumerator Ramp_To_Sharp_Coroutine(Vector2 end1, Vector2 end2, float move_time, bool call_finish,int type)
     {
         // 1st part of mvoe
