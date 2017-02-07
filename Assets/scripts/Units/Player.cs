@@ -180,31 +180,23 @@ public class Player : Unit
 
     public override void ApplyGravity(Direction gravitydirection, List<Unit>[,] units)
     {
-        bool falling = false;
         if (lean)
             return;
-        if (Toolkit.HasRamp(position) || Toolkit.HasBranch(position))
-            return;
-        if (!Toolkit.IsEmpty(Toolkit.VectorSum(position, gravitydirection)))
+        if (Has_Ramp(position) || Toolkit.HasBranch(position))
         {
             return;
         }
-        while (true)
+        Vector2 pos = Toolkit.VectorSum(position, gravitydirection);
+        if (!Fall(pos))
+            return;
+        while (Fall(pos))
         {
-            Vector2 pos = Toolkit.VectorSum(position, gravitydirection);
             /*if (pos.y <= 0 || pos.x <= 0)
                 break;*/
-            if (Toolkit.IsEmpty(pos)) //empty space
-            {
-                api.RemoveFromDatabase(this);
-                position = pos;
-                api.AddToDatabase(this);
-                falling = true;
-            }
-            else if(falling)
-            {
-                break;
-            }
+            api.RemoveFromDatabase(this);
+            position = pos;
+            api.AddToDatabase(this);
+            pos = Toolkit.VectorSum(position, gravitydirection);
         }
         api.graphicalengine_Fall(this, position);
     }
@@ -279,6 +271,47 @@ public class Player : Unit
             case AbilityType.Gravity: return true;
             case AbilityType.Rope: return true;
             default: return false;
+        }
+    }
+
+
+    private bool Has_Ramp(Vector2 position)
+    {
+        List<Unit>[,] units = Starter.GetDataBase().units;
+        for (int i = 0; i < units[(int)position.x, (int)position.y].Count; i++)
+        {
+            if (units[(int)position.x, (int)position.y][i] is Ramp)
+            {
+                Ramp ramp = (Ramp)units[(int)position.x, (int)position.y][i];
+                //if player can move to it , it should fall
+                return !ramp.PlayerMoveInto(Direction.Up);
+            }
+        }
+        return false;
+    }
+
+    private bool Fall(Vector2 position)
+    {
+        List<Unit>[,] units = Starter.GetDataBase().units;
+        if (units[(int)position.x, (int)position.y].Count != 0)
+        {
+            for (int i = 0; i < units[(int)position.x, (int)position.y].Count; i++)
+            {
+                Unit unit = units[(int)position.x, (int)position.y][i];
+                if (unit is Ramp)
+                {
+                    Ramp ramp = (Ramp)unit;
+                    // Land On Ramp should be called
+                    return false;
+                }
+            }
+            // There is Some Object and fall should stop
+            return false;
+        }
+        else
+        {
+            Debug.Log("Fall no object");
+            return true;
         }
     }
 }

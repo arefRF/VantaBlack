@@ -265,11 +265,10 @@ public class PlayerPhysics : MonoBehaviour
             player_transofrm.position = Vector2.MoveTowards(player_transofrm.position, end, Time.deltaTime * 1 / move_time);
             yield return null;
         }
-
+        move_type = MoveType.Idle;
         if (call_finish)
             api.MovePlayerFinished(gameObject);
         api.Check_Camera(player);
-        move_type = MoveType.Idle;
         // if it needs Call Finished Move of API
     }
 
