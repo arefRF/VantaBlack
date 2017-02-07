@@ -30,7 +30,7 @@ public class APIGraphic{
     public void MovePlayer_Ramp_3(Player player, Vector2 position,int type)
     {
         Debug.Log("Ramp to Fall");
-        player.gameObject.GetComponent<PlayerPhysics>().Ramp_To_Fall(position);
+        player.gameObject.GetComponent<PlayerPhysics>().Ramp_To_Fall(position,type);
     }
 
   
@@ -132,12 +132,14 @@ public class APIGraphic{
     public void Land(Player player, Vector2 position, Unit fallonunit)
     {
         Debug.Log("Land");
+        player.GetComponent<PlayerPhysics>().Land(position);
         logicalengine.graphic_LandFinished(player);
+        
     }
     
     public void LandOnRamp(Player player, Vector2 position, Unit fallonunit, int ramptype)
     {
-        player.GetComponent<PlayerPhysics>().Land_On_Ramp(ramptype);
+        player.GetComponent<PlayerPhysics>().Land_On_Ramp(position,ramptype);
         Debug.Log("Land On Ramp");
         logicalengine.graphic_LandFinished(player);
     }
