@@ -90,6 +90,10 @@ public class Ramp : Unit {
                     }
 
                 }
+                else if (units[i] is Player)
+                {
+                    players.Add(units[i]);
+                }
                 else
                     return false;
             }

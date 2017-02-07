@@ -43,7 +43,11 @@ public class LogicalEngine {
             for (int i = 0; i < unit.ConnectedUnits.Count; i++)
             {
                 if (!unit.ConnectedUnits[i].CanMove(dir, unit.transform.parent.gameObject))
+                {
+                    Debug.Log(unit.ConnectedUnits[i]);
+                    Debug.Log(unit.ConnectedUnits[i].gameObject);
                     return false;
+                }
                 shouldmove.AddRange(unit.ConnectedUnits[i].players);
             }
             for (int i = 0; i < unit.ConnectedUnits.Count; i++)
