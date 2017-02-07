@@ -224,7 +224,7 @@ public class FunctionalContainer : Container {
                 {
                     Debug.Log(direction);
                     Debug.Log(stuckdirection);
-                    if (direction != stuckdirection && increased)
+                    if (direction != stuckdirection && !increased)
                     {
                         stucklevel++;
                         api.AddToStuckList(this);
@@ -239,6 +239,7 @@ public class FunctionalContainer : Container {
                     }
                     if (stucklevel == 0)
                         api.RemoveFromStuckList(this);
+                    Debug.Log(stucklevel);
                 }
             }
         }

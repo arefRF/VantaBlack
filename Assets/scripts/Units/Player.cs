@@ -131,14 +131,16 @@ public class Player : Unit
             }
             else if (units[i] is Ramp)
             {
-                Ramp ramp = (Ramp)units[i];
+                return false;
+                // baadan age bekhaym player moghe harekate game object ziresh bere ru ramp ino barmidarim
+                /*Ramp ramp = (Ramp)units[i];
                 switch (dir)
                 {
                     case Direction.Up: if (ramp.type != 2 && ramp.type != 3) return false; break;
                     case Direction.Right: if (ramp.type != 3 && ramp.type != 4) return false; break;
                     case Direction.Left: if (ramp.type != 1 && ramp.type != 2) return false; break;
                     case Direction.Down: if (ramp.type != 1 && ramp.type != 4) return false; break;
-                }
+                }*/
             }
             else if(units[i].transform.parent.gameObject != parent)
                 return false;
