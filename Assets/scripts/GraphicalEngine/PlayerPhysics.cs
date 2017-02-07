@@ -58,24 +58,39 @@ public class PlayerPhysics : MonoBehaviour
             if (player.direction == Direction.Right)
                 return new Vector2(-0.5f, -0.1f);
         }
+        else if(type == 1)
+        {
+            if (player.direction == Direction.Left)
+                return new Vector2(0.8f,-0.1f);
+        }
 
         return new Vector2(0, 0);
     }
     public void Block_To_Ramp_Move(Vector2 pos, int type)
     {
 
-        Vector2 end1 = pos + Block_To_Ramp_Pos();
+        Vector2 end1 = pos + Block_To_Ramp_Pos(type);
         Vector2 end2 = (Vector2)pos + On_Ramp_Pos(type);
         StartCoroutine(Block_To_Ramp_Coroutine(end1,end2,move_time,true,type));
         
     }
 
-    private Vector2 Block_To_Ramp_Pos()
+    private Vector2 Block_To_Ramp_Pos(int type)
     {
-        if (player.direction == Direction.Left)
-            return new Vector2(0.2f, 0.7f);
-        else if (player.direction == Direction.Right)
-            return new Vector2(-0.4f, 0);
+        if (type == 4)
+        {
+            if (player.direction == Direction.Left)
+                return new Vector2(0.2f, 0.7f);
+            else if (player.direction == Direction.Right)
+                return new Vector2(-0.4f, 0);
+        }
+        else if(type == 1)
+        {
+            if (player.direction == Direction.Left)
+                return new Vector2(0.5f, 0);
+            else if (player.direction == Direction.Right)
+                return new Vector2(-0.2f, 0.9f);
+        }
         return new Vector2(0, 0);
     }
     
