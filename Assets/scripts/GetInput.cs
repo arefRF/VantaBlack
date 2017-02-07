@@ -58,7 +58,6 @@ public class GetInput : MonoBehaviour {
                     Get_Space_Arrows();
                 if (Input.GetKeyDown(KeyCode.W))
                 {
-                    api.AbsorbRelease(Direction.Up);
                     is_holding = true;
                     hold_direction = Direction.Up;
                     StopAllCoroutines();
@@ -66,7 +65,6 @@ public class GetInput : MonoBehaviour {
                 }
                 if (Input.GetKeyDown(KeyCode.S))
                 {
-                    api.AbsorbRelease(Direction.Down);
                     is_holding = true;
                     hold_direction = Direction.Down;
                     StopAllCoroutines();
@@ -74,7 +72,6 @@ public class GetInput : MonoBehaviour {
                 }
                 if (Input.GetKeyDown(KeyCode.A))
                 {
-                    api.AbsorbRelease(Direction.Left);
                     hold_direction = Direction.Left;
                     is_holding = true;
                     StopAllCoroutines();
@@ -82,14 +79,16 @@ public class GetInput : MonoBehaviour {
                 }
                 if (Input.GetKeyDown(KeyCode.D))
                 {
-                    api.AbsorbRelease(Direction.Right);
                     is_holding = true;
                     hold_direction = Direction.Right;
                     StopAllCoroutines();
                     StartCoroutine(Wait_For_Absorb_Hold());
                 }
                 if (Input.GetKeyUp(KeyCode.D) || Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.S))
+                {
+                    api.AbsorbRelease(hold_direction);
                     is_holding = false;
+                }
             }
 
         }
