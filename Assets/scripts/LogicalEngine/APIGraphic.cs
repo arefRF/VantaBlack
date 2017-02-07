@@ -20,14 +20,14 @@ public class APIGraphic{
     }
     
     // Ramp to Block
-    public void MovePlayer_Ramp_2(Player player, Vector2 position)
+    public void MovePlayer_Ramp_2(Player player, Vector2 position,int type)
     {
         Debug.Log("Ramp To Block");
         player.GetComponent<PlayerPhysics>().Simple_Move(position);
     }
 
     //Ramp to fall
-    public void MovePlayer_Ramp_3(Player player, Vector2 position)
+    public void MovePlayer_Ramp_3(Player player, Vector2 position,int type)
     {
         Debug.Log("Ramp to Fall");
         player.gameObject.GetComponent<PlayerPhysics>().Ramp_To_Fall(position);
