@@ -176,7 +176,7 @@ public class LogicalEngine {
                     if (units.Count == 0)
                     {
                         database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                        apigraphic.MovePlayer_Ramp_3(player, nextpos);
+                        apigraphic.MovePlayer_Ramp_3(player, nextpos, ramp.type);
                         player.position = nextpos;
                     }
                     else
@@ -191,7 +191,7 @@ public class LogicalEngine {
                         else
                         {
                             database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                            apigraphic.MovePlayer_Ramp_2(player, nextpos);
+                            apigraphic.MovePlayer_Ramp_2(player, nextpos, ramp.type);
                             player.position = nextpos;
                         }
                     }
@@ -225,12 +225,12 @@ public class LogicalEngine {
                     }
                     else if(!Toolkit.IsEmpty(Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction))))
                     {
-                        apigraphic.MovePlayer_Ramp_2(player, nextpos);
+                        apigraphic.MovePlayer_Ramp_2(player, nextpos, ramp.type);
                         player.position = nextpos;
                     }
                     else
                     {
-                        apigraphic.MovePlayer_Ramp_3(player, nextpos);
+                        apigraphic.MovePlayer_Ramp_3(player, nextpos, ramp.type);
                         player.position = nextpos;
                     }
                 }
