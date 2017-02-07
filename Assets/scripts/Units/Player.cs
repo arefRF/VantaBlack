@@ -182,7 +182,7 @@ public class Player : Unit
     {
         if (lean)
             return;
-        if (Has_Ramp(position) || Toolkit.HasBranch(position))
+        if (Stand_On_Ramp(position) || Toolkit.HasBranch(position))
         {
             return;
         }
@@ -203,7 +203,7 @@ public class Player : Unit
 
     public void FallFinished()
     {
-        Vector2 pos = position;
+        Vector2 pos = Toolkit.VectorSum(position, Starter.GetGravityDirection());
         if (pos.x <= 0 || pos.y <= 0)
             return;
         if (Toolkit.HasRamp(pos)) //ramp
@@ -275,7 +275,7 @@ public class Player : Unit
     }
 
 
-    private bool Has_Ramp(Vector2 position)
+    private bool Stand_On_Ramp(Vector2 position)
     {
         List<Unit>[,] units = Starter.GetDataBase().units;
         for (int i = 0; i < units[(int)position.x, (int)position.y].Count; i++)
@@ -283,8 +283,8 @@ public class Player : Unit
             if (units[(int)position.x, (int)position.y][i] is Ramp)
             {
                 Ramp ramp = (Ramp)units[(int)position.x, (int)position.y][i];
-                //if player can move to it , it should fall
-                return !ramp.PlayerMoveInto(Direction.Up);
+                //if player can move to it , it should not fall
+                return ramp.PlayerMoveInto(Direction.Up);
             }
         }
         return false;
@@ -304,13 +304,13 @@ public class Player : Unit
                     // Land On Ramp should be called
                     return false;
                 }
+
             }
             // There is Some Object and fall should stop
             return false;
         }
         else
         {
-            Debug.Log("Fall no object");
             return true;
         }
     }
