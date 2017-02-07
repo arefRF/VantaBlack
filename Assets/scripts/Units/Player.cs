@@ -203,7 +203,7 @@ public class Player : Unit
 
     public void FallFinished()
     {
-        Vector2 pos = Toolkit.VectorSum(position, Starter.GetGravityDirection());
+        Vector2 pos = position;
         if (pos.x <= 0 || pos.y <= 0)
             return;
         if (Toolkit.HasRamp(pos)) //ramp

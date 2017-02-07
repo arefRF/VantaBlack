@@ -288,7 +288,7 @@ public class PlayerPhysics : MonoBehaviour
         {
             switch (move_type)
             {
-                case MoveType.Falling: api.Fall_Finish(player); break;
+                case MoveType.Falling: api.Fall_Finish(player); move_type = MoveType.Idle; break;
             }
         }
         api.Check_Camera(player);
