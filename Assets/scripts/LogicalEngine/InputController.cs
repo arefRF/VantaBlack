@@ -4,6 +4,12 @@ using System.Collections;
 public class InputController {
 
     LogicalEngine engine;
+
+    public InputController(LogicalEngine engine)
+    {
+        this.engine = engine;
+    }
+
     public void PlayerMoveAction(Player player, Direction direction)
     {
         if (player.state == PlayerState.Idle)
@@ -12,7 +18,7 @@ public class InputController {
         }
         else if(player.state == PlayerState.Moving)
         {
-
+            MovingPlayerMove(player, direction);
         }
     }
 
@@ -32,6 +38,10 @@ public class InputController {
                 {
                     engine.Lean(player, direction);
                 }
+                else
+                {
+                    player.state = PlayerState.Moving;
+                }
             }
             else if (player.Can_Lean(direction))
             {
@@ -42,6 +52,27 @@ public class InputController {
 
     private void MovingPlayerMove(Player player, Direction direction)
     {
+        if(player.direction == direction)
+        {
+            if(player.movepercentage >= 90)
+            {
 
+            }
+        }
+        else
+        {
+            Direction olddir = player.direction;
+            player.direction = direction;
+            engine.apigraphic.PlayerChangeDirection(player, olddir, player.direction);
+            if (!player.Move(direction))
+            {
+                engine.Lean(player, direction);
+            }
+            else
+            {
+                Debug.Log(player.state);
+                player.state = PlayerState.Moving;
+            }
+        }
     }
 }
