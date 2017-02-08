@@ -177,7 +177,6 @@ public class PlayerPhysics : MonoBehaviour
     public void Simple_Move(Vector2 pos)
     {
         set_percent = true;
-        real_end = pos;
            StopAllCoroutines();
             Rotate_On_Block();
             move_type = MoveType.BlockToBlock;
@@ -197,6 +196,7 @@ public class PlayerPhysics : MonoBehaviour
     // block to ramp co
     private IEnumerator Block_To_Ramp_Coroutine(Vector2 end1, Vector2 end2, float mvoe_time, bool call_finish,int type)
     {
+        set_percent = true;
         float remain_distance = ((Vector2)player_transofrm.position - end1).sqrMagnitude;
         while (remain_distance > float.Epsilon)
         {
@@ -210,6 +210,7 @@ public class PlayerPhysics : MonoBehaviour
         {
             remain_distance = ((Vector2)player_transofrm.position - end2).sqrMagnitude;
             player_transofrm.position = Vector3.MoveTowards(player.transform.position, end2, Time.deltaTime * 1 / move_time);
+            Set_Player_Move_Percent(remain_distance);
             yield return null;
         }
         if (call_finish)
@@ -220,6 +221,7 @@ public class PlayerPhysics : MonoBehaviour
 
     private IEnumerator Ramp_To_Block_Coroutine(Vector2 end1,Vector2 end2,float mvoe_time,bool call_finish)
     {
+        set_percent = true;
         float remain_distance = ((Vector2)player_transofrm.position - end1).sqrMagnitude;
         while(remain_distance > float.Epsilon)
         {
@@ -233,6 +235,7 @@ public class PlayerPhysics : MonoBehaviour
         {
             remain_distance = ((Vector2)player_transofrm.position - end2).sqrMagnitude;
             player_transofrm.position = Vector3.MoveTowards(player.transform.position, end2, Time.deltaTime * 1 / move_time);
+            Set_Player_Move_Percent(remain_distance);
             yield return null;
         }
         if (call_finish)
@@ -242,6 +245,7 @@ public class PlayerPhysics : MonoBehaviour
     }
     private IEnumerator Ramp_To_Sharp_Coroutine(Vector2 end1, Vector2 end2, float move_time, bool call_finish,int type)
     {
+        set_percent = true;
         // 1st part of mvoe
         float remain_distance = ((Vector2)player_transofrm.position - end1).sqrMagnitude;
         while (remain_distance > float.Epsilon)
@@ -258,6 +262,7 @@ public class PlayerPhysics : MonoBehaviour
         {
             remain_distance = ((Vector2)player_transofrm.position - end2).sqrMagnitude;
             player_transofrm.position = Vector3.MoveTowards(player.transform.position, end2, Time.deltaTime * 1 /  move_time);
+            Set_Player_Move_Percent(remain_distance);
             yield return null;
         }
         if (call_finish)
@@ -274,11 +279,12 @@ public class PlayerPhysics : MonoBehaviour
     // For Simple Constant Velocity Moves
     private IEnumerator Constant_Move(Vector2 end,float move_time,bool call_finish)
     {
-        float remain_distance = ((Vector2)player_transofrm.position - real_end).sqrMagnitude;
+        set_percent = true;
+        float remain_distance = ((Vector2)player_transofrm.position - end).sqrMagnitude;
         while(remain_distance > float.Epsilon)
         {
-            remain_distance = ((Vector2)player_transofrm.position - real_end).sqrMagnitude;
-            player_transofrm.position = Vector2.MoveTowards(player_transofrm.position, real_end, Time.deltaTime * 1 / move_time);
+            remain_distance = ((Vector2)player_transofrm.position - end).sqrMagnitude;
+            player_transofrm.position = Vector2.MoveTowards(player_transofrm.position, end, Time.deltaTime * 1 / move_time);
             Set_Player_Move_Percent(remain_distance);
             yield return null;
         }
