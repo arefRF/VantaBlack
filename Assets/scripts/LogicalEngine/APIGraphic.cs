@@ -201,6 +201,11 @@ public class APIGraphic{
 
     }
 
+    public void Move_Update(Player player,Vector2 pos)
+    {
+        player.GetComponent<PlayerPhysics>().Set_End(pos);
+    }
+
     public void LeanStickMove(Player player,Direction dir)
     {
         Debug.Log("Lean Stick Move");

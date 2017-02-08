@@ -14,7 +14,6 @@ public class PlayerPhysics : MonoBehaviour
     private MoveType move_type;
     private Player player;
     private Vector2 real_end;
-
     void Start()
     {
         engine = Starter.GetEngine();
@@ -23,9 +22,6 @@ public class PlayerPhysics : MonoBehaviour
         player = GetComponent<Player>();
         move_type = MoveType.Idle;
     }
-
-
-    
 
     //ramp to fall
     public void Ramp_To_Fall(Vector2 pos,int type)
@@ -265,14 +261,20 @@ public class PlayerPhysics : MonoBehaviour
             api.MovePlayerFinished(gameObject);
         api.Check_Camera(player);
     }
+
+    public void Set_End(Vector2 pos)
+    {
+        real_end = pos;
+    }
+
     // For Simple Constant Velocity Moves
     private IEnumerator Constant_Move(Vector2 end,float move_time,bool call_finish)
     {
-        float remain_distance = ((Vector2)player_transofrm.position - end).sqrMagnitude;
+        float remain_distance = ((Vector2)player_transofrm.position - real_end).sqrMagnitude;
         while(remain_distance > float.Epsilon)
         {
-            remain_distance = ((Vector2)player_transofrm.position - end).sqrMagnitude;
-            player_transofrm.position = Vector2.MoveTowards(player_transofrm.position, end, Time.deltaTime * 1 / move_time);
+            remain_distance = ((Vector2)player_transofrm.position - real_end).sqrMagnitude;
+            player_transofrm.position = Vector2.MoveTowards(player_transofrm.position, real_end, Time.deltaTime * 1 / move_time);
             yield return null;
         }
         move_type = MoveType.Idle;
