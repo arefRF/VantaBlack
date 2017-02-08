@@ -301,10 +301,6 @@ public class PlayerPhysics : MonoBehaviour
             Debug.Log("90 percent");
             player.movepercentage = 90;
         }
-        else if(remain < 0.2f)
-        {
-            set_percent = true;
-        }
     }
 
     // For Moves that have Acceleration Like Gravity
