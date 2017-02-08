@@ -28,8 +28,9 @@ public class PlayerPhysics : MonoBehaviour
     
 
     //ramp to fall
-    public void Ramp_To_Fall(Vector2 pos)
+    public void Ramp_To_Fall(Vector2 pos,int type)
     {
+        Rotate_On_Ramp(type);
         StartCoroutine(Constant_Move(pos, move_time, true));
     }
 
@@ -75,8 +76,13 @@ public class PlayerPhysics : MonoBehaviour
         
     }
     
-    public void Land_On_Ramp(int type)
+    public void Land(Vector2 position)
     {
+        Rotate_On_Block();
+    }
+    public void Land_On_Ramp(Vector2 position,int type)
+    {
+        player_transofrm.position = position + On_Ramp_Pos(type);
         Rotate_On_Ramp(type);
     }
 
@@ -265,11 +271,10 @@ public class PlayerPhysics : MonoBehaviour
             player_transofrm.position = Vector2.MoveTowards(player_transofrm.position, end, Time.deltaTime * 1 / move_time);
             yield return null;
         }
-
+        move_type = MoveType.Idle;
         if (call_finish)
             api.MovePlayerFinished(gameObject);
         api.Check_Camera(player);
-        move_type = MoveType.Idle;
         // if it needs Call Finished Move of API
     }
 
@@ -289,7 +294,7 @@ public class PlayerPhysics : MonoBehaviour
         {
             switch (move_type)
             {
-                case MoveType.Falling: api.Fall_Finish(player); break;
+                case MoveType.Falling: api.Fall_Finish(player); move_type = MoveType.Idle; break;
             }
         }
         api.Check_Camera(player);

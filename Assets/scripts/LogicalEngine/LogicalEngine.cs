@@ -44,8 +44,6 @@ public class LogicalEngine {
             {
                 if (!unit.ConnectedUnits[i].CanMove(dir, unit.transform.parent.gameObject))
                 {
-                    Debug.Log(unit.ConnectedUnits[i]);
-                    Debug.Log(unit.ConnectedUnits[i].gameObject);
                     return false;
                 }
                 shouldmove.AddRange(unit.ConnectedUnits[i].players);
@@ -284,14 +282,14 @@ public class LogicalEngine {
                         database.units[(int)player.position.x, (int)player.position.y].Remove(player);
                         if(Toolkit.CanplayerGoOnRampSideFromFromNoneRamp((Ramp)units[0], database.gravity_direction, dir))
                         {
-                            apigraphic.MovePlayer_Simple_3(player, nextpos, ((Ramp)units[0]).type);
+                            apigraphic.MovePlayer_Simple_3(player, nextpos, Toolkit.GetRamp(nextpos).type);
                             player.position = nextpos;
                         }
                         else if(Toolkit.HasRamp(temp))
                         {
                             if(Toolkit.CanplayerGoOnRampSideFromFromNoneRamp(Toolkit.GetRamp(temp), database.gravity_direction, Toolkit.ReverseDirection(dir)))
                             {
-                                apigraphic.MovePlayer_Simple_3(player, temp, ((Ramp)units[0]).type);
+                                apigraphic.MovePlayer_Simple_3(player, temp, Toolkit.GetRamp(temp).type);
                                 player.position = temp;
                             }
                             else
@@ -299,6 +297,12 @@ public class LogicalEngine {
                                 apigraphic.MovePlayer_Simple_4(player, nextpos);
                                 player.position = nextpos;
                             }
+                        }
+                        else
+                        {
+                            database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                            graphic_PlayerMoveAnimationFinished(player);
+                            return;
                         }
                     }
                 }
