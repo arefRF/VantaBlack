@@ -12,8 +12,10 @@ public class InputController {
 
     public void PlayerMoveAction(Player player, Direction direction)
     {
+        Debug.Log(player.state);
         if (player.state == PlayerState.Idle)
         {
+            Debug.Log("asdfghjkl;sdfghjk");
             IdlePLayerMove(player, direction);
         }
         else if(player.state == PlayerState.Moving)
@@ -59,18 +61,20 @@ public class InputController {
             //Debug.Log("calling graphicals");
             if (player.movepercentage == 98)
             {
-                if (!player.Move(direction))
-                {
-                }
-                else
-                {
-                    player.movepercentage = 99;
-                    player.state = PlayerState.Moving;
-                    /*engine.apiunit.RemoveFromDatabase(player);
-                    player.position += Toolkit.DirectiontoVector(direction);
-                    engine.apiunit.AddToDatabase(player);
-                    Debug.Log("calling graphicals");
-                    engine.apigraphic.Move_Update(player, player.position);*/
+                if (!player.ApplyGravity(engine.database.gravity_direction, engine.database.units)){
+                    if (!player.Move(direction))
+                    {
+                    }
+                    else
+                    {
+                        player.movepercentage = 99;
+                        player.state = PlayerState.Moving;
+                        /*engine.apiunit.RemoveFromDatabase(player);
+                        player.position += Toolkit.DirectiontoVector(direction);
+                        engine.apiunit.AddToDatabase(player);
+                        Debug.Log("calling graphicals");
+                        engine.apigraphic.Move_Update(player, player.position);*/
+                    }
                 }
             }
         }

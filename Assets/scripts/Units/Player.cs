@@ -184,17 +184,17 @@ public class Player : Unit
         return false;
     }
 
-    public override void ApplyGravity(Direction gravitydirection, List<Unit>[,] units)
+    public override bool ApplyGravity(Direction gravitydirection, List<Unit>[,] units)
     {
         if (lean)
-            return;
+            return false;
         if (Stand_On_Ramp(position) || Toolkit.HasBranch(position))
         {
-            return;
+            return false;
         }
         Vector2 pos = Toolkit.VectorSum(position, gravitydirection);
         if (!Fall(pos))
-            return;
+            return false;
         while (Fall(pos))
         {
             /*if (pos.y <= 0 || pos.x <= 0)
@@ -204,7 +204,9 @@ public class Player : Unit
             api.AddToDatabase(this);
             pos = Toolkit.VectorSum(position, gravitydirection);
         }
+        state = PlayerState.Falling;
         api.graphicalengine_Fall(this, position);
+        return true;
     }
 
     public void FallFinished()

@@ -397,6 +397,7 @@ public class LogicalEngine {
     public void graphic_LandFinished(Player player)
     {
         player.movepercentage = 0;
+        player.state = PlayerState.Idle;
     }
 
     public void Lean(Player player, Direction direction)
@@ -534,8 +535,8 @@ public class LogicalEngine {
 
     public void graphic_PlayerMoveAnimationFinished(Player player)
     {
-        player.state = PlayerState.Idle;
         Applygravity();
+        player.state = PlayerState.Idle;
     }
     public void graphic_GameObjectMoveAnimationFinished(GameObject gameobject, Unit unit)
     {
@@ -557,10 +558,6 @@ public class LogicalEngine {
     public void graphic_PlayerChangeDirectionFinished(Player player)
     {
         player.state = PlayerState.Idle;
-    }
-    public void graphic_PlayerLandFinished(Player player)
-    {
-        
     }
     public void UnitToGraphic_Land(Unit unit, Unit landingunit,Vector2 landingposition)
     {
