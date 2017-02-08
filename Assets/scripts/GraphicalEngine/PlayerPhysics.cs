@@ -69,7 +69,7 @@ public class PlayerPhysics : MonoBehaviour
     }
     public void Block_To_Ramp_Move(Vector2 pos, int type)
     {
-
+        Debug.Log(type);
         Vector2 end1 = pos + Block_To_Ramp_Pos(type);
         Vector2 end2 = (Vector2)pos + On_Ramp_Pos(type);
         StartCoroutine(Block_To_Ramp_Coroutine(end1,end2,move_time,true,type));

@@ -60,7 +60,7 @@ public class GraphicalEngine : MonoBehaviour {
     public void Container_Change_Number(Container container)
     {
 
-        string lights = @"Containers\";
+        string lights = @"Containers\Numbers\";
         switch (container.abilities.Count)
         {
             case 0: lights += ""; break;
@@ -84,7 +84,7 @@ public class GraphicalEngine : MonoBehaviour {
     {
 
         // On or Off Sprite
-        string toggle = @"Containers\";
+        string toggle = @"Containers\Icons\";
         if (container.on)
         {
             toggle += "ABILITY FUEL ON";
