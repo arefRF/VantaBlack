@@ -9,9 +9,7 @@ public class GetInput : MonoBehaviour {
 
     public APIInput api;
     private Direction lean_direction;
-    private float camera_speed = 0.05f;
     private bool is_space;
-    private bool is_walking;
     private bool is_holding;
     private Direction hold_direction;
     // Use this for initialization
@@ -20,7 +18,6 @@ public class GetInput : MonoBehaviour {
         database = Starter.GetDataBase();
         engine = Starter.GetEngine();
         is_space = false;
-        is_walking = false;
         api = engine.apiinput;
         api.input = this;
     }
@@ -28,27 +25,12 @@ public class GetInput : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        if (database.state == State.Idle)
-        {
-                // Absorb or Static Container or Undo Lean
-                Get_Lean_Undo();
-                // if (Input.GetKeyDown(KeyCode.A))
-                //engine.Absorb(lean_direction);
-                // else if (Input.GetKeyDown(KeyCode.Space))
-                // engine.UseContainerBlockSwitch(lean_direction);
-
-            
-            if (is_space)
-            {
-                // Directional Abilities use
+           // Lean Keys Up
+            Get_Lean_Undo();
+           // Directional Abilities use
                 if (Input.GetKeyUp(KeyCode.Space))
                     is_space = false;
-
-            }
-            else
-            {
-                if (!is_walking)
-                    Get_Move();
+                Get_Move();
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
                     if (!api.Action_Key())
@@ -89,23 +71,19 @@ public class GetInput : MonoBehaviour {
                     api.AbsorbRelease(hold_direction);
                     is_holding = false;
                 }
-            }
 
-        }
+        
     }
 
+    // this is responsibile for Absorb and Release hold
     private IEnumerator Wait_For_Absorb_Hold()
     {
         yield return new WaitForSeconds(0.5f);
         if (is_holding)
-            Hold_Absorb_Release();
-    }
-
-
-    private void Hold_Absorb_Release()
-    {
-        api.AbsorbReleaseHold(hold_direction);
-        is_holding = false;
+        {
+            api.AbsorbReleaseHold(hold_direction);
+            is_holding = false;
+        }
     }
     // Get Arrows if Ability needs it
     private void Get_Space_Arrows()
@@ -160,15 +138,5 @@ public class GetInput : MonoBehaviour {
         pos.z = -10;
         Camera.main.transform.position = pos;
 
-    }
-
-    public void Player_Move_Finished()
-    {
-        is_walking = false;
-    }
-
-    public void Player_Move_Started()
-    {
-        is_walking = true;
     }
 }

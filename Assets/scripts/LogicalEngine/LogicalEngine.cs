@@ -123,7 +123,6 @@ public class LogicalEngine {
     public void MovePlayer(Player player, Direction dir)
     {
         Vector2 nextpos;
-        apiinput.PlayerMoveStarted();
         if (player.onramp)
         {
             List<Unit> units = GetUnits(player.position);
@@ -404,19 +403,16 @@ public class LogicalEngine {
                     {
                         Direction olddir = database.player[i].direction;
                         database.player[i].direction = direction;
-                        apiinput.PlayerMoveStarted();
                         apigraphic.PlayerChangeDirection(database.player[i], olddir, database.player[i].direction);
                     }
                     else if (!database.player[i].Move(direction))
                     {
                         Lean(database.player[i], direction);
-                        apiinput.PlayerMoveFinished();
                     }
                 }
                 else if (database.player[i].Can_Lean(direction))
                 {
                     Lean(database.player[i], direction);
-                    apiinput.PlayerMoveFinished();
                 }   
             }
         }
@@ -537,7 +533,6 @@ public class LogicalEngine {
     {
         Debug.Log("move animation finished");
         Applygravity();
-        apiinput.PlayerMoveFinished();
     }
     public void graphic_GameObjectMoveAnimationFinished(GameObject gameobject, Unit unit)
     {
@@ -558,7 +553,7 @@ public class LogicalEngine {
 
     public void graphic_PlayerChangeDirectionFinished(Player player)
     {
-        apiinput.PlayerMoveFinished();
+        
     }
     public void graphic_PlayerLandFinished(Player player)
     {
