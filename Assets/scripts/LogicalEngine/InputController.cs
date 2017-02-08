@@ -12,10 +12,8 @@ public class InputController {
 
     public void PlayerMoveAction(Player player, Direction direction)
     {
-        Debug.Log(player.state);
         if (player.state == PlayerState.Idle)
         {
-            Debug.Log("asdfghjkl;sdfghjk");
             IdlePLayerMove(player, direction);
         }
         else if(player.state == PlayerState.Moving)
@@ -54,8 +52,6 @@ public class InputController {
 
     private void MovingPlayerMove(Player player, Direction direction)
     {
-        //Debug.Log(player.direction);
-        //Debug.Log(direction);
         if (player.direction == direction)
         {
             //Debug.Log("calling graphicals");
@@ -80,6 +76,7 @@ public class InputController {
         }
         else if (direction == Toolkit.ReverseDirection(player.direction))
         {
+            player.movepercentage = 0;  
             Direction olddir = player.direction;
             player.direction = direction;
             engine.apigraphic.PlayerChangeDirection(player, olddir, player.direction);
