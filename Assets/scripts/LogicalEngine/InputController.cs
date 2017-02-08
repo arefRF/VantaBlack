@@ -57,7 +57,6 @@ public class InputController {
         if(player.direction == direction)
         {
             //Debug.Log("calling graphicals");
-            //Debug.Log(player.movepercentage);
             if (player.movepercentage == 90)
             {
                 Debug.Log("calling graphicals");
