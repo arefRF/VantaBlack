@@ -28,16 +28,6 @@ public class APIInput{
         engine.Input_Move(dir);
     }
 
-    public void PlayerMoveFinished()
-    {
-        input.Player_Move_Finished();
-    }
-
-    public void PlayerMoveStarted()
-    {
-        input.Player_Move_Started();
-    }
-
     public void ArrowRelease(Direction dir)
     {
         engine.ArrowkeyReleased(dir);
