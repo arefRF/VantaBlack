@@ -51,7 +51,6 @@ public class APIGraphic{
     //  Block to Block
     public void MovePlayer_Simple_1(Player player, Vector2 position)
     {
-        Debug.Log("simple1");
         //player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
         player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
     }
