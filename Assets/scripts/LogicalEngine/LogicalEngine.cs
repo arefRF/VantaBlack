@@ -15,7 +15,6 @@ public class LogicalEngine {
     {
         lock_move = new Object();
         sizeX = x;
-
         sizeY = y;
         stuckedunits = new List<Unit>();
         apigraphic = new APIGraphic(this);
