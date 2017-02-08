@@ -14,6 +14,7 @@ public class PlayerPhysics : MonoBehaviour
     private MoveType move_type;
     private Player player;
     private Vector2 real_end;
+    private bool set_percent;
     void Start()
     {
         engine = Starter.GetEngine();
@@ -175,6 +176,7 @@ public class PlayerPhysics : MonoBehaviour
     }
     public void Simple_Move(Vector2 pos)
     {
+        set_percent = true;
         real_end = pos;
            StopAllCoroutines();
             Rotate_On_Block();
@@ -293,8 +295,16 @@ public class PlayerPhysics : MonoBehaviour
 
     private void Set_Player_Move_Percent(float remain)
     {
-        if (remain > 0.9f)
+        if (remain >= 0.9f && set_percent)
+        {
+            set_percent = false;
+            Debug.Log("90 percent");
             player.movepercentage = 90;
+        }
+        else if(remain < 0.2f)
+        {
+            set_percent = true;
+        }
     }
 
     // For Moves that have Acceleration Like Gravity
