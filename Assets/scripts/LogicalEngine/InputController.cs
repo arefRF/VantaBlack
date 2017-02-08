@@ -52,24 +52,30 @@ public class InputController {
 
     private void MovingPlayerMove(Player player, Direction direction)
     {
+        //Debug.Log(player.direction);
+        //Debug.Log(direction);
         if(player.direction == direction)
         {
-            if(player.movepercentage == 90)
+            //Debug.Log("calling graphicals");
+            //Debug.Log(player.movepercentage);
+            if (player.movepercentage == 90)
             {
-                /*if (!player.Move(direction))
+                Debug.Log("calling graphicals");
+                if (!player.Move(direction))
                 {
                     engine.Lean(player, direction);
                     
-                }*/
-                //else if
-                //{
-                    player.movepercentage = 91;
+                }
+                else
+                {
+                player.movepercentage = 91;
                     player.state = PlayerState.Moving;
-                engine.apiunit.RemoveFromDatabase(player);
+                /*engine.apiunit.RemoveFromDatabase(player);
                 player.position += Toolkit.DirectiontoVector(direction);
                 engine.apiunit.AddToDatabase(player);
-                engine.apigraphic.Move_Update(player, player.position);
-                //}
+                Debug.Log("calling graphicals");
+                engine.apigraphic.Move_Update(player, player.position);*/
+                }
             }
         }
         else

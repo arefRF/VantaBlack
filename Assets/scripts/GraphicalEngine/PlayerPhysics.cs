@@ -298,7 +298,6 @@ public class PlayerPhysics : MonoBehaviour
         if (remain >= 0.9f && set_percent)
         {
             set_percent = false;
-            Debug.Log("90 percent");
             player.movepercentage = 90;
         }
     }
