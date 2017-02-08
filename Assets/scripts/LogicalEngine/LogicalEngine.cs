@@ -201,10 +201,20 @@ public class LogicalEngine {
                 }
                 else
                 {
-                    database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                    player.position = nextpos;
-                    database.units[(int)player.position.x, (int)player.position.y].Add(player);
-                    apigraphic.MovePlayer_Ramp_1(player, nextpos,((Ramp)units[0]).type);
+                    if (Toolkit.CanplayerGoOnRampSideFromRamp(Toolkit.GetRamp(nextpos), database.gravity_direction, Direction.Right))
+                    {
+                        database.units[(int)player.position.x, (int)player.position.y].Remove(player);
+                        player.position = nextpos;
+                        database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                        apigraphic.MovePlayer_Ramp_1(player, nextpos, ((Ramp)units[0]).type);
+                    }
+                    else
+                    {
+                        database.units[(int)player.position.x, (int)player.position.y].Remove(player);
+                        player.position = Toolkit.VectorSum(player.position, dir);
+                        database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                        apigraphic.MovePlayer_Ramp_5(player, player.position, Toolkit.GetRamp(player.position).type);
+                    }
                 }
             }
             else
