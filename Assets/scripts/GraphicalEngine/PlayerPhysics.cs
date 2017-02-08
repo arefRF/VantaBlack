@@ -273,11 +273,20 @@ public class PlayerPhysics : MonoBehaviour
         }
         move_type = MoveType.Idle;
         if (call_finish)
+        {
             api.MovePlayerFinished(gameObject);
+            player.movepercentage = 100;
+        }
         api.Check_Camera(player);
         // if it needs Call Finished Move of API
     }
 
+
+    private void Set_Player_Move_Percent(float remain)
+    {
+        if (remain > 0.9f)
+            player.movepercentage = 90;
+    }
 
     // For Moves that have Acceleration Like Gravity
     private IEnumerator Accelerated_Move(Vector2 end,float velocity, float a,bool call_finish)
