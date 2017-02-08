@@ -57,14 +57,14 @@ public class InputController {
         if (player.direction == direction)
         {
             //Debug.Log("calling graphicals");
-            if (player.movepercentage == 90)
+            if (player.movepercentage == 98)
             {
                 if (!player.Move(direction))
                 {
                 }
                 else
                 {
-                    player.movepercentage = 91;
+                    player.movepercentage = 99;
                     player.state = PlayerState.Moving;
                     /*engine.apiunit.RemoveFromDatabase(player);
                     player.position += Toolkit.DirectiontoVector(direction);
