@@ -30,6 +30,7 @@ public class PlayerPhysics : MonoBehaviour
     //ramp to fall
     public void Ramp_To_Fall(Vector2 pos,int type)
     {
+        StopAllCoroutines();
         Rotate_On_Ramp(type);
         StartCoroutine(Constant_Move(pos, move_time, true));
     }
@@ -46,6 +47,7 @@ public class PlayerPhysics : MonoBehaviour
     //ramp to block
     public void Ramp_To_Block_Move(Vector2 pos,int type)
     {
+        StopAllCoroutines();
         Vector2 end1 = pos  +Ramp_To_Block_Pos(type);
         StartCoroutine(Ramp_To_Block_Coroutine(end1, pos, move_time, true));
         
@@ -69,6 +71,7 @@ public class PlayerPhysics : MonoBehaviour
     }
     public void Block_To_Ramp_Move(Vector2 pos, int type)
     {
+        StopAllCoroutines();
         Debug.Log(type);
         Vector2 end1 = pos + Block_To_Ramp_Pos(type);
         Vector2 end2 = (Vector2)pos + On_Ramp_Pos(type);
@@ -107,6 +110,7 @@ public class PlayerPhysics : MonoBehaviour
     
     public void Ramp_To_Sharp_Move(Vector2 pos,int type)
     {
+        StopAllCoroutines();
         Vector2 end1 = Ramp_To_Sharp_Pos(Direction.Down, pos);
         Vector2 end2 = pos + On_Ramp_Pos(type);
         StartCoroutine(Ramp_To_Sharp_Coroutine(end1,end2,move_time,true,type));
@@ -143,6 +147,7 @@ public class PlayerPhysics : MonoBehaviour
 
     public void Lean_Stick_Move(Direction dir)
     {
+
         StopAllCoroutines();
         Vector2 target = Toolkit.DirectiontoVector(dir) + (Vector2)player_transofrm.position;
         StartCoroutine(Constant_Move(target,platform_move_time,false));
@@ -158,6 +163,7 @@ public class PlayerPhysics : MonoBehaviour
     //ramp to ramp
     public void Ramp_To_Ramp_Move(Vector2 pos,int type)
     {
+        StopAllCoroutines();
         Vector2 on_ramp_pos = On_Ramp_Pos(type);
         pos = (Vector2)pos + on_ramp_pos;
         StartCoroutine(Constant_Move(pos, move_time, true));
@@ -173,12 +179,10 @@ public class PlayerPhysics : MonoBehaviour
     }
     public void Simple_Move(Vector2 pos)
     {
-        if (move_type != MoveType.Falling)
-        {
+           StopAllCoroutines();
             Rotate_On_Block();
             move_type = MoveType.BlockToBlock;
             StartCoroutine(Constant_Move(pos, move_time, true));
-        }
 
     }
 
