@@ -71,7 +71,7 @@ public class FunctionalContainer : Container {
             }
             //stucklevel = 0;
         }
-        if (stucklevel > 0)
+        if (stucklevel > 0 && !first)
         {
             dir = stuckdirection;
             shouldmove = stucklevel;
