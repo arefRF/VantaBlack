@@ -43,7 +43,6 @@ public class PlayerPhysics : MonoBehaviour
 
     public void On_Platform_Stay(Vector2 pos)
     {
-
         StopAllCoroutines();
     }
 
@@ -222,7 +221,8 @@ public class PlayerPhysics : MonoBehaviour
         if (call_finish)
             api.MovePlayerFinished(gameObject);
         api.Check_Camera(player);
-       
+        player.movepercentage = 0;
+
     }
 
     private IEnumerator Ramp_To_Block_Coroutine(Vector2 end1,Vector2 end2,float mvoe_time,bool call_finish)
@@ -247,6 +247,7 @@ public class PlayerPhysics : MonoBehaviour
         if (call_finish)
             api.MovePlayerFinished(gameObject);
         api.Check_Camera(player);
+        player.movepercentage = 0;
         
     }
     private IEnumerator Ramp_To_Sharp_Coroutine(Vector2 end1, Vector2 end2, float move_time, bool call_finish,int type)
@@ -274,6 +275,7 @@ public class PlayerPhysics : MonoBehaviour
         if (call_finish)
             api.MovePlayerFinished(gameObject);
         api.Check_Camera(player);
+        player.movepercentage = 0;
     }
 
     public void Set_End(Vector2 pos)
@@ -298,9 +300,9 @@ public class PlayerPhysics : MonoBehaviour
         if (call_finish)
         {
             api.MovePlayerFinished(gameObject);
-            player.movepercentage = 100;
         }
         api.Check_Camera(player);
+        player.movepercentage = 0;
         // if it needs Call Finished Move of API
     }
 
