@@ -54,36 +54,34 @@ public class InputController {
     {
         //Debug.Log(player.direction);
         //Debug.Log(direction);
-        if(player.direction == direction)
+        if (player.direction == direction)
         {
             //Debug.Log("calling graphicals");
             if (player.movepercentage == 90)
             {
                 if (!player.Move(direction))
                 {
-                    engine.Lean(player, direction);
-                    
                 }
                 else
                 {
-                player.movepercentage = 91;
+                    player.movepercentage = 91;
                     player.state = PlayerState.Moving;
-                /*engine.apiunit.RemoveFromDatabase(player);
-                player.position += Toolkit.DirectiontoVector(direction);
-                engine.apiunit.AddToDatabase(player);
-                Debug.Log("calling graphicals");
-                engine.apigraphic.Move_Update(player, player.position);*/
+                    /*engine.apiunit.RemoveFromDatabase(player);
+                    player.position += Toolkit.DirectiontoVector(direction);
+                    engine.apiunit.AddToDatabase(player);
+                    Debug.Log("calling graphicals");
+                    engine.apigraphic.Move_Update(player, player.position);*/
                 }
             }
         }
-        else
+        else if (direction == Toolkit.ReverseDirection(player.direction))
         {
             Direction olddir = player.direction;
             player.direction = direction;
             engine.apigraphic.PlayerChangeDirection(player, olddir, player.direction);
             if (!player.Move(direction))
             {
-                engine.Lean(player, direction);
+                
             }
             else
             {
