@@ -295,14 +295,10 @@ public class PlayerPhysics : MonoBehaviour
 
     private void Set_Player_Move_Percent(float remain)
     {
-        if (remain >= 0.9f && set_percent)
+        if (remain < 0.9f && set_percent)
         {
             set_percent = false;
             player.movepercentage = 90;
-        }
-        else if(remain < 0.2f)
-        {
-            set_percent = true;
         }
     }
 

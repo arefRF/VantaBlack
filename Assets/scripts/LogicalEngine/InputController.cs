@@ -59,7 +59,6 @@ public class InputController {
             //Debug.Log("calling graphicals");
             if (player.movepercentage == 90)
             {
-                Debug.Log("calling graphicals");
                 if (!player.Move(direction))
                 {
                     engine.Lean(player, direction);
