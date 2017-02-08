@@ -73,8 +73,6 @@ public class APIGraphic{
     // Block to fall
     public void MovePlayer_Simple_4(Player player, Vector2 position)
     {
-        Debug.Log("simple4");
-        Debug.Log(position);
         player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
     }
     
