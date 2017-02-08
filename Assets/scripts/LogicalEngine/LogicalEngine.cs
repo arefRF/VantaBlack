@@ -534,7 +534,6 @@ public class LogicalEngine {
 
     public void graphic_PlayerMoveAnimationFinished(Player player)
     {
-        Debug.Log("move animation finished");
         player.state = PlayerState.Idle;
         Applygravity();
     }

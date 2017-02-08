@@ -54,9 +54,18 @@ public class InputController {
     {
         if(player.direction == direction)
         {
-            if(player.movepercentage >= 90)
+            if(player.movepercentage == 90)
             {
-
+                if (!player.Move(direction))
+                {
+                    engine.Lean(player, direction);
+                    
+                }
+                else
+                {
+                    player.movepercentage = 91;
+                    player.state = PlayerState.Moving;
+                }
             }
         }
         else
@@ -70,7 +79,6 @@ public class InputController {
             }
             else
             {
-                Debug.Log(player.state);
                 player.state = PlayerState.Moving;
             }
         }
