@@ -175,6 +175,7 @@ public class PlayerPhysics : MonoBehaviour
     }
     public void Simple_Move(Vector2 pos)
     {
+        real_end = pos;
            StopAllCoroutines();
             Rotate_On_Block();
             move_type = MoveType.BlockToBlock;

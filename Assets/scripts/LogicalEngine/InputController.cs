@@ -56,16 +56,20 @@ public class InputController {
         {
             if(player.movepercentage == 90)
             {
-                if (!player.Move(direction))
+                /*if (!player.Move(direction))
                 {
                     engine.Lean(player, direction);
                     
-                }
-                else
-                {
+                }*/
+                //else if
+                //{
                     player.movepercentage = 91;
                     player.state = PlayerState.Moving;
-                }
+                engine.apiunit.RemoveFromDatabase(player);
+                player.position += Toolkit.DirectiontoVector(direction);
+                engine.apiunit.AddToDatabase(player);
+                engine.apigraphic.Move_Update(player, player.position);
+                //}
             }
         }
         else
