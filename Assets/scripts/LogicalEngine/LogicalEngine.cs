@@ -535,6 +535,7 @@ public class LogicalEngine {
 
     public void graphic_PlayerMoveAnimationFinished(Player player)
     {
+        player.movepercentage = 0;
         Applygravity();
         player.state = PlayerState.Idle;
     }
