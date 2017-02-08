@@ -366,7 +366,7 @@ public class LogicalEngine {
             isonunit = false;
         if (isonunit)
         {
-            player.state = 0;
+            player.movepercentage = 0;
         }
         else
             player.ApplyGravity(database.gravity_direction, database.units);
@@ -374,7 +374,7 @@ public class LogicalEngine {
 
     public void graphic_LandFinished(Player player)
     {
-        player.state = 0;
+        player.movepercentage = 0;
     }
 
     public void Lean(Player player, Direction direction)
@@ -395,26 +395,7 @@ public class LogicalEngine {
     {
         for(int i=0; i<database.player.Count; i++)
         {
-            if (!database.player[i].lean )
-            {
-                if (database.player[i].Can_Move_Direction(direction))
-                {
-                    if (database.player[i].Should_Change_Direction(direction))
-                    {
-                        Direction olddir = database.player[i].direction;
-                        database.player[i].direction = direction;
-                        apigraphic.PlayerChangeDirection(database.player[i], olddir, database.player[i].direction);
-                    }
-                    else if (!database.player[i].Move(direction))
-                    {
-                        Lean(database.player[i], direction);
-                    }
-                }
-                else if (database.player[i].Can_Lean(direction))
-                {
-                    Lean(database.player[i], direction);
-                }   
-            }
+            
         }
     }
 

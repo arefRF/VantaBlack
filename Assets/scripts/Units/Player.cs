@@ -8,8 +8,8 @@ public class Player : Unit
     public List<AbilityType> abilities;
     public List<Direction> move_direction;
     public Direction direction { get; set; }
-    public int state { get; set; }
-
+    public int movepercentage { get; set; }
+    public PlayerState state {get;set;}
     public Direction leandirection { get; set; }
     public bool lean { get; set; }
 
