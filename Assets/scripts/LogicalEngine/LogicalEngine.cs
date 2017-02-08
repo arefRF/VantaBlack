@@ -15,7 +15,6 @@ public class LogicalEngine {
     {
         lock_move = new Object();
         sizeX = x;
-
         sizeY = y;
         stuckedunits = new List<Unit>();
         apigraphic = new APIGraphic(this);
@@ -368,7 +367,7 @@ public class LogicalEngine {
             isonunit = false;
         if (isonunit)
         {
-            player.state = PlayerState.Steady;
+            player.state = 0;
         }
         else
             player.ApplyGravity(database.gravity_direction, database.units);
@@ -376,7 +375,7 @@ public class LogicalEngine {
 
     public void graphic_LandFinished(Player player)
     {
-        player.state = PlayerState.Steady;
+        player.state = 0;
     }
 
     public void Lean(Player player, Direction direction)
