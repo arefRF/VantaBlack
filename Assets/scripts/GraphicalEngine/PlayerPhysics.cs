@@ -265,6 +265,7 @@ public class PlayerPhysics : MonoBehaviour
 
     public void Set_End(Vector2 pos)
     {
+        Debug.Log("Set End");
         real_end = pos;
     }
 
@@ -276,6 +277,7 @@ public class PlayerPhysics : MonoBehaviour
         {
             remain_distance = ((Vector2)player_transofrm.position - real_end).sqrMagnitude;
             player_transofrm.position = Vector2.MoveTowards(player_transofrm.position, real_end, Time.deltaTime * 1 / move_time);
+            Set_Player_Move_Percent(remain_distance);
             yield return null;
         }
         move_type = MoveType.Idle;
