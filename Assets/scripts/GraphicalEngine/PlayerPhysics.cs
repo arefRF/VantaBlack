@@ -41,6 +41,12 @@ public class PlayerPhysics : MonoBehaviour
 
     }
 
+    public void On_Platform_Stay(Vector2 pos)
+    {
+
+        StopAllCoroutines();
+    }
+
     //ramp to block
     public void Ramp_To_Block_Move(Vector2 pos,int type)
     {
@@ -155,7 +161,7 @@ public class PlayerPhysics : MonoBehaviour
 
         Rotate_On_Ramp(type);
     }
-    
+   
 
     //ramp to ramp
     public void Ramp_To_Ramp_Move(Vector2 pos,int type)
@@ -301,10 +307,10 @@ public class PlayerPhysics : MonoBehaviour
 
     private void Set_Player_Move_Percent(float remain)
     {
-        if (remain < 0.1f && set_percent)
+        if (remain < 0.02f && set_percent)
         {
             set_percent = false;
-            player.movepercentage = 90;
+            player.movepercentage = 98;
         }
     }
 
