@@ -208,6 +208,11 @@ public class APIGraphic{
         Debug.Log("Lean Stick Move");
         player.GetComponent<PlayerPhysics>().Lean_Stick_Move(dir);
     }
+
+    public void LeanStickStop(Player player)
+    {
+        player.GetComponent<PlayerPhysics>().Lean_Stick_Stop();
+    }
     public void Release(Player player, Container container)
     {
 

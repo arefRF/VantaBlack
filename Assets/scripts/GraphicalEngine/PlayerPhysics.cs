@@ -15,6 +15,8 @@ public class PlayerPhysics : MonoBehaviour
     private Player player;
     private Vector2 real_end;
     private bool set_percent;
+    private Coroutine lean_stick_co;
+    private Coroutine on_Platform_co;
     void Start()
     {
         engine = Starter.GetEngine();
@@ -152,7 +154,12 @@ public class PlayerPhysics : MonoBehaviour
 
         StopAllCoroutines();
         Vector2 target = Toolkit.DirectiontoVector(dir) + (Vector2)player_transofrm.position;
-        StartCoroutine(Constant_Move(target,platform_move_time,false));
+        lean_stick_co =  StartCoroutine(Constant_Move(target,platform_move_time,false));
+    }
+
+    public void Lean_Stick_Stop()
+    {
+        StopCoroutine(lean_stick_co);
     }
 
     private void Sharp_To_Ramp_Move(int type)
