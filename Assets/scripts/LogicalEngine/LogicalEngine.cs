@@ -105,7 +105,7 @@ public class LogicalEngine {
                     apigraphic.MovePlayerOnPlatform((Player)shouldmove[i], dir);
                 }
             }
-            Debug.Log(Toolkit.VectorSum(tempposition, dir),);
+            Debug.Log(Toolkit.VectorSum(tempposition, dir));
             apigraphic.MoveGameObject(unit.transform.parent.gameObject, Toolkit.VectorSum(tempposition, dir), unit);
         }
         else
