@@ -164,10 +164,10 @@ public class APIGraphic{
 
     }
 
-    public void MovePlayerOnPlatform(Player player,Direction dir)
+    public void MovePlayerOnPlatform(Player player,Vector2 po)
     {
         Debug.Log("MoveOnPlatForm");
-        player.GetComponent<PlayerPhysics>().On_Platform_Move(dir);
+        player.GetComponent<PlayerPhysics>().On_Platform_Move(pos);
     }
     public void Lean(Player player)
     {

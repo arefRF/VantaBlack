@@ -36,10 +36,9 @@ public class PlayerPhysics : MonoBehaviour
     }
 
     // when platform is moving move the player
-    public void On_Platform_Move(Direction dir)
+    public void On_Platform_Move(Vector2 pos)
     {
         move_type = MoveType.OnPlatform;
-        Vector2 pos = Toolkit.DirectiontoVector(dir) + (Vector2)player_transofrm.position;
         Debug.Log("On platform move");
         StartCoroutine(Constant_Move(pos, platform_move_time, false));
 
@@ -315,6 +314,8 @@ public class PlayerPhysics : MonoBehaviour
         {
             if (move_type == MoveType.LeanStick)
                 api.LeanStickFinished(player);
+            else if (move_type == MoveType.OnPlatform)
+                api.MovePlayerFinished(gameObject);
             set_percent = false;
             player.movepercentage = 98;
         }
