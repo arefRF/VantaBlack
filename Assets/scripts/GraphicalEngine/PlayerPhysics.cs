@@ -163,7 +163,8 @@ public class PlayerPhysics : MonoBehaviour
 
     public void Lean_Stick_Stop()
     {
-        StopCoroutine(lean_stick_co);
+        if(lean_stick_co!=null)
+            StopCoroutine(lean_stick_co);
     }
    
 
