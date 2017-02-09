@@ -112,7 +112,6 @@ public class APIGraphic{
     }    
     public void Fall(Player player, Vector2 position)
     {
-        Debug.Log("Fall");
         player.GetComponent<PlayerPhysics>().Fall(position);
         logicalengine.graphic_FallFinished(player);
     }
@@ -124,7 +123,6 @@ public class APIGraphic{
 
     public void Land(Player player, Vector2 position, Unit fallonunit)
     {
-        Debug.Log("Land");
         player.GetComponent<PlayerPhysics>().Land(position);
         logicalengine.graphic_LandFinished(player);
         
