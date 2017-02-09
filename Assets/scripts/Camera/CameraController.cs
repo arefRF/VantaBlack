@@ -71,12 +71,14 @@ public class CameraController : MonoBehaviour {
 
     private IEnumerator Camera_Move(Vector3 end,float move_time,bool auto)
     {
-        Debug.Log(end);
         float remain = (Camera.main.transform.position - end).sqrMagnitude;
         while (remain > float.Epsilon)
         {
-            remain  = (Camera.main.transform.position - end).sqrMagnitude;
-            pos = Vector3.MoveTowards(Camera.main.transform.position, end, Time.smoothDeltaTime / move_time);
+            Vector3 pos = new Vector3(p_transform.position.x, p_transform.position.y, Camera.main.transform.position.z);
+            pos.x = Mathf.Clamp(pos.x, left_bound, right_bound);
+            pos.y = Mathf.Clamp(pos.y, lower_bound, upper_bound);
+            remain  = (Camera.main.transform.position - pos).sqrMagnitude;
+            pos = Vector3.MoveTowards(Camera.main.transform.position, pos, Time.smoothDeltaTime / move_time);
             Camera.main.transform.position =pos;
             yield return null;
         }
