@@ -6,7 +6,6 @@ public class PlayerGraphics : MonoBehaviour {
     private APIGraphic api;
     private LogicalEngine engine;
     private Vector2 unmoved_pos;
-    public Vector2 camera_offset = new Vector2(3, 3);
     void Start()
     {
         unmoved_pos = transform.position;
@@ -45,7 +44,9 @@ public class PlayerGraphics : MonoBehaviour {
     }
     
     public void Check_Camera()
-    {/*
+    {
+        
+        /*
         if(Mathf.Abs(unmoved_pos.x - transform.position.x)> camera_offset.x)
         {  
             StartCoroutine(Smooth_Move_Camera(new Vector3( Camera_Pos().x, Camera.main.transform.position.y, -15)));

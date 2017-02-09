@@ -156,7 +156,6 @@ public class PlayerPhysics : MonoBehaviour
 
     public void Lean_Stick_Move(Direction dir)
     {
-
         StopAllCoroutines();
         move_type = MoveType.LeanStick;
         Vector2 target = Toolkit.DirectiontoVector(dir) + (Vector2)player_transofrm.position;
@@ -304,7 +303,7 @@ public class PlayerPhysics : MonoBehaviour
             Set_Player_Move_Percent(remain_distance);
             yield return null;
         }
-        move_type = MoveType.Idle;
+
         if (call_finish)
         {
             if (move_type == MoveType.LeanStick)
@@ -312,6 +311,7 @@ public class PlayerPhysics : MonoBehaviour
             else
                 api.MovePlayerFinished(gameObject);
         }
+        move_type = MoveType.Idle;
         api.Check_Camera(player);
         player.movepercentage = 0;
         // if it needs Call Finished Move of API

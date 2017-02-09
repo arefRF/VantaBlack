@@ -217,6 +217,7 @@ public class APIGraphic{
 
     public void LeanStickFinished(Player player)
     {
+        Debug.Log("Lean Stick Finish");
         logicalengine.graphic_LeanStickMoveFinished(player);
     }
     public void Release(Player player, Container container)
