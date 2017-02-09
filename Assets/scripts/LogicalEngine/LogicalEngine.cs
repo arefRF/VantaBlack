@@ -64,6 +64,7 @@ public class LogicalEngine {
             }
             leanmove.AddRange(GetRelatedLeanedPlayers(unit.gameObject.transform.parent.gameObject));
             database.units[(int)unit.position.x, (int)unit.position.y].Remove(unit);
+            Vector2 tempposition = unit.position - (Vector2)unit.gameObject.transform.position;
             unit.position = Toolkit.VectorSum(unit.position, Toolkit.DirectiontoVector(dir));
             database.units[(int)unit.position.x, (int)unit.position.y].Add(unit);
             for(int i=0; i<leanmove.Count; i++)
@@ -104,8 +105,8 @@ public class LogicalEngine {
                     apigraphic.MovePlayerOnPlatform((Player)shouldmove[i], dir);
                 }
             }
-
-            apigraphic.MoveGameObject(unit.transform.parent.gameObject, dir, unit);
+            Debug.Log(Toolkit.VectorSum(tempposition, dir),);
+            apigraphic.MoveGameObject(unit.transform.parent.gameObject, Toolkit.VectorSum(tempposition, dir), unit);
         }
         else
         {
