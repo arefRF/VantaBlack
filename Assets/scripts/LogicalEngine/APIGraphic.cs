@@ -211,7 +211,13 @@ public class APIGraphic{
 
     public void LeanStickStop(Player player)
     {
+        Debug.Log("Lean Stop");
         player.GetComponent<PlayerPhysics>().Lean_Stick_Stop();
+    }
+
+    public void LeanStickFinished(Player player)
+    {
+        logicalengine.graphic_LeanStickMoveFinished(player);
     }
     public void Release(Player player, Container container)
     {
