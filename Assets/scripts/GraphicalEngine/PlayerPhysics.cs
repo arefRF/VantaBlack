@@ -227,7 +227,6 @@ public class PlayerPhysics : MonoBehaviour
         }
         if (call_finish)
             api.MovePlayerFinished(gameObject);
-        api.Check_Camera(player);
         player.movepercentage = 0;
 
     }
@@ -253,7 +252,6 @@ public class PlayerPhysics : MonoBehaviour
         }
         if (call_finish)
             api.MovePlayerFinished(gameObject);
-        api.Check_Camera(player);
         player.movepercentage = 0;
         
     }
@@ -281,7 +279,6 @@ public class PlayerPhysics : MonoBehaviour
         }
         if (call_finish)
             api.MovePlayerFinished(gameObject);
-        api.Check_Camera(player);
         player.movepercentage = 0;
     }
 
@@ -312,7 +309,6 @@ public class PlayerPhysics : MonoBehaviour
                 api.MovePlayerFinished(gameObject);
         }
         move_type = MoveType.Idle;
-        api.Check_Camera(player);
         player.movepercentage = 0;
         // if it needs Call Finished Move of API
     }
@@ -344,7 +340,6 @@ public class PlayerPhysics : MonoBehaviour
                 case MoveType.Falling: api.Fall_Finish(player); move_type = MoveType.Idle; break;
             }
         }
-        api.Check_Camera(player);
 
     }
     private Vector2 Ramp_To_Corner_Pos(Direction gravity,Vector2 target)

@@ -42,23 +42,6 @@ public class PlayerGraphics : MonoBehaviour {
     {
         StartCoroutine(Player_Move_Coroutine(end,true));
     }
-    
-    public void Check_Camera()
-    {
-        
-        /*
-        if(Mathf.Abs(unmoved_pos.x - transform.position.x)> camera_offset.x)
-        {  
-            StartCoroutine(Smooth_Move_Camera(new Vector3( Camera_Pos().x, Camera.main.transform.position.y, -15)));
-            unmoved_pos = transform.position;
-        }
-        
-        if(Mathf.Abs(unmoved_pos.y - transform.position.y)> camera_offset.y)
-        {
-            StartCoroutine(Smooth_Move_Camera(new Vector3(Camera.main.transform.position.x, Camera_Pos().y , -15)));
-            unmoved_pos = transform.position;
-        }*/
-    }
 
     private Vector2 Camera_Pos()
     {

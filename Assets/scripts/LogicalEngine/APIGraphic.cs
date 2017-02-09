@@ -109,10 +109,6 @@ public class APIGraphic{
     {
         logicalengine.graphic_PlayerMoveAnimationFinished(player_obj.GetComponent<Player>());
            
-    }
-    public void Check_Camera(Player player)
-    {
-        player.GetComponent<PlayerGraphics>().Check_Camera();
     }    
     public void Fall(Player player, Vector2 position)
     {
