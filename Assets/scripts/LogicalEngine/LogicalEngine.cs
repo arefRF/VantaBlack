@@ -68,20 +68,23 @@ public class LogicalEngine {
             database.units[(int)unit.position.x, (int)unit.position.y].Add(unit);
             for(int i=0; i<leanmove.Count; i++)
             {
+                bool flag = false;
                 for(int j=0; j<shouldmove.Count;j++)
                 {
                     if(leanmove[i] == shouldmove[j])
                     {
-                        leanmove.RemoveAt(j);
-                        j=-1;
+                        Debug.Log(leanmove[i]);
+                        Debug.Log(shouldmove[j]);
+                        
+                        flag = true;
                     }
                 }
-                if (leanmove[i].CanMove(dir, unit.transform.parent.gameObject))
+                if (!flag && leanmove[i].CanMove(dir, unit.transform.parent.gameObject))
                 {
                     database.units[(int)leanmove[i].position.x, (int)leanmove[i].position.y].Remove(leanmove[i]);
-                    leanmove[i].position = Toolkit.VectorSum(leanmove[i].position, Toolkit.DirectiontoVector(dir));
-                    database.units[(int)leanmove[i].position.x, (int)leanmove[i].position.y].Add(leanmove[i]);
+                    ((Player)leanmove[i]).nextpos = Toolkit.VectorSum(leanmove[i].position, Toolkit.DirectiontoVector(dir));
                     apigraphic.LeanStickMove((Player)leanmove[i], dir);
+                    leanmove.RemoveAt(i);
                 }
             }
             for (int i = 0; i < shouldmove.Count; i++)
@@ -514,6 +517,7 @@ public class LogicalEngine {
                 {
                     if(database.player[i] == leanmove[j])
                     {
+                        apiunit.AddToDatabase(database.player[i]);
                         apigraphic.LeanStickStop(database.player[i]);
                     }
                 }
@@ -560,6 +564,15 @@ public class LogicalEngine {
         Applygravity();
         player.state = PlayerState.Idle;
     }
+
+    public void graphic_LeanStickMoveFinished(Player player)
+    {
+        player.position = player.nextpos;
+        apiunit.AddToDatabase(player);
+        Applygravity();
+        player.state = PlayerState.Idle;
+    }
+
     public void graphic_GameObjectMoveAnimationFinished(GameObject gameobject, Unit unit)
     {
         if (unit == null)

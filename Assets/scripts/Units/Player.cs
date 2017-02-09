@@ -18,7 +18,7 @@ public class Player : Unit
 
     public bool onmovingplatform { get; set; }
 
-
+    public Vector2 nextpos { get; set; }
 
     public void Awake()
     {
