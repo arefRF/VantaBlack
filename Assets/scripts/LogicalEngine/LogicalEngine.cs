@@ -84,7 +84,6 @@ public class LogicalEngine {
                     database.units[(int)leanmove[i].position.x, (int)leanmove[i].position.y].Remove(leanmove[i]);
                     ((Player)leanmove[i]).nextpos = Toolkit.VectorSum(leanmove[i].position, Toolkit.DirectiontoVector(dir));
                     apigraphic.LeanStickMove((Player)leanmove[i], dir);
-                    leanmove.RemoveAt(i);
                 }
             }
             for (int i = 0; i < shouldmove.Count; i++)
@@ -511,12 +510,14 @@ public class LogicalEngine {
         {
             if (database.player[i].lean)
             {
+                Debug.Log("player lean stopig");
                 database.player[i].lean = false;
                 apigraphic.LeanFinished(database.player[i]);
                 for(int j=0; j<leanmove.Count; j++)
                 {
                     if(database.player[i] == leanmove[j])
                     {
+                        Debug.Log("stoping lean stick");
                         apiunit.AddToDatabase(database.player[i]);
                         apigraphic.LeanStickStop(database.player[i]);
                     }

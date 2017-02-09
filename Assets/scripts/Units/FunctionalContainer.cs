@@ -39,8 +39,6 @@ public class FunctionalContainer : Container {
         reservedmovebool.Clear();
         reservedmoveint.Clear();
         Direction dir = direction;
-        Debug.Log(shouldmove);
-        Debug.Log(stucklevel);
         if (!on)
         {
             dir = Toolkit.ReverseDirection(dir);
@@ -129,8 +127,6 @@ public class FunctionalContainer : Container {
             if (stucklevel > 0)
                 stucklevel--;
             moved++;
-            Debug.Log(moved);
-            Debug.Log(shouldmove);
             if (moved == shouldmove)
                 movedone = true;
         }
