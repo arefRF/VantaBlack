@@ -53,9 +53,13 @@ public class CameraController : MonoBehaviour {
     }
     public void Camera_Offset_Change(float left, float right, float lower, float upper)
     {
-        right_bound = right;
-        left_bound = left;
-        upper_bound = upper;
-        lower_bound = lower;
+        if(right!=0)
+            right_bound = right;
+        if(left!=0)
+            left_bound = left;
+        if(upper!=0)
+            upper_bound = upper;
+        if(lower!= 0)
+            lower_bound = lower;
     }
 }

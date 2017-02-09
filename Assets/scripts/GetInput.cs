@@ -27,6 +27,13 @@ public class GetInput : MonoBehaviour {
     {
         // Lean Keys Up
         Get_Lean_Undo();
+
+      /*  if (Input.GetAxis("Horizontal") == 1)
+            Debug.Log("1");
+        if (Input.GetAxis("Horizontal") == -1)
+            Debug.Log("-1");
+
+      */
         // Directional Abilities use
         if (Input.GetKeyUp(KeyCode.Space))
             is_space = false;
