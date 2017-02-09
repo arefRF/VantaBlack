@@ -15,6 +15,7 @@ public class LogicalEngine {
 
 
     private List<Unit> leanmove;
+    private List<Unit> shouldmove;
     public LogicalEngine(int x, int y)
     {
         lock_move = new Object();
@@ -39,7 +40,7 @@ public class LogicalEngine {
 
     public bool MoveUnit(Unit unit, Direction dir)
     {
-        List<Unit> shouldmove = new List<Unit>();
+        shouldmove = new List<Unit>();
         leanmove = new List<Unit>();
         if (!(unit is Box))
         {
@@ -102,11 +103,9 @@ public class LogicalEngine {
                     database.units[(int)shouldmove[i].position.x, (int)shouldmove[i].position.y].Remove(shouldmove[i]);
                     shouldmove[i].position = Toolkit.VectorSum(shouldmove[i].position, Toolkit.DirectiontoVector(dir));
                     database.units[(int)shouldmove[i].position.x, (int)shouldmove[i].position.y].Add(shouldmove[i]);
-                    apigraphic.MovePlayerOnPlatform((Player)shouldmove[i], dir);
+                    apigraphic.MovePlayerOnPlatform((Player)shouldmove[i], shouldmove[i].position);
                 }
             }
-            Debug.Log(Toolkit.VectorSum(tempposition, dir));
-            Debug.Log(unit.transform.localPosition);
             apigraphic.MoveGameObject(unit.transform.parent.gameObject, Toolkit.VectorSum(tempposition, dir), unit);
         }
         else
@@ -512,17 +511,12 @@ public class LogicalEngine {
         {
             if (database.player[i].lean)
             {
-                Debug.Log("player lean stopig");
                 database.player[i].lean = false;
                 apigraphic.LeanFinished(database.player[i]);
-                for(int j=0; j<leanmove.Count; j++)
+                if(leanmove.Contains(database.player[i]) && !shouldmove.Contains(database.player[i]))
                 {
-                    if(database.player[i] == leanmove[j])
-                    {
-                        Debug.Log("stoping lean stick");
-                        apiunit.AddToDatabase(database.player[i]);
-                        apigraphic.LeanStickStop(database.player[i]);
-                    }
+                    apiunit.AddToDatabase(database.player[i]);
+                    apigraphic.LeanStickStop(database.player[i]);
                 }
                 database.player[i].ApplyGravity(database.gravity_direction, database.units);
             }
