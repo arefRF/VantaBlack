@@ -12,6 +12,9 @@ public class LogicalEngine {
     int sizeX, sizeY;
     public List<Unit> stuckedunits;
     Object lock_move;
+
+
+    private List<Unit> leanmove;
     public LogicalEngine(int x, int y)
     {
         lock_move = new Object();
@@ -22,6 +25,7 @@ public class LogicalEngine {
         apiinput = new APIInput(this);
         apiunit = new APIUnit(this);
         database = Starter.GetDataBase();
+        leanmove = new List<Unit>();
         initializer = new SubEngine_Initializer(x,y, this);
     }
 
@@ -36,7 +40,7 @@ public class LogicalEngine {
     public bool MoveUnit(Unit unit, Direction dir)
     {
         List<Unit> shouldmove = new List<Unit>();
-        List<Unit> leanmove = new List<Unit>();
+        leanmove = new List<Unit>();
         if (!(unit is Box))
         {
             if (!unit.CanMove(dir, unit.transform.parent.gameObject))
@@ -68,8 +72,8 @@ public class LogicalEngine {
                 {
                     if(leanmove[i] == shouldmove[j])
                     {
-                        shouldmove.RemoveAt(j);
-                        j--;
+                        leanmove.RemoveAt(j);
+                        j=-1;
                     }
                 }
                 if (leanmove[i].CanMove(dir, unit.transform.parent.gameObject))
@@ -201,10 +205,20 @@ public class LogicalEngine {
                 }
                 else
                 {
-                    database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                    player.position = nextpos;
-                    database.units[(int)player.position.x, (int)player.position.y].Add(player);
-                    apigraphic.MovePlayer_Ramp_1(player, nextpos,((Ramp)units[0]).type);
+                    if (Toolkit.CanplayerGoOnRampSideFromRamp(Toolkit.GetRamp(nextpos), database.gravity_direction, dir))
+                    {
+                        database.units[(int)player.position.x, (int)player.position.y].Remove(player);
+                        player.position = nextpos;
+                        database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                        apigraphic.MovePlayer_Ramp_1(player, nextpos, ((Ramp)units[0]).type);
+                    }
+                    else
+                    {
+                        database.units[(int)player.position.x, (int)player.position.y].Remove(player);
+                        player.position = Toolkit.VectorSum(player.position, dir);
+                        database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                        apigraphic.MovePlayer_Ramp_5(player, player.position, Toolkit.GetRamp(player.position).type);
+                    }
                 }
             }
             else
@@ -397,6 +411,7 @@ public class LogicalEngine {
     public void graphic_LandFinished(Player player)
     {
         player.movepercentage = 0;
+        player.state = PlayerState.Idle;
     }
 
     public void Lean(Player player, Direction direction)
@@ -495,6 +510,13 @@ public class LogicalEngine {
             {
                 database.player[i].lean = false;
                 apigraphic.LeanFinished(database.player[i]);
+                for(int j=0; j<leanmove.Count; j++)
+                {
+                    if(database.player[i] == leanmove[j])
+                    {
+                        apigraphic.LeanStickStop(database.player[i]);
+                    }
+                }
                 database.player[i].ApplyGravity(database.gravity_direction, database.units);
             }
         }
@@ -534,8 +556,9 @@ public class LogicalEngine {
 
     public void graphic_PlayerMoveAnimationFinished(Player player)
     {
-        player.state = PlayerState.Idle;
+        player.movepercentage = 0;
         Applygravity();
+        player.state = PlayerState.Idle;
     }
     public void graphic_GameObjectMoveAnimationFinished(GameObject gameobject, Unit unit)
     {
@@ -557,10 +580,6 @@ public class LogicalEngine {
     public void graphic_PlayerChangeDirectionFinished(Player player)
     {
         player.state = PlayerState.Idle;
-    }
-    public void graphic_PlayerLandFinished(Player player)
-    {
-        
     }
     public void UnitToGraphic_Land(Unit unit, Unit landingunit,Vector2 landingposition)
     {

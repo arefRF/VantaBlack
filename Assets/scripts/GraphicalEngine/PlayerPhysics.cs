@@ -15,6 +15,8 @@ public class PlayerPhysics : MonoBehaviour
     private Player player;
     private Vector2 real_end;
     private bool set_percent;
+    private Coroutine lean_stick_co;
+    private Coroutine on_Platform_co;
     void Start()
     {
         engine = Starter.GetEngine();
@@ -39,6 +41,11 @@ public class PlayerPhysics : MonoBehaviour
         Debug.Log("On platform move");
         StartCoroutine(Constant_Move(pos, platform_move_time, false));
 
+    }
+
+    public void On_Platform_Stay(Vector2 pos)
+    {
+        StopAllCoroutines();
     }
 
     //ramp to block
@@ -147,7 +154,12 @@ public class PlayerPhysics : MonoBehaviour
 
         StopAllCoroutines();
         Vector2 target = Toolkit.DirectiontoVector(dir) + (Vector2)player_transofrm.position;
-        StartCoroutine(Constant_Move(target,platform_move_time,false));
+        lean_stick_co =  StartCoroutine(Constant_Move(target,platform_move_time,false));
+    }
+
+    public void Lean_Stick_Stop()
+    {
+        StopCoroutine(lean_stick_co);
     }
 
     private void Sharp_To_Ramp_Move(int type)
@@ -155,7 +167,7 @@ public class PlayerPhysics : MonoBehaviour
 
         Rotate_On_Ramp(type);
     }
-    
+   
 
     //ramp to ramp
     public void Ramp_To_Ramp_Move(Vector2 pos,int type)
@@ -216,7 +228,8 @@ public class PlayerPhysics : MonoBehaviour
         if (call_finish)
             api.MovePlayerFinished(gameObject);
         api.Check_Camera(player);
-       
+        player.movepercentage = 0;
+
     }
 
     private IEnumerator Ramp_To_Block_Coroutine(Vector2 end1,Vector2 end2,float mvoe_time,bool call_finish)
@@ -241,6 +254,7 @@ public class PlayerPhysics : MonoBehaviour
         if (call_finish)
             api.MovePlayerFinished(gameObject);
         api.Check_Camera(player);
+        player.movepercentage = 0;
         
     }
     private IEnumerator Ramp_To_Sharp_Coroutine(Vector2 end1, Vector2 end2, float move_time, bool call_finish,int type)
@@ -268,6 +282,7 @@ public class PlayerPhysics : MonoBehaviour
         if (call_finish)
             api.MovePlayerFinished(gameObject);
         api.Check_Camera(player);
+        player.movepercentage = 0;
     }
 
     public void Set_End(Vector2 pos)
@@ -292,19 +307,19 @@ public class PlayerPhysics : MonoBehaviour
         if (call_finish)
         {
             api.MovePlayerFinished(gameObject);
-            player.movepercentage = 100;
         }
         api.Check_Camera(player);
+        player.movepercentage = 0;
         // if it needs Call Finished Move of API
     }
 
 
     private void Set_Player_Move_Percent(float remain)
     {
-        if (remain < 0.1f && set_percent)
+        if (remain < 0.02f && set_percent)
         {
             set_percent = false;
-            player.movepercentage = 90;
+            player.movepercentage = 98;
         }
     }
 

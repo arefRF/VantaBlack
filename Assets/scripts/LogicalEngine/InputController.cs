@@ -52,30 +52,31 @@ public class InputController {
 
     private void MovingPlayerMove(Player player, Direction direction)
     {
-        //Debug.Log(player.direction);
-        //Debug.Log(direction);
         if (player.direction == direction)
         {
             //Debug.Log("calling graphicals");
-            if (player.movepercentage == 90)
+            if (player.movepercentage == 98)
             {
-                if (!player.Move(direction))
-                {
-                }
-                else
-                {
-                    player.movepercentage = 91;
-                    player.state = PlayerState.Moving;
-                    /*engine.apiunit.RemoveFromDatabase(player);
-                    player.position += Toolkit.DirectiontoVector(direction);
-                    engine.apiunit.AddToDatabase(player);
-                    Debug.Log("calling graphicals");
-                    engine.apigraphic.Move_Update(player, player.position);*/
+                if (!player.ApplyGravity(engine.database.gravity_direction, engine.database.units)){
+                    if (!player.Move(direction))
+                    {
+                    }
+                    else
+                    {
+                        player.movepercentage = 99;
+                        player.state = PlayerState.Moving;
+                        /*engine.apiunit.RemoveFromDatabase(player);
+                        player.position += Toolkit.DirectiontoVector(direction);
+                        engine.apiunit.AddToDatabase(player);
+                        Debug.Log("calling graphicals");
+                        engine.apigraphic.Move_Update(player, player.position);*/
+                    }
                 }
             }
         }
         else if (direction == Toolkit.ReverseDirection(player.direction))
         {
+            player.movepercentage = 0;  
             Direction olddir = player.direction;
             player.direction = direction;
             engine.apigraphic.PlayerChangeDirection(player, olddir, player.direction);
