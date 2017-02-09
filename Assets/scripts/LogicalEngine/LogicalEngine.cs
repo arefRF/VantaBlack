@@ -81,7 +81,6 @@ public class LogicalEngine {
                 }
                 if (!flag && leanmove[i].CanMove(dir, unit.transform.parent.gameObject))
                 {
-                    database.units[(int)leanmove[i].position.x, (int)leanmove[i].position.y].Remove(leanmove[i]);
                     ((Player)leanmove[i]).nextpos = Toolkit.VectorSum(leanmove[i].position, Toolkit.DirectiontoVector(dir));
                     apigraphic.LeanStickMove((Player)leanmove[i], ((Player)leanmove[i]).nextpos);
                 }
@@ -562,6 +561,7 @@ public class LogicalEngine {
 
     public void graphic_LeanStickMoveFinished(Player player)
     {
+        apiunit.RemoveFromDatabase(player);
         player.position = player.nextpos;
         apiunit.AddToDatabase(player);
         Applygravity();

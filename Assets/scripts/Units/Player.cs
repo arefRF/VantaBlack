@@ -9,12 +9,12 @@ public class Player : Unit
     public List<Direction> move_direction;
     public Direction direction { get; set; }
     public int movepercentage { get; set; }
-    public PlayerState state {get;set;}
+    public PlayerState state { get; set; }
     public Direction leandirection { get; set; }
     public bool lean { get; set; }
 
     public bool onramp { get; set; }
-    public Direction gravity {get;set; }
+    public Direction gravity { get; set; }
 
     public bool onmovingplatform { get; set; }
 
@@ -47,7 +47,7 @@ public class Player : Unit
                 return true;
         return false;
     }
-    public bool Can_Lean( Direction dir)
+    public bool Can_Lean(Direction dir)
     {
         if (dir == Direction.Up || dir == Direction.Down)
             return true;
@@ -58,7 +58,7 @@ public class Player : Unit
     public override bool Move(Direction dir)
     {
         Ramp ramp = null;
-        List<Unit> units  = api.engine_GetUnits(this, dir);
+        List<Unit> units = api.engine_GetUnits(this, dir);
         onramp = false;
         List<Unit> temp = api.engine_GetUnits(position);
         bool goingup = true;
@@ -74,7 +74,7 @@ public class Player : Unit
             }
         }
         if (onramp)
-        { 
+        {
             Direction gravitydirection = Starter.GetDataBase().gravity_direction;
             switch (gravitydirection)
             {
@@ -107,7 +107,7 @@ public class Player : Unit
                     }
                     break;
             }
-            if(goingup)
+            if (goingup)
                 units = api.engine_GetUnits(Toolkit.VectorSum(Toolkit.VectorSum(Toolkit.DirectiontoVector(Toolkit.ReverseDirection(gravitydirection)), Toolkit.DirectiontoVector(dir)), position));
         }
         for (int i = 0; i < units.Count; i++) {
@@ -122,6 +122,7 @@ public class Player : Unit
     {
         List<Unit> units = api.engine_GetUnits(this, dir);
         players = new List<Unit>();
+        Debug.Log(position);
         for (int i = 0; i < units.Count; i++)
         {
             if (units[i] is Player)
@@ -146,13 +147,17 @@ public class Player : Unit
                     case Direction.Down: if (ramp.type != 1 && ramp.type != 4) return false; break;
                 }*/
             }
-            else if(units[i].transform.parent.gameObject != parent)
+            else if (units[i].transform.parent.gameObject != parent)
                 return false;
         }
         for (int i = 0; i < players.Count; i++)
         {
             if (!players[i].CanMove(dir, parent))
+            {
+                Debug.Log(players[i]);
                 return false;
+            }
+            
         }
         int bound = players.Count;
         for(int i = 0; i< bound; i++)
