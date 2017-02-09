@@ -13,10 +13,10 @@ public class PlayerPhysics : MonoBehaviour
     private Transform player_transofrm;
     private MoveType move_type;
     private Player player;
-    private Vector2 real_end;
     private bool set_percent;
-    private Coroutine lean_stick_co;
-    private Coroutine on_Platform_co;
+   // private Coroutine lean_stick_co;
+    //private Coroutine on_Platform_co;
+    private Coroutine last_co;
     void Start()
     {
         engine = Starter.GetEngine();
@@ -32,16 +32,16 @@ public class PlayerPhysics : MonoBehaviour
         move_type = MoveType.RampToFall;
         StopAllCoroutines();
         Rotate_On_Ramp(type);
-        StartCoroutine(Constant_Move(pos, move_time, true));
+        last_co =  StartCoroutine(Constant_Move(pos, move_time, true));
     }
 
     // when platform is moving move the player
     public void On_Platform_Move(Vector2 pos)
     {
-        if (on_Platform_co != null)
-            StopCoroutine(on_Platform_co);
+        if (last_co != null)
+            StopCoroutine(last_co);
         move_type = MoveType.OnPlatform;
-        on_Platform_co =  StartCoroutine(Constant_Move(pos, platform_move_time, false));
+        last_co =  StartCoroutine(Constant_Move(pos, platform_move_time, false));
 
     }
 
@@ -54,9 +54,10 @@ public class PlayerPhysics : MonoBehaviour
     public void Ramp_To_Block_Move(Vector2 pos,int type)
     {
         move_type = MoveType.RampToBlock;
-        StopAllCoroutines();
+        if (last_co != null)
+            StopCoroutine(last_co);
         Vector2 end1 = pos  +Ramp_To_Block_Pos(type);
-        StartCoroutine(Ramp_To_Block_Coroutine(end1, pos, move_time, true));
+        last_co = StartCoroutine(Ramp_To_Block_Coroutine(end1, pos, move_time, true));
         
        
     }
@@ -79,11 +80,12 @@ public class PlayerPhysics : MonoBehaviour
     public void Block_To_Ramp_Move(Vector2 pos, int type)
     {
         move_type = MoveType.BlockToRamp;
-        StopAllCoroutines();
+        if(last_co != null)
+            StopCoroutine(last_co);
         Debug.Log(type);
         Vector2 end1 = pos + Block_To_Ramp_Pos(type);
         Vector2 end2 = (Vector2)pos + On_Ramp_Pos(type);
-        StartCoroutine(Block_To_Ramp_Coroutine(end1,end2,move_time,true,type));
+        last_co = StartCoroutine(Block_To_Ramp_Coroutine(end1,end2,move_time,true,type));
         
     }
     
@@ -119,10 +121,10 @@ public class PlayerPhysics : MonoBehaviour
     public void Ramp_To_Sharp_Move(Vector2 pos,int type)
     {
         move_type = MoveType.RampToSharp;
-        StopAllCoroutines();
+        StopCoroutine(last_co);
         Vector2 end1 = Ramp_To_Sharp_Pos(Direction.Down, pos);
         Vector2 end2 = pos + On_Ramp_Pos(type);
-        StartCoroutine(Ramp_To_Sharp_Coroutine(end1,end2,move_time,true,type));
+        last_co = StartCoroutine(Ramp_To_Sharp_Coroutine(end1,end2,move_time,true,type));
         sharp_type = type;
     }
 
@@ -156,52 +158,56 @@ public class PlayerPhysics : MonoBehaviour
 
     public void Lean_Stick_Move(Vector2 pos)
     {
-        StopAllCoroutines();
+        if (last_co != null)
+            StopCoroutine(last_co);
         move_type = MoveType.LeanStick;
-        lean_stick_co =  StartCoroutine(Constant_Move(pos,platform_move_time,true));
+        last_co =  StartCoroutine(Constant_Move(pos,platform_move_time,true));
     }
 
     public void Lean_Stick_Stop()
     {
-        if(lean_stick_co!=null)
-            StopCoroutine(lean_stick_co);
+        if(last_co!=null)
+            StopCoroutine(last_co);
     }
    
 
     //ramp to ramp
     public void Ramp_To_Ramp_Move(Vector2 pos,int type)
     {
-        StopAllCoroutines();
+        if(last_co!= null )
+            StopCoroutine(last_co);
         Vector2 on_ramp_pos = On_Ramp_Pos(type);
         pos = (Vector2)pos + on_ramp_pos;
-        StartCoroutine(Constant_Move(pos, move_time, true));
+        last_co = StartCoroutine(Constant_Move(pos, move_time, true));
         Rotate_On_Ramp(type);
     }
    
     //fall 
     public void Fall(Vector2 pos)
     {
-        StopAllCoroutines();
+        StopCoroutine(last_co);
         move_type = MoveType.Falling;
-        StartCoroutine(Accelerated_Move(pos,fall_velocity,fall_acceleration,true));
+        last_co  = StartCoroutine(Accelerated_Move(pos,fall_velocity,fall_acceleration,true));
     }
     public void Simple_Move(Vector2 pos)
     {
             set_percent = true;
-           StopAllCoroutines();
+        if (last_co != null)
+            StopCoroutine(last_co);
             Rotate_On_Block();
             move_type = MoveType.BlockToBlock;
-            StartCoroutine(Constant_Move(pos, move_time, true));
+            last_co = StartCoroutine(Constant_Move(pos, move_time, true));
 
     }
 
     // ramp to corner move
     public void Ramp_To_Corner_Move(Vector2 pos,int type)
     {
+        StopCoroutine(last_co);
         move_type = MoveType.RampToCorner;
         Rotate_On_Ramp(type);
         pos += Ramp_To_Corner_Pos(Direction.Down, pos);
-        StartCoroutine(Constant_Move(pos, move_time, true));
+        last_co = StartCoroutine(Constant_Move(pos, move_time, true));
     }
 
 
@@ -284,8 +290,7 @@ public class PlayerPhysics : MonoBehaviour
 
     public void Set_End(Vector2 pos)
     {
-        Debug.Log("Set End");
-        real_end = pos;
+
     }
 
     // For Simple Constant Velocity Moves
