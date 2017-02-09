@@ -166,7 +166,6 @@ public class APIGraphic{
 
     public void MovePlayerOnPlatform(Player player,Vector2 pos)
     {
-        Debug.Log("MoveOnPlatForm");
         player.GetComponent<PlayerPhysics>().On_Platform_Move(pos);
     }
     public void Lean(Player player)

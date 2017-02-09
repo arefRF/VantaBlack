@@ -75,8 +75,6 @@ public class LogicalEngine {
                 {
                     if(leanmove[i] == shouldmove[j])
                     {
-                        Debug.Log(leanmove[i]);
-                        Debug.Log(shouldmove[j]);
                         
                         flag = true;
                     }

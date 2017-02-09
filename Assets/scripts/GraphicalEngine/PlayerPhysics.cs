@@ -38,9 +38,10 @@ public class PlayerPhysics : MonoBehaviour
     // when platform is moving move the player
     public void On_Platform_Move(Vector2 pos)
     {
+        if (on_Platform_co != null)
+            StopCoroutine(on_Platform_co);
         move_type = MoveType.OnPlatform;
-        Debug.Log("On platform move");
-        StartCoroutine(Constant_Move(pos, platform_move_time, false));
+        on_Platform_co =  StartCoroutine(Constant_Move(pos, platform_move_time, false));
 
     }
 

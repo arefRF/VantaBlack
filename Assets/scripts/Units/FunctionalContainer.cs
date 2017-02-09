@@ -98,7 +98,6 @@ public class FunctionalContainer : Container {
         }
         if (movedone)
         {
-            Debug.Log("move done");
             //if (moved == abilities.Count)
             resetstucked = false;
             movedone = false;
@@ -119,7 +118,6 @@ public class FunctionalContainer : Container {
         {
             shouldmove = stucklevel;
         }
-        Debug.Log("trying to move ");
         if (api.MoveUnit(this, dir))
         {
             resetstucked = true;
@@ -132,7 +130,6 @@ public class FunctionalContainer : Container {
         }
         else
         {
-            Debug.Log("couldnt move");
             laston = on;
             bool flag = false;
             if (moved != 0)
