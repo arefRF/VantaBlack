@@ -143,9 +143,8 @@ public class APIGraphic{
     }
 
 
-    public void MoveGameObject(GameObject obj, Direction dir, Unit unit)
+    public void MoveGameObject(GameObject obj, Vector2 pos, Unit unit)
     {
-        Vector2 pos = (Vector2) obj.transform.position + Toolkit.DirectiontoVector(dir);
         graphicalengine.Move_Object(obj,unit, pos);
        
     }

@@ -46,6 +46,7 @@ public class GraphicalEngine : MonoBehaviour {
             if (remain_distance < 0.01 && finish_lock)
             {
                 finish_lock = false;
+                
                 api.MoveGameObjectFinished(obj,unit);
             }
 

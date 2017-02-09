@@ -303,9 +303,6 @@ public class PlayerPhysics : MonoBehaviour
 
         if (call_finish)
         {
-            if (move_type == MoveType.LeanStick)
-                api.LeanStickFinished(player);
-            else
                 api.MovePlayerFinished(gameObject);
         }
         move_type = MoveType.Idle;
@@ -317,6 +314,8 @@ public class PlayerPhysics : MonoBehaviour
     {
         if (remain < 0.02f && set_percent)
         {
+            if (move_type == MoveType.LeanStick)
+                api.LeanStickFinished(player);
             set_percent = false;
             player.movepercentage = 98;
         }
