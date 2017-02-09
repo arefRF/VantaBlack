@@ -84,7 +84,7 @@ public class LogicalEngine {
                 {
                     database.units[(int)leanmove[i].position.x, (int)leanmove[i].position.y].Remove(leanmove[i]);
                     ((Player)leanmove[i]).nextpos = Toolkit.VectorSum(leanmove[i].position, Toolkit.DirectiontoVector(dir));
-                    apigraphic.LeanStickMove((Player)leanmove[i], dir);
+                    apigraphic.LeanStickMove((Player)leanmove[i], ((Player)leanmove[i]).nextpos);
                 }
             }
             for (int i = 0; i < shouldmove.Count; i++)
