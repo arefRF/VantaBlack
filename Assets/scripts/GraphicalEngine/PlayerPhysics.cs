@@ -296,7 +296,7 @@ public class PlayerPhysics : MonoBehaviour
         while(remain_distance > float.Epsilon)
         {
             remain_distance = ((Vector2)player_transofrm.position - end).sqrMagnitude;
-            player_transofrm.position = Vector2.MoveTowards(player_transofrm.position, end, Time.deltaTime * 1 / move_time);
+            player_transofrm.position = Vector2.MoveTowards(player_transofrm.position, end, Time.deltaTime * 1  / move_time);
             Set_Player_Move_Percent(remain_distance);
             yield return null;
         }
