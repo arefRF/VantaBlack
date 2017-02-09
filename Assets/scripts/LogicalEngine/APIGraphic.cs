@@ -146,7 +146,6 @@ public class APIGraphic{
     public void MoveGameObject(GameObject obj, Vector2 pos, Unit unit)
     {
         graphicalengine.Move_Object(obj,unit, pos);
-       
     }
 
     public void MoveGameObjectFinished(GameObject obj, Unit unit)
@@ -198,10 +197,10 @@ public class APIGraphic{
         player.GetComponent<PlayerPhysics>().Set_End(pos);
     }
 
-    public void LeanStickMove(Player player,Direction dir)
+    public void LeanStickMove(Player player,Vector2 pos)
     {
         Debug.Log("Lean Stick Move");
-        player.GetComponent<PlayerPhysics>().Lean_Stick_Move(dir);
+        player.GetComponent<PlayerPhysics>().Lean_Stick_Move(pos);
     }
 
     public void LeanStickStop(Player player)

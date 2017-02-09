@@ -154,12 +154,11 @@ public class PlayerPhysics : MonoBehaviour
     }
 
 
-    public void Lean_Stick_Move(Direction dir)
+    public void Lean_Stick_Move(Vector2 pos)
     {
         StopAllCoroutines();
         move_type = MoveType.LeanStick;
-        Vector2 target = Toolkit.DirectiontoVector(dir) + (Vector2)player_transofrm.position;
-        lean_stick_co =  StartCoroutine(Constant_Move(target,platform_move_time,true));
+        lean_stick_co =  StartCoroutine(Constant_Move(pos,platform_move_time,true));
     }
 
     public void Lean_Stick_Stop()
