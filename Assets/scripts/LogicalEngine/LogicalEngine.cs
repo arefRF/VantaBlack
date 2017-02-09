@@ -68,8 +68,8 @@ public class LogicalEngine {
                 {
                     if(leanmove[i] == shouldmove[j])
                     {
-                        shouldmove.RemoveAt(j);
-                        j--;
+                        leanmove.RemoveAt(j);
+                        j=-1;
                     }
                 }
                 if (leanmove[i].CanMove(dir, unit.transform.parent.gameObject))
@@ -201,7 +201,7 @@ public class LogicalEngine {
                 }
                 else
                 {
-                    if (Toolkit.CanplayerGoOnRampSideFromRamp(Toolkit.GetRamp(nextpos), database.gravity_direction, Direction.Right))
+                    if (Toolkit.CanplayerGoOnRampSideFromRamp(Toolkit.GetRamp(nextpos), database.gravity_direction, dir))
                     {
                         database.units[(int)player.position.x, (int)player.position.y].Remove(player);
                         player.position = nextpos;
