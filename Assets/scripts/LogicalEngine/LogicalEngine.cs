@@ -12,6 +12,9 @@ public class LogicalEngine {
     int sizeX, sizeY;
     public List<Unit> stuckedunits;
     Object lock_move;
+
+
+    private List<Unit> leanmove;
     public LogicalEngine(int x, int y)
     {
         lock_move = new Object();
@@ -22,6 +25,7 @@ public class LogicalEngine {
         apiinput = new APIInput(this);
         apiunit = new APIUnit(this);
         database = Starter.GetDataBase();
+        leanmove = new List<Unit>();
         initializer = new SubEngine_Initializer(x,y, this);
     }
 
@@ -36,7 +40,7 @@ public class LogicalEngine {
     public bool MoveUnit(Unit unit, Direction dir)
     {
         List<Unit> shouldmove = new List<Unit>();
-        List<Unit> leanmove = new List<Unit>();
+        leanmove = new List<Unit>();
         if (!(unit is Box))
         {
             if (!unit.CanMove(dir, unit.transform.parent.gameObject))
@@ -506,6 +510,13 @@ public class LogicalEngine {
             {
                 database.player[i].lean = false;
                 apigraphic.LeanFinished(database.player[i]);
+                for(int j=0; j<leanmove.Count; j++)
+                {
+                    if(database.player[i] == leanmove[j])
+                    {
+                        apigraphic.LeanStickStop(database.player[i]);
+                    }
+                }
                 database.player[i].ApplyGravity(database.gravity_direction, database.units);
             }
         }
