@@ -6,7 +6,6 @@ public class Box : Unit {
 	// Use this for initialization
 	void Start () {
         unitType = UnitType.Box;
-        obj = this.gameObject;
         position = gameObject.transform.position;
 	}
 	

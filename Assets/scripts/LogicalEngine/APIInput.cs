@@ -28,6 +28,11 @@ public class APIInput{
         engine.Input_Move(dir);
     }
 
+    public void UndoPressed()
+    {
+        engine.Undo();
+    }
+
     public void ArrowRelease(Direction dir)
     {
         engine.ArrowkeyReleased(dir);

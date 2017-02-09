@@ -331,3 +331,5 @@ public class Player : Unit
     }
 }
 
+//public class CloneablePlayer : 
+

@@ -25,54 +25,56 @@ public class GetInput : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-           // Lean Keys Up
-            Get_Lean_Undo();
-           // Directional Abilities use
-                if (Input.GetKeyUp(KeyCode.Space))
-                    is_space = false;
-                Get_Move();
-                if (Input.GetKeyDown(KeyCode.Space))
-                {
-                    if (!api.Action_Key())
-                        is_space = true;
-                }
-                if (is_space)
-                    Get_Space_Arrows();
-                if (Input.GetKeyDown(KeyCode.W))
-                {
-                    is_holding = true;
-                    hold_direction = Direction.Up;
-                    StopAllCoroutines();
-                    StartCoroutine(Wait_For_Absorb_Hold());
-                }
-                if (Input.GetKeyDown(KeyCode.S))
-                {
-                    is_holding = true;
-                    hold_direction = Direction.Down;
-                    StopAllCoroutines();
-                    StartCoroutine(Wait_For_Absorb_Hold());
-                }
-                if (Input.GetKeyDown(KeyCode.A))
-                {
-                    hold_direction = Direction.Left;
-                    is_holding = true;
-                    StopAllCoroutines();
-                    StartCoroutine(Wait_For_Absorb_Hold());
-                }
-                if (Input.GetKeyDown(KeyCode.D))
-                {
-                    is_holding = true;
-                    hold_direction = Direction.Right;
-                    StopAllCoroutines();
-                    StartCoroutine(Wait_For_Absorb_Hold());
-                }
-                if (Input.GetKeyUp(KeyCode.D) || Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.S))
-                {
-                    api.AbsorbRelease(hold_direction);
-                    is_holding = false;
-                }
-
-        
+        // Lean Keys Up
+        Get_Lean_Undo();
+        // Directional Abilities use
+        if (Input.GetKeyUp(KeyCode.Space))
+            is_space = false;
+        Get_Move();
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (!api.Action_Key())
+                is_space = true;
+        }
+        if (is_space)
+            Get_Space_Arrows();
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            is_holding = true;
+            hold_direction = Direction.Up;
+            StopAllCoroutines();
+            StartCoroutine(Wait_For_Absorb_Hold());
+        }
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            is_holding = true;
+            hold_direction = Direction.Down;
+            StopAllCoroutines();
+            StartCoroutine(Wait_For_Absorb_Hold());
+        }
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            hold_direction = Direction.Left;
+            is_holding = true;
+            StopAllCoroutines();
+            StartCoroutine(Wait_For_Absorb_Hold());
+        }
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            is_holding = true;
+            hold_direction = Direction.Right;
+            StopAllCoroutines();
+            StartCoroutine(Wait_For_Absorb_Hold());
+        }
+        if (Input.GetKeyUp(KeyCode.D) || Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.S))
+        {
+            api.AbsorbRelease(hold_direction);
+            is_holding = false;
+        }
+        if (Input.GetKeyUp(KeyCode.R))
+        {
+            api.UndoPressed();
+        }
     }
 
     // this is responsibile for Absorb and Release hold
