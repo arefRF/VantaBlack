@@ -53,6 +53,7 @@ public class CameraController : MonoBehaviour {
     }
     public void Camera_Offset_Change(float left, float right, float lower, float upper)
     {
+        auto_move = false;
         if(right!=0)
             right_bound = right;
         if(left!=0)
@@ -61,5 +62,26 @@ public class CameraController : MonoBehaviour {
             upper_bound = upper;
         if(lower!= 0)
             lower_bound = lower;
+        Vector3 pos = new Vector3(p_transform.position.x, p_transform.position.y,Camera.main.transform.position.z);
+        pos.x = Mathf.Clamp(pos.x, left_bound, right_bound);
+        pos.y = Mathf.Clamp(pos.y, lower_bound, upper_bound);
+        StartCoroutine(Camera_Move(pos,0.5f,true));
+
+    }
+
+    private IEnumerator Camera_Move(Vector3 end,float move_time,bool auto)
+    {
+        Debug.Log(end);
+        float remain = (Camera.main.transform.position - end).sqrMagnitude;
+        while (remain > float.Epsilon)
+        {
+            remain  = (Camera.main.transform.position - end).sqrMagnitude;
+            pos = Vector3.MoveTowards(Camera.main.transform.position, end, Time.smoothDeltaTime / move_time);
+            Camera.main.transform.position =pos;
+            yield return null;
+        }
+        
+        auto_move = auto;
+        
     }
 }
