@@ -70,7 +70,6 @@ public class Snapshot
         originalunits = new List<Unit>();
         foreach (Unit u in units)
         {
-            Debug.Log(u.position);
             originalunits.Add(u);
             clonedunits.Add(u.Clone());
         }

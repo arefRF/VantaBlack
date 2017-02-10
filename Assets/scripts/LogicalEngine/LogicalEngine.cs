@@ -304,7 +304,7 @@ public class LogicalEngine {
                 List<Unit> units = GetUnits(nextpos);
                 if (units.Count != 0)
                 {
-                    Debug.Log(units.Count);
+
                     if(units[0] is Branch)
                     {
                         database.units[(int)player.position.x, (int)player.position.y].Remove(player);
@@ -627,7 +627,7 @@ public class LogicalEngine {
                 
             if (u is FunctionalContainer)
             {
-                Debug.Log(u.gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock);
+
                 if (!u.gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock)
                 {
                     ((FunctionalContainer)u).ResetStuckLevel();
@@ -649,7 +649,7 @@ public class LogicalEngine {
             }
             if (u is FunctionalContainer)
             {
-                Debug.Log(u.gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock);
+               
                 if (!u.gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock)
                 {
                     ((FunctionalContainer)u).ResetStuckLevel();
