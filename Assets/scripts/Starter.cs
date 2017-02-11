@@ -12,6 +12,10 @@ public class Starter : MonoBehaviour{
     {
         _Set_Everything();
     }
+    void Start()
+    {
+        logicalengine.Applygravity();
+    }
     public void _Set_Everything()
     {
         database = new Database(0);

@@ -8,12 +8,18 @@ public class LogicalEngine {
     public APIUnit apiunit;
     public Database database;
     SubEngine_Initializer initializer;
+    InputController inputcontroller;
     int sizeX, sizeY;
     public List<Unit> stuckedunits;
-    Object lock_move;
+    SnapshotManager snpmanager;
+
+
+    private List<Unit> leanmove;
+    private List<Unit> shouldmove;
+    private int movingplayformcount;
     public LogicalEngine(int x, int y)
     {
-        lock_move = new Object();
+        movingplayformcount = 0;
         sizeX = x;
         sizeY = y;
         stuckedunits = new List<Unit>();
@@ -21,6 +27,8 @@ public class LogicalEngine {
         apiinput = new APIInput(this);
         apiunit = new APIUnit(this);
         database = Starter.GetDataBase();
+        leanmove = new List<Unit>();
+        snpmanager = new SnapshotManager(this);
         initializer = new SubEngine_Initializer(x,y, this);
     }
 
@@ -28,21 +36,25 @@ public class LogicalEngine {
     {
         database.units = initializer.init();
         database.state = State.Idle;
+        inputcontroller = new InputController(this);
+        //Applygravity();
     }
 
     public bool MoveUnit(Unit unit, Direction dir)
     {
-        List<Unit> shouldmove = new List<Unit>();
-        List<Unit> leanmove = new List<Unit>();
+        shouldmove = new List<Unit>();
+        leanmove = new List<Unit>();
         if (!(unit is Box))
         {
-            if (!unit.CanMove(dir))
+            if (!unit.CanMove(dir, unit.transform.parent.gameObject))
                 return false;
             shouldmove.AddRange(unit.players);
             for (int i = 0; i < unit.ConnectedUnits.Count; i++)
             {
-                if (!unit.ConnectedUnits[i].CanMove(dir))
+                if (!unit.ConnectedUnits[i].CanMove(dir, unit.transform.parent.gameObject))
+                {
                     return false;
+                }
                 shouldmove.AddRange(unit.ConnectedUnits[i].players);
             }
             for (int i = 0; i < unit.ConnectedUnits.Count; i++)
@@ -55,24 +67,24 @@ public class LogicalEngine {
             }
             leanmove.AddRange(GetRelatedLeanedPlayers(unit.gameObject.transform.parent.gameObject));
             database.units[(int)unit.position.x, (int)unit.position.y].Remove(unit);
+            Vector2 tempposition = unit.position - (Vector2)unit.gameObject.transform.localPosition;
             unit.position = Toolkit.VectorSum(unit.position, Toolkit.DirectiontoVector(dir));
             database.units[(int)unit.position.x, (int)unit.position.y].Add(unit);
             for(int i=0; i<leanmove.Count; i++)
             {
+                bool flag = false;
                 for(int j=0; j<shouldmove.Count;j++)
                 {
                     if(leanmove[i] == shouldmove[j])
                     {
-                        shouldmove.RemoveAt(j);
-                        j--;
+                        
+                        flag = true;
                     }
                 }
-                if (leanmove[i].CanMove(dir))
+                if (!flag && leanmove[i].CanMove(dir, unit.transform.parent.gameObject))
                 {
-                    database.units[(int)leanmove[i].position.x, (int)leanmove[i].position.y].Remove(leanmove[i]);
-                    leanmove[i].position = Toolkit.VectorSum(leanmove[i].position, Toolkit.DirectiontoVector(dir));
-                    database.units[(int)leanmove[i].position.x, (int)leanmove[i].position.y].Add(leanmove[i]);
-                    apigraphic.LeanStickMove((Player)leanmove[i], dir);
+                    ((Player)leanmove[i]).nextpos = Toolkit.VectorSum(leanmove[i].position, Toolkit.DirectiontoVector(dir));
+                    apigraphic.LeanStickMove((Player)leanmove[i], ((Player)leanmove[i]).nextpos);
                 }
             }
             for (int i = 0; i < shouldmove.Count; i++)
@@ -85,16 +97,16 @@ public class LogicalEngine {
                         j--;
                     }
                 }
-                if (shouldmove[i].CanMove(dir))
+                if (shouldmove[i].CanMove(dir, unit.transform.parent.gameObject))
                 {
                     database.units[(int)shouldmove[i].position.x, (int)shouldmove[i].position.y].Remove(shouldmove[i]);
                     shouldmove[i].position = Toolkit.VectorSum(shouldmove[i].position, Toolkit.DirectiontoVector(dir));
                     database.units[(int)shouldmove[i].position.x, (int)shouldmove[i].position.y].Add(shouldmove[i]);
-                    apigraphic.MovePlayerOnPlatform((Player)shouldmove[i], dir);
+                    apigraphic.MovePlayerOnPlatform((Player)shouldmove[i], shouldmove[i].position);
                 }
             }
-
-            apigraphic.MoveGameObject(unit.transform.parent.gameObject, dir, unit);
+            movingplayformcount++;
+            apigraphic.MoveGameObject(unit.transform.parent.gameObject, Toolkit.VectorSum(tempposition, dir), unit);
         }
         else
         {
@@ -120,7 +132,9 @@ public class LogicalEngine {
     public void MovePlayer(Player player, Direction dir)
     {
         Vector2 nextpos;
-        apiinput.PlayerMoveStarted();
+        List<Unit> listt = new List<Unit>();
+        listt.Add(player);
+        snpmanager.takesnapshot(listt);
         if (player.onramp)
         {
             List<Unit> units = GetUnits(player.position);
@@ -171,8 +185,10 @@ public class LogicalEngine {
                     if (units.Count == 0)
                     {
                         database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                        apigraphic.MovePlayer_Ramp_3(player, nextpos);
                         player.position = nextpos;
+                        database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                        apigraphic.MovePlayer_Ramp_3(player, nextpos, ramp.type);
+                        
                     }
                     else
                     {
@@ -180,22 +196,35 @@ public class LogicalEngine {
                         {
                             database.units[(int)player.position.x, (int)player.position.y].Remove(player);
                             Vector2 temp = Toolkit.VectorSum(player.position, Toolkit.DirectiontoVector(dir));
-                            apigraphic.MovePlayer_Ramp_5(player, Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction)),((Ramp)units[0]).type);
                             player.position = temp;
+                            database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                            apigraphic.MovePlayer_Ramp_5(player, Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction)),((Ramp)units[0]).type);
                         }
                         else
                         {
                             database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                            apigraphic.MovePlayer_Ramp_2(player, nextpos);
                             player.position = nextpos;
+                            database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                            apigraphic.MovePlayer_Ramp_2(player, nextpos, ramp.type);
                         }
                     }
                 }
                 else
                 {
-                    database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                    apigraphic.MovePlayer_Ramp_1(player, nextpos,((Ramp)units[0]).type);
-                    player.position = nextpos;
+                    if (Toolkit.CanplayerGoOnRampSideFromRamp(Toolkit.GetRamp(nextpos), database.gravity_direction, dir))
+                    {
+                        database.units[(int)player.position.x, (int)player.position.y].Remove(player);
+                        player.position = nextpos;
+                        database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                        apigraphic.MovePlayer_Ramp_1(player, nextpos, ((Ramp)units[0]).type);
+                    }
+                    else
+                    {
+                        database.units[(int)player.position.x, (int)player.position.y].Remove(player);
+                        player.position = Toolkit.VectorSum(player.position, dir);
+                        database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                        apigraphic.MovePlayer_Ramp_5(player, player.position, Toolkit.GetRamp(player.position).type);
+                    }
                 }
             }
             else
@@ -205,8 +234,9 @@ public class LogicalEngine {
                 if(Toolkit.HasRamp(nextpos) && Toolkit.GetRamp(nextpos).ComingOnRampSide(player.position))
                 {
                     database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                    apigraphic.MovePlayer_Ramp_4(player, nextpos, ((Ramp)units[0]).type);
                     player.position = nextpos;
+                    database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                    apigraphic.MovePlayer_Ramp_4(player, nextpos, ((Ramp)units[0]).type);
                 }
                 else
                 {
@@ -215,18 +245,22 @@ public class LogicalEngine {
                     if (Toolkit.HasRamp(Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction))))
                     {
                         ramp = Toolkit.GetRamp(Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction)));
-                        apigraphic.MovePlayer_Ramp_1(player, Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction)),ramp.type);
                         player.position = Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction));
+                        database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                        apigraphic.MovePlayer_Ramp_1(player, Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction)),ramp.type);
+                        
                     }
                     else if(!Toolkit.IsEmpty(Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction))))
                     {
-                        apigraphic.MovePlayer_Ramp_2(player, nextpos);
                         player.position = nextpos;
+                        database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                        apigraphic.MovePlayer_Ramp_2(player, nextpos, ramp.type);
                     }
                     else
                     {
-                        apigraphic.MovePlayer_Ramp_3(player, nextpos);
                         player.position = nextpos;
+                        database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                        apigraphic.MovePlayer_Ramp_3(player, nextpos, ramp.type);
                     }
                 }
             }
@@ -243,21 +277,24 @@ public class LogicalEngine {
                     if(units[0] is Ramp)
                     {
                         database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                        apigraphic.MovePlayer_Branch_3(player, temp, ((Ramp)units[0]).type);
                         player.position = nextpos;
+                        database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                        apigraphic.MovePlayer_Branch_3(player, temp, ((Ramp)units[0]).type);
                     }
                     else
                     {
                         database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                        apigraphic.MovePlayer_Branch_1(player, nextpos);
                         player.position = nextpos;
+                        database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                        apigraphic.MovePlayer_Branch_1(player, nextpos);
                     }
                 }
                 else
                 {
                     database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                    apigraphic.MovePlayer_Branch_2(player, nextpos);
                     player.position = nextpos;
+                    database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                    apigraphic.MovePlayer_Branch_2(player, nextpos);
                 }
             }
             else //simple move
@@ -267,33 +304,43 @@ public class LogicalEngine {
                 List<Unit> units = GetUnits(nextpos);
                 if (units.Count != 0)
                 {
-                    Debug.Log(units.Count);
+
                     if(units[0] is Branch)
                     {
                         database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                        apigraphic.MovePlayer_Simple_2(player, nextpos);
                         player.position = nextpos;
+                        database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                        apigraphic.MovePlayer_Simple_2(player, nextpos);
                     }
                     else if(units[0] is Ramp)
                     {
                         database.units[(int)player.position.x, (int)player.position.y].Remove(player);
                         if(Toolkit.CanplayerGoOnRampSideFromFromNoneRamp((Ramp)units[0], database.gravity_direction, dir))
                         {
-                            apigraphic.MovePlayer_Simple_3(player, nextpos, ((Ramp)units[0]).type);
                             player.position = nextpos;
+                            database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                            apigraphic.MovePlayer_Simple_3(player, nextpos, Toolkit.GetRamp(nextpos).type);
                         }
                         else if(Toolkit.HasRamp(temp))
                         {
                             if(Toolkit.CanplayerGoOnRampSideFromFromNoneRamp(Toolkit.GetRamp(temp), database.gravity_direction, Toolkit.ReverseDirection(dir)))
                             {
-                                apigraphic.MovePlayer_Simple_3(player, temp, ((Ramp)units[0]).type);
                                 player.position = temp;
+                                database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                                apigraphic.MovePlayer_Simple_3(player, temp, Toolkit.GetRamp(temp).type);
                             }
                             else
                             {
-                                apigraphic.MovePlayer_Simple_4(player, nextpos);
                                 player.position = nextpos;
+                                database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                                apigraphic.MovePlayer_Simple_4(player, nextpos);
                             }
+                        }
+                        else
+                        {
+                            database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                            graphic_PlayerMoveAnimationFinished(player);
+                            return;
                         }
                     }
                 }
@@ -307,42 +354,51 @@ public class LogicalEngine {
                             database.units[(int)player.position.x, (int)player.position.y].Remove(player);
                             if (Toolkit.IsdoubleRamp(units[0].position))
                             {
-                                apigraphic.MovePlayer_Simple_1(player, nextpos);
                                 player.position = nextpos;
+                                database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                                apigraphic.MovePlayer_Simple_1(player, nextpos);
                             }
 
                             else if (Toolkit.CanplayerGoOnRampSideFromFromNoneRamp(units[0] as Ramp, database.gravity_direction, Toolkit.ReverseDirection(dir)))
                             {
-                                apigraphic.MovePlayer_Simple_5(player, temp, ((Ramp)units[0]).type);
                                 player.position = temp;
+                                database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                                apigraphic.MovePlayer_Simple_5(player, temp, ((Ramp)units[0]).type);
                             }
                             else
                             {
-                                apigraphic.MovePlayer_Simple_1(player, nextpos);
                                 player.position = nextpos;
+                                database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                                apigraphic.MovePlayer_Simple_4(player, nextpos);
                             }
                             
                         }
                         else
                         {
                             database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                            apigraphic.MovePlayer_Simple_1(player, nextpos);
                             player.position = nextpos;
-
+                            database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                            apigraphic.MovePlayer_Simple_1(player, nextpos);
                         }
                     }
                     else
                     {
                         database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                        apigraphic.MovePlayer_Simple_4(player, nextpos);
                         player.position = nextpos;
+                        database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                        apigraphic.MovePlayer_Simple_4(player, nextpos);
                     }
                 }
             }
         }
-        database.units[(int)player.position.x, (int)player.position.y].Add(player);
     }
-    private void Applygravity()
+
+    public void Undo()
+    {
+        snpmanager.Reverse();
+    }
+
+    public void Applygravity()
     {
         for(int i=0; i<database.player.Count; i++)
         {
@@ -358,7 +414,7 @@ public class LogicalEngine {
             isonunit = false;
         if (isonunit)
         {
-            player.state = PlayerState.Steady;
+            player.movepercentage = 0;
         }
         else
             player.ApplyGravity(database.gravity_direction, database.units);
@@ -366,7 +422,8 @@ public class LogicalEngine {
 
     public void graphic_LandFinished(Player player)
     {
-        player.state = PlayerState.Steady;
+        player.movepercentage = 0;
+        player.state = PlayerState.Idle;
     }
 
     public void Lean(Player player, Direction direction)
@@ -387,29 +444,7 @@ public class LogicalEngine {
     {
         for(int i=0; i<database.player.Count; i++)
         {
-            if (!database.player[i].lean )
-            {
-                if (database.player[i].Can_Move_Direction(direction))
-                {
-                    if (database.player[i].Should_Change_Direction(direction))
-                    {
-                        Direction olddir = database.player[i].direction;
-                        database.player[i].direction = direction;
-                        apiinput.PlayerMoveStarted();
-                        apigraphic.PlayerChangeDirection(database.player[i], olddir, database.player[i].direction);
-                    }
-                    else if (!database.player[i].Move(direction))
-                    {
-                        Lean(database.player[i], direction);
-                        apiinput.PlayerMoveFinished();
-                    }
-                }
-                else if (database.player[i].Can_Lean(direction))
-                {
-                    Lean(database.player[i], direction);
-                    apiinput.PlayerMoveFinished();
-                }   
-            }
+            inputcontroller.PlayerMoveAction(database.player[i], direction);
         }
     }
 
@@ -487,6 +522,11 @@ public class LogicalEngine {
             {
                 database.player[i].lean = false;
                 apigraphic.LeanFinished(database.player[i]);
+                if(leanmove.Contains(database.player[i]) && !shouldmove.Contains(database.player[i]))
+                {
+                    apiunit.AddToDatabase(database.player[i]);
+                    apigraphic.LeanStickStop(database.player[i]);
+                }
                 database.player[i].ApplyGravity(database.gravity_direction, database.units);
             }
         }
@@ -526,14 +566,26 @@ public class LogicalEngine {
 
     public void graphic_PlayerMoveAnimationFinished(Player player)
     {
-        Debug.Log("move animation finished");
+        player.movepercentage = 0;
         Applygravity();
-        apiinput.PlayerMoveFinished();
+        player.state = PlayerState.Idle;
     }
+
+    public void graphic_LeanStickMoveFinished(Player player)
+    {
+        apiunit.RemoveFromDatabase(player);
+        player.position = player.nextpos;
+        apiunit.AddToDatabase(player);
+        Applygravity();
+        player.state = PlayerState.Idle;
+    }
+
     public void graphic_GameObjectMoveAnimationFinished(GameObject gameobject, Unit unit)
     {
         if (unit == null)
             return;
+        if(movingplayformcount > 0)
+            movingplayformcount--;
         //unit.gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = false;
         
         if(unit is FunctionalContainer)
@@ -549,11 +601,7 @@ public class LogicalEngine {
 
     public void graphic_PlayerChangeDirectionFinished(Player player)
     {
-        apiinput.PlayerMoveFinished();
-    }
-    public void graphic_PlayerLandFinished(Player player)
-    {
-        
+        player.state = PlayerState.Idle;
     }
     public void UnitToGraphic_Land(Unit unit, Unit landingunit,Vector2 landingposition)
     {
@@ -579,7 +627,7 @@ public class LogicalEngine {
                 
             if (u is FunctionalContainer)
             {
-                Debug.Log(u.gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock);
+
                 if (!u.gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock)
                 {
                     ((FunctionalContainer)u).ResetStuckLevel();
@@ -601,7 +649,7 @@ public class LogicalEngine {
             }
             if (u is FunctionalContainer)
             {
-                Debug.Log(u.gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock);
+               
                 if (!u.gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock)
                 {
                     ((FunctionalContainer)u).ResetStuckLevel();

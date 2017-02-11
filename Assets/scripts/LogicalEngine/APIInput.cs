@@ -28,14 +28,9 @@ public class APIInput{
         engine.Input_Move(dir);
     }
 
-    public void PlayerMoveFinished()
+    public void UndoPressed()
     {
-        input.Player_Move_Finished();
-    }
-
-    public void PlayerMoveStarted()
-    {
-        input.Player_Move_Started();
+        engine.Undo();
     }
 
     public void ArrowRelease(Direction dir)

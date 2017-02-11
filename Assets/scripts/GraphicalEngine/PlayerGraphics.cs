@@ -3,13 +3,13 @@ using System.Collections;
 
 public class PlayerGraphics : MonoBehaviour {
     public float move_time = 0.5f;
-    private Animator animation;
     private APIGraphic api;
     private LogicalEngine engine;
+    private Vector2 unmoved_pos;
     void Start()
     {
+        unmoved_pos = transform.position;
         engine = Starter.GetEngine();
-        animation = GetComponent<Animator>();
         api = engine.apigraphic;
     }
 
@@ -42,8 +42,56 @@ public class PlayerGraphics : MonoBehaviour {
     {
         StartCoroutine(Player_Move_Coroutine(end,true));
     }
-    
 
+    private Vector2 Camera_Pos()
+    {
+        return (Vector2)Camera.main.transform.position + ((Vector2)transform.position - unmoved_pos);
+    }
+
+
+    private IEnumerator Smooth_Move_Camera(Vector3 end)
+    {
+
+        float sqrRemainingDistance = (Camera.main.transform.position - end).sqrMagnitude;
+
+        while (sqrRemainingDistance > float.Epsilon)
+        {
+
+            sqrRemainingDistance = (Camera.main.transform.position - end).sqrMagnitude;
+            Vector3 newPostion = Vector3.MoveTowards(Camera.main.transform.position, end,  2 * Time.deltaTime);
+            Camera.main.transform.position = newPostion;
+            yield return null;
+        }
+ 
+
+
+    }
+    private IEnumerator Move_Camera_Coroutine_X(float pos)
+    {
+        Debug.Log("Move Camera coroutine");
+        Debug.Log(pos);
+        Camera main_camera = Camera.main;
+        float remain = Mathf.Abs(main_camera.transform.position.x - pos);
+        Vector3 end = new Vector3(pos, main_camera.transform.position.y, -15);
+        while ( remain > float.Epsilon)
+        {
+            remain = Mathf.Abs(main_camera.transform.position.x - pos);
+            main_camera.transform.position = Vector3.MoveTowards(main_camera.transform.position,end ,Time.deltaTime * 1/10);
+        }
+        yield return null;
+    }
+
+    private IEnumerator Move_Camera_Coroutine_Y(float pos)
+    {
+        Camera main_camera = Camera.main;
+        float remain = Mathf.Abs(main_camera.transform.position.y - pos);
+        while (remain > float.Epsilon)
+        {
+            remain = Mathf.Abs(main_camera.transform.position.y - pos);
+            main_camera.transform.position = Vector3.MoveTowards(main_camera.transform.position, new Vector2( main_camera.transform.position.x, pos), Time.deltaTime);
+        }
+        yield return null;
+    }
     public void Player_Change_Direction(Player player,Direction dir)
     {
         if (dir == Direction.Right)

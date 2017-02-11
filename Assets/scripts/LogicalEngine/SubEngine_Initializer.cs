@@ -19,7 +19,8 @@ public class SubEngine_Initializer{
         sprite_Container = new Sprite[16];
         sprite_Rock = new Sprite[16];
         string containerrootpath = "Containers\\Box";
-        string rockrootpath = "Containers\\Rock";
+        string rockrootpath = "Rocks\\Rock";
+        string ramprootpath = "Ramps\\type-";
         for (int i=1; i < 16; i++)
         {
             string containerpath = containerrootpath + " " + i;
@@ -85,8 +86,11 @@ public class SubEngine_Initializer{
             {
                 for(int k=0; k<units[i,j].Count; k++)
                 {
-                    if(units[i,j][k] is Container)
+                    if (units[i, j][k] is Container)
+                    {
                         SetContainerSprite(units, units[i, j][k]);
+                        engine.apigraphic.UnitChangeSprite(units[i, j][k]);
+                    }
                     else if (units[i, j][k] is Rock)
                         SetRockSprite(units, units[i, j][k]);
                 }
@@ -192,4 +196,5 @@ public class SubEngine_Initializer{
         catch { }
         return false;
     }
+
 }

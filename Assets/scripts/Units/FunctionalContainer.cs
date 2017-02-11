@@ -10,11 +10,13 @@ public class FunctionalContainer : Container {
     private bool movedone = false;
     private int stucklevel = 0;
 
-    public List<int> reservedmoveint;
+    public List<int> reservedmoveint { get; set; }
     protected List<bool> reservedmovebool;
 
     private bool resetstucked;
     protected bool laston;
+    protected Direction stuckdirection;
+    public int stuckstatus {get; set; }
     public override bool PlayerMoveInto(Direction dir)
     {
         return false;
@@ -36,36 +38,67 @@ public class FunctionalContainer : Container {
         api.RemoveFromStuckList(this);
         reservedmovebool.Clear();
         reservedmoveint.Clear();
+        Direction dir = direction;
+        if (!on)
+        {
+            dir = Toolkit.ReverseDirection(dir);
+        }
         int count = abilities.Count;
         if (count != 0 && abilities[0] != AbilityType.Fuel)
             count = 0;
-        Debug.Log(shouldmove);
         if (first)
         {
             on = !on;
+            dir = Toolkit.ReverseDirection(dir);
             laston = !on;
             api.ChangeSprite(this);
-            if (!on && stucklevel > 0)
+            if (stucklevel > 0)
             {
+                if (!on && stuckdirection == dir)
+                {
+                    api.AddToStuckList(this);
+                    stuckdirection = dir;
+                    gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = false;
+                    return;
+                }
+                else if (on && stuckdirection != dir)
+                {
+                    shouldmove = count - stucklevel;
+                    stucklevel = 0;
+                }
+            }
+            //stucklevel = 0;
+        }
+        if (stucklevel > 0 && !first)
+        {
+            dir = stuckdirection;
+            shouldmove = stucklevel;
+        }
+        else if (stucklevel != 0 && !resetstucked)
+        {
+            //shayad bug bede
+            if (dir != stuckdirection)
+            {
+                stucklevel--;
+                if (stucklevel == 0)
+                    api.RemoveFromStuckList(this);
+                resetstucked = false;
+                gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = false;
+                Action_Fuel(false);
+                return;
+            }
+            else
+            {
+                laston = !on;
+                resetstucked = false;
                 api.AddToStuckList(this);
                 gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = false;
                 return;
             }
-            //stucklevel = 0;
-        }
-        else if (stucklevel != 0 && !resetstucked)
-        {
-            laston = !on;
-            resetstucked = false;
-            Debug.Log("not zero");
-            api.AddToStuckList(this);
-            gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = false;
-            return;
         }
         if (movedone)
         {
             //if (moved == abilities.Count)
-            Debug.Log("move done");
             resetstucked = false;
             movedone = false;
             moved = 0;
@@ -85,11 +118,6 @@ public class FunctionalContainer : Container {
         {
             shouldmove = stucklevel;
         }
-        Direction dir = direction;
-        if (!on)
-        {
-            dir = Toolkit.ReverseDirection(dir);
-        }
         if (api.MoveUnit(this, dir))
         {
             resetstucked = true;
@@ -104,7 +132,6 @@ public class FunctionalContainer : Container {
         {
             laston = on;
             bool flag = false;
-            Debug.Log(moved);
             if (moved != 0)
             {
                 flag = true;
@@ -112,6 +139,7 @@ public class FunctionalContainer : Container {
             }
             if (/*first && */stucklevel == 0)
                 stucklevel = count - moved;
+            stuckdirection = dir;
             api.AddToStuckList(this);
             shouldmove = moved;
             moved = 0;
@@ -121,7 +149,6 @@ public class FunctionalContainer : Container {
             }
             gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = false;
         }
-        Debug.Log(stucklevel);
     }
     public void Action_Fuel_Continue(Direction dir,int count)
     {
@@ -142,6 +169,7 @@ public class FunctionalContainer : Container {
         else
         {
             api.AddToStuckList(this);
+            stuckdirection = dir;
             stucklevel++;
             CheckReservedList();
         }
@@ -164,12 +192,20 @@ public class FunctionalContainer : Container {
         }
         if (on)
         {
-            Debug.Log(stucklevel);
             if (increased) {
                 if (stucklevel < 1)
                     Action_Fuel_Continue(direction, count);
+                else if (direction == stuckdirection)
+                {
+                    stucklevel++;
+                    api.AddToStuckList(this);
+                }
                 else
+                {
                     stucklevel--;
+                    if (stucklevel == 0)
+                        api.RemoveFromStuckList(this);
+                }
             }
             else
             {
@@ -179,20 +215,43 @@ public class FunctionalContainer : Container {
                 }
                 else
                 {
-                    stucklevel--;
+                    Debug.Log(direction);
+                    Debug.Log(stuckdirection);
+                    if (direction != stuckdirection && !increased)
+                    {
+                        stucklevel++;
+                        api.AddToStuckList(this);
+                    }
+                    else
+                        stucklevel--;
+                    Debug.Log(stucklevel);
                     if (abilities.Count == 0)
                     {
                         on = false;
                         api.ChangeSprite(this);
                     }
+                    if (stucklevel == 0)
+                        api.RemoveFromStuckList(this);
+                    Debug.Log(stucklevel);
                 }
             }
         }
         else if (api.isStucked(this))
         {
-            if(on)
+            if (on)
+            {
                 if (!increased)
                     Action_Fuel_Continue(Toolkit.ReverseDirection(direction), count);
+            }
+            /*else
+            {
+                if (increased)
+                {
+                    stucklevel--;
+                    if (stucklevel == 0)
+                        api.RemoveFromStuckList(this);
+                }
+            }*/
         }
         else
         {
@@ -205,8 +264,6 @@ public class FunctionalContainer : Container {
 
     public override void CheckReservedList()
     {
-        Debug.Log(reservedmoveint[0]);
-        Debug.Log(reservedmovebool[0]);
         if (reservedmovebool.Count == 0)
             return;
         int count = reservedmoveint[0];

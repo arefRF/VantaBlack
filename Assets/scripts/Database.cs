@@ -67,5 +67,5 @@ public enum AbilityType
 
 public enum PlayerState
 {
-    Steady, Falling, Hanging, Jumping, Rolling
+    Idle, Falling, Jumping, Moving
 }

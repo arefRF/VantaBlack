@@ -56,7 +56,6 @@ public class APIUnit {
 
     public void graphicalengine_Fall(Unit unit, Vector2 fallposition)
     {
-        Debug.Log("falling");
         engine.apigraphic.Fall((Player)unit, fallposition);
     }
 
@@ -108,7 +107,8 @@ public class APIUnit {
 
     public void AddToDatabase(Unit unit)
     {
-        engine.database.units[(int)unit.position.x, (int)unit.position.y].Add(unit);
+        if(!engine.database.units[(int)unit.position.x, (int)unit.position.y].Contains(unit))
+            engine.database.units[(int)unit.position.x, (int)unit.position.y].Add(unit);
     }
 
     public void CheckstuckedList()
