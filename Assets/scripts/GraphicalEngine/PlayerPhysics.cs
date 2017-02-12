@@ -120,7 +120,8 @@ public class PlayerPhysics : MonoBehaviour
     public void Ramp_To_Sharp_Move(Vector2 pos,int type)
     {
         move_type = MoveType.RampToSharp;
-        StopCoroutine(last_co);
+        if(last_co!=null)
+            StopCoroutine(last_co);
         Vector2 end1 = Ramp_To_Sharp_Pos(Direction.Down, pos);
         Vector2 end2 = pos + On_Ramp_Pos(type);
         last_co = StartCoroutine(Ramp_To_Sharp_Coroutine(end1,end2,move_time,true,type));
