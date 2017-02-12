@@ -75,6 +75,6 @@ public class CloneableGate : CloneableUnit
 {
     public CloneableGate(Gate gate) : base(gate.position)
     {
-
+        original = gate;
     }
 }
