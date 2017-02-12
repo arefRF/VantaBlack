@@ -17,6 +17,7 @@ public class GetInput : MonoBehaviour {
     private bool move_input;
     private bool ar_input = false;
     private bool action_lock = false;
+    public bool joystick;
     // Use this for initialization
     void Start()
     {
@@ -30,68 +31,71 @@ public class GetInput : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        // Joy Stick Move
-        Get_Joy_Move();
+        if (joystick)
+        {
+            // Joy Stick Move
+            Get_Joy_Move();
 
-        //Joystick absorb release
-        Get_Joy_AR();
-        // Lean Keys Up
-        Get_Lean_Undo();
+            //Joystick absorb release
+            Get_Joy_AR();
+            // Lean Keys Up
+            Get_Action_Joy();
 
-        /*  if (Input.GetAxis("Horizontal") == 1)
-              Debug.Log("1");
-          if (Input.GetAxis("Horizontal") == -1)
-              Debug.Log("-1");
+        }
+        else
+        {
 
-        */
-        Get_Action_Joy();
-        // Directional Abilities use
-        if (Input.GetKeyUp(KeyCode.Space))
-            is_space = false;
-        Get_Move();
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            if (!api.Action_Key())
-                is_space = true;
-        }
-        if (is_space)
-            Get_Space_Arrows();
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            is_holding = true;
-            hold_direction = Direction.Up;
-            StopAllCoroutines();
-            StartCoroutine(Wait_For_Absorb_Hold());
-        }
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            is_holding = true;
-            hold_direction = Direction.Down;
-            StopAllCoroutines();
-            StartCoroutine(Wait_For_Absorb_Hold());
-        }
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            hold_direction = Direction.Left;
-            is_holding = true;
-            StopAllCoroutines();
-            StartCoroutine(Wait_For_Absorb_Hold());
-        }
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            is_holding = true;
-            hold_direction = Direction.Right;
-            StopAllCoroutines();
-            StartCoroutine(Wait_For_Absorb_Hold());
-        }
-        if (Input.GetKeyUp(KeyCode.D) || Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.S))
-        {
-            api.AbsorbRelease(hold_direction);
-            is_holding = false;
-        }
-        if (Input.GetKeyUp(KeyCode.R))
-        {
-            api.UndoPressed();
+
+            Get_Lean_Undo();
+
+            // Directional Abilities use
+            if (Input.GetKeyUp(KeyCode.Space))
+                is_space = false;
+            Get_Move();
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                if (!api.Action_Key())
+                    is_space = true;
+            }
+            if (is_space)
+                Get_Space_Arrows();
+            if (Input.GetKeyDown(KeyCode.W))
+            {
+                is_holding = true;
+                hold_direction = Direction.Up;
+                StopAllCoroutines();
+                StartCoroutine(Wait_For_Absorb_Hold());
+            }
+            if (Input.GetKeyDown(KeyCode.S))
+            {
+                is_holding = true;
+                hold_direction = Direction.Down;
+                StopAllCoroutines();
+                StartCoroutine(Wait_For_Absorb_Hold());
+            }
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                hold_direction = Direction.Left;
+                is_holding = true;
+                StopAllCoroutines();
+                StartCoroutine(Wait_For_Absorb_Hold());
+            }
+            if (Input.GetKeyDown(KeyCode.D))
+            {
+                is_holding = true;
+                hold_direction = Direction.Right;
+                StopAllCoroutines();
+                StartCoroutine(Wait_For_Absorb_Hold());
+            }
+            if (Input.GetKeyUp(KeyCode.D) || Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.S))
+            {
+                api.AbsorbRelease(hold_direction);
+                is_holding = false;
+            }
+            if (Input.GetKeyUp(KeyCode.R))
+            {
+                api.UndoPressed();
+            }
         }
     }
 
