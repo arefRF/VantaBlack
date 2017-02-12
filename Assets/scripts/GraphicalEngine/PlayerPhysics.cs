@@ -181,10 +181,16 @@ public class PlayerPhysics : MonoBehaviour
         Rotate_On_Ramp(type);
     }
    
+    public void Player_Undo()
+    {
+        StopAllCoroutines();
+    }
+
     //fall 
     public void Fall(Vector2 pos)
     {
-        StopCoroutine(last_co);
+        if(last_co!=null)
+            StopCoroutine(last_co);
         move_type = MoveType.Falling;
         last_co  = StartCoroutine(Accelerated_Move(pos,fall_velocity,fall_acceleration,true));
     }

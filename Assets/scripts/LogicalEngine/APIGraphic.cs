@@ -225,6 +225,11 @@ public class APIGraphic{
         logicalengine.graphic_PlayerChangeDirectionFinished(player);
     }
 
+    public void Undo_Player(Player player)
+    {
+        player.GetComponent<PlayerPhysics>().Player_Undo();
+    }
+
     public void UnitChangeSprite(Unit unit)
     {
         //Debug.Log(unit);
