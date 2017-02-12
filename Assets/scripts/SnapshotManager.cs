@@ -38,7 +38,20 @@ public class SnapshotManager{
             Snapshot snp = database.snapshots[database.snapshots.Count - 1];
             database.snapshots.RemoveAt(database.snapshots.Count - 1);
             Undo(snp);
-            Undo(snapshot);
+            for(int i=0; i<snapshot.clonedunits.Count; i++)
+            {
+                bool flag = true;
+                for(int j=0; j<snp.clonedunits.Count; j++)
+                {
+                    if(snp.clonedunits[j].original == snapshot.clonedunits[i].original)
+                    {
+                        flag = false;
+                        break;
+                    }
+                }
+                if (flag)
+                    snapshot.clonedunits[i].Undo();
+            }
         }
     }
 
