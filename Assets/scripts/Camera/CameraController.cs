@@ -69,6 +69,21 @@ public class CameraController : MonoBehaviour {
 
     }
 
+    public void Camera_Size_Change(float zoom )
+    {
+        StartCoroutine(Zoom(zoom,1));
+    }
+
+    private IEnumerator Zoom(float zoom,float move_time)
+    {
+        float remain = Mathf.Abs( Camera.main.orthographicSize - zoom);
+        while (remain> float.Epsilon)
+        {
+            remain = Mathf.Abs(Camera.main.orthographicSize - zoom);
+            Camera.main.orthographicSize = Mathf.MoveTowards(Camera.main.orthographicSize, zoom, Time.smoothDeltaTime / move_time);
+            yield return null; 
+        }
+    }
     private IEnumerator Camera_Move(Vector3 end,float move_time,bool auto)
     {
         float remain = (Camera.main.transform.position - end).sqrMagnitude;
