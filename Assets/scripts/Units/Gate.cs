@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 public class Gate : Container {
 
     public string sceneName;
+    public bool Internal;
 
     public void Start()
     {
@@ -39,10 +40,22 @@ public class Gate : Container {
         }
         if(abilities.Count == capacity)
         {
-            Change_Scene();
+            Open();
         }
     }
 
+
+    private void Open()
+    {
+        if (Internal)
+        {
+            GetComponent<Animator>().Play(2); 
+        }
+        else
+        {
+            Change_Scene();
+        }
+    }
     private void Change_Scene()
     {
        SceneManager.LoadScene(sceneName);
