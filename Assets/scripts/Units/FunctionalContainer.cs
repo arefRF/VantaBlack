@@ -6,16 +6,16 @@ public class FunctionalContainer : Container {
     public Direction direction;
     public bool on;
     public int moved { get; set; }
-    protected int shouldmove;
-    protected bool movedone = false;
-    protected int stucklevel = 0;
+    public int shouldmove { get; set; }
+    public bool movedone { get; set; }
+    public int stucklevel {get;set;}
 
     public List<int> reservedmoveint { get; set; }
-    protected List<bool> reservedmovebool;
+    public List<bool> reservedmovebool { get; set; }
 
-    protected bool resetstucked;
-    protected bool laston;
-    protected Direction stuckdirection;
+    public bool resetstucked { get; set; }
+    public bool laston { get; set; }
+    public Direction stuckdirection { get; set; }
     public int stuckstatus {get; set; }
     public override bool PlayerMoveInto(Direction dir)
     {

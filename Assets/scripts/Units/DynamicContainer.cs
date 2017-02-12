@@ -12,6 +12,8 @@ public class DynamicContainer : FunctionalContainer {
         reservedmoveint = new List<int>();
         reservedmovebool = new List<bool>();
         laston = !on;
+        stucklevel = 0;
+        stuckstatus = 0;
 	}
 	
 	// Update is called once per frame
@@ -29,7 +31,7 @@ public class DynamicContainer : FunctionalContainer {
         CloneableDynamicContainer clone = new CloneableDynamicContainer(this);
         for (int i = 0; i < abilities.Count; i++)
             clone.abilities.Add(abilities[i]);
-        clone.direction = direction;
+        //clone.direction = direction;
         clone.on = on;
         clone.moved = moved;
         clone.shouldmove = shouldmove;
@@ -51,7 +53,6 @@ public class DynamicContainer : FunctionalContainer {
 public class CloneableDynamicContainer : CloneableUnit
 {
     public List<AbilityType> abilities;
-    public Direction direction;
     public bool on;
     public int moved;
     public int shouldmove;
@@ -68,5 +69,20 @@ public class CloneableDynamicContainer : CloneableUnit
         reservedmovebool = new List<bool>();
         reservedmoveint = new List<int>();
         abilities = new List<AbilityType>();
+        for (int i = 0; i < container.abilities.Count; i++)
+            abilities.Add(container.abilities[i]);
+        for (int i = 0; i < container.reservedmovebool.Count; i++)
+            reservedmovebool.Add(container.reservedmovebool[i]);
+        for (int i = 0; i < container.reservedmoveint.Count; i++)
+            reservedmoveint.Add(container.reservedmoveint[i]);
+        on = container.on;
+        moved = container.moved;
+        shouldmove = container.shouldmove;
+        movedone = container.movedone;
+        stucklevel = container.stucklevel;
+        resetstucked = container.resetstucked;
+        laston = container.laston;
+        stuckdirection = container.stuckdirection;
+        stuckstatus = container.stuckstatus;
     }
 }

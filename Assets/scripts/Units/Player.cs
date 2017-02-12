@@ -364,5 +364,28 @@ public class CloneablePlayer : CloneableUnit
         gravity = player.gravity;
         nextpos = new Vector2(player.nextpos.x, player.nextpos.y);
     }
+
+    public override void Undo()
+    {
+        original.api.RemoveFromDatabase(original);
+        original.position = position;
+        original.api.AddToDatabase(original);
+        original.abilities = new List<AbilityType>();
+        for (int i = 0; i < abilities.Count; i++)
+            original.abilities.Add(abilities[i]);
+        move_direction = new List<Direction>();
+        for (int i = 0; i < move_direction.Count; i++)
+            move_direction.Add(move_direction[i]);
+        original.direction = direction;
+        original.movepercentage = movepercentage;
+        original.state = state;
+        original.leandirection = leandirection;
+        original.lean = lean;
+        original.onramp = onramp;
+        original.gravity = gravity;
+        original.nextpos = new Vector2(nextpos.x, nextpos.y);
+
+        original.transform.position = position;
+    }
 }
 

@@ -116,5 +116,10 @@ public class CloneableUnit
     {
         this.position = new Vector2(position.x, position.y);
     }
+
+    public virtual void Undo()
+    {
+
+    }
 }
 

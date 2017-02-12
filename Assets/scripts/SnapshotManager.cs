@@ -5,19 +5,25 @@ using System.Collections.Generic;
 public class SnapshotManager{
     Database database;
     LogicalEngine engine;
+    Snapshot snapshot;
     public SnapshotManager(LogicalEngine engine)
     {
         this.engine = engine;
         database = engine.database;
+        snapshot = new Snapshot();
     }
 
-    public void takesnapshot(List<Unit> units)
+    public void takesnapshot()
     {
-        Snapshot snp = new Snapshot(units);
-        database.snapshots.Add(snp);
+        database.snapshots.Add(snapshot);
+        snapshot = new Snapshot();
     }
 
-    public void Reverse()
+    public void AddToSnapShot(Unit unit)
+    {
+        snapshot.clonedunits.Add(unit.Clone());
+    }
+    public void Undo()
     {
         if (database.snapshots.Count != 0)
         {
@@ -27,51 +33,21 @@ public class SnapshotManager{
         }
     }
 
-    public void Undo(Snapshot snapshot)
+    private void Undo(Snapshot snapshot)
     {
         for (int i = 0; i < snapshot.clonedunits.Count; i++)
         {
-            if (snapshot.clonedunits[i] is CloneablePlayer)
-                UndoPlayer(snapshot.clonedunits[i]);
+            snapshot.clonedunits[i].Undo();
         }
-    }
-
-    private void UndoPlayer(CloneableUnit unit)
-    {
-        CloneablePlayer player = (CloneablePlayer)unit;
-        Debug.Log(player.position);
-        engine.apiunit.RemoveFromDatabase(player.original);
-        player.original.position = player.position;
-        engine.apiunit.AddToDatabase(player.original);
-        player.original.abilities = new List<AbilityType>();
-        for (int i = 0; i < player.abilities.Count; i++)
-            player.original.abilities.Add(player.abilities[i]);
-        player.move_direction = new List<Direction>();
-        for (int i = 0; i < player.move_direction.Count; i++)
-            player.move_direction.Add(player.move_direction[i]);
-        player.original.direction = player.direction;
-        player.original.movepercentage = player.movepercentage;
-        player.original.state = player.state;
-        player.original.leandirection = player.leandirection;
-        player.original.lean = player.lean;
-        player.original.onramp = player.onramp;
-        player.original.gravity = player.gravity;
-        player.original.nextpos = new Vector2(player.nextpos.x, player.nextpos.y);
-
-        player.original.transform.position = player.position;
     }
 }
 
 public class Snapshot
 {
     public List<CloneableUnit> clonedunits;
-    public Snapshot(List<Unit> units)
+    public Snapshot()
     {
         clonedunits = new List<CloneableUnit>();
-        foreach (Unit u in units)
-        {
-
-        }
     }
 }
 

@@ -132,9 +132,7 @@ public class LogicalEngine {
     public void MovePlayer(Player player, Direction dir)
     {
         Vector2 nextpos;
-        List<Unit> listt = new List<Unit>();
-        listt.Add(player);
-        snpmanager.takesnapshot(listt);
+        snpmanager.AddToSnapShot(player);
         if (player.onramp)
         {
             List<Unit> units = GetUnits(player.position);
@@ -391,11 +389,12 @@ public class LogicalEngine {
                 }
             }
         }
+        snpmanager.takesnapshot();
     }
 
     public void Undo()
     {
-        snpmanager.Reverse();
+        snpmanager.Undo();
     }
 
     public void Applygravity()
