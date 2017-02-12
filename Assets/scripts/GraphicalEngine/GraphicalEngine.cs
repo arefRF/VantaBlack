@@ -34,6 +34,7 @@ public class GraphicalEngine : MonoBehaviour {
        object_co =  StartCoroutine(Move_Object_Coroutine(obj,unit,pos));
     }
 
+     
     private IEnumerator Move_Object_Coroutine(GameObject obj, Unit unit,Vector2 end)
     {
         float remain_distance = ((Vector2)obj.transform.position - end).sqrMagnitude;
@@ -112,11 +113,8 @@ public class GraphicalEngine : MonoBehaviour {
         Container_Change_Number(container);
 
 
-        // Rotation for Abilities with DIrection
-        if (container.abilities.Count != 0)
-        {
-            if (container.abilities[0] == AbilityType.Fuel)
-            {
+        // Rotation for Abilities with Direction
+          
                 int rot = 0;
                 switch (container.direction)
                 {
@@ -126,13 +124,9 @@ public class GraphicalEngine : MonoBehaviour {
                     case Direction.Down: rot = 270; break;
                 }
                 container.transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0, 0, rot));
-                
-            }
-            else if (container.abilities[0] == AbilityType.Key)
-            {
+            if( container.abilities.Count!= 0 &&  container.abilities[0] == AbilityType.Key)
                 container.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load("Doors\\Key", typeof(Sprite));
-            }
-        }
+            
 
     }
 

@@ -120,7 +120,6 @@ public class Player : Unit
     {
         List<Unit> units = api.engine_GetUnits(this, dir);
         players = new List<Unit>();
-        Debug.Log(position);
         for (int i = 0; i < units.Count; i++)
         {
             if (units[i] is Player)

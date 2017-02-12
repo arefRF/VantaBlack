@@ -82,7 +82,6 @@ public class PlayerPhysics : MonoBehaviour
         move_type = MoveType.BlockToRamp;
         if(last_co != null)
             StopCoroutine(last_co);
-        Debug.Log(type);
         Vector2 end1 = pos + Block_To_Ramp_Pos(type);
         Vector2 end2 = (Vector2)pos + On_Ramp_Pos(type);
         last_co = StartCoroutine(Block_To_Ramp_Coroutine(end1,end2,move_time,true,type));

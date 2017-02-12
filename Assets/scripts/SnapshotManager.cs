@@ -70,6 +70,10 @@ public class Snapshot
         clonedunits = new List<CloneableUnit>();
         foreach (Unit u in units)
         {
+<<<<<<< HEAD
+=======
+            originalunits.Add(u);
+>>>>>>> 1ae737e01ed0f834e120731571da1cfd8ca2035d
             clonedunits.Add(u.Clone());
         }
     }

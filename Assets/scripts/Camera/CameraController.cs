@@ -53,9 +53,52 @@ public class CameraController : MonoBehaviour {
     }
     public void Camera_Offset_Change(float left, float right, float lower, float upper)
     {
-        right_bound = right;
-        left_bound = left;
-        upper_bound = upper;
-        lower_bound = lower;
+        auto_move = false;
+        if(right!=0)
+            right_bound = right;
+        if(left!=0)
+            left_bound = left;
+        if(upper!=0)
+            upper_bound = upper;
+        if(lower!= 0)
+            lower_bound = lower;
+        Vector3 pos = new Vector3(p_transform.position.x, p_transform.position.y,Camera.main.transform.position.z);
+        pos.x = Mathf.Clamp(pos.x, left_bound, right_bound);
+        pos.y = Mathf.Clamp(pos.y, lower_bound, upper_bound);
+        StartCoroutine(Camera_Move(pos,0.5f,true));
+
+    }
+
+    public void Camera_Size_Change(float zoom )
+    {
+        StartCoroutine(Zoom(zoom,1));
+    }
+
+    private IEnumerator Zoom(float zoom,float move_time)
+    {
+        float remain = Mathf.Abs( Camera.main.orthographicSize - zoom);
+        while (remain> float.Epsilon)
+        {
+            remain = Mathf.Abs(Camera.main.orthographicSize - zoom);
+            Camera.main.orthographicSize = Mathf.MoveTowards(Camera.main.orthographicSize, zoom, Time.smoothDeltaTime / move_time);
+            yield return null; 
+        }
+    }
+    private IEnumerator Camera_Move(Vector3 end,float move_time,bool auto)
+    {
+        float remain = (Camera.main.transform.position - end).sqrMagnitude;
+        while (remain > float.Epsilon)
+        {
+            Vector3 pos = new Vector3(p_transform.position.x, p_transform.position.y, Camera.main.transform.position.z);
+            pos.x = Mathf.Clamp(pos.x, left_bound, right_bound);
+            pos.y = Mathf.Clamp(pos.y, lower_bound, upper_bound);
+            remain  = (Camera.main.transform.position - pos).sqrMagnitude;
+            pos = Vector3.MoveTowards(Camera.main.transform.position, pos, Time.smoothDeltaTime / move_time);
+            Camera.main.transform.position =pos;
+            yield return null;
+        }
+        
+        auto_move = auto;
+        
     }
 }
