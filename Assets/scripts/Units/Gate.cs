@@ -49,7 +49,7 @@ public class Gate : Container {
     {
         if (Internal)
         {
-            GetComponent<Animator>().Play(2); 
+            
         }
         else
         {
