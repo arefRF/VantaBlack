@@ -345,7 +345,6 @@ public class CloneablePlayer : CloneableUnit
     public bool onramp;
     public Direction gravity;
     public Vector2 nextpos;
-    public Player original;
     public CloneablePlayer(Player player) : base(player.position)
     {
         original = player;
@@ -367,6 +366,7 @@ public class CloneablePlayer : CloneableUnit
 
     public override void Undo()
     {
+        Player original = (Player)base.original;
         original.api.RemoveFromDatabase(original);
         original.position = position;
         original.api.AddToDatabase(original);
@@ -385,7 +385,7 @@ public class CloneablePlayer : CloneableUnit
         original.gravity = gravity;
         original.nextpos = new Vector2(nextpos.x, nextpos.y);
 
-        original.transform.position = position;
+        SetPosition();
     }
 }
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 public class APIUnit {
-    LogicalEngine engine;
+    public LogicalEngine engine;
 
     public APIUnit(LogicalEngine engine)
     {
@@ -127,5 +127,10 @@ public class APIUnit {
             unit.Action_Fuel(false);
         else
             unit.CheckReservedList();
+    }
+
+    public void AddToSnapshot(Unit unit)
+    {
+        engine.snpmanager.AddToSnapShot(unit);
     }
 }

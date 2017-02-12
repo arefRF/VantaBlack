@@ -17,7 +17,7 @@ public class Unit : MonoBehaviour {
 
     public virtual CloneableUnit Clone()
     {
-        return (CloneableUnit)MemberwiseClone();
+        return null;
     }
     public virtual void Undo()
     {
@@ -112,6 +112,7 @@ public class Unit : MonoBehaviour {
 public class CloneableUnit
 {
     public Vector2 position;
+    public Unit original;
     public CloneableUnit(Vector2 position)
     {
         this.position = new Vector2(position.x, position.y);
@@ -119,7 +120,15 @@ public class CloneableUnit
 
     public virtual void Undo()
     {
+        original.api.RemoveFromDatabase(original);
+        original.position = position;
+        original.api.AddToDatabase(original);
+        SetPosition();
+    }
 
+    public virtual void SetPosition()
+    {
+        original.gameObject.transform.position = original.position - (Vector2)original.gameObject.transform.parent.gameObject.transform.position;
     }
 }
 

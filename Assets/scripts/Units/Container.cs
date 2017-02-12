@@ -32,6 +32,7 @@ public class Container : ParentContainer {
 
     private void PlayerAbsorbAbilities(Player player)
     {
+        api.AddToSnapshot(this);
         if(player.abilities.Count<4)
         {
             player.abilities.Add(abilities[0]);
@@ -43,6 +44,7 @@ public class Container : ParentContainer {
 
     public virtual void PlayerReleaseAbilities(Player player)
     {
+        api.AddToSnapshot(this);
         if(abilities.Count<4)
         {
             abilities.Add(player.abilities[0]);

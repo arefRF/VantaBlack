@@ -21,7 +21,19 @@ public class SnapshotManager{
 
     public void AddToSnapShot(Unit unit)
     {
-        snapshot.clonedunits.Add(unit.Clone());
+        try
+        {
+            for (int i = 0; i < snapshot.clonedunits.Count; i++)
+                if (snapshot.clonedunits[i].original == unit)
+                    return;
+            snapshot.clonedunits.Add(unit.Clone());
+        }
+        catch { }
+    }
+    public void AddToSnapShot(List<Unit> units)
+    {
+        for (int i = 0; i < units.Count; i++)
+            AddToSnapShot(units[i]);
     }
     public void Undo()
     {
@@ -35,6 +47,7 @@ public class SnapshotManager{
 
     private void Undo(Snapshot snapshot)
     {
+        Debug.Log(snapshot.clonedunits.Count);
         for (int i = 0; i < snapshot.clonedunits.Count; i++)
         {
             snapshot.clonedunits[i].Undo();

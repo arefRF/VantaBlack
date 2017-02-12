@@ -17,6 +17,6 @@ public class CloneableRock : CloneableUnit
 {
     public CloneableRock(Rock rock) : base(rock.position)
     {
-
+        original = rock;
     }
 }
