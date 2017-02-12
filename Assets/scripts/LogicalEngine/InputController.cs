@@ -14,7 +14,6 @@ public class InputController {
     {
         if (player.state == PlayerState.Idle)
         {
-            Debug.Log(player.position);
             IdlePLayerMove(player, direction);
         }
         else if(player.state == PlayerState.Moving)

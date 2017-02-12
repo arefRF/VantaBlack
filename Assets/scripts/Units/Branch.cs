@@ -9,4 +9,17 @@ public class Branch : Unit {
         return true;
     }
 
+    public override CloneableUnit Clone()
+    {
+        return new CloneableBranch(this);
+    }
+
+}
+
+public class CloneableBranch : CloneableUnit
+{
+    public CloneableBranch(Branch branch) : base(branch.position)
+    {
+
+    }
 }

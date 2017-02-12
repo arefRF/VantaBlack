@@ -7,13 +7,13 @@ public class FunctionalContainer : Container {
     public bool on;
     public int moved { get; set; }
     protected int shouldmove;
-    private bool movedone = false;
-    private int stucklevel = 0;
+    protected bool movedone = false;
+    protected int stucklevel = 0;
 
     public List<int> reservedmoveint { get; set; }
     protected List<bool> reservedmovebool;
 
-    private bool resetstucked;
+    protected bool resetstucked;
     protected bool laston;
     protected Direction stuckdirection;
     public int stuckstatus {get; set; }
@@ -79,12 +79,16 @@ public class FunctionalContainer : Container {
             //shayad bug bede
             if (dir != stuckdirection)
             {
+                Debug.Log("now in here");
                 stucklevel--;
                 if (stucklevel == 0)
                     api.RemoveFromStuckList(this);
                 resetstucked = false;
                 gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = false;
-                Action_Fuel(false);
+                if (count < stucklevel + 1)
+                {
+                    Action_Fuel(false);
+                }
                 return;
             }
             else
@@ -96,6 +100,7 @@ public class FunctionalContainer : Container {
                 return;
             }
         }
+        Debug.Log(stucklevel);
         if (movedone)
         {
             //if (moved == abilities.Count)

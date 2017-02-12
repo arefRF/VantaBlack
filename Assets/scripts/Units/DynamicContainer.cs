@@ -23,4 +23,50 @@ public class DynamicContainer : FunctionalContainer {
     {
         return false;
     }
+
+    public override CloneableUnit Clone()
+    {
+        CloneableDynamicContainer clone = new CloneableDynamicContainer(this);
+        for (int i = 0; i < abilities.Count; i++)
+            clone.abilities.Add(abilities[i]);
+        clone.direction = direction;
+        clone.on = on;
+        clone.moved = moved;
+        clone.shouldmove = shouldmove;
+        clone.movedone = movedone;
+        clone.stucklevel = stucklevel;
+        for (int i = 0; i < reservedmoveint.Count; i++)
+        {
+            clone.reservedmoveint.Add(reservedmoveint[i]);
+            clone.reservedmovebool.Add(reservedmovebool[i]);
+        }
+        clone.resetstucked = resetstucked;
+        clone.laston = laston;
+        clone.stuckdirection = stuckdirection;
+        clone.stuckstatus = stuckstatus;
+        return clone;
+    }
+}
+
+public class CloneableDynamicContainer : CloneableUnit
+{
+    public List<AbilityType> abilities;
+    public Direction direction;
+    public bool on;
+    public int moved;
+    public int shouldmove;
+    public bool movedone;
+    public int stucklevel;
+    public List<int> reservedmoveint;
+    public List<bool> reservedmovebool;
+    public bool resetstucked;
+    public bool laston;
+    public Direction stuckdirection;
+    public int stuckstatus;
+    public CloneableDynamicContainer(DynamicContainer container) : base(container.position)
+    {
+        reservedmovebool = new List<bool>();
+        reservedmoveint = new List<int>();
+        abilities = new List<AbilityType>();
+    }
 }

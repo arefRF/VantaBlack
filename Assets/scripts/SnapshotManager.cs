@@ -29,49 +29,47 @@ public class SnapshotManager{
 
     public void Undo(Snapshot snapshot)
     {
-        for(int i=0; i<snapshot.clonedunits.Count; i++)
+        for (int i = 0; i < snapshot.clonedunits.Count; i++)
         {
-            Debug.Log(snapshot.originalunits[i].position);
-            Debug.Log(snapshot.clonedunits[i].position);
-            if (engine.database.units[(int)snapshot.originalunits[i].position.x, (int)snapshot.originalunits[i].position.y].Contains(snapshot.originalunits[i]))
-                Debug.Log("containes");
-            engine.apiunit.RemoveFromDatabase(snapshot.originalunits[i]);
-            if (snapshot.originalunits[i] is Player)
-            {
-                engine.database.player.Remove((Player)snapshot.originalunits[i]);
-            }
-            snapshot.originalunits[i] = snapshot.clonedunits[i].Clone();
-            Debug.Log(((Player)snapshot.originalunits[i]).move_direction.Count);
-            if (snapshot.originalunits[i] is Player)
-            {
-                engine.database.player.Add((Player)snapshot.originalunits[i]);
-            }
-            engine.apiunit.AddToDatabase(snapshot.originalunits[i]);
-            if (snapshot.originalunits[i] is Player)
-            {
-                snapshot.originalunits[i].transform.position = snapshot.clonedunits[i].position;
-            }
-            else
-                snapshot.originalunits[i].transform.parent.transform.position = snapshot.originalunits[i].position - (Vector2)snapshot.originalunits[i].transform.position;
-            Debug.Log(snapshot.originalunits[i].position);
-            if(engine.database.units[(int)snapshot.originalunits[i].position.x, (int)snapshot.originalunits[i].position.y][engine.database.units[(int)snapshot.originalunits[i].position.x, (int)snapshot.originalunits[i].position.y].Count - 1] == snapshot.originalunits[i])
-                Debug.Log("wtf akhe");
+            if (snapshot.clonedunits[i] is CloneablePlayer)
+                UndoPlayer(snapshot.clonedunits[i]);
         }
+    }
+
+    private void UndoPlayer(CloneableUnit unit)
+    {
+        CloneablePlayer player = (CloneablePlayer)unit;
+        Debug.Log(player.position);
+        engine.apiunit.RemoveFromDatabase(player.original);
+        player.original.position = player.position;
+        engine.apiunit.AddToDatabase(player.original);
+        player.original.abilities = new List<AbilityType>();
+        for (int i = 0; i < player.abilities.Count; i++)
+            player.original.abilities.Add(player.abilities[i]);
+        player.move_direction = new List<Direction>();
+        for (int i = 0; i < player.move_direction.Count; i++)
+            player.move_direction.Add(player.move_direction[i]);
+        player.original.direction = player.direction;
+        player.original.movepercentage = player.movepercentage;
+        player.original.state = player.state;
+        player.original.leandirection = player.leandirection;
+        player.original.lean = player.lean;
+        player.original.onramp = player.onramp;
+        player.original.gravity = player.gravity;
+        player.original.nextpos = new Vector2(player.nextpos.x, player.nextpos.y);
+
+        player.original.transform.position = player.position;
     }
 }
 
 public class Snapshot
 {
-    public List<Unit> clonedunits;
-    public List<Unit> originalunits;
+    public List<CloneableUnit> clonedunits;
     public Snapshot(List<Unit> units)
     {
-        clonedunits = new List<Unit>();
-        originalunits = new List<Unit>();
+        clonedunits = new List<CloneableUnit>();
         foreach (Unit u in units)
         {
-            Debug.Log(u.position);
-            originalunits.Add(u);
             clonedunits.Add(u.Clone());
         }
     }

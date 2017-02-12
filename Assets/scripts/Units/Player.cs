@@ -16,8 +16,6 @@ public class Player : Unit
     public bool onramp { get; set; }
     public Direction gravity { get; set; }
 
-    public bool onmovingplatform { get; set; }
-
     public Vector2 nextpos { get; set; }
 
     public void Awake()
@@ -329,7 +327,43 @@ public class Player : Unit
             return true;
         }
     }
+
+    public override CloneableUnit Clone()
+    {
+        return new CloneablePlayer(this);
+    }
 }
 
-//public class CloneablePlayer : 
+public class CloneablePlayer : CloneableUnit
+{
+    public List<AbilityType> abilities;
+    public List<Direction> move_direction;
+    public Direction direction;
+    public int movepercentage;
+    public PlayerState state;
+    public Direction leandirection;
+    public bool lean;
+    public bool onramp;
+    public Direction gravity;
+    public Vector2 nextpos;
+    public Player original;
+    public CloneablePlayer(Player player) : base(player.position)
+    {
+        original = player;
+        abilities = new List<AbilityType>();
+        for (int i = 0; i < player.abilities.Count; i++)
+            abilities.Add(player.abilities[i]);
+        move_direction = new List<Direction>();
+        for (int i = 0; i < player.move_direction.Count; i++)
+            move_direction.Add(player.move_direction[i]);
+        direction = player.direction;
+        movepercentage = player.movepercentage;
+        state = player.state;
+        leandirection = player.leandirection;
+        lean = player.lean;
+        onramp = player.onramp;
+        gravity = player.gravity;
+        nextpos = new Vector2(player.nextpos.x, player.nextpos.y);
+    }
+}
 

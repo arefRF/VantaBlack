@@ -195,4 +195,17 @@ public class Ramp : Unit {
             default: return false;
         }
     }
+
+    public override CloneableUnit Clone()
+    {
+        return new CloneableRamp(this);
+    }
+}
+
+public class CloneableRamp : CloneableUnit
+{
+    public CloneableRamp(Ramp ramp) : base(ramp.position)
+    {
+
+    }
 }
