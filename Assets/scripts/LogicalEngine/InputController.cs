@@ -28,6 +28,7 @@ public class InputController {
         {
             if (player.Can_Move_Direction(direction))
             {
+                Debug.Log("Can Mvoe Direction");
                 if (player.Should_Change_Direction(direction))
                 {
                     Direction olddir = player.direction;
@@ -43,6 +44,7 @@ public class InputController {
             }
             else if (player.Can_Lean(direction))
             {
+                Debug.Log("Can Lean");
                 engine.Lean(player, direction);
             }
         }

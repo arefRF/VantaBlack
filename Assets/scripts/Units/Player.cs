@@ -43,6 +43,10 @@ public class Player : Unit
         for (int i = 0; i < move_direction.Count; i++)
             if (dir == move_direction[i])
                 return true;
+
+        //if inside branch go anywhere
+        if (Toolkit.IsInsideBranch(position))
+            return true;
         return false;
     }
     public bool Can_Lean(Direction dir)
@@ -195,8 +199,9 @@ public class Player : Unit
             return false;
         }
         Vector2 pos = Toolkit.VectorSum(position, gravitydirection);
-        if (!Fall(pos))
+        if (!Fall(pos) && !Stand_On_Ramp(pos))
             return false;
+        Debug.Log("Apply");
         while (Fall(pos))
         {
             /*if (pos.y <= 0 || pos.x <= 0)
@@ -210,6 +215,8 @@ public class Player : Unit
         api.graphicalengine_Fall(this, position);
         return true;
     }
+
+    
 
     public void FallFinished()
     {
