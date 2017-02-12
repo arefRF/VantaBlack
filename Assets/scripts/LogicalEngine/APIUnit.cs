@@ -133,4 +133,10 @@ public class APIUnit {
     {
         engine.snpmanager.AddToSnapShot(unit);
     }
+
+    public void TakeSnapshot()
+    {
+        engine.snpmanager.takesnapshot();
+    }
 }
+
