@@ -5,74 +5,72 @@ using System.Collections.Generic;
 public class SnapshotManager{
     Database database;
     LogicalEngine engine;
+    Snapshot snapshot;
     public SnapshotManager(LogicalEngine engine)
     {
         this.engine = engine;
         database = engine.database;
+        snapshot = new Snapshot();
     }
 
-    public void takesnapshot(List<Unit> units)
+    public void takesnapshot()
     {
-        Snapshot snp = new Snapshot(units);
-        database.snapshots.Add(snp);
+        database.snapshots.Add(snapshot);
+        snapshot = new Snapshot();
     }
 
-    public void Reverse()
+    public void AddToSnapShot(Unit unit)
+    {
+        for (int i = 0; i < snapshot.clonedunits.Count; i++)
+            if (snapshot.clonedunits[i].original == unit)
+                return;
+        snapshot.clonedunits.Add(unit.Clone());
+    }
+    public void AddToSnapShot(List<Unit> units)
+    {
+        for (int i = 0; i < units.Count; i++)
+            AddToSnapShot(units[i]);
+    }
+    public void Undo()
     {
         if (database.snapshots.Count != 0)
         {
-            Snapshot snapshot = database.snapshots[database.snapshots.Count - 1];
+            Snapshot snp = database.snapshots[database.snapshots.Count - 1];
             database.snapshots.RemoveAt(database.snapshots.Count - 1);
-            Undo(snapshot);
+            Undo(snp);
+            for(int i=0; i<snapshot.clonedunits.Count; i++)
+            {
+                bool flag = true;
+                for(int j=0; j<snp.clonedunits.Count; j++)
+                {
+                    if(snp.clonedunits[j].original == snapshot.clonedunits[i].original)
+                    {
+                        flag = false;
+                        break;
+                    }
+                }
+                if (flag)
+                    snapshot.clonedunits[i].Undo();
+            }
         }
     }
 
-    public void Undo(Snapshot snapshot)
+    private void Undo(Snapshot snapshot)
     {
-        for(int i=0; i<snapshot.clonedunits.Count; i++)
+        Debug.Log(snapshot.clonedunits.Count);
+        for (int i = 0; i < snapshot.clonedunits.Count; i++)
         {
-            Debug.Log(snapshot.originalunits[i].position);
-            Debug.Log(snapshot.clonedunits[i].position);
-            if (engine.database.units[(int)snapshot.originalunits[i].position.x, (int)snapshot.originalunits[i].position.y].Contains(snapshot.originalunits[i]))
-                Debug.Log("containes");
-            engine.apiunit.RemoveFromDatabase(snapshot.originalunits[i]);
-            if (snapshot.originalunits[i] is Player)
-            {
-                engine.database.player.Remove((Player)snapshot.originalunits[i]);
-            }
-            snapshot.originalunits[i] = snapshot.clonedunits[i].Clone();
-            Debug.Log(((Player)snapshot.originalunits[i]).move_direction.Count);
-            if (snapshot.originalunits[i] is Player)
-            {
-                engine.database.player.Add((Player)snapshot.originalunits[i]);
-            }
-            engine.apiunit.AddToDatabase(snapshot.originalunits[i]);
-            if (snapshot.originalunits[i] is Player)
-            {
-                snapshot.originalunits[i].transform.position = snapshot.clonedunits[i].position;
-            }
-            else
-                snapshot.originalunits[i].transform.parent.transform.position = snapshot.originalunits[i].position - (Vector2)snapshot.originalunits[i].transform.position;
-            Debug.Log(snapshot.originalunits[i].position);
-            if(engine.database.units[(int)snapshot.originalunits[i].position.x, (int)snapshot.originalunits[i].position.y][engine.database.units[(int)snapshot.originalunits[i].position.x, (int)snapshot.originalunits[i].position.y].Count - 1] == snapshot.originalunits[i])
-                Debug.Log("wtf akhe");
+            snapshot.clonedunits[i].Undo();
         }
     }
 }
 
 public class Snapshot
 {
-    public List<Unit> clonedunits;
-    public List<Unit> originalunits;
-    public Snapshot(List<Unit> units)
+    public List<CloneableUnit> clonedunits;
+    public Snapshot()
     {
-        clonedunits = new List<Unit>();
-        originalunits = new List<Unit>();
-        foreach (Unit u in units)
-        {
-            originalunits.Add(u);
-            clonedunits.Add(u.Clone());
-        }
+        clonedunits = new List<CloneableUnit>();
     }
 }
 

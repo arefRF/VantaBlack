@@ -43,6 +43,7 @@ public class InputController {
             }
             else if (player.Can_Lean(direction))
             {
+                Debug.Log("Can Lean");
                 engine.Lean(player, direction);
             }
         }

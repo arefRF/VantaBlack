@@ -15,11 +15,14 @@ public class Unit : MonoBehaviour {
 
     // public abstract bool CanMove(UnitType unittype);
 
-    public virtual Unit Clone()
+    public virtual CloneableUnit Clone()
     {
-        return (Unit)MemberwiseClone();
+        return null;
     }
+    public virtual void Undo()
+    {
 
+    }
     public virtual bool PlayerMoveInto(Direction dir)
     {
         return false;
@@ -108,11 +111,24 @@ public class Unit : MonoBehaviour {
 
 public class CloneableUnit
 {
-    Vector2 position;
-
+    public Vector2 position;
+    public Unit original;
     public CloneableUnit(Vector2 position)
     {
-        this.position = position;
+        this.position = new Vector2(position.x, position.y);
+    }
+
+    public virtual void Undo()
+    {
+        original.api.RemoveFromDatabase(original);
+        original.position = position;
+        original.api.AddToDatabase(original);
+        SetPosition();
+    }
+
+    public virtual void SetPosition()
+    {
+        original.gameObject.transform.position = original.position;
     }
 }
 

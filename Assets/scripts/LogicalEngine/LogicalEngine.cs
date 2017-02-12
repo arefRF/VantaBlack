@@ -11,15 +11,13 @@ public class LogicalEngine {
     InputController inputcontroller;
     int sizeX, sizeY;
     public List<Unit> stuckedunits;
-    SnapshotManager snpmanager;
+    public SnapshotManager snpmanager;
 
 
     private List<Unit> leanmove;
     private List<Unit> shouldmove;
-    private int movingplayformcount;
     public LogicalEngine(int x, int y)
     {
-        movingplayformcount = 0;
         sizeX = x;
         sizeY = y;
         stuckedunits = new List<Unit>();
@@ -83,6 +81,7 @@ public class LogicalEngine {
                 }
                 if (!flag && leanmove[i].CanMove(dir, unit.transform.parent.gameObject))
                 {
+                    snpmanager.AddToSnapShot(leanmove[i]);
                     ((Player)leanmove[i]).nextpos = Toolkit.VectorSum(leanmove[i].position, Toolkit.DirectiontoVector(dir));
                     apigraphic.LeanStickMove((Player)leanmove[i], ((Player)leanmove[i]).nextpos);
                 }
@@ -99,13 +98,15 @@ public class LogicalEngine {
                 }
                 if (shouldmove[i].CanMove(dir, unit.transform.parent.gameObject))
                 {
+                    snpmanager.AddToSnapShot(shouldmove[i]);
                     database.units[(int)shouldmove[i].position.x, (int)shouldmove[i].position.y].Remove(shouldmove[i]);
                     shouldmove[i].position = Toolkit.VectorSum(shouldmove[i].position, Toolkit.DirectiontoVector(dir));
                     database.units[(int)shouldmove[i].position.x, (int)shouldmove[i].position.y].Add(shouldmove[i]);
                     apigraphic.MovePlayerOnPlatform((Player)shouldmove[i], shouldmove[i].position);
                 }
             }
-            movingplayformcount++;
+            snpmanager.AddToSnapShot(unit);
+            snpmanager.AddToSnapShot(unit.ConnectedUnits);
             apigraphic.MoveGameObject(unit.transform.parent.gameObject, Toolkit.VectorSum(tempposition, dir), unit);
         }
         else
@@ -132,9 +133,7 @@ public class LogicalEngine {
     public void MovePlayer(Player player, Direction dir)
     {
         Vector2 nextpos;
-        List<Unit> listt = new List<Unit>();
-        listt.Add(player);
-        snpmanager.takesnapshot(listt);
+        snpmanager.AddToSnapShot(player);
         if (player.onramp)
         {
             List<Unit> units = GetUnits(player.position);
@@ -391,11 +390,12 @@ public class LogicalEngine {
                 }
             }
         }
+        snpmanager.takesnapshot();
     }
 
     public void Undo()
     {
-        snpmanager.Reverse();
+        snpmanager.Undo();
     }
 
     public void Applygravity()
@@ -584,8 +584,6 @@ public class LogicalEngine {
     {
         if (unit == null)
             return;
-        if(movingplayformcount > 0)
-            movingplayformcount--;
         //unit.gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = false;
         
         if(unit is FunctionalContainer)

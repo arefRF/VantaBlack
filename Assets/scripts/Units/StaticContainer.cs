@@ -8,5 +8,7 @@ public class StaticContainer : FunctionalContainer {
         moved = 0;
         shouldmove = abilities.Count;
         laston = !on;
+        stucklevel = 0;
+        stuckstatus = 0;
     }
 }

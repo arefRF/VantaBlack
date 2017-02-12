@@ -120,7 +120,8 @@ public class PlayerPhysics : MonoBehaviour
     public void Ramp_To_Sharp_Move(Vector2 pos,int type)
     {
         move_type = MoveType.RampToSharp;
-        StopCoroutine(last_co);
+        if(last_co!=null)
+            StopCoroutine(last_co);
         Vector2 end1 = Ramp_To_Sharp_Pos(Direction.Down, pos);
         Vector2 end2 = pos + On_Ramp_Pos(type);
         last_co = StartCoroutine(Ramp_To_Sharp_Coroutine(end1,end2,move_time,true,type));
@@ -181,10 +182,16 @@ public class PlayerPhysics : MonoBehaviour
         Rotate_On_Ramp(type);
     }
    
+    public void Player_Undo()
+    {
+        StopAllCoroutines();
+    }
+
     //fall 
     public void Fall(Vector2 pos)
     {
-        StopCoroutine(last_co);
+        if(last_co!=null)
+            StopCoroutine(last_co);
         move_type = MoveType.Falling;
         last_co  = StartCoroutine(Accelerated_Move(pos,fall_velocity,fall_acceleration,true));
     }
