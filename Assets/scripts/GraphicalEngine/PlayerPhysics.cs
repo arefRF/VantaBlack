@@ -181,6 +181,11 @@ public class PlayerPhysics : MonoBehaviour
         Rotate_On_Ramp(type);
     }
    
+    public void Player_Undo()
+    {
+        StopAllCoroutines();
+    }
+
     //fall 
     public void Fall(Vector2 pos)
     {
