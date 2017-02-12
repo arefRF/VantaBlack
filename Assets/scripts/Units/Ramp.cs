@@ -206,6 +206,6 @@ public class CloneableRamp : CloneableUnit
 {
     public CloneableRamp(Ramp ramp) : base(ramp.position)
     {
-
+        original = ramp;
     }
 }

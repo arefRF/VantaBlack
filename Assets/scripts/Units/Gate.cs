@@ -64,4 +64,17 @@ public class Gate : Container {
     {
         return;
     }
+
+    public override CloneableUnit Clone()
+    {
+        return new CloneableGate(this);
+    }
+}
+
+public class CloneableGate : CloneableUnit
+{
+    public CloneableGate(Gate gate) : base(gate.position)
+    {
+        original = gate;
+    }
 }

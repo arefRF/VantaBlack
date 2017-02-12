@@ -28,25 +28,7 @@ public class DynamicContainer : FunctionalContainer {
 
     public override CloneableUnit Clone()
     {
-        CloneableDynamicContainer clone = new CloneableDynamicContainer(this);
-        for (int i = 0; i < abilities.Count; i++)
-            clone.abilities.Add(abilities[i]);
-        //clone.direction = direction;
-        clone.on = on;
-        clone.moved = moved;
-        clone.shouldmove = shouldmove;
-        clone.movedone = movedone;
-        clone.stucklevel = stucklevel;
-        for (int i = 0; i < reservedmoveint.Count; i++)
-        {
-            clone.reservedmoveint.Add(reservedmoveint[i]);
-            clone.reservedmovebool.Add(reservedmovebool[i]);
-        }
-        clone.resetstucked = resetstucked;
-        clone.laston = laston;
-        clone.stuckdirection = stuckdirection;
-        clone.stuckstatus = stuckstatus;
-        return clone;
+        return new CloneableDynamicContainer(this);
     }
 }
 
@@ -66,6 +48,7 @@ public class CloneableDynamicContainer : CloneableUnit
     public int stuckstatus;
     public CloneableDynamicContainer(DynamicContainer container) : base(container.position)
     {
+        original = container;
         reservedmovebool = new List<bool>();
         reservedmoveint = new List<int>();
         abilities = new List<AbilityType>();
@@ -84,5 +67,31 @@ public class CloneableDynamicContainer : CloneableUnit
         laston = container.laston;
         stuckdirection = container.stuckdirection;
         stuckstatus = container.stuckstatus;
+    }
+
+    public override void Undo()
+    {
+        base.Undo();
+        DynamicContainer original = (DynamicContainer)base.original;
+        original.abilities = new List<AbilityType>();
+        original.reservedmovebool = new List<bool>();
+        original.reservedmoveint = new List<int>();
+        for (int i = 0; i < abilities.Count; i++)
+            original.abilities.Add(abilities[i]);
+        for (int i = 0; i < reservedmovebool.Count; i++)
+            original.reservedmovebool.Add(reservedmovebool[i]);
+        for (int i = 0; i < reservedmoveint.Count; i++)
+            original.reservedmoveint.Add(reservedmoveint[i]);
+        original.on = on;
+        original.moved = moved;
+        original.movedone = movedone;
+        original.stucklevel = stucklevel;
+        original.resetstucked = resetstucked;
+        original.laston = laston;
+        original.stuckdirection = stuckdirection;
+        original.stuckstatus = stuckstatus;
+
+        
+        original.api.engine.apigraphic.UnitChangeSprite(original);
     }
 }

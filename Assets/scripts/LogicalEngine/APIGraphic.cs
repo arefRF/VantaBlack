@@ -232,6 +232,7 @@ public class APIGraphic{
 
     public void UnitChangeSprite(Unit unit)
     {
+        //Debug.Log(unit);
         if (unit is SimpleContainer)
             graphicalengine.Simple_Container((SimpleContainer)unit);
         else if (unit is DynamicContainer)
