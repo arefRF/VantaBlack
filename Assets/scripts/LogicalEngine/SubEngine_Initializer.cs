@@ -170,6 +170,8 @@ public class SubEngine_Initializer{
             unit.gameObject.GetComponent<SpriteRenderer>().sprite = sprite_Container[15];
     }
 
+
+
     private bool[] GetConnectedSides(List<Unit>[,] units, Unit unit)
     {
         bool[] result = new bool[4];

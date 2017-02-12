@@ -4,43 +4,73 @@ using System.Collections.Generic;
 
 public class SnapshotManager{
     Database database;
-    public SnapshotManager()
+    LogicalEngine engine;
+    Snapshot snapshot;
+    public SnapshotManager(LogicalEngine engine)
     {
-        database = Starter.GetDataBase();
+        this.engine = engine;
+        database = engine.database;
+        snapshot = new Snapshot();
     }
 
-    public void takesnapshot(List<CloneableUnit> units, Vector3 CameraPos, float CameraSize)
+    public void takesnapshot()
     {
-        Snapshot snp = new Snapshot(units, CameraPos, CameraSize);
-        database.snapshots.Add(snp);
+        database.snapshots.Add(snapshot);
+        snapshot = new Snapshot();
     }
 
-    public Snapshot Revese()
+    public void AddToSnapShot(Unit unit)
+    {
+        for (int i = 0; i < snapshot.clonedunits.Count; i++)
+            if (snapshot.clonedunits[i].original == unit)
+                return;
+        snapshot.clonedunits.Add(unit.Clone());
+    }
+    public void AddToSnapShot(List<Unit> units)
+    {
+        for (int i = 0; i < units.Count; i++)
+            AddToSnapShot(units[i]);
+    }
+    public void Undo()
     {
         if (database.snapshots.Count != 0)
         {
-            Snapshot snapshot = database.snapshots[database.snapshots.Count - 1];
+            Snapshot snp = database.snapshots[database.snapshots.Count - 1];
             database.snapshots.RemoveAt(database.snapshots.Count - 1);
-            return snapshot;
+            Undo(snp);
+            for(int i=0; i<snapshot.clonedunits.Count; i++)
+            {
+                bool flag = true;
+                for(int j=0; j<snp.clonedunits.Count; j++)
+                {
+                    if(snp.clonedunits[j].original == snapshot.clonedunits[i].original)
+                    {
+                        flag = false;
+                        break;
+                    }
+                }
+                if (flag)
+                    snapshot.clonedunits[i].Undo();
+            }
         }
-        return null;
+    }
+
+    private void Undo(Snapshot snapshot)
+    {
+        Debug.Log(snapshot.clonedunits.Count);
+        for (int i = 0; i < snapshot.clonedunits.Count; i++)
+        {
+            snapshot.clonedunits[i].Undo();
+        }
     }
 }
 
 public class Snapshot
 {
-    public List<CloneableUnit> units;
-    public Vector3 cameraPosition;
-    public float cameraSize;
-    public long turn;
-    public Snapshot(List<CloneableUnit> units, Vector3 Camerapos, float CameraSize)
+    public List<CloneableUnit> clonedunits;
+    public Snapshot()
     {
-        this.units = new List<CloneableUnit>();
-        foreach (CloneableUnit u in units)
-            this.units.Add(u);
-        turn = Starter.GetDataBase().turn;
-        cameraPosition = Camerapos;
-        cameraSize = CameraSize;
+        clonedunits = new List<CloneableUnit>();
     }
 }
 

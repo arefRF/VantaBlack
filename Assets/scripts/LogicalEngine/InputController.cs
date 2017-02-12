@@ -35,9 +35,7 @@ public class InputController {
                     engine.apigraphic.PlayerChangeDirection(player, olddir, player.direction);
                 }
                 else if (!player.Move(direction))
-                {
                     engine.Lean(player, direction);
-                }
                 else
                 {
                     player.state = PlayerState.Moving;
@@ -45,6 +43,7 @@ public class InputController {
             }
             else if (player.Can_Lean(direction))
             {
+                Debug.Log("Can Lean");
                 engine.Lean(player, direction);
             }
         }

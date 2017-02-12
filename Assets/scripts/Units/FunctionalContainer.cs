@@ -6,16 +6,16 @@ public class FunctionalContainer : Container {
     public Direction direction;
     public bool on;
     public int moved { get; set; }
-    protected int shouldmove;
-    private bool movedone = false;
-    private int stucklevel = 0;
+    public int shouldmove { get; set; }
+    public bool movedone { get; set; }
+    public int stucklevel {get;set;}
 
     public List<int> reservedmoveint { get; set; }
-    protected List<bool> reservedmovebool;
+    public List<bool> reservedmovebool { get; set; }
 
-    private bool resetstucked;
-    protected bool laston;
-    protected Direction stuckdirection;
+    public bool resetstucked { get; set; }
+    public bool laston { get; set; }
+    public Direction stuckdirection { get; set; }
     public int stuckstatus {get; set; }
     public override bool PlayerMoveInto(Direction dir)
     {
@@ -39,8 +39,6 @@ public class FunctionalContainer : Container {
         reservedmovebool.Clear();
         reservedmoveint.Clear();
         Direction dir = direction;
-        Debug.Log(shouldmove);
-        Debug.Log(stucklevel);
         if (!on)
         {
             dir = Toolkit.ReverseDirection(dir);
@@ -81,12 +79,16 @@ public class FunctionalContainer : Container {
             //shayad bug bede
             if (dir != stuckdirection)
             {
+                Debug.Log("now in here");
                 stucklevel--;
                 if (stucklevel == 0)
                     api.RemoveFromStuckList(this);
                 resetstucked = false;
                 gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = false;
-                Action_Fuel(false);
+                if (count < stucklevel + 1)
+                {
+                    Action_Fuel(false);
+                }
                 return;
             }
             else
@@ -98,9 +100,9 @@ public class FunctionalContainer : Container {
                 return;
             }
         }
+        Debug.Log(stucklevel);
         if (movedone)
         {
-            Debug.Log("move done");
             //if (moved == abilities.Count)
             resetstucked = false;
             movedone = false;
@@ -121,7 +123,6 @@ public class FunctionalContainer : Container {
         {
             shouldmove = stucklevel;
         }
-        Debug.Log("trying to move ");
         if (api.MoveUnit(this, dir))
         {
             resetstucked = true;
@@ -129,14 +130,11 @@ public class FunctionalContainer : Container {
             if (stucklevel > 0)
                 stucklevel--;
             moved++;
-            Debug.Log(moved);
-            Debug.Log(shouldmove);
             if (moved == shouldmove)
                 movedone = true;
         }
         else
         {
-            Debug.Log("couldnt move");
             laston = on;
             bool flag = false;
             if (moved != 0)

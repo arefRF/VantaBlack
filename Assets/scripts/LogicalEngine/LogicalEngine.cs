@@ -11,10 +11,13 @@ public class LogicalEngine {
     InputController inputcontroller;
     int sizeX, sizeY;
     public List<Unit> stuckedunits;
-    Object lock_move;
+    public SnapshotManager snpmanager;
+
+
+    private List<Unit> leanmove;
+    private List<Unit> shouldmove;
     public LogicalEngine(int x, int y)
     {
-        lock_move = new Object();
         sizeX = x;
         sizeY = y;
         stuckedunits = new List<Unit>();
@@ -22,6 +25,8 @@ public class LogicalEngine {
         apiinput = new APIInput(this);
         apiunit = new APIUnit(this);
         database = Starter.GetDataBase();
+        leanmove = new List<Unit>();
+        snpmanager = new SnapshotManager(this);
         initializer = new SubEngine_Initializer(x,y, this);
     }
 
@@ -35,8 +40,8 @@ public class LogicalEngine {
 
     public bool MoveUnit(Unit unit, Direction dir)
     {
-        List<Unit> shouldmove = new List<Unit>();
-        List<Unit> leanmove = new List<Unit>();
+        shouldmove = new List<Unit>();
+        leanmove = new List<Unit>();
         if (!(unit is Box))
         {
             if (!unit.CanMove(dir, unit.transform.parent.gameObject))
@@ -60,24 +65,25 @@ public class LogicalEngine {
             }
             leanmove.AddRange(GetRelatedLeanedPlayers(unit.gameObject.transform.parent.gameObject));
             database.units[(int)unit.position.x, (int)unit.position.y].Remove(unit);
+            Vector2 tempposition = unit.position - (Vector2)unit.gameObject.transform.localPosition;
             unit.position = Toolkit.VectorSum(unit.position, Toolkit.DirectiontoVector(dir));
             database.units[(int)unit.position.x, (int)unit.position.y].Add(unit);
             for(int i=0; i<leanmove.Count; i++)
             {
+                bool flag = false;
                 for(int j=0; j<shouldmove.Count;j++)
                 {
                     if(leanmove[i] == shouldmove[j])
                     {
-                        shouldmove.RemoveAt(j);
-                        j--;
+                        
+                        flag = true;
                     }
                 }
-                if (leanmove[i].CanMove(dir, unit.transform.parent.gameObject))
+                if (!flag && leanmove[i].CanMove(dir, unit.transform.parent.gameObject))
                 {
-                    database.units[(int)leanmove[i].position.x, (int)leanmove[i].position.y].Remove(leanmove[i]);
-                    leanmove[i].position = Toolkit.VectorSum(leanmove[i].position, Toolkit.DirectiontoVector(dir));
-                    database.units[(int)leanmove[i].position.x, (int)leanmove[i].position.y].Add(leanmove[i]);
-                    apigraphic.LeanStickMove((Player)leanmove[i], dir);
+                    snpmanager.AddToSnapShot(leanmove[i]);
+                    ((Player)leanmove[i]).nextpos = Toolkit.VectorSum(leanmove[i].position, Toolkit.DirectiontoVector(dir));
+                    apigraphic.LeanStickMove((Player)leanmove[i], ((Player)leanmove[i]).nextpos);
                 }
             }
             for (int i = 0; i < shouldmove.Count; i++)
@@ -92,14 +98,16 @@ public class LogicalEngine {
                 }
                 if (shouldmove[i].CanMove(dir, unit.transform.parent.gameObject))
                 {
+                    snpmanager.AddToSnapShot(shouldmove[i]);
                     database.units[(int)shouldmove[i].position.x, (int)shouldmove[i].position.y].Remove(shouldmove[i]);
                     shouldmove[i].position = Toolkit.VectorSum(shouldmove[i].position, Toolkit.DirectiontoVector(dir));
                     database.units[(int)shouldmove[i].position.x, (int)shouldmove[i].position.y].Add(shouldmove[i]);
-                    apigraphic.MovePlayerOnPlatform((Player)shouldmove[i], dir);
+                    apigraphic.MovePlayerOnPlatform((Player)shouldmove[i], shouldmove[i].position);
                 }
             }
-
-            apigraphic.MoveGameObject(unit.transform.parent.gameObject, dir, unit);
+            snpmanager.AddToSnapShot(unit);
+            snpmanager.AddToSnapShot(unit.ConnectedUnits);
+            apigraphic.MoveGameObject(unit.transform.parent.gameObject, Toolkit.VectorSum(tempposition, dir), unit);
         }
         else
         {
@@ -125,6 +133,7 @@ public class LogicalEngine {
     public void MovePlayer(Player player, Direction dir)
     {
         Vector2 nextpos;
+        snpmanager.AddToSnapShot(player);
         if (player.onramp)
         {
             List<Unit> units = GetUnits(player.position);
@@ -201,7 +210,7 @@ public class LogicalEngine {
                 }
                 else
                 {
-                    if (Toolkit.CanplayerGoOnRampSideFromRamp(Toolkit.GetRamp(nextpos), database.gravity_direction, Direction.Right))
+                    if (Toolkit.CanplayerGoOnRampSideFromRamp(Toolkit.GetRamp(nextpos), database.gravity_direction, dir))
                     {
                         database.units[(int)player.position.x, (int)player.position.y].Remove(player);
                         player.position = nextpos;
@@ -294,7 +303,7 @@ public class LogicalEngine {
                 List<Unit> units = GetUnits(nextpos);
                 if (units.Count != 0)
                 {
-                    Debug.Log(units.Count);
+
                     if(units[0] is Branch)
                     {
                         database.units[(int)player.position.x, (int)player.position.y].Remove(player);
@@ -381,7 +390,14 @@ public class LogicalEngine {
                 }
             }
         }
+        snpmanager.takesnapshot();
     }
+
+    public void Undo()
+    {
+        snpmanager.Undo();
+    }
+
     public void Applygravity()
     {
         for(int i=0; i<database.player.Count; i++)
@@ -506,6 +522,11 @@ public class LogicalEngine {
             {
                 database.player[i].lean = false;
                 apigraphic.LeanFinished(database.player[i]);
+                if(leanmove.Contains(database.player[i]) && !shouldmove.Contains(database.player[i]))
+                {
+                    apiunit.AddToDatabase(database.player[i]);
+                    apigraphic.LeanStickStop(database.player[i]);
+                }
                 database.player[i].ApplyGravity(database.gravity_direction, database.units);
             }
         }
@@ -549,6 +570,16 @@ public class LogicalEngine {
         Applygravity();
         player.state = PlayerState.Idle;
     }
+
+    public void graphic_LeanStickMoveFinished(Player player)
+    {
+        apiunit.RemoveFromDatabase(player);
+        player.position = player.nextpos;
+        apiunit.AddToDatabase(player);
+        Applygravity();
+        player.state = PlayerState.Idle;
+    }
+
     public void graphic_GameObjectMoveAnimationFinished(GameObject gameobject, Unit unit)
     {
         if (unit == null)
@@ -594,7 +625,7 @@ public class LogicalEngine {
                 
             if (u is FunctionalContainer)
             {
-                Debug.Log(u.gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock);
+
                 if (!u.gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock)
                 {
                     ((FunctionalContainer)u).ResetStuckLevel();
@@ -616,7 +647,7 @@ public class LogicalEngine {
             }
             if (u is FunctionalContainer)
             {
-                Debug.Log(u.gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock);
+               
                 if (!u.gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock)
                 {
                     ((FunctionalContainer)u).ResetStuckLevel();

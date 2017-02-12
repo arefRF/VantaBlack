@@ -9,16 +9,14 @@ public class Player : Unit
     public List<Direction> move_direction;
     public Direction direction { get; set; }
     public int movepercentage { get; set; }
-    public PlayerState state {get;set;}
+    public PlayerState state { get; set; }
     public Direction leandirection { get; set; }
     public bool lean { get; set; }
 
     public bool onramp { get; set; }
-    public Direction gravity {get;set; }
+    public Direction gravity { get; set; }
 
-    public bool onmovingplatform { get; set; }
-
-
+    public Vector2 nextpos { get; set; }
 
     public void Awake()
     {
@@ -45,9 +43,13 @@ public class Player : Unit
         for (int i = 0; i < move_direction.Count; i++)
             if (dir == move_direction[i])
                 return true;
+
+        //if inside branch go anywhere
+        if (Toolkit.IsInsideBranch(position))
+            return true;
         return false;
     }
-    public bool Can_Lean( Direction dir)
+    public bool Can_Lean(Direction dir)
     {
         if (dir == Direction.Up || dir == Direction.Down)
             return true;
@@ -58,7 +60,7 @@ public class Player : Unit
     public override bool Move(Direction dir)
     {
         Ramp ramp = null;
-        List<Unit> units  = api.engine_GetUnits(this, dir);
+        List<Unit> units = api.engine_GetUnits(this, dir);
         onramp = false;
         List<Unit> temp = api.engine_GetUnits(position);
         bool goingup = true;
@@ -74,7 +76,7 @@ public class Player : Unit
             }
         }
         if (onramp)
-        { 
+        {
             Direction gravitydirection = Starter.GetDataBase().gravity_direction;
             switch (gravitydirection)
             {
@@ -107,7 +109,7 @@ public class Player : Unit
                     }
                     break;
             }
-            if(goingup)
+            if (goingup)
                 units = api.engine_GetUnits(Toolkit.VectorSum(Toolkit.VectorSum(Toolkit.DirectiontoVector(Toolkit.ReverseDirection(gravitydirection)), Toolkit.DirectiontoVector(dir)), position));
         }
         for (int i = 0; i < units.Count; i++) {
@@ -146,13 +148,17 @@ public class Player : Unit
                     case Direction.Down: if (ramp.type != 1 && ramp.type != 4) return false; break;
                 }*/
             }
-            else if(units[i].transform.parent.gameObject != parent)
+            else if (units[i].transform.parent.gameObject != parent)
                 return false;
         }
         for (int i = 0; i < players.Count; i++)
         {
             if (!players[i].CanMove(dir, parent))
+            {
+                Debug.Log(players[i]);
                 return false;
+            }
+            
         }
         int bound = players.Count;
         for(int i = 0; i< bound; i++)
@@ -193,8 +199,9 @@ public class Player : Unit
             return false;
         }
         Vector2 pos = Toolkit.VectorSum(position, gravitydirection);
-        if (!Fall(pos))
+        if (!Fall(pos)  && !Stand_On_Ramp(pos))
             return false;
+        Debug.Log("Apply");
         while (Fall(pos))
         {
             /*if (pos.y <= 0 || pos.x <= 0)
@@ -208,6 +215,8 @@ public class Player : Unit
         api.graphicalengine_Fall(this, position);
         return true;
     }
+
+    
 
     public void FallFinished()
     {
@@ -223,6 +232,8 @@ public class Player : Unit
             else
             {
                 Vector2 temp = Toolkit.GetRamp(pos).fallOn(this, Toolkit.ReverseDirection(Starter.GetGravityDirection()));
+                Debug.Log(temp);
+                Debug.Log(position);
                 if (temp == position)
                 {
                     api.graphicalengine_Land(this, position);
@@ -321,6 +332,67 @@ public class Player : Unit
         {
             return true;
         }
+    }
+
+    public override CloneableUnit Clone()
+    {
+        return new CloneablePlayer(this);
+    }
+}
+
+public class CloneablePlayer : CloneableUnit
+{
+    public List<AbilityType> abilities;
+    public List<Direction> move_direction;
+    public Direction direction;
+    public int movepercentage;
+    public PlayerState state;
+    public Direction leandirection;
+    public bool lean;
+    public bool onramp;
+    public Direction gravity;
+    public Vector2 nextpos;
+    public CloneablePlayer(Player player) : base(player.position)
+    {
+        original = player;
+        abilities = new List<AbilityType>();
+        for (int i = 0; i < player.abilities.Count; i++)
+            abilities.Add(player.abilities[i]);
+        move_direction = new List<Direction>();
+        for (int i = 0; i < player.move_direction.Count; i++)
+            move_direction.Add(player.move_direction[i]);
+        direction = player.direction;
+        movepercentage = player.movepercentage;
+        state = player.state;
+        leandirection = player.leandirection;
+        lean = player.lean;
+        onramp = player.onramp;
+        gravity = player.gravity;
+        nextpos = new Vector2(player.nextpos.x, player.nextpos.y);
+    }
+
+    public override void Undo()
+    {
+        Player original = (Player)base.original;
+        original.api.RemoveFromDatabase(original);
+        original.position = position;
+        original.api.AddToDatabase(original);
+        original.abilities = new List<AbilityType>();
+        for (int i = 0; i < abilities.Count; i++)
+            original.abilities.Add(abilities[i]);
+        move_direction = new List<Direction>();
+        for (int i = 0; i < move_direction.Count; i++)
+            move_direction.Add(move_direction[i]);
+        original.direction = direction;
+        original.movepercentage = movepercentage;
+        original.state = state;
+        original.leandirection = leandirection;
+        original.lean = lean;
+        original.onramp = onramp;
+        original.gravity = gravity;
+        original.nextpos = new Vector2(nextpos.x, nextpos.y);
+
+        SetPosition();
     }
 }
 

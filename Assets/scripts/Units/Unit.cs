@@ -4,9 +4,7 @@ using System.Collections.Generic;
 public class Unit : MonoBehaviour {
     public Vector2 position { get; set; }
     public UnitType unitType { get; set; }
-    public GameObject obj { get; set; }
     public long codeNumber { get; set; }
-    public Vector2 target_pos { get; set; }
     public APIUnit api { get; set; }
 
     public static int Code = 0;
@@ -17,6 +15,14 @@ public class Unit : MonoBehaviour {
 
     // public abstract bool CanMove(UnitType unittype);
 
+    public virtual CloneableUnit Clone()
+    {
+        return null;
+    }
+    public virtual void Undo()
+    {
+
+    }
     public virtual bool PlayerMoveInto(Direction dir)
     {
         return false;
@@ -105,6 +111,24 @@ public class Unit : MonoBehaviour {
 
 public class CloneableUnit
 {
+    public Vector2 position;
+    public Unit original;
+    public CloneableUnit(Vector2 position)
+    {
+        this.position = new Vector2(position.x, position.y);
+    }
 
+    public virtual void Undo()
+    {
+        original.api.RemoveFromDatabase(original);
+        original.position = position;
+        original.api.AddToDatabase(original);
+        SetPosition();
+    }
+
+    public virtual void SetPosition()
+    {
+        original.gameObject.transform.position = original.position;
+    }
 }
 

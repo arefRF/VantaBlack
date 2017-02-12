@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 public class Gate : Container {
 
     public string sceneName;
+    public bool Internal;
 
     public void Start()
     {
@@ -39,10 +40,22 @@ public class Gate : Container {
         }
         if(abilities.Count == capacity)
         {
-            Change_Scene();
+            Open();
         }
     }
 
+
+    private void Open()
+    {
+        if (Internal)
+        {
+            
+        }
+        else
+        {
+            Change_Scene();
+        }
+    }
     private void Change_Scene()
     {
        SceneManager.LoadScene(sceneName);
@@ -50,5 +63,18 @@ public class Gate : Container {
     public override void PlayerAbsorb(Player player)
     {
         return;
+    }
+
+    public override CloneableUnit Clone()
+    {
+        return new CloneableGate(this);
+    }
+}
+
+public class CloneableGate : CloneableUnit
+{
+    public CloneableGate(Gate gate) : base(gate.position)
+    {
+        original = gate;
     }
 }
