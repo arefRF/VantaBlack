@@ -91,7 +91,11 @@ public class GraphicalEngine : MonoBehaviour {
     {
         gate.GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load("Doors\\Door 2", typeof(Sprite));
     }
-  
+    
+    public void Stop_All_Co()
+    {
+        StopAllCoroutines();
+    }
     public void Dynamic_Container(DynamicContainer container)
     {
 

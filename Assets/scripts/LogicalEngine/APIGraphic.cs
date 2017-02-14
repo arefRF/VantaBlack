@@ -188,6 +188,12 @@ public class APIGraphic{
 
     }
 
+
+    // for stoping courtines of moving container and objects
+    public void Stop_Objects_Co()
+    {
+        graphicalengine.StopAllCoroutines();
+    }
     public void Move_Update(Player player,Vector2 pos)
     {
         player.GetComponent<PlayerPhysics>().Set_End(pos);
