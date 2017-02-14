@@ -96,7 +96,10 @@ public class Container : ParentContainer {
     {
         if (abilities.Count == 0)
             return;
-        else if (player.abilities.Count == 0)
+        api.AddToSnapshot(this);
+        api.AddToSnapshot(ConnectedUnits);
+        api.AddToSnapshot(player);
+        if (player.abilities.Count == 0)
         {
             while (abilities.Count != 0 && player.abilities.Count < 4)
                 PlayerAbsorbAbilitiesHold(player);
@@ -120,7 +123,10 @@ public class Container : ParentContainer {
     {
         if (player.abilities.Count == 0)
             return;
-        else if (abilities.Count == 0)
+        api.AddToSnapshot(this);
+        api.AddToSnapshot(ConnectedUnits);
+        api.AddToSnapshot(player);
+        if (abilities.Count == 0)
         {
             while(player.abilities.Count != 0 && abilities.Count < 4)
                 PlayerReleaseAbilitiesHold(player);

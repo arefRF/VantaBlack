@@ -142,6 +142,7 @@ public class FunctionalContainer : Container {
         }
         else
         {
+            firstmove = true;
             laston = on;
             bool flag = false;
             if (moved != 0)
@@ -173,6 +174,7 @@ public class FunctionalContainer : Container {
         }
         if (api.MoveUnit(this, dir))
         {
+            firstmove = false;
             moved = count;
             movedone = true;
             shouldmove = count;
@@ -180,12 +182,14 @@ public class FunctionalContainer : Container {
         }
         else
         {
+            firstmove = true;
             api.AddToStuckList(this);
             stuckdirection = dir;
             stucklevel++;
             CheckReservedList();
         }
         gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = false;
+        //firstmove = true;
     }
     protected override void ContainerAbilityChanged(bool increased, int count)
     {
@@ -283,6 +287,7 @@ public class FunctionalContainer : Container {
         reservedmoveint.RemoveAt(0);
         reservedmovebool.RemoveAt(0);
         ContainerAbilityChanged(increased, count);
+        api.MergeSnapshot();
     }
 
     public void ResetStuckLevel()
