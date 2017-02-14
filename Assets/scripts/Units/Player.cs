@@ -380,6 +380,7 @@ public class CloneablePlayer : CloneableUnit
 
     public override void Undo()
     {
+        Debug.Log("player");
         Player original = (Player)base.original;
         original.api.StopPlayerCoroutine(original);
         original.api.RemoveFromDatabase(original);

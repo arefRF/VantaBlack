@@ -9,5 +9,16 @@ public class SimpleContainer : Container {
         return false;
     }
 
-    
+    public override CloneableUnit Clone()
+    {
+        return new CloneableSimpleContainer(this);
+    }
+}
+
+public class CloneableSimpleContainer : CloneableUnit
+{
+    public CloneableSimpleContainer(SimpleContainer container) : base(container.position)
+    {
+        original = container;
+    }
 }

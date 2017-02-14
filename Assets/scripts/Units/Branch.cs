@@ -20,6 +20,6 @@ public class CloneableBranch : CloneableUnit
 {
     public CloneableBranch(Branch branch) : base(branch.position)
     {
-
+        original = branch;
     }
 }
