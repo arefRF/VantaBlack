@@ -216,9 +216,12 @@ public class Player : Unit
             api.RemoveFromDatabase(this);
             position = pos;
             api.AddToDatabase(this);
+            if (pos.x == 0 || pos.y == 0)
+                break;
             pos = Toolkit.VectorSum(position, gravitydirection);
         }
         state = PlayerState.Falling;
+
         api.graphicalengine_Fall(this, position);
         return true;
     }

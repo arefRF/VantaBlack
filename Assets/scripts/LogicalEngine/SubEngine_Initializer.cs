@@ -86,7 +86,7 @@ public class SubEngine_Initializer{
             {
                 for(int k=0; k<units[i,j].Count; k++)
                 {
-                    if (units[i, j][k] is Container)
+                    if (units[i, j][k] is Container && !units[i, j][k] is Gate)
                     {
                         SetContainerSprite(units, units[i, j][k]);
                         engine.apigraphic.UnitChangeSprite(units[i, j][k]);
@@ -155,7 +155,6 @@ public class SubEngine_Initializer{
             else if (notconnected[1] && !notconnected[2])
                 ramp_path += "down";
         }
-        Debug.Log(ramp_path);
         unit.GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load(ramp_path,typeof(Sprite));
     }
     private void SetRockSprite(List<Unit>[,] units, Unit unit)

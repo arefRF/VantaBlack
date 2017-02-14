@@ -49,7 +49,8 @@ public class Gate : Container {
     {
         if (Internal)
         {
-            
+            GetComponent<Animator>().SetBool("Open", true);
+            api.RemoveFromDatabase(this);
         }
         else
         {
