@@ -22,14 +22,14 @@ public class Player : Unit
     {
         direction = move_direction[0];
     }
-    public void Update()
+    /*public void Update()
     {
         if(countt != api.engine.database.snapshots.Count)
         {
             Debug.Log(api.engine.database.snapshots.Count);
             countt = api.engine.database.snapshots.Count;
         }
-    }
+    }*/
     public bool Should_Change_Direction(Direction dir)
     {
         for (int i = 0; i < move_direction.Count; i++)
@@ -383,7 +383,6 @@ public class CloneablePlayer : CloneableUnit
 
     public override void Undo()
     {
-        Debug.Log("player");
         Player original = (Player)base.original;
         original.api.StopPlayerCoroutine(original);
         original.api.RemoveFromDatabase(original);

@@ -69,7 +69,6 @@ public class SnapshotManager{
     }
     public void Undo()
     {
-        Debug.Log(database.snapshots.Count);
         if (database.snapshots.Count != 0)
         {
             Snapshot snp = database.snapshots[database.snapshots.Count - 1];
