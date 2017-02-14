@@ -26,6 +26,9 @@ public class FunctionalContainer : Container {
     {
         if (abilities.Count == 0)
             return;
+        api.AddToSnapshot(this);
+        api.AddToSnapshot(this.ConnectedUnits);
+        api.TakeSnapshot();
         switch (abilities[0])
         {
             case AbilityType.Fuel: Action_Fuel(true); break; 
@@ -100,7 +103,6 @@ public class FunctionalContainer : Container {
                 return;
             }
         }
-        Debug.Log(stucklevel);
         if (movedone)
         {
             //if (moved == abilities.Count)

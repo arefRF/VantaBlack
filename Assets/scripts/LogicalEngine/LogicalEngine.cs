@@ -98,6 +98,7 @@ public class LogicalEngine {
                 }
                 if (shouldmove[i].CanMove(dir, unit.transform.parent.gameObject))
                 {
+                    Debug.Log(shouldmove[i]);
                     snpmanager.AddToSnapShot(shouldmove[i]);
                     database.units[(int)shouldmove[i].position.x, (int)shouldmove[i].position.y].Remove(shouldmove[i]);
                     shouldmove[i].position = Toolkit.VectorSum(shouldmove[i].position, Toolkit.DirectiontoVector(dir));
