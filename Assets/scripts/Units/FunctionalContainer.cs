@@ -17,6 +17,8 @@ public class FunctionalContainer : Container {
     public bool laston { get; set; }
     public Direction stuckdirection { get; set; }
     public int stuckstatus {get; set; }
+    public bool firstmove { get; set; } // baraye inke fgt dafeye avval snapshot begire
+
     public override bool PlayerMoveInto(Direction dir)
     {
         return false;
@@ -28,7 +30,7 @@ public class FunctionalContainer : Container {
             return;
         api.AddToSnapshot(this);
         api.AddToSnapshot(this.ConnectedUnits);
-        api.TakeSnapshot();
+        //api.TakeSnapshot();
         switch (abilities[0])
         {
             case AbilityType.Fuel: Action_Fuel(true); break; 
@@ -105,6 +107,7 @@ public class FunctionalContainer : Container {
         }
         if (movedone)
         {
+            firstmove = true;
             //if (moved == abilities.Count)
             resetstucked = false;
             movedone = false;
@@ -127,6 +130,7 @@ public class FunctionalContainer : Container {
         }
         if (api.MoveUnit(this, dir))
         {
+            firstmove = false;
             resetstucked = true;
             laston = !on;
             if (stucklevel > 0)

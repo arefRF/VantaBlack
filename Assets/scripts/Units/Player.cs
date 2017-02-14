@@ -17,12 +17,19 @@ public class Player : Unit
     public Direction gravity { get; set; }
 
     public Vector2 nextpos { get; set; }
-
+    static int countt = 0;
     public void Awake()
     {
         direction = move_direction[0];
     }
-
+    public void Update()
+    {
+        if(countt != api.engine.database.snapshots.Count)
+        {
+            Debug.Log(api.engine.database.snapshots.Count);
+            countt = api.engine.database.snapshots.Count;
+        }
+    }
     public bool Should_Change_Direction(Direction dir)
     {
         for (int i = 0; i < move_direction.Count; i++)
@@ -374,6 +381,7 @@ public class CloneablePlayer : CloneableUnit
     public override void Undo()
     {
         Player original = (Player)base.original;
+        original.api.StopPlayerCoroutine(original);
         original.api.RemoveFromDatabase(original);
         original.position = position;
         original.api.AddToDatabase(original);

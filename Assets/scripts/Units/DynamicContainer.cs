@@ -14,6 +14,7 @@ public class DynamicContainer : FunctionalContainer {
         laston = !on;
         stucklevel = 0;
         stuckstatus = 0;
+        firstmove = true;
 	}
 	
 	// Update is called once per frame

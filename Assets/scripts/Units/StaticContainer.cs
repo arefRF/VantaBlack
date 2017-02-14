@@ -10,5 +10,6 @@ public class StaticContainer : FunctionalContainer {
         laston = !on;
         stucklevel = 0;
         stuckstatus = 0;
+        firstmove = true;
     }
 }

@@ -63,6 +63,11 @@ public class LogicalEngine {
                 u.position = newpos;
                 database.units[(int)u.position.x, (int)u.position.y].Add(u);
             }
+            if (((FunctionalContainer)unit).firstmove)
+            {
+                snpmanager.AddToSnapShot(unit);
+                snpmanager.AddToSnapShot(unit.ConnectedUnits);
+            }
             leanmove.AddRange(GetRelatedLeanedPlayers(unit.gameObject.transform.parent.gameObject));
             database.units[(int)unit.position.x, (int)unit.position.y].Remove(unit);
             Vector2 tempposition = unit.position - (Vector2)unit.gameObject.transform.localPosition;
@@ -81,7 +86,8 @@ public class LogicalEngine {
                 }
                 if (!flag && leanmove[i].CanMove(dir, unit.transform.parent.gameObject))
                 {
-                    snpmanager.AddToSnapShot(leanmove[i]);
+                    if (((FunctionalContainer)unit).firstmove)
+                        snpmanager.AddToSnapShot(leanmove[i]);
                     ((Player)leanmove[i]).nextpos = Toolkit.VectorSum(leanmove[i].position, Toolkit.DirectiontoVector(dir));
                     apigraphic.LeanStickMove((Player)leanmove[i], ((Player)leanmove[i]).nextpos);
                 }
@@ -98,16 +104,18 @@ public class LogicalEngine {
                 }
                 if (shouldmove[i].CanMove(dir, unit.transform.parent.gameObject))
                 {
-                    Debug.Log(shouldmove[i]);
-                    snpmanager.AddToSnapShot(shouldmove[i]);
+                    if (((FunctionalContainer)unit).firstmove)
+                        snpmanager.AddToSnapShot(shouldmove[i]);
                     database.units[(int)shouldmove[i].position.x, (int)shouldmove[i].position.y].Remove(shouldmove[i]);
                     shouldmove[i].position = Toolkit.VectorSum(shouldmove[i].position, Toolkit.DirectiontoVector(dir));
                     database.units[(int)shouldmove[i].position.x, (int)shouldmove[i].position.y].Add(shouldmove[i]);
                     apigraphic.MovePlayerOnPlatform((Player)shouldmove[i], shouldmove[i].position);
                 }
             }
-            snpmanager.AddToSnapShot(unit);
-            snpmanager.AddToSnapShot(unit.ConnectedUnits);
+            if (((FunctionalContainer)unit).firstmove)
+                snpmanager.takesnapshot();
+            else
+                snpmanager.MergeSnapshot();
             apigraphic.MoveGameObject(unit.transform.parent.gameObject, Toolkit.VectorSum(tempposition, dir), unit);
         }
         else
@@ -396,6 +404,8 @@ public class LogicalEngine {
 
     public void Undo()
     {
+        apigraphic.Undo_Objects();
+        snpmanager.MergeSnapshot();
         snpmanager.Undo();
     }
 

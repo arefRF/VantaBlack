@@ -143,5 +143,15 @@ public class APIUnit {
     {
         engine.snpmanager.takesnapshot();
     }
+
+    public void MergeSnapshot()
+    {
+        engine.snpmanager.MergeSnapshot();
+    }
+
+    public void StopPlayerCoroutine(Player player)
+    {
+        engine.apigraphic.Undo_Player(player);
+    }
 }
 

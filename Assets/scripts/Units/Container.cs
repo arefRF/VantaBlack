@@ -35,7 +35,7 @@ public class Container : ParentContainer {
         api.AddToSnapshot(this);
         api.AddToSnapshot(this.ConnectedUnits);
         api.AddToSnapshot(player);
-        api.TakeSnapshot();
+        //api.TakeSnapshot();
         if(player.abilities.Count<4)
         {
             player.abilities.Add(abilities[0]);
@@ -50,7 +50,7 @@ public class Container : ParentContainer {
         api.AddToSnapshot(this);
         api.AddToSnapshot(this.ConnectedUnits);
         api.AddToSnapshot(player);
-        api.TakeSnapshot();
+        //api.TakeSnapshot();
         if(abilities.Count<4)
         {
             abilities.Add(player.abilities[0]);
