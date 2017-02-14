@@ -86,7 +86,7 @@ public class SubEngine_Initializer{
             {
                 for(int k=0; k<units[i,j].Count; k++)
                 {
-                    if (units[i, j][k] is Container && !units[i, j][k] is Gate)
+                    if (units[i, j][k] is Container && !(units[i, j][k] is Gate))
                     {
                         SetContainerSprite(units, units[i, j][k]);
                         engine.apigraphic.UnitChangeSprite(units[i, j][k]);
