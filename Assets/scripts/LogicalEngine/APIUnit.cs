@@ -134,6 +134,11 @@ public class APIUnit {
         engine.snpmanager.AddToSnapShot(unit);
     }
 
+    public void AddToSnapshot(List<Unit> units)
+    {
+        engine.snpmanager.AddToSnapShot(units);
+    }
+
     public void TakeSnapshot()
     {
         engine.snpmanager.takesnapshot();

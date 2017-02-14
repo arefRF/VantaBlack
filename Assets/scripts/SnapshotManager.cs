@@ -33,12 +33,27 @@ public class SnapshotManager{
     }
     public void Undo()
     {
+        Debug.Log(database.snapshots.Count);
         if (database.snapshots.Count != 0)
         {
             Snapshot snp = database.snapshots[database.snapshots.Count - 1];
             database.snapshots.RemoveAt(database.snapshots.Count - 1);
             Undo(snp);
-            Undo(snapshot);
+            for(int i=0; i<snapshot.clonedunits.Count; i++)
+            {
+                bool flag = true;
+                for(int j=0; j<snp.clonedunits.Count; j++)
+                {
+                    if(snp.clonedunits[j].original == snapshot.clonedunits[i].original)
+                    {
+                        flag = false;
+                        break;
+                    }
+                }
+                if (flag)
+                    snapshot.clonedunits[i].Undo();
+            }
+            snapshot.clonedunits.Clear();
         }
     }
 
@@ -47,6 +62,8 @@ public class SnapshotManager{
         Debug.Log(snapshot.clonedunits.Count);
         for (int i = 0; i < snapshot.clonedunits.Count; i++)
         {
+            Debug.Log(snapshot.clonedunits[i].original);
+            Debug.Log(snapshot.clonedunits[i].position);
             snapshot.clonedunits[i].Undo();
         }
     }

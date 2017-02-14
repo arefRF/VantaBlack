@@ -128,7 +128,7 @@ public class CloneableUnit
 
     public virtual void SetPosition()
     {
-        original.gameObject.transform.position = original.position - (Vector2)original.gameObject.transform.parent.gameObject.transform.position;
+        original.gameObject.transform.position = original.position;
     }
 }
 

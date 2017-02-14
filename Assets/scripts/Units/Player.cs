@@ -391,7 +391,7 @@ public class CloneablePlayer : CloneableUnit
         original.onramp = onramp;
         original.gravity = gravity;
         original.nextpos = new Vector2(nextpos.x, nextpos.y);
-
+        original.lean = false;
         SetPosition();
     }
 }
