@@ -190,10 +190,7 @@ public class APIGraphic{
 
 
     // for stoping courtines of moving container and objects
-    public void Stop_Objects_Co()
-    {
-        graphicalengine.StopAllCoroutines();
-    }
+
     public void Move_Update(Player player,Vector2 pos)
     {
         player.GetComponent<PlayerPhysics>().Set_End(pos);
@@ -234,6 +231,10 @@ public class APIGraphic{
     public void Undo_Player(Player player)
     {
         player.GetComponent<PlayerPhysics>().Player_Undo();
+    }
+    public void Undo_Objects()
+    {
+        graphicalengine.StopAllCoroutines();
     }
 
     public void UnitChangeSprite(Unit unit)
