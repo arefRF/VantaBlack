@@ -20,7 +20,7 @@ public class SubEngine_Initializer{
         sprite_Rock = new Sprite[16];
         string containerrootpath = "Containers\\Box";
         string rockrootpath = "Rocks\\Rock";
-        string ramprootpath = "Ramps\\type-";
+
         for (int i=1; i < 16; i++)
         {
             string containerpath = containerrootpath + " " + i;
@@ -93,11 +93,71 @@ public class SubEngine_Initializer{
                     }
                     else if (units[i, j][k] is Rock)
                         SetRockSprite(units, units[i, j][k]);
+                    else if (units[i, j][k] is Ramp)
+                        SetRampSprite(units,units[i,j][k]);
                 }
             }
         }
     }
 
+
+    private void SetRampSprite(List<Unit>[,] units,Unit unit)
+    {
+        string ramprootpath = "Ramps\\Ramp-type";
+        string ramp_path = "";
+        bool[] notconnected = GetConnectedSides(units, unit);
+        Ramp ramp = (Ramp)unit;
+        if(ramp.type == 1)
+        {
+            ramp_path = ramprootpath + "1-";
+            // bot and left connected
+            if (!notconnected[2] && !notconnected[3])
+                ramp_path += "2";
+            // just bot connected
+            else if (!notconnected[2] && notconnected[3])
+                ramp_path += "down";
+            // just left connected
+            else if (notconnected[2] && !notconnected[3])
+                ramp_path += "left";
+        }
+        else if(ramp.type == 2)
+        {
+            ramp_path = ramprootpath + "2-";
+            if (!notconnected[0] && !notconnected[3])
+                ramp_path += "2";
+            else if (!notconnected[0] && notconnected[3])
+                ramp_path += "top";
+            else if (notconnected[0] && !notconnected[3])
+                ramp_path += "left";
+        }
+        else if(ramp.type == 3)
+        {
+            ramp_path = ramprootpath + "3-";
+            if (!notconnected[0] && !notconnected[1])
+                ramp_path += "2";
+            //right connected
+            else if (notconnected[0] && !notconnected[1])
+                ramp_path += "right";
+            else if (!notconnected[0] && notconnected[1])
+                ramp_path += "left";
+            //not connected to anything
+            else
+                ramp_path += "0";
+
+        }
+        else if(ramp.type == 4)
+        {
+            ramp_path = ramprootpath + "4-";
+            if (!notconnected[1] && !notconnected[2])
+                ramp_path += "2";
+            else if (!notconnected[1] && notconnected[2])
+                ramp_path += "right";
+            else if (notconnected[1] && !notconnected[2])
+                ramp_path += "down";
+        }
+        Debug.Log(ramp_path);
+        unit.GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load(ramp_path,typeof(Sprite));
+    }
     private void SetRockSprite(List<Unit>[,] units, Unit unit)
     {
         bool[] notconnected = GetConnectedSides(units, unit);
