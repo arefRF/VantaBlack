@@ -208,7 +208,6 @@ public class Player : Unit
         Vector2 pos = Toolkit.VectorSum(position, gravitydirection);
         if (!Fall(pos)  && !Stand_On_Ramp(pos))
             return false;
-        Debug.Log("Apply");
         while (Fall(pos))
         {
             /*if (pos.y <= 0 || pos.x <= 0)
