@@ -29,7 +29,8 @@ public class FunctionalContainer : Container {
         if (abilities.Count == 0)
             return;
         api.AddToSnapshot(this);
-        api.AddToSnapshot(this.ConnectedUnits);
+        api.AddToSnapshot(ConnectedUnits);
+        api.AddToSnapshot(player);
         //api.TakeSnapshot();
         switch (abilities[0])
         {
