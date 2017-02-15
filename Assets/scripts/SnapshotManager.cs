@@ -40,8 +40,6 @@ public class SnapshotManager{
                 {
                     if(snapshot.clonedunits[i].original == database.snapshots[database.snapshots.Count - 1].clonedunits[j].original)
                     {
-                        database.snapshots[database.snapshots.Count - 1].clonedunits.RemoveAt(j);
-                        database.snapshots[database.snapshots.Count - 1].clonedunits.Add(snapshot.clonedunits[i]);
                         flag = false;
                         break;
                     }
