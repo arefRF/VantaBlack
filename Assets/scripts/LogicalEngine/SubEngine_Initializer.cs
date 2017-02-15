@@ -139,7 +139,7 @@ public class SubEngine_Initializer{
             else if (notconnected[0] && !notconnected[1])
                 ramp_path += "right";
             else if (!notconnected[0] && notconnected[1])
-                ramp_path += "left";
+                ramp_path += "top";
             //not connected to anything
             else
                 ramp_path += "0";
