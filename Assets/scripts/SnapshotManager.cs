@@ -20,18 +20,33 @@ public class SnapshotManager{
         database.snapshots.Add(snapshot);
         snapshot = new Snapshot();
     }
-
+    private void AddStucktoOtherList(List<Unit> copyto, List<Unit> copyfrom)
+    {
+        copyto.Clear();
+        for (int i = 0; i < copyfrom.Count; i++)
+        {
+            if(!copyto.Contains(copyfrom[i]))
+                copyto.Add(copyfrom[i]);
+        }
+    }
+    public void CloneStuckList()
+    {
+        if(snapshot.stuckedunits.Count == 0)
+            AddStucktoOtherList(snapshot.stuckedunits, engine.stuckedunits);
+    }
     public void MergeSnapshot()
     {
+        Debug.Log("merging snapshot");
         if (snapshot.clonedunits.Count == 0)
         {
-            
             return;
         }
+        Debug.Log("half merge");
         if (database.snapshots.Count == 0)
             takesnapshot();
         else
         {
+            Debug.Log("full merge");
             Debug.Log(database.snapshots.Count);
             for (int i = 0; i < snapshot.clonedunits.Count; i++)
             {
@@ -58,6 +73,7 @@ public class SnapshotManager{
             {
                 return;
             }
+        Debug.Log("adding to snapshot");
         snapshot.clonedunits.Add(unit.Clone());
     }
     public void AddToSnapShot(List<Unit> units)
@@ -92,7 +108,8 @@ public class SnapshotManager{
 
     private void Undo(Snapshot snapshot)
     {
-        Debug.Log(snapshot.clonedunits.Count);
+        Debug.Log(engine.database.snapshots.Count);
+        AddStucktoOtherList(engine.stuckedunits, snapshot.stuckedunits);
         for (int i = 0; i < snapshot.clonedunits.Count; i++)
         {
             snapshot.clonedunits[i].Undo();
@@ -103,9 +120,11 @@ public class SnapshotManager{
 public class Snapshot
 {
     public List<CloneableUnit> clonedunits;
+    public List<Unit> stuckedunits;
     public Snapshot()
     {
         clonedunits = new List<CloneableUnit>();
+        stuckedunits = new List<Unit>();
     }
 }
 

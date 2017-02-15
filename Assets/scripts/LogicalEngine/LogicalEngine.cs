@@ -13,7 +13,6 @@ public class LogicalEngine {
     public List<Unit> stuckedunits;
     public SnapshotManager snpmanager;
 
-
     private List<Unit> leanmove;
     private List<Unit> shouldmove;
     public LogicalEngine(int x, int y)
@@ -44,6 +43,7 @@ public class LogicalEngine {
         leanmove = new List<Unit>();
         if (!(unit is Box))
         {
+            snpmanager.CloneStuckList();
             if (!unit.CanMove(dir, unit.transform.parent.gameObject))
                 return false;
             shouldmove.AddRange(unit.players);
@@ -115,7 +115,9 @@ public class LogicalEngine {
             if (((FunctionalContainer)unit).firstmove)
                 snpmanager.takesnapshot();
             else
+            {
                 snpmanager.MergeSnapshot();
+            }
             apigraphic.MoveGameObject(unit.transform.parent.gameObject, Toolkit.VectorSum(tempposition, dir), unit);
         }
         else
@@ -665,11 +667,13 @@ public class LogicalEngine {
                 
             if (u is FunctionalContainer)
             {
-
                 if (!u.gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock)
                 {
                     ((FunctionalContainer)u).ResetStuckLevel();
                     stuckedunits.RemoveAt(i);
+                    ((FunctionalContainer)u).firstmove = false;
+                    snpmanager.AddToSnapShot(u);
+                    snpmanager.AddToSnapShot(u.ConnectedUnits);
                     ((FunctionalContainer)u).Action_Fuel(false);
                 }
             }
@@ -687,11 +691,12 @@ public class LogicalEngine {
             }
             if (u is FunctionalContainer)
             {
-               
+                Debug.Log(u);
                 if (!u.gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock)
                 {
                     ((FunctionalContainer)u).ResetStuckLevel();
                     stuckedunits.RemoveAt(i);
+                    ((FunctionalContainer)u).firstmove = false;
                     ((FunctionalContainer)u).Action_Fuel(false);
                 }
             }

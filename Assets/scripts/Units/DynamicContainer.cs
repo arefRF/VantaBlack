@@ -46,6 +46,7 @@ public class CloneableDynamicContainer : CloneableUnit
     public bool laston;
     public Direction stuckdirection;
     public int stuckstatus;
+    public bool firstmove;
     public CloneableDynamicContainer(DynamicContainer container) : base(container.position)
     {
         original = container;
@@ -67,6 +68,7 @@ public class CloneableDynamicContainer : CloneableUnit
         laston = container.laston;
         stuckdirection = container.stuckdirection;
         stuckstatus = container.stuckstatus;
+        firstmove = container.firstmove;
     }
 
     public override void Undo()
@@ -90,7 +92,8 @@ public class CloneableDynamicContainer : CloneableUnit
         original.laston = laston;
         original.stuckdirection = stuckdirection;
         original.stuckstatus = stuckstatus;
-
+        original.firstmove = firstmove;
+        original.shouldmove = shouldmove;
         
         original.api.engine.apigraphic.UnitChangeSprite(original);
     }
