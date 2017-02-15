@@ -209,7 +209,7 @@ public class LogicalEngine {
                                 database.units[(int)player.position.x, (int)player.position.y].Add(player);
                                 apigraphic.MovePlayer_Ramp_2(player, player.position, type);
                             }
-                            else if (((Ramp)units[0]).IsOnRampSide(Toolkit.ReverseDirection(dir)))
+                            else if (((Ramp)units[0]).IsOnRampSide(Toolkit.ReverseDirection(database.gravity_direction)))
                             {
                                 player.position = Toolkit.VectorSum(player.position, Toolkit.DirectiontoVector(dir));
                                 database.units[(int)player.position.x, (int)player.position.y].Add(player);
