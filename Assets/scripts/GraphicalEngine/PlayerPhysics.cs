@@ -209,7 +209,8 @@ public class PlayerPhysics : MonoBehaviour
     // ramp to corner move
     public void Ramp_To_Corner_Move(Vector2 pos,int type)
     {
-        StopCoroutine(last_co);
+        if(last_co!=null)
+            StopCoroutine(last_co);
         move_type = MoveType.RampToCorner;
         Rotate_On_Ramp(type);
         pos += Ramp_To_Corner_Pos(Direction.Down, pos);
