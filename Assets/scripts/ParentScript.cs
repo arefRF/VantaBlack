@@ -9,9 +9,4 @@ public class ParentScript : MonoBehaviour {
 	void Start () {
         movelock = false;
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 }
