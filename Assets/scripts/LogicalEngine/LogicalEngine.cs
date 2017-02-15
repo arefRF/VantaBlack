@@ -203,10 +203,25 @@ public class LogicalEngine {
                         if (units[0] is Ramp)
                         {
                             database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                            Vector2 temp = Toolkit.VectorSum(player.position, Toolkit.DirectiontoVector(dir));
-                            player.position = temp;
-                            database.units[(int)player.position.x, (int)player.position.y].Add(player);
-                            apigraphic.MovePlayer_Ramp_5(player, Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction)),((Ramp)units[0]).type);
+                            if (Toolkit.IsdoubleRamp(units[0].position)){
+                                int type = Toolkit.GetRamp(player.position).type;
+                                player.position = nextpos;
+                                database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                                apigraphic.MovePlayer_Ramp_2(player, player.position, type);
+                            }
+                            else if (((Ramp)units[0]).IsOnRampSide(Toolkit.ReverseDirection(dir)))
+                            {
+                                player.position = Toolkit.VectorSum(player.position, Toolkit.DirectiontoVector(dir));
+                                database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                                apigraphic.MovePlayer_Ramp_5(player, Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction)), ((Ramp)units[0]).type);
+                            }
+                            else
+                            {
+                                int type = Toolkit.GetRamp(player.position).type;
+                                player.position = nextpos;
+                                database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                                apigraphic.MovePlayer_Ramp_2(player, player.position, type);
+                            }
                         }
                         else
                         {
@@ -252,11 +267,25 @@ public class LogicalEngine {
                     database.units[(int)player.position.x, (int)player.position.y].Remove(player);
                     if (Toolkit.HasRamp(Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction))))
                     {
-                        ramp = Toolkit.GetRamp(Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction)));
-                        player.position = Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction));
-                        database.units[(int)player.position.x, (int)player.position.y].Add(player);
-                        apigraphic.MovePlayer_Ramp_1(player, Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction)),ramp.type);
-                        
+                        if (Toolkit.IsdoubleRamp(Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction))))
+                        {
+                            player.position = nextpos;
+                            database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                            apigraphic.MovePlayer_Ramp_2(player, player.position, ramp.type);
+                        }
+                        else if (!Toolkit.GetRamp(Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction))).IsOnRampSide(Toolkit.ReverseDirection(database.gravity_direction)))
+                        {
+                            player.position = nextpos;
+                            database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                            apigraphic.MovePlayer_Ramp_2(player, player.position, ramp.type);
+                        }
+                        else
+                        {
+                            ramp = Toolkit.GetRamp(Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction)));
+                            player.position = Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction));
+                            database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                            apigraphic.MovePlayer_Ramp_1(player, Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction)), ramp.type);
+                        }
                     }
                     else if(!Toolkit.IsEmpty(Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction))))
                     {
