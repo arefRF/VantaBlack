@@ -16,22 +16,22 @@ public class PlayerGraphics : MonoBehaviour {
 
     public void Lean_Right()
     {
-        transform.GetChild(0).localPosition +=  new Vector3(0.2f,0,0);
+        transform.GetChild(0).localPosition +=  new Vector3(1f,0,0);
     }
 
     public void Lean_Left()
     {
-        transform.GetChild(0).localPosition += new Vector3(-0.2f, 0,0);
+        transform.GetChild(0).localPosition += new Vector3(-1f, 0,0);
     }
 
     public void Lean_Up()
     {
-        transform.GetChild(0).localPosition += new Vector3(0, 0.3f,0);
+        transform.GetChild(0).localPosition += new Vector3(0, 1f,0);
     }
 
     public void Lean_Down()
     {
-        transform.GetChild(0).localPosition +=  new Vector3( 0, -0.3f,0);
+        transform.GetChild(0).localPosition +=  new Vector3( 0, -1f,0);
     }
 
     public void Lean_Finished()
