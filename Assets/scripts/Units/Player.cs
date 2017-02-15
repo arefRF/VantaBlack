@@ -210,8 +210,6 @@ public class Player : Unit
             return false;
         while (Fall(pos))
         {
-            /*if (pos.y <= 0 || pos.x <= 0)
-                break;*/
             api.RemoveFromDatabase(this);
             position = pos;
             api.AddToDatabase(this);
@@ -220,7 +218,6 @@ public class Player : Unit
             pos = Toolkit.VectorSum(position, gravitydirection);
         }
         state = PlayerState.Falling;
-
         api.graphicalengine_Fall(this, position);
         return true;
     }
@@ -229,6 +226,7 @@ public class Player : Unit
 
     public void FallFinished()
     {
+        Debug.Log("Fall finished");
         Vector2 pos = Toolkit.VectorSum(position, Starter.GetGravityDirection());
         if (pos.x <= 0 || pos.y <= 0)
             return;

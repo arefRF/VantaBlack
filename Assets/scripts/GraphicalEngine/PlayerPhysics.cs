@@ -317,7 +317,10 @@ public class PlayerPhysics : MonoBehaviour
         {
                 api.MovePlayerFinished(gameObject);
         }
-        move_type = MoveType.Idle;
+
+        //cuz it messed with falling
+        if(move_type!= MoveType.Falling)
+            move_type = MoveType.Idle;
         player.movepercentage = 0;
         // if it needs Call Finished Move of API
     }
