@@ -142,7 +142,7 @@ public class Player : Unit
             {
                 continue;
             }
-            else if (units[i] is Ramp)
+            else if (units[i] is Ramp && units[i].transform.parent.gameObject != parent)
             {
                 return false;
                 // baadan age bekhaym player moghe harekate game object ziresh bere ru ramp ino barmidarim
