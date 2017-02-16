@@ -129,6 +129,7 @@ public class FunctionalContainer : Container {
         {
             shouldmove = stucklevel;
         }
+
         if (api.MoveUnit(this, dir))
         {
             firstmove = false;

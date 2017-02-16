@@ -691,12 +691,13 @@ public class LogicalEngine {
             }
             if (u is FunctionalContainer)
             {
-                Debug.Log(u);
                 if (!u.gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock)
                 {
                     ((FunctionalContainer)u).ResetStuckLevel();
                     stuckedunits.RemoveAt(i);
                     ((FunctionalContainer)u).firstmove = false;
+                    snpmanager.AddToSnapShot(u);
+                    snpmanager.AddToSnapShot(u.ConnectedUnits);
                     ((FunctionalContainer)u).Action_Fuel(false);
                 }
             }

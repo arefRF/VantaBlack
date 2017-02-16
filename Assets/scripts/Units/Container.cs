@@ -127,8 +127,7 @@ public class Container : ParentContainer {
         if (player.abilities.Count == 0)
             return;
         api.AddToSnapshot(this);
-        if (this is FunctionalContainer)
-            api.AddToSnapshot(ConnectedUnits);
+        api.AddToSnapshot(ConnectedUnits);
         api.AddToSnapshot(player);
         if (abilities.Count == 0)
         {
