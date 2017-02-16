@@ -691,6 +691,7 @@ public class LogicalEngine {
             }
             if (u is FunctionalContainer)
             {
+                Debug.Log(u.gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock);
                 if (!u.gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock)
                 {
                     ((FunctionalContainer)u).ResetStuckLevel();

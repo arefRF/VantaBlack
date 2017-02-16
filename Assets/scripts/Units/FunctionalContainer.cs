@@ -179,7 +179,6 @@ public class FunctionalContainer : Container {
             moved = count;
             movedone = true;
             shouldmove = count;
-            api.CheckstuckedList(this);
         }
         else
         {
