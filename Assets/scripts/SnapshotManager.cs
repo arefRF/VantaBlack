@@ -44,7 +44,6 @@ public class SnapshotManager{
             takesnapshot();
         else
         {
-            Debug.Log(database.snapshots.Count);
             for (int i = 0; i < snapshot.clonedunits.Count; i++)
             {
                 bool flag = true;

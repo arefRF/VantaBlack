@@ -624,8 +624,6 @@ public class LogicalEngine {
 
     public void graphic_GameObjectMoveAnimationFinished(GameObject gameobject, Unit unit)
     {
-        Debug.Log("Move Finish");
-        Debug.Log(gameobject);
         if (unit == null)
             return;
         //unit.gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = false;
