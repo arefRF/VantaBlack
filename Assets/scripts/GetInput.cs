@@ -47,7 +47,6 @@ public class GetInput : MonoBehaviour {
         else
         {
 
-
            Get_Lean_Undo();
 
             // Directional Abilities use
