@@ -142,8 +142,8 @@ public class GraphicalEngine : MonoBehaviour {
         }
     }
     public void Dynamic_Container(DynamicContainer container)
-    {
-
+    {    
+        Debug.Log("Animations\\Container\\Container-1(T)");
         // On or Off Sprite
         string toggle = @"Containers\Icons\";
         if (container.on)
