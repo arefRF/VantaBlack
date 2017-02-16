@@ -36,17 +36,14 @@ public class SnapshotManager{
     }
     public void MergeSnapshot()
     {
-        Debug.Log("merging snapshot");
         if (snapshot.clonedunits.Count == 0)
         {
             return;
         }
-        Debug.Log("half merge");
         if (database.snapshots.Count == 0)
             takesnapshot();
         else
         {
-            Debug.Log("full merge");
             Debug.Log(database.snapshots.Count);
             for (int i = 0; i < snapshot.clonedunits.Count; i++)
             {
@@ -70,10 +67,7 @@ public class SnapshotManager{
     {
         for (int i = 0; i < snapshot.clonedunits.Count; i++)
             if (snapshot.clonedunits[i].original == unit)
-            {
                 return;
-            }
-        Debug.Log("adding to snapshot");
         snapshot.clonedunits.Add(unit.Clone());
     }
     public void AddToSnapShot(List<Unit> units)

@@ -33,7 +33,8 @@ public class Container : ParentContainer {
     private void PlayerAbsorbAbilities(Player player)
     {
         api.AddToSnapshot(this);
-        api.AddToSnapshot(this.ConnectedUnits);
+        if (this is FunctionalContainer)
+            api.AddToSnapshot(ConnectedUnits);
         api.AddToSnapshot(player);
         //api.TakeSnapshot();
         if(player.abilities.Count<4)
@@ -48,7 +49,8 @@ public class Container : ParentContainer {
     public virtual void PlayerReleaseAbilities(Player player)
     {
         api.AddToSnapshot(this);
-        api.AddToSnapshot(this.ConnectedUnits);
+        if (this is FunctionalContainer)
+            api.AddToSnapshot(ConnectedUnits);
         api.AddToSnapshot(player);
         //api.TakeSnapshot();
         if(abilities.Count<4)
@@ -97,7 +99,8 @@ public class Container : ParentContainer {
         if (abilities.Count == 0)
             return;
         api.AddToSnapshot(this);
-        api.AddToSnapshot(ConnectedUnits);
+        if (this is FunctionalContainer)
+            api.AddToSnapshot(ConnectedUnits);
         api.AddToSnapshot(player);
         if (player.abilities.Count == 0)
         {
@@ -124,7 +127,8 @@ public class Container : ParentContainer {
         if (player.abilities.Count == 0)
             return;
         api.AddToSnapshot(this);
-        api.AddToSnapshot(ConnectedUnits);
+        if (this is FunctionalContainer)
+            api.AddToSnapshot(ConnectedUnits);
         api.AddToSnapshot(player);
         if (abilities.Count == 0)
         {
