@@ -47,8 +47,6 @@ public class GetInput : MonoBehaviour {
         else
         {
 
-            if (Input.GetKeyDown(KeyCode.G))
-                Debug.Log("G");
            Get_Lean_Undo();
 
             // Directional Abilities use
