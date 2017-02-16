@@ -218,7 +218,6 @@ public class Player : Unit
 
     public void FallFinished()
     {
-        Debug.Log("Fall finished");
         Vector2 pos = Toolkit.VectorSum(position, Starter.GetGravityDirection());
         if (pos.x <= 0 || pos.y <= 0)
             return;

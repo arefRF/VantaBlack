@@ -58,7 +58,6 @@ public class GraphicalEngine : MonoBehaviour {
 
     public void Simple_Container(SimpleContainer container)
     {
-
         if (container.abilities.Count != 0)
         {
             if (container.abilities[0] == AbilityType.Key)
@@ -150,12 +149,16 @@ public class GraphicalEngine : MonoBehaviour {
         if (container.on)
         {
             toggle += "ABILITY FUEL ON";
+            container.transform.GetChild(2).gameObject.SetActive(true);
             container.transform.GetChild(3).gameObject.SetActive(true);
+            container.GetComponent<Animator>().speed = 4;
         }
         else
         {
             toggle += "ABILITY FUEL OFF";
+            container.transform.GetChild(2).gameObject.SetActive(false);
             container.transform.GetChild(3).gameObject.SetActive(false);
+            container.GetComponent<Animator>().speed = 1;
         }
         container.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load(toggle, typeof(Sprite));
 
@@ -176,7 +179,10 @@ public class GraphicalEngine : MonoBehaviour {
                  case Direction.Down: rot = 270; break;
              }
                 container.transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0, 0, rot));
-            if( container.abilities.Count!= 0 &&  container.abilities[0] == AbilityType.Key)
+
+        // Direction lights roation
+        container.transform.GetChild(2).rotation = Quaternion.Euler(new Vector3(0, 0, rot-90));
+        if ( container.abilities.Count!= 0 &&  container.abilities[0] == AbilityType.Key)
                 container.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load("Doors\\Key", typeof(Sprite));
             
 
