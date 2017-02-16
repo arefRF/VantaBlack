@@ -102,7 +102,6 @@ public class SnapshotManager{
 
     private void Undo(Snapshot snapshot)
     {
-        Debug.Log(engine.database.snapshots.Count);
         AddStucktoOtherList(engine.stuckedunits, snapshot.stuckedunits);
         for (int i = 0; i < snapshot.clonedunits.Count; i++)
         {

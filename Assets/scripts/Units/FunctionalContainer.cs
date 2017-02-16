@@ -60,12 +60,21 @@ public class FunctionalContainer : Container {
             api.ChangeSprite(this);
             if (stucklevel > 0)
             {
-                if (!on && stuckdirection == dir)
+                if (!on)
                 {
-                    api.AddToStuckList(this);
-                    stuckdirection = dir;
-                    gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = false;
-                    return;
+                    if (stuckdirection == dir)
+                    {
+                        api.AddToStuckList(this);
+                        stuckdirection = dir;
+                        gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = false;
+                        return;
+                    }
+                    else
+                    {
+                        shouldmove = count - stucklevel;
+                        stucklevel = 0;
+                        api.RemoveFromStuckList(this);
+                    }
                 }
                 else if (on && stuckdirection != dir)
                 {
@@ -85,7 +94,6 @@ public class FunctionalContainer : Container {
             //shayad bug bede
             if (dir != stuckdirection)
             {
-                Debug.Log("now in here");
                 stucklevel--;
                 if (stucklevel == 0)
                     api.RemoveFromStuckList(this);
@@ -179,7 +187,6 @@ public class FunctionalContainer : Container {
             moved = count;
             movedone = true;
             shouldmove = count;
-            api.CheckstuckedList(this);
         }
         else
         {
@@ -232,8 +239,6 @@ public class FunctionalContainer : Container {
                 }
                 else
                 {
-                    Debug.Log(direction);
-                    Debug.Log(stuckdirection);
                     if (direction != stuckdirection && !increased)
                     {
                         stucklevel++;
@@ -287,6 +292,8 @@ public class FunctionalContainer : Container {
         bool increased = reservedmovebool[0];
         reservedmoveint.RemoveAt(0);
         reservedmovebool.RemoveAt(0);
+        Debug.Log(increased);
+        Debug.Log(count);
         ContainerAbilityChanged(increased, count);
         api.MergeSnapshot();
     }
