@@ -74,6 +74,8 @@ public class FunctionalContainer : Container {
                         shouldmove = count - stucklevel;
                         stucklevel = 0;
                         api.RemoveFromStuckList(this);
+                        if (shouldmove == 0)
+                            return;
                     }
                 }
                 else if (on && stuckdirection != dir)
@@ -187,6 +189,7 @@ public class FunctionalContainer : Container {
             moved = count;
             movedone = true;
             shouldmove = count;
+            CheckReservedList();
         }
         else
         {
@@ -245,8 +248,10 @@ public class FunctionalContainer : Container {
                         api.AddToStuckList(this);
                     }
                     else
+                    {
                         stucklevel--;
-                    Debug.Log(stucklevel);
+                        CheckReservedList();
+                    }
                     if (abilities.Count == 0)
                     {
                         on = false;
@@ -254,7 +259,6 @@ public class FunctionalContainer : Container {
                     }
                     if (stucklevel == 0)
                         api.RemoveFromStuckList(this);
-                    Debug.Log(stucklevel);
                 }
             }
         }
@@ -292,8 +296,6 @@ public class FunctionalContainer : Container {
         bool increased = reservedmovebool[0];
         reservedmoveint.RemoveAt(0);
         reservedmovebool.RemoveAt(0);
-        Debug.Log(increased);
-        Debug.Log(count);
         ContainerAbilityChanged(increased, count);
         api.MergeSnapshot();
     }
@@ -305,6 +307,7 @@ public class FunctionalContainer : Container {
 
     protected override void AddToReservedMove(bool increased, int count)
     {
+        Debug.Log("here here here");
         if (increased && count == 1)
         {
             shouldmove = 1;
@@ -321,10 +324,10 @@ public class FunctionalContainer : Container {
             }
             else
             {
-                if (stucklevel >= 1)
+                /*if (stucklevel >= 1)
                 {
                     stucklevel--;
-                }
+                }*/
                 /*else
                 {
                     stucklevel--;

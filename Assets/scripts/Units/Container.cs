@@ -23,20 +23,34 @@ public class Container : ParentContainer {
         player.abilities = temp;
         api.ChangeSprite(this);
         if (this is FunctionalContainer) {
-            if ((player.abilities.Count != 0 && player.abilities[0] == AbilityType.Fuel) || (abilities.Count != 0 && abilities[0] == AbilityType.Fuel))
-                if(((FunctionalContainer)this).on)
-                    ((FunctionalContainer)this).Action_Fuel(true);
+            if ((player.abilities.Count != 0 && player.abilities[0] == AbilityType.Fuel))
+            {
+                if (((FunctionalContainer)this).on)
+                    ((FunctionalContainer)this).Action_Fuel(false);
+                else
+                {
+                    for(int i=0; i<player.abilities.Count; i++)
+                    {
+                        ContainerAbilityChanged(false, player.abilities.Count - i);
+                    }
+                }
+            }
+            else if((abilities.Count != 0 && abilities[0] == AbilityType.Fuel))
+            {
+                if (((FunctionalContainer)this).on)
+                    ((FunctionalContainer)this).Action_Fuel(false);
+                else
+                {
+                    for (int i = 0; i < abilities.Count; i++)
+                        ContainerAbilityChanged(true, i+1);
+                }
+            }
         }
             
     }
 
     private void PlayerAbsorbAbilities(Player player)
     {
-        api.AddToSnapshot(this);
-        if (this is FunctionalContainer)
-            api.AddToSnapshot(ConnectedUnits);
-        api.AddToSnapshot(player);
-        //api.TakeSnapshot();
         if(player.abilities.Count<4)
         {
             player.abilities.Add(abilities[0]);
@@ -48,11 +62,6 @@ public class Container : ParentContainer {
 
     public virtual void PlayerReleaseAbilities(Player player)
     {
-        api.AddToSnapshot(this);
-        if (this is FunctionalContainer)
-            api.AddToSnapshot(ConnectedUnits);
-        api.AddToSnapshot(player);
-        //api.TakeSnapshot();
         if(abilities.Count<4)
         {
             abilities.Add(player.abilities[0]);
@@ -64,6 +73,10 @@ public class Container : ParentContainer {
    }
     public virtual void PlayerAbsorb(Player player)
     {
+        api.AddToSnapshot(this);
+        if (this is FunctionalContainer)
+            api.AddToSnapshot(ConnectedUnits);
+        api.AddToSnapshot(player);
         if (abilities.Count == 0)
             return;
         else if (player.abilities.Count == 0)
@@ -80,6 +93,10 @@ public class Container : ParentContainer {
 
     public virtual void PlayerRelease(Player player)
     {
+        api.AddToSnapshot(this);
+        if (this is FunctionalContainer)
+            api.AddToSnapshot(ConnectedUnits);
+        api.AddToSnapshot(player);
         if (player.abilities.Count == 0)
             return;
         else if (abilities.Count == 0)
