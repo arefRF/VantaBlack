@@ -17,6 +17,8 @@ public class FunctionalContainer : Container {
     public bool laston { get; set; }
     public Direction stuckdirection { get; set; }
     public int stuckstatus {get; set; }
+    public bool firstmove { get; set; } // baraye inke fgt dafeye avval snapshot begire
+
     public override bool PlayerMoveInto(Direction dir)
     {
         return false;
@@ -26,6 +28,10 @@ public class FunctionalContainer : Container {
     {
         if (abilities.Count == 0)
             return;
+        api.AddToSnapshot(this);
+        api.AddToSnapshot(ConnectedUnits);
+        api.AddToSnapshot(player);
+        //api.TakeSnapshot();
         switch (abilities[0])
         {
             case AbilityType.Fuel: Action_Fuel(true); break; 
@@ -54,12 +60,23 @@ public class FunctionalContainer : Container {
             api.ChangeSprite(this);
             if (stucklevel > 0)
             {
-                if (!on && stuckdirection == dir)
+                if (!on)
                 {
-                    api.AddToStuckList(this);
-                    stuckdirection = dir;
-                    gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = false;
-                    return;
+                    if (stuckdirection == dir)
+                    {
+                        api.AddToStuckList(this);
+                        stuckdirection = dir;
+                        gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = false;
+                        return;
+                    }
+                    else
+                    {
+                        shouldmove = count - stucklevel;
+                        stucklevel = 0;
+                        api.RemoveFromStuckList(this);
+                        if (shouldmove == 0)
+                            return;
+                    }
                 }
                 else if (on && stuckdirection != dir)
                 {
@@ -79,7 +96,6 @@ public class FunctionalContainer : Container {
             //shayad bug bede
             if (dir != stuckdirection)
             {
-                Debug.Log("now in here");
                 stucklevel--;
                 if (stucklevel == 0)
                     api.RemoveFromStuckList(this);
@@ -100,9 +116,9 @@ public class FunctionalContainer : Container {
                 return;
             }
         }
-        Debug.Log(stucklevel);
         if (movedone)
         {
+            firstmove = true;
             //if (moved == abilities.Count)
             resetstucked = false;
             movedone = false;
@@ -123,8 +139,10 @@ public class FunctionalContainer : Container {
         {
             shouldmove = stucklevel;
         }
+
         if (api.MoveUnit(this, dir))
         {
+            firstmove = false;
             resetstucked = true;
             laston = !on;
             if (stucklevel > 0)
@@ -135,6 +153,7 @@ public class FunctionalContainer : Container {
         }
         else
         {
+            firstmove = true;
             laston = on;
             bool flag = false;
             if (moved != 0)
@@ -166,19 +185,22 @@ public class FunctionalContainer : Container {
         }
         if (api.MoveUnit(this, dir))
         {
+            firstmove = false;
             moved = count;
             movedone = true;
             shouldmove = count;
-            api.CheckstuckedList(this);
+            CheckReservedList();
         }
         else
         {
+            firstmove = true;
             api.AddToStuckList(this);
             stuckdirection = dir;
             stucklevel++;
             CheckReservedList();
         }
         gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = false;
+        //firstmove = true;
     }
     protected override void ContainerAbilityChanged(bool increased, int count)
     {
@@ -220,16 +242,16 @@ public class FunctionalContainer : Container {
                 }
                 else
                 {
-                    Debug.Log(direction);
-                    Debug.Log(stuckdirection);
                     if (direction != stuckdirection && !increased)
                     {
                         stucklevel++;
                         api.AddToStuckList(this);
                     }
                     else
+                    {
                         stucklevel--;
-                    Debug.Log(stucklevel);
+                        CheckReservedList();
+                    }
                     if (abilities.Count == 0)
                     {
                         on = false;
@@ -237,7 +259,6 @@ public class FunctionalContainer : Container {
                     }
                     if (stucklevel == 0)
                         api.RemoveFromStuckList(this);
-                    Debug.Log(stucklevel);
                 }
             }
         }
@@ -276,6 +297,7 @@ public class FunctionalContainer : Container {
         reservedmoveint.RemoveAt(0);
         reservedmovebool.RemoveAt(0);
         ContainerAbilityChanged(increased, count);
+        api.MergeSnapshot();
     }
 
     public void ResetStuckLevel()
@@ -285,6 +307,7 @@ public class FunctionalContainer : Container {
 
     protected override void AddToReservedMove(bool increased, int count)
     {
+        Debug.Log("here here here");
         if (increased && count == 1)
         {
             shouldmove = 1;
@@ -301,10 +324,10 @@ public class FunctionalContainer : Container {
             }
             else
             {
-                if (stucklevel >= 1)
+                /*if (stucklevel >= 1)
                 {
                     stucklevel--;
-                }
+                }*/
                 /*else
                 {
                     stucklevel--;

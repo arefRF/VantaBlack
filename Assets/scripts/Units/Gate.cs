@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 public class Gate : Container {
 
@@ -38,18 +38,17 @@ public class Gate : Container {
             abilities.Add(player.abilities[0]);
             player.abilities.RemoveAt(0);
         }
-        if(abilities.Count == capacity)
-        {
-            Open();
-        }
     }
-
-
-    private void Open()
+    public override void Action(Player player, Direction dir)
     {
+        if (abilities == null)
+            return;
+        if (abilities.Count != capacity)
+            return;
         if (Internal)
         {
-            
+            GetComponent<Animator>().SetBool("Open", true);
+            api.RemoveFromDatabase(this);
         }
         else
         {
@@ -73,8 +72,23 @@ public class Gate : Container {
 
 public class CloneableGate : CloneableUnit
 {
+    public List<AbilityType> abilities;
     public CloneableGate(Gate gate) : base(gate.position)
     {
         original = gate;
+        abilities = new List<AbilityType>();
+        for (int i = 0; i < gate.abilities.Count; i++)
+            abilities.Add(gate.abilities[i]);
+    }
+
+    public override void Undo()
+    {
+        base.Undo();
+        Gate original = (Gate)base.original;
+        original.abilities = new List<AbilityType>();
+        for (int i = 0; i < abilities.Count; i++)
+            original.abilities.Add(abilities[i]);
+
+        original.api.engine.apigraphic.UnitChangeSprite(original);
     }
 }

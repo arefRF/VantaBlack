@@ -74,6 +74,10 @@ public class CameraController : MonoBehaviour {
         StartCoroutine(Zoom(zoom,1));
     }
 
+    public void Camera_Rotation_Change(float rot, float move_time)
+    {
+        StartCoroutine(Rotation(rot,move_time));
+    }
     private IEnumerator Zoom(float zoom,float move_time)
     {
         float remain = Mathf.Abs( Camera.main.orthographicSize - zoom);
@@ -83,6 +87,21 @@ public class CameraController : MonoBehaviour {
             Camera.main.orthographicSize = Mathf.MoveTowards(Camera.main.orthographicSize, zoom, Time.smoothDeltaTime / move_time);
             yield return null; 
         }
+    }
+
+    private IEnumerator Rotation(float rot, float move_time)
+    {
+        float remain = Mathf.Abs(Camera.main.transform.rotation.z - rot);
+        float rotation = Camera.main.transform.rotation.z;
+        while(remain > float.Epsilon)
+        {
+            remain = Mathf.Abs(Camera.main.transform.rotation.z - rot);
+            rotation = Mathf.MoveTowards(rotation, rot, Time.deltaTime / move_time);
+            Camera.main.transform.rotation = Quaternion.Euler(new Vector3(0, 0, rotation));
+            yield return null;
+
+        }
+        
     }
     private IEnumerator Camera_Move(Vector3 end,float move_time,bool auto)
     {

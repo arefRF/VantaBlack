@@ -4,7 +4,6 @@ using System;
 
 public class DynamicContainer : FunctionalContainer {
     
-
     // Use this for initialization
     void Start () {
         moved = 0;
@@ -14,6 +13,7 @@ public class DynamicContainer : FunctionalContainer {
         laston = !on;
         stucklevel = 0;
         stuckstatus = 0;
+        firstmove = true;
 	}
 	
 	// Update is called once per frame
@@ -46,6 +46,7 @@ public class CloneableDynamicContainer : CloneableUnit
     public bool laston;
     public Direction stuckdirection;
     public int stuckstatus;
+    public bool firstmove;
     public CloneableDynamicContainer(DynamicContainer container) : base(container.position)
     {
         original = container;
@@ -67,6 +68,7 @@ public class CloneableDynamicContainer : CloneableUnit
         laston = container.laston;
         stuckdirection = container.stuckdirection;
         stuckstatus = container.stuckstatus;
+        firstmove = container.firstmove;
     }
 
     public override void Undo()
@@ -90,7 +92,8 @@ public class CloneableDynamicContainer : CloneableUnit
         original.laston = laston;
         original.stuckdirection = stuckdirection;
         original.stuckstatus = stuckstatus;
-
+        original.firstmove = firstmove;
+        original.shouldmove = shouldmove;
         
         original.api.engine.apigraphic.UnitChangeSprite(original);
     }

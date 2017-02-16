@@ -8,4 +8,18 @@ public class Vision : Unit {
     {
         return false;
     }
+
+
+    public override CloneableUnit Clone()
+    {
+        return new CloneableVision(this);
+    }
+}
+
+public class CloneableVision : CloneableUnit
+{
+    public CloneableVision(Vision vision) : base(vision.position)
+    {
+        original = vision;
+    }
 }

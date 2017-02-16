@@ -4,8 +4,6 @@ using System;
 
 public class Rock : Unit
 {
-
-
     public override CloneableUnit Clone()
     {
         return new CloneableRock(this);

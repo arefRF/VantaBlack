@@ -134,9 +134,24 @@ public class APIUnit {
         engine.snpmanager.AddToSnapShot(unit);
     }
 
+    public void AddToSnapshot(List<Unit> units)
+    {
+        engine.snpmanager.AddToSnapShot(units);
+    }
+
     public void TakeSnapshot()
     {
         engine.snpmanager.takesnapshot();
+    }
+
+    public void MergeSnapshot()
+    {
+        engine.snpmanager.MergeSnapshot();
+    }
+
+    public void StopPlayerCoroutine(Player player)
+    {
+        engine.apigraphic.Undo_Player(player);
     }
 }
 

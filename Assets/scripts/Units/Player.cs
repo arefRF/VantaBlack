@@ -17,7 +17,6 @@ public class Player : Unit
     public Direction gravity { get; set; }
 
     public Vector2 nextpos { get; set; }
-
     public void Awake()
     {
         direction = move_direction[0];
@@ -135,7 +134,7 @@ public class Player : Unit
             {
                 continue;
             }
-            else if (units[i] is Ramp)
+            else if (units[i] is Ramp && units[i].transform.parent.gameObject != parent)
             {
                 return false;
                 // baadan age bekhaym player moghe harekate game object ziresh bere ru ramp ino barmidarim
@@ -201,14 +200,13 @@ public class Player : Unit
         Vector2 pos = Toolkit.VectorSum(position, gravitydirection);
         if (!Fall(pos)  && !Stand_On_Ramp(pos))
             return false;
-        Debug.Log("Apply");
         while (Fall(pos))
         {
-            /*if (pos.y <= 0 || pos.x <= 0)
-                break;*/
             api.RemoveFromDatabase(this);
             position = pos;
             api.AddToDatabase(this);
+            if (pos.x == 0 || pos.y == 0)
+                break;
             pos = Toolkit.VectorSum(position, gravitydirection);
         }
         state = PlayerState.Falling;
@@ -374,6 +372,7 @@ public class CloneablePlayer : CloneableUnit
     public override void Undo()
     {
         Player original = (Player)base.original;
+        original.api.StopPlayerCoroutine(original);
         original.api.RemoveFromDatabase(original);
         original.position = position;
         original.api.AddToDatabase(original);
@@ -391,7 +390,7 @@ public class CloneablePlayer : CloneableUnit
         original.onramp = onramp;
         original.gravity = gravity;
         original.nextpos = new Vector2(nextpos.x, nextpos.y);
-
+        original.lean = false;
         SetPosition();
     }
 }
