@@ -38,15 +38,13 @@ public class Gate : Container {
             abilities.Add(player.abilities[0]);
             player.abilities.RemoveAt(0);
         }
-        if(abilities.Count == capacity)
-        {
-            Open();
-        }
     }
-
-
-    private void Open()
+    public override void Action(Player player, Direction dir)
     {
+        if (abilities == null)
+            return;
+        if (abilities.Count != capacity)
+            return;
         if (Internal)
         {
             GetComponent<Animator>().SetBool("Open", true);
