@@ -198,7 +198,6 @@ public class PlayerPhysics : MonoBehaviour
     }
     public void Simple_Move(Vector2 pos)
     {
-        Debug.Log("Simple Move");
             set_percent = true;
         if (last_co != null)
             StopCoroutine(last_co);

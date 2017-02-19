@@ -37,6 +37,7 @@ public class Gate : Container {
         {
             abilities.Add(player.abilities[0]);
             player.abilities.RemoveAt(0);
+            api.engine.apigraphic.UnitChangeSprite(this);
         }
     }
     public override void Action(Player player, Direction dir)
