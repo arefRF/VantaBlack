@@ -187,6 +187,16 @@ public class LogicalEngine {
             }
             if (goingup)
             {
+                Debug.Log(player.position);
+                Vector2 temppos = Toolkit.VectorSum(player.position, dir);
+                Debug.Log(temppos);
+                if (Toolkit.HasBranch(temppos))
+                {
+                    database.units[(int)player.position.x, (int)player.position.y].Remove(player);
+                    player.position = temppos;
+                    database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                    apigraphic.MovePlayer_Ramp_2(player, player.position, ramp.type);
+                }
                 nextpos = Toolkit.VectorSum(player.position, Toolkit.VectorSum(Toolkit.DirectiontoVector(Toolkit.ReverseDirection(database.gravity_direction)), Toolkit.DirectiontoVector(dir)));
                 units = GetUnits(nextpos);
                 if (units.Count == 0)
@@ -236,7 +246,14 @@ public class LogicalEngine {
                 }
                 else
                 {
-                    if (Toolkit.CanplayerGoOnRampSideFromRamp(Toolkit.GetRamp(nextpos), database.gravity_direction, dir))
+                    if (Toolkit.HasBranch(nextpos))
+                    {
+                        database.units[(int)player.position.x, (int)player.position.y].Remove(player);
+                        player.position = nextpos;
+                        database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                        apigraphic.MovePlayer_Ramp_2(player, player.position, ramp.type);
+                    }
+                    else if (Toolkit.CanplayerGoOnRampSideFromRamp(Toolkit.GetRamp(nextpos), database.gravity_direction, dir))
                     {
                         database.units[(int)player.position.x, (int)player.position.y].Remove(player);
                         player.position = nextpos;
@@ -306,19 +323,24 @@ public class LogicalEngine {
         }
         else //not on ramp
         {
-            if (Toolkit.IsInsideBranch(player))
+            if (Toolkit.IsInsideBranch(player)) //branch move
             {
                 nextpos = Toolkit.VectorSum(player.position, Toolkit.DirectiontoVector(dir));
                 Vector2 temp = Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction));
-                List<Unit> units = GetUnits(temp);
+                List<Unit> units = GetUnits(nextpos);
                 if(units.Count != 0)
                 {
                     if(units[0] is Ramp)
                     {
-                        database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                        player.position = nextpos;
-                        database.units[(int)player.position.x, (int)player.position.y].Add(player);
-                        apigraphic.MovePlayer_Branch_3(player, temp, ((Ramp)units[0]).type);
+                        if (Toolkit.IsdoubleRamp(nextpos))
+                            return;
+                        else if (((Ramp)units[0]).IsOnRampSide(Toolkit.ReverseDirection(dir)))
+                        {
+                            database.units[(int)player.position.x, (int)player.position.y].Remove(player);
+                            player.position = nextpos;
+                            database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                            apigraphic.MovePlayer_Branch_3(player, nextpos, ((Ramp)units[0]).type);
+                        }
                     }
                     else
                     {
@@ -330,10 +352,24 @@ public class LogicalEngine {
                 }
                 else
                 {
-                    database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                    player.position = nextpos;
-                    database.units[(int)player.position.x, (int)player.position.y].Add(player);
-                    apigraphic.MovePlayer_Branch_2(player, nextpos);
+                    if (Toolkit.HasRamp(temp) && !Toolkit.IsdoubleRamp(temp))
+                    {
+                        Ramp ramp = Toolkit.GetRamp(temp);
+                        if (ramp.IsOnRampSide(Toolkit.ReverseDirection(database.gravity_direction)))
+                        {
+                            database.units[(int)player.position.x, (int)player.position.y].Remove(player);
+                            player.position = temp;
+                            database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                            apigraphic.MovePlayer_Branch_3(player, player.position, ramp.type);
+                        }
+                    }
+                    else
+                    {
+                        database.units[(int)player.position.x, (int)player.position.y].Remove(player);
+                        player.position = nextpos;
+                        database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                        apigraphic.MovePlayer_Branch_2(player, nextpos);
+                    }
                 }
             }
             else //simple move
@@ -579,7 +615,7 @@ public class LogicalEngine {
     {
         for(int i=0; i<database.player.Count; i++)
         {
-            if (database.player[i].lean)
+            if (database.player[i].lean && !Toolkit.IsInsideBranch(database.player[i]))
             {
                 Vector2 newpos = Toolkit.VectorSum(database.player[i].position, Toolkit.DirectiontoVector(database.player[i].leandirection));
                 List<Unit> units = GetUnits(newpos);
