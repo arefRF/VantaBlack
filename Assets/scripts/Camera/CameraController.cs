@@ -48,7 +48,7 @@ public class CameraController : MonoBehaviour {
         while(remain > float.Epsilon)
         {
             remain = (transform.position - end).sqrMagnitude;
-            transform.position = Vector3.MoveTowards(transform.position, end, Time.deltaTime * move_time);
+            transform.position = Vector3.MoveTowards(transform.position, end, Time.deltaTime / move_time);
             yield return null;
         }
     }
