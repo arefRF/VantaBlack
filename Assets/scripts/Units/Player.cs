@@ -22,6 +22,10 @@ public class Player : Unit
     public void Awake()
     {
         abilities = new List<Ability>();
+        for(int i=0; i<abilitycount; i++)
+        {
+            abilities.Add(Ability.GetAbilityInstance(abilitytype));
+        }
         direction = move_direction[0];
     }
 

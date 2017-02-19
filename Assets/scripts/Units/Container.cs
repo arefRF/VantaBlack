@@ -59,31 +59,32 @@ public class Container : ParentContainer {
         abilities = player.abilities;
         player.abilities = temp;
         api.ChangeSprite(this);
+        _setability(player);
         if (this is FunctionalContainer) {
             if ((player.abilities.Count != 0 && player.abilities[0].abilitytype == AbilityType.Fuel))
             {
-                if (((FunctionalContainer)this).on)
-                    ((FunctionalContainer)this).Action_Fuel(false);
-                else
+                for(int i=0; i<player.abilities.Count; i++)
                 {
-                    for(int i=0; i<player.abilities.Count; i++)
-                    {
-                        ContainerAbilityChanged(false, player.abilities.Count - i);
-                    }
+                    AddToReservedMove(false, player.abilities.Count - i);
+                }
+                if (((FunctionalContainer)this).on)
+                {
+                    CheckReservedList();
                 }
             }
             else if((abilities.Count != 0 && abilities[0].abilitytype == AbilityType.Fuel))
             {
-                if (((FunctionalContainer)this).on)
-                    ((FunctionalContainer)this).Action_Fuel(false);
-                else
+                for (int i = 0; i < player.abilities.Count; i++)
                 {
-                    for (int i = 0; i < abilities.Count; i++)
-                        ContainerAbilityChanged(true, i+1);
+                    AddToReservedMove(false, i+1);
+                }
+                if (((FunctionalContainer)this).on)
+                {
+                    CheckReservedList();
                 }
             }
         }
-            
+        
     }
 
     private void PlayerAbsorbAbilities(Player player)
@@ -111,6 +112,25 @@ public class Container : ParentContainer {
 
    }
 
+    public virtual void PlayerAbsorb(Player player)
+    {
+        api.AddToSnapshot(this);
+        if (this is FunctionalContainer)
+            api.AddToSnapshot(ConnectedUnits);
+        api.AddToSnapshot(player);
+        if (abilities.Count == 0)
+            return;
+        else if (player.abilities.Count == 0)
+            PlayerAbsorbAbilities(player);
+        else
+        {
+            if (abilities[0].abilitytype == player.abilities[0].abilitytype)
+                PlayerAbsorbAbilities(player);
+            else
+                Swap(player);
+        }
+
+    }
 
     public virtual void PlayerRelease(Player player)
     {
@@ -124,7 +144,7 @@ public class Container : ParentContainer {
             PlayerReleaseAbilities(player);
         else
         {
-            if (player.abilities[0] == abilities[0])
+            if (player.abilities[0].abilitytype == abilities[0].abilitytype)
                 PlayerReleaseAbilities(player);
             else
                 Swap(player);
@@ -238,23 +258,5 @@ public class Container : ParentContainer {
         if (player.abilities.Count != 0)
             player.abilitytype = player.abilities[0].abilitytype;
     }
-    public virtual void PlayerAbsorb(Player player)
-    {
-        api.AddToSnapshot(this);
-        if (this is FunctionalContainer)
-            api.AddToSnapshot(ConnectedUnits);
-        api.AddToSnapshot(player);
-        if (abilities.Count == 0)
-            return;
-        else if (player.abilities.Count == 0)
-            PlayerAbsorbAbilities(player);
-        else
-        {
-            if (abilities[0] == player.abilities[0])
-                PlayerAbsorbAbilities(player);
-            else
-                Swap(player);
-        }
-
-    }
+    
 }
