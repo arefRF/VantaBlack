@@ -48,6 +48,12 @@ public class APIGraphic{
         player.gameObject.GetComponent<PlayerPhysics>().Ramp_To_Sharp_Move(position,type);
     }
 
+    //ramp to branch
+    public void MovePlayer_Ramp_Branch(Player player,Vector2 position,int type)
+    {
+        player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
+    }
+
     //  Block to Block
     public void MovePlayer_Simple_1(Player player, Vector2 position)
     {
@@ -104,6 +110,7 @@ public class APIGraphic{
 
         player.gameObject.GetComponent<PlayerPhysics>().Block_To_Ramp_Move(position,ramptype);
     }
+
 
     public void MovePlayerFinished(GameObject player_obj)
     {
