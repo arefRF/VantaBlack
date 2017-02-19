@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public sealed class Toolkit{
+    public static Database database;
     public static Vector2 VectorSum(Vector2 a, Vector2 b)
     {
         return new Vector2(a.x + b.x, a.y + b.y);
@@ -46,7 +47,6 @@ public sealed class Toolkit{
 
     public static bool IsEmptySpace(Vector2 position,  Direction d)
     {
-        Database database = Starter.GetDataBase();
         try {
             Vector2 temp = DirectiontoVector(ReverseDirection(d));
             temp = Toolkit.VectorSum(position, Toolkit.DirectiontoVector(d));
@@ -90,7 +90,6 @@ public sealed class Toolkit{
 
     public static bool CanMove(Vector2 position, Direction d)
     {
-        Database database = Starter.GetDataBase();
         try
         {
             /*foreach(Unit u in Database.database.units[1,1])
@@ -116,7 +115,6 @@ public sealed class Toolkit{
 
     public static Unit GetUnitByCodeNumber(int codenumber)
     {
-        Database database = Starter.GetDataBase();
         for (int i=0; i<database.units.GetLength(0); i++)
         {
             for(int j=0; j<database.units.GetLength(1); j++)
@@ -133,7 +131,7 @@ public sealed class Toolkit{
 
     public static bool IsHigherThan(Vector2 position1, Vector2 position2)
     {
-        Direction gravity_direction = Starter.GetGravityDirection();
+        Direction gravity_direction = database.gravity_direction;
         switch (gravity_direction)
         {
             case Direction.Down: if (position1.y > position2.y) return true; return false;
@@ -201,7 +199,6 @@ public sealed class Toolkit{
 
     public static void AddUnitToPosition(Unit u, Vector2 position)
     {
-        Database database = Starter.GetDataBase();
         if (u.unitType == UnitType.Wall)
         {
             return;
@@ -210,7 +207,6 @@ public sealed class Toolkit{
     }
     public static Unit GetUnit(GameObject gameobject)
     {
-        Database database = Starter.GetDataBase();
         for (int i = 0; i < database.Xsize; i++)
         {
             for (int j = 0; j < database.Ysize; j++)
@@ -228,7 +224,6 @@ public sealed class Toolkit{
 
     public static bool IsOnRamp(Unit unit)
     {
-        Database database = Starter.GetDataBase();
         for(int i=0; i<database.units[(int)unit.position.x, (int)unit.position.y].Count; i++)
         {
             Unit u = database.units[(int)unit.position.x, (int)unit.position.y][i];
@@ -326,7 +321,6 @@ public sealed class Toolkit{
 
     public static bool IsInsideBranch(Player player)
     {
-        Database database = Starter.GetDataBase();
         for (int i=0; i<database.units[(int)player.position.x, (int)player.position.y].Count; i++)
         {
             if (database.units[(int)player.position.x, (int)player.position.y][i] is Branch)
@@ -336,7 +330,6 @@ public sealed class Toolkit{
     }
     public static bool IsInsideBranch(Vector2 position)
     {
-        Database database = Starter.GetDataBase();
         for (int i = 0; i < database.units[(int)position.x, (int)position.y].Count; i++)
         {
             if (database.units[(int)position.x, (int)position.y][i] is Branch)
@@ -462,6 +455,33 @@ public sealed class Toolkit{
                 return (Branch)units[(int)position.x, (int)position.y][i];
         }
         return null;
+    }
+
+    public static bool[] GetConnectedSides(Unit unit)
+    {
+        bool[] result = new bool[4];
+        result[0] = !IsConnectedFromPosition(unit, VectorSum(unit.position, new Vector2(0, 1)));
+        result[1] = !IsConnectedFromPosition(unit, VectorSum(unit.position, new Vector2(1, 0)));
+        result[2] = !IsConnectedFromPosition(unit, VectorSum(unit.position, new Vector2(0, -1)));
+        result[3] = !IsConnectedFromPosition(unit, VectorSum(unit.position, new Vector2(-1, 0)));
+        
+        return result;
+    }
+
+    public static bool IsConnectedFromPosition(Unit unit, Vector2 pos)
+    {
+            for (int i = 0; i < database.units[(int)pos.x, (int)pos.y].Count; i++)
+            {
+                Unit u = database.units[(int)pos.x, (int)pos.y][i];
+                if (u.gameObject.transform.parent == unit.gameObject.transform.parent)
+                {
+                    return true;
+                }
+            }
+
+
+        
+        return false;
     }
 }
 

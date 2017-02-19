@@ -48,18 +48,25 @@ public class APIGraphic{
         player.gameObject.GetComponent<PlayerPhysics>().Ramp_To_Sharp_Move(position,type);
     }
 
+    //ramp to branch
+    public void MovePlayer_Ramp_Branch(Player player,Vector2 position,int type)
+    {
+        player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
+    }
+
     //  Block to Block
     public void MovePlayer_Simple_1(Player player, Vector2 position)
     {
         //player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
         player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
+        player.gameObject.GetComponent<PlayerGraphics>().Move_Animation(player.direction);
     }
 
     // Block to Branch
     public void MovePlayer_Simple_2(Player player, Vector2 position)
     {
-       
-        player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
+
+        player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
     }
 
     // Block to Ramp
@@ -105,9 +112,11 @@ public class APIGraphic{
         player.gameObject.GetComponent<PlayerPhysics>().Block_To_Ramp_Move(position,ramptype);
     }
 
+
     public void MovePlayerFinished(GameObject player_obj)
     {
         logicalengine.graphic_PlayerMoveAnimationFinished(player_obj.GetComponent<Player>());
+        player_obj.GetComponent<PlayerGraphics>().Move_Finished();
            
     }    
     public void Fall(Player player, Vector2 position)
@@ -239,7 +248,6 @@ public class APIGraphic{
 
     public void UnitChangeSprite(Unit unit)
     {
-        //Debug.Log(unit);
         if (unit is SimpleContainer)
             graphicalengine.Simple_Container((SimpleContainer)unit);
         else if (unit is DynamicContainer)

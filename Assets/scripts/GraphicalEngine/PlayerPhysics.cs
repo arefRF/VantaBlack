@@ -209,6 +209,11 @@ public class PlayerPhysics : MonoBehaviour
 
     }
 
+    public void Jump(Vector2 pos)
+    {
+
+    }
+
     // ramp to corner move
     public void Ramp_To_Corner_Move(Vector2 pos,int type)
     {
@@ -390,7 +395,7 @@ public class PlayerPhysics : MonoBehaviour
         if (GetComponent<Player>().direction == Direction.Right)
             transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0, 0, 0));
         else if (GetComponent<Player>().direction == Direction.Left)
-            transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0, 180, 0));
+            transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0, 0, 0));
     }
 
    private void Rotate_On_Ramp(int type)
@@ -404,9 +409,11 @@ public class PlayerPhysics : MonoBehaviour
         else if (player.direction == Direction.Left)
         {
            // StartCoroutine(Rotate_Co(new Vector3(0, 180, Ramp_Rotation_Value(type, player.direction))));
-            transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0, 180, Ramp_Rotation_Value(type, player.direction)));
+            transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0, 0, Ramp_Rotation_Value(type, player.direction)));
         }
     }
+
+
 
     private IEnumerator Rotate_Co(Vector3 rot)
     {

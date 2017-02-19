@@ -94,7 +94,10 @@ public class APIUnit {
         }
         return false;
     }
+    public void SetinitialSprite(Unit unit)
+    {
 
+    }
     public void ChangeSprite(Unit unit)
     {
         engine.apigraphic.UnitChangeSprite(unit);

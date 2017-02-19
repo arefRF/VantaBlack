@@ -3,14 +3,21 @@ using System.Collections.Generic;
 
 public class StaticContainer : FunctionalContainer {
 
-    public void Start()
+    public override void Run()
     {
+        abilities = new List<Ability>();
+        for (int i = 0; i < abilitycount; i++)
+        {
+            abilities.Add(Ability.GetAbilityInstance(abilitytype));
+        }
+        api.ChangeSprite(this);
         moved = 0;
         shouldmove = abilities.Count;
         laston = !on;
         stucklevel = 0;
         stuckstatus = 0;
         firstmove = true;
+        base.Run();
     }
 }
 

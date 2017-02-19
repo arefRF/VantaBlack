@@ -60,7 +60,7 @@ public class GraphicalEngine : MonoBehaviour {
     {
         if (container.abilities.Count != 0)
         {
-            if (container.abilities[0] == AbilityType.Key)
+            if (container.abilities[0].abilitytype == AbilityType.Key)
             {
                 container.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load("Doors\\Key", typeof(Sprite));
             }
@@ -90,7 +90,7 @@ public class GraphicalEngine : MonoBehaviour {
             case 4: lights += "Lights 4"; break;
             default: lights += "Lights Infinite"; break;
         }
-        if ( container.abilities.Count != 0 && container.abilities[0] == AbilityType.Key)
+        if ( container.abilities.Count != 0 && container.abilities[0].abilitytype == AbilityType.Key)
             lights = @"Containers\Lights Infinite";
         container.transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load(lights, typeof(Sprite));
     }
@@ -105,15 +105,15 @@ public class GraphicalEngine : MonoBehaviour {
         StopAllCoroutines();
     }
 
-    private Vector3 Ability_Color(List<AbilityType> ability)
+    private Vector3 Ability_Color(List<Ability> ability)
     {
         if (ability.Count != 0)
         {
-            if (ability[0] == AbilityType.Key)
+            if (ability[0].abilitytype == AbilityType.Key)
             {
                 return new Vector3(1, 1, 1);
             }
-            else if (ability[0] == AbilityType.Fuel)
+            else if (ability[0].abilitytype == AbilityType.Fuel)
             {
                 return new Vector3(0, 0.941f, 0.654f);
             }
@@ -143,7 +143,6 @@ public class GraphicalEngine : MonoBehaviour {
     }
     public void Dynamic_Container(DynamicContainer container)
     {    
-        Debug.Log("Animations\\Container\\Container-1(T)");
         // On or Off Sprite
         string toggle = @"Containers\Icons\";
         if (container.on)
@@ -182,7 +181,7 @@ public class GraphicalEngine : MonoBehaviour {
 
         // Direction lights roation
         container.transform.GetChild(2).rotation = Quaternion.Euler(new Vector3(0, 0, rot-90));
-        if ( container.abilities.Count!= 0 &&  container.abilities[0] == AbilityType.Key)
+        if ( container.abilities.Count!= 0 &&  container.abilities[0].abilitytype == AbilityType.Key)
                 container.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load("Doors\\Key", typeof(Sprite));
             
 

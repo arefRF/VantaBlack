@@ -6,9 +6,10 @@ public class Gate : Container {
     public string sceneName;
     public bool Internal;
 
-    public void Start()
+    public override void Run()
     {
         capacity = 1;
+        base.Run();
     }
 
     public override bool PlayerMoveInto(Direction dir)
@@ -21,7 +22,7 @@ public class Gate : Container {
         if (capacity == abilities.Count)
             return;
         try {
-            if (player.abilities[0] != AbilityType.Key)
+            if (player.abilities[0].abilitytype != AbilityType.Key)
                 return;
         }
         catch
@@ -37,6 +38,7 @@ public class Gate : Container {
         {
             abilities.Add(player.abilities[0]);
             player.abilities.RemoveAt(0);
+            api.engine.apigraphic.UnitChangeSprite(this);
         }
     }
     public override void Action(Player player, Direction dir)
@@ -72,11 +74,11 @@ public class Gate : Container {
 
 public class CloneableGate : CloneableUnit
 {
-    public List<AbilityType> abilities;
+    public List<Ability> abilities;
     public CloneableGate(Gate gate) : base(gate.position)
     {
         original = gate;
-        abilities = new List<AbilityType>();
+        abilities = new List<Ability>();
         for (int i = 0; i < gate.abilities.Count; i++)
             abilities.Add(gate.abilities[i]);
     }
@@ -85,7 +87,7 @@ public class CloneableGate : CloneableUnit
     {
         base.Undo();
         Gate original = (Gate)base.original;
-        original.abilities = new List<AbilityType>();
+        original.abilities = new List<Ability>();
         for (int i = 0; i < abilities.Count; i++)
             original.abilities.Add(abilities[i]);
 

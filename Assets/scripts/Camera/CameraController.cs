@@ -9,6 +9,7 @@ public class CameraController : MonoBehaviour {
     private float vert_view;
     private float horz_view;
     private Vector3 pos;
+    public float move_time = 0.5f;
 
 	// Use this for initialization
 	void Start () {
@@ -35,19 +36,13 @@ public class CameraController : MonoBehaviour {
         }
 	}
 
-    
-    public void Camera_Move(Vector2 pos,float move_time)
-    {
-
-    }
-
     private IEnumerator Move_Couroutine(Vector3 end,float move_time)
     {
         float remain = (transform.position - end).sqrMagnitude;
         while(remain > float.Epsilon)
         {
             remain = (transform.position - end).sqrMagnitude;
-            transform.position = Vector3.MoveTowards(transform.position, end, Time.deltaTime * move_time);
+            transform.position = Vector3.MoveTowards(transform.position, end, Time.deltaTime / move_time);
             yield return null;
         }
     }
@@ -65,7 +60,7 @@ public class CameraController : MonoBehaviour {
         Vector3 pos = new Vector3(p_transform.position.x, p_transform.position.y,Camera.main.transform.position.z);
         pos.x = Mathf.Clamp(pos.x, left_bound, right_bound);
         pos.y = Mathf.Clamp(pos.y, lower_bound, upper_bound);
-        StartCoroutine(Camera_Move(pos,0.5f,true));
+        StartCoroutine(Camera_Move(pos,move_time,true));
 
     }
 
