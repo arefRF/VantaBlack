@@ -242,6 +242,7 @@ public class Player : Unit
                     position = temp;
                     api.AddToDatabase(this);
                     api.graphicalengine_LandOnRamp(this, position);
+                    onramp = true;
                 }
             }
         }

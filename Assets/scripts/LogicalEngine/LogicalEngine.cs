@@ -187,15 +187,13 @@ public class LogicalEngine {
             }
             if (goingup)
             {
-                Debug.Log(player.position);
                 Vector2 temppos = Toolkit.VectorSum(player.position, dir);
-                Debug.Log(temppos);
                 if (Toolkit.HasBranch(temppos))
                 {
                     database.units[(int)player.position.x, (int)player.position.y].Remove(player);
                     player.position = temppos;
                     database.units[(int)player.position.x, (int)player.position.y].Add(player);
-                    apigraphic.MovePlayer_Ramp_2(player, player.position, ramp.type);
+                    apigraphic.MovePlayer_Ramp_Branch(player, player.position, ramp.type);
                 }
                 nextpos = Toolkit.VectorSum(player.position, Toolkit.VectorSum(Toolkit.DirectiontoVector(Toolkit.ReverseDirection(database.gravity_direction)), Toolkit.DirectiontoVector(dir)));
                 units = GetUnits(nextpos);
@@ -260,9 +258,17 @@ public class LogicalEngine {
                         database.units[(int)player.position.x, (int)player.position.y].Add(player);
                         apigraphic.MovePlayer_Ramp_1(player, nextpos, ((Ramp)units[0]).type);
                     }
+                    else if (Toolkit.GetRamp(nextpos).IsOnRampSide(Toolkit.ReverseDirection(dir))) //zir pelle az ramp be zir pelle going up
+                    {
+                        database.units[(int)player.position.x, (int)player.position.y].Remove(player);
+                        player.position = nextpos;
+                        database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                        apigraphic.MovePlayer_Ramp_2(player, nextpos, ramp.type);
+                    }
                     else
                     {
                         database.units[(int)player.position.x, (int)player.position.y].Remove(player);
+                        Debug.Log(player.position);
                         player.position = Toolkit.VectorSum(player.position, dir);
                         database.units[(int)player.position.x, (int)player.position.y].Add(player);
                         apigraphic.MovePlayer_Ramp_5(player, player.position, Toolkit.GetRamp(player.position).type);
