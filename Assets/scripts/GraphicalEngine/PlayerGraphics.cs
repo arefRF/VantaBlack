@@ -6,37 +6,50 @@ public class PlayerGraphics : MonoBehaviour {
     private APIGraphic api;
     private LogicalEngine engine;
     private Vector2 unmoved_pos;
+    private Animator animator;
     void Start()
     {
         unmoved_pos = transform.position;
         engine = Starter.GetEngine();
         api = engine.apigraphic;
+        animator = GetComponent<Animator>();
     }
 
 
     public void Lean_Right()
     {
-        transform.GetChild(0).localPosition +=  new Vector3(1f,0,0);
+        //transform.GetChild(0).localPosition +=  new Vector3(1f,0,0);
+        animator.SetInteger("Lean", 2);
+        animator.SetBool("isLean", true);
     }
 
     public void Lean_Left()
     {
-        transform.GetChild(0).localPosition += new Vector3(-1f, 0,0);
+        //transform.GetChild(0).localPosition += new Vector3(-1f, 0,0);
+        animator.SetInteger("Lean", 4);
+        animator.SetBool("isLean", true);
     }
 
     public void Lean_Up()
     {
-        transform.GetChild(0).localPosition += new Vector3(0, 1f,0);
+        // transform.GetChild(0).localPosition += new Vector3(0, 1f,0);
+        animator.SetInteger("Lean", 1);
+        animator.SetBool("isLean", true);
     }
 
     public void Lean_Down()
     {
-        transform.GetChild(0).localPosition +=  new Vector3( 0, -1f,0);
+        //transform.GetChild(0).localPosition +=  new Vector3( 0, -1f,0);
+        animator.SetInteger("Lean", 3);
+        animator.SetBool("isLean", true);
     }
 
     public void Lean_Finished()
     {
+        animator.SetBool("isLean", false);
+        animator.SetInteger("Lean", 0);
         transform.GetChild(0).localPosition = new Vector2(0, 0);
+        transform.GetChild(1).localPosition = new Vector2(0, 0);
     }
     public void Player_Move(GameObject player,Vector2 end)
     {
@@ -93,11 +106,11 @@ public class PlayerGraphics : MonoBehaviour {
         yield return null;
     }
     public void Player_Change_Direction(Player player,Direction dir)
-    {
+    { /*
         if (dir == Direction.Right)
             transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0, 0, 0));
         else if (dir == Direction.Left)
-            transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0, 180, 0));
+            transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0, 180, 0));*/
         api.PlayerChangeDirectionFinished(gameObject.GetComponent<Player>());
 
     }  
