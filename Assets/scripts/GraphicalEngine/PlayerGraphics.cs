@@ -82,7 +82,16 @@ public class PlayerGraphics : MonoBehaviour {
 
     public void Move_Animation(Direction dir)
     {
+        if (dir == Direction.Right)
+            animator.SetInteger("Walk", 1);
+        else
+            animator.SetInteger("Walk", -1);
 
+    }
+
+    public void Move_Finished()
+    {
+        animator.SetInteger("Walk", 0);
     }
     private IEnumerator Move_Camera_Coroutine_X(float pos)
     {

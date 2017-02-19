@@ -464,6 +464,7 @@ public sealed class Toolkit{
         result[1] = !IsConnectedFromPosition(unit, VectorSum(unit.position, new Vector2(1, 0)));
         result[2] = !IsConnectedFromPosition(unit, VectorSum(unit.position, new Vector2(0, -1)));
         result[3] = !IsConnectedFromPosition(unit, VectorSum(unit.position, new Vector2(-1, 0)));
+        
         return result;
     }
 
@@ -481,6 +482,8 @@ public sealed class Toolkit{
             }
         }
         catch { }
+
+        
         return false;
     }
 }
