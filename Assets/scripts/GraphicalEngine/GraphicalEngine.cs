@@ -71,6 +71,7 @@ public class GraphicalEngine : MonoBehaviour {
         else
             container.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load("", typeof(Sprite));
         Container_Change_Number(container);
+        Debug.Log(container.name);
         container.transform.GetChild(3).gameObject.SetActive(false);
 
         //Change Color
@@ -143,7 +144,6 @@ public class GraphicalEngine : MonoBehaviour {
     }
     public void Dynamic_Container(DynamicContainer container)
     {    
-        Debug.Log("Animations\\Container\\Container-1(T)");
         // On or Off Sprite
         string toggle = @"Containers\Icons\";
         if (container.on)
