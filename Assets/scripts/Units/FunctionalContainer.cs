@@ -34,7 +34,7 @@ public class FunctionalContainer : Container {
         //api.TakeSnapshot();
         switch (abilities[0])
         {
-            case AbilityType.Fuel: Action_Fuel(true); break; 
+            case AbilityType.Fuel: Action_Fuel(true); break;
         }
     }
 
