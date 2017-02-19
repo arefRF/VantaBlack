@@ -29,6 +29,7 @@ public class Starter : MonoBehaviour{
         database.state = State.Busy;
         staticengine = logicalengine;
         GameObject.Find("Graphical").GetComponent<GraphicalEngine>().database = database;
+        Toolkit.database = database;
         logicalengine.Run();
     }
 

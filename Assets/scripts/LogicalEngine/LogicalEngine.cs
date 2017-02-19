@@ -7,7 +7,7 @@ public class LogicalEngine {
     public APIInput apiinput;
     public APIUnit apiunit;
     public Database database;
-    SubEngine_Initializer initializer;
+    public SubEngine_Initializer initializer;
     InputController inputcontroller;
     int sizeX, sizeY;
     public List<Unit> stuckedunits;

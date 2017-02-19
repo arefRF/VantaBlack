@@ -14,7 +14,15 @@ public class Unit : MonoBehaviour {
     public List<Unit> players { get; set; }
 
     // public abstract bool CanMove(UnitType unittype);
+    public virtual void Run()
+    {
+        position = gameObject.transform.position;
+        SetInitialSprite();
+    }
+    public virtual void SetInitialSprite()
+    {
 
+    }
     public virtual CloneableUnit Clone()
     {
         return null;
