@@ -33,6 +33,10 @@ public class LogicalEngine {
     {
         database.units = initializer.init();
         database.state = State.Idle;
+        for (int i = 0; i < sizeX; i++)
+            for (int j = 0; j < sizeY; j++)
+                for (int k = 0; k < database.units[i, j].Count; k++)
+                    database.units[i, j][k].Run();
         inputcontroller = new InputController(this);
         //Applygravity();
     }

@@ -73,10 +73,7 @@ public class SubEngine_Initializer{
             for (int j = 0; j < connectedunits.Count; j++)
                 connectedunits[j].SetConnectedUnits(connectedunits);
         }
-        for (int i = 0; i < x; i++)
-            for (int j = 0; j < y; j++)
-                for (int k = 0; k < units[x, y].Count; k++)
-                    units[x, y][k].Run();
+
         return units;
     }
 }
