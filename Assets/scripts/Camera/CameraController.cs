@@ -107,7 +107,7 @@ public class CameraController : MonoBehaviour {
             pos.x = Mathf.Clamp(pos.x, left_bound, right_bound);
             pos.y = Mathf.Clamp(pos.y, lower_bound, upper_bound);
             remain  = (Camera.main.transform.position - pos).sqrMagnitude;
-            pos = Vector3.MoveTowards(Camera.main.transform.position, pos, Time.smoothDeltaTime * move_time);
+            pos = Vector3.MoveTowards(Camera.main.transform.position, pos, Time.smoothDeltaTime / move_time);
             Camera.main.transform.position =pos;
             yield return null;
         }
