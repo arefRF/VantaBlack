@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 public class APIUnit {
-    LogicalEngine engine;
+    public LogicalEngine engine;
 
     public APIUnit(LogicalEngine engine)
     {
@@ -128,4 +128,30 @@ public class APIUnit {
         else
             unit.CheckReservedList();
     }
+
+    public void AddToSnapshot(Unit unit)
+    {
+        engine.snpmanager.AddToSnapShot(unit);
+    }
+
+    public void AddToSnapshot(List<Unit> units)
+    {
+        engine.snpmanager.AddToSnapShot(units);
+    }
+
+    public void TakeSnapshot()
+    {
+        engine.snpmanager.takesnapshot();
+    }
+
+    public void MergeSnapshot()
+    {
+        engine.snpmanager.MergeSnapshot();
+    }
+
+    public void StopPlayerCoroutine(Player player)
+    {
+        engine.apigraphic.Undo_Player(player);
+    }
 }
+

@@ -120,7 +120,8 @@ public class PlayerPhysics : MonoBehaviour
     public void Ramp_To_Sharp_Move(Vector2 pos,int type)
     {
         move_type = MoveType.RampToSharp;
-        StopCoroutine(last_co);
+        if(last_co!=null)
+            StopCoroutine(last_co);
         Vector2 end1 = Ramp_To_Sharp_Pos(Direction.Down, pos);
         Vector2 end2 = pos + On_Ramp_Pos(type);
         last_co = StartCoroutine(Ramp_To_Sharp_Coroutine(end1,end2,move_time,true,type));
@@ -181,15 +182,23 @@ public class PlayerPhysics : MonoBehaviour
         Rotate_On_Ramp(type);
     }
    
+    public void Player_Undo()
+    {
+        StopAllCoroutines();
+
+    }
+
     //fall 
     public void Fall(Vector2 pos)
     {
-        StopCoroutine(last_co);
+        if(last_co!=null)
+            StopCoroutine(last_co);
         move_type = MoveType.Falling;
         last_co  = StartCoroutine(Accelerated_Move(pos,fall_velocity,fall_acceleration,true));
     }
     public void Simple_Move(Vector2 pos)
     {
+        Debug.Log("Simple Move");
             set_percent = true;
         if (last_co != null)
             StopCoroutine(last_co);
@@ -202,7 +211,8 @@ public class PlayerPhysics : MonoBehaviour
     // ramp to corner move
     public void Ramp_To_Corner_Move(Vector2 pos,int type)
     {
-        StopCoroutine(last_co);
+        if(last_co!=null)
+            StopCoroutine(last_co);
         move_type = MoveType.RampToCorner;
         Rotate_On_Ramp(type);
         pos += Ramp_To_Corner_Pos(Direction.Down, pos);
@@ -309,7 +319,10 @@ public class PlayerPhysics : MonoBehaviour
         {
                 api.MovePlayerFinished(gameObject);
         }
-        move_type = MoveType.Idle;
+
+        //cuz it messed with falling
+        if(move_type!= MoveType.Falling)
+            move_type = MoveType.Idle;
         player.movepercentage = 0;
         // if it needs Call Finished Move of API
     }
@@ -383,11 +396,30 @@ public class PlayerPhysics : MonoBehaviour
     {
         Player player = GetComponent<Player>();
         if (player.direction == Direction.Right)
-            transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0, 0, Ramp_Rotation_Value(type,player.direction)));
+        {
+           // StartCoroutine(Rotate_Co(new Vector3(0, 0, Ramp_Rotation_Value(type, player.direction))));
+            transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0, 0, Ramp_Rotation_Value(type, player.direction)));
+        }
         else if (player.direction == Direction.Left)
-            transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0, 180, Ramp_Rotation_Value(type,player.direction)));
+        {
+           // StartCoroutine(Rotate_Co(new Vector3(0, 180, Ramp_Rotation_Value(type, player.direction))));
+            transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0, 180, Ramp_Rotation_Value(type, player.direction)));
+        }
     }
 
+    private IEnumerator Rotate_Co(Vector3 rot)
+    {
+        Debug.Log("Rotate co");
+        Vector3 rotation = new Vector3(transform.GetChild(0).rotation.x, transform.GetChild(0).rotation.y, transform.GetChild(0).rotation.z);
+        float remain = (rotation - rot).sqrMagnitude;
+        while(remain > float.Epsilon)
+        {
+            remain = (rotation - rot).sqrMagnitude;
+            rotation = Vector3.MoveTowards(rotation, rot, Time.deltaTime / 0.3f);
+            transform.GetChild(0).rotation = Quaternion.Euler(rotation);
+            yield return null;
+        }
+    }
     private float Ramp_Rotation_Value(int type,Direction dir)
     {
         if (type == 4)

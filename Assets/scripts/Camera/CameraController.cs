@@ -9,6 +9,7 @@ public class CameraController : MonoBehaviour {
     private float vert_view;
     private float horz_view;
     private Vector3 pos;
+    public float move_time = 0.5f;
 
 	// Use this for initialization
 	void Start () {
@@ -65,10 +66,44 @@ public class CameraController : MonoBehaviour {
         Vector3 pos = new Vector3(p_transform.position.x, p_transform.position.y,Camera.main.transform.position.z);
         pos.x = Mathf.Clamp(pos.x, left_bound, right_bound);
         pos.y = Mathf.Clamp(pos.y, lower_bound, upper_bound);
-        StartCoroutine(Camera_Move(pos,0.5f,true));
+        StartCoroutine(Camera_Move(pos,move_time,true));
 
     }
 
+    public void Camera_Size_Change(float zoom )
+    {
+        StartCoroutine(Zoom(zoom,1));
+    }
+
+    public void Camera_Rotation_Change(float rot, float move_time)
+    {
+        StartCoroutine(Rotation(rot,move_time));
+    }
+    private IEnumerator Zoom(float zoom,float move_time)
+    {
+        float remain = Mathf.Abs( Camera.main.orthographicSize - zoom);
+        while (remain> float.Epsilon)
+        {
+            remain = Mathf.Abs(Camera.main.orthographicSize - zoom);
+            Camera.main.orthographicSize = Mathf.MoveTowards(Camera.main.orthographicSize, zoom, Time.smoothDeltaTime / move_time);
+            yield return null; 
+        }
+    }
+
+    private IEnumerator Rotation(float rot, float move_time)
+    {
+        float remain = Mathf.Abs(Camera.main.transform.rotation.z - rot);
+        float rotation = Camera.main.transform.rotation.z;
+        while(remain > float.Epsilon)
+        {
+            remain = Mathf.Abs(Camera.main.transform.rotation.z - rot);
+            rotation = Mathf.MoveTowards(rotation, rot, Time.deltaTime / move_time);
+            Camera.main.transform.rotation = Quaternion.Euler(new Vector3(0, 0, rotation));
+            yield return null;
+
+        }
+        
+    }
     private IEnumerator Camera_Move(Vector3 end,float move_time,bool auto)
     {
         float remain = (Camera.main.transform.position - end).sqrMagnitude;
@@ -78,7 +113,7 @@ public class CameraController : MonoBehaviour {
             pos.x = Mathf.Clamp(pos.x, left_bound, right_bound);
             pos.y = Mathf.Clamp(pos.y, lower_bound, upper_bound);
             remain  = (Camera.main.transform.position - pos).sqrMagnitude;
-            pos = Vector3.MoveTowards(Camera.main.transform.position, pos, Time.smoothDeltaTime / move_time);
+            pos = Vector3.MoveTowards(Camera.main.transform.position, pos, Time.smoothDeltaTime * move_time);
             Camera.main.transform.position =pos;
             yield return null;
         }

@@ -16,10 +16,7 @@ public class Player : Unit
     public bool onramp { get; set; }
     public Direction gravity { get; set; }
 
-    public bool onmovingplatform { get; set; }
-
     public Vector2 nextpos { get; set; }
-
     public void Awake()
     {
         direction = move_direction[0];
@@ -45,6 +42,10 @@ public class Player : Unit
         for (int i = 0; i < move_direction.Count; i++)
             if (dir == move_direction[i])
                 return true;
+
+        //if inside branch go anywhere
+        if (Toolkit.IsInsideBranch(position))
+            return true;
         return false;
     }
     public bool Can_Lean(Direction dir)
@@ -133,7 +134,7 @@ public class Player : Unit
             {
                 continue;
             }
-            else if (units[i] is Ramp)
+            else if (units[i] is Ramp && units[i].transform.parent.gameObject != parent)
             {
                 return false;
                 // baadan age bekhaym player moghe harekate game object ziresh bere ru ramp ino barmidarim
@@ -197,21 +198,23 @@ public class Player : Unit
             return false;
         }
         Vector2 pos = Toolkit.VectorSum(position, gravitydirection);
-        if (!Fall(pos))
+        if (!Fall(pos)  && !Stand_On_Ramp(pos))
             return false;
         while (Fall(pos))
         {
-            /*if (pos.y <= 0 || pos.x <= 0)
-                break;*/
             api.RemoveFromDatabase(this);
             position = pos;
             api.AddToDatabase(this);
+            if (pos.x == 0 || pos.y == 0)
+                break;
             pos = Toolkit.VectorSum(position, gravitydirection);
         }
         state = PlayerState.Falling;
         api.graphicalengine_Fall(this, position);
         return true;
     }
+
+    
 
     public void FallFinished()
     {
@@ -328,7 +331,67 @@ public class Player : Unit
             return true;
         }
     }
+
+    public override CloneableUnit Clone()
+    {
+        return new CloneablePlayer(this);
+    }
 }
 
-//public class CloneablePlayer : 
+public class CloneablePlayer : CloneableUnit
+{
+    public List<AbilityType> abilities;
+    public List<Direction> move_direction;
+    public Direction direction;
+    public int movepercentage;
+    public PlayerState state;
+    public Direction leandirection;
+    public bool lean;
+    public bool onramp;
+    public Direction gravity;
+    public Vector2 nextpos;
+    public CloneablePlayer(Player player) : base(player.position)
+    {
+        original = player;
+        abilities = new List<AbilityType>();
+        for (int i = 0; i < player.abilities.Count; i++)
+            abilities.Add(player.abilities[i]);
+        move_direction = new List<Direction>();
+        for (int i = 0; i < player.move_direction.Count; i++)
+            move_direction.Add(player.move_direction[i]);
+        direction = player.direction;
+        movepercentage = player.movepercentage;
+        state = player.state;
+        leandirection = player.leandirection;
+        lean = player.lean;
+        onramp = player.onramp;
+        gravity = player.gravity;
+        nextpos = new Vector2(player.nextpos.x, player.nextpos.y);
+    }
+
+    public override void Undo()
+    {
+        Player original = (Player)base.original;
+        original.api.StopPlayerCoroutine(original);
+        original.api.RemoveFromDatabase(original);
+        original.position = position;
+        original.api.AddToDatabase(original);
+        original.abilities = new List<AbilityType>();
+        for (int i = 0; i < abilities.Count; i++)
+            original.abilities.Add(abilities[i]);
+        move_direction = new List<Direction>();
+        for (int i = 0; i < move_direction.Count; i++)
+            move_direction.Add(move_direction[i]);
+        original.direction = direction;
+        original.movepercentage = movepercentage;
+        original.state = state;
+        original.leandirection = leandirection;
+        original.lean = lean;
+        original.onramp = onramp;
+        original.gravity = gravity;
+        original.nextpos = new Vector2(nextpos.x, nextpos.y);
+        original.lean = false;
+        SetPosition();
+    }
+}
 

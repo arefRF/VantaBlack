@@ -58,8 +58,8 @@ public class APIGraphic{
     // Block to Branch
     public void MovePlayer_Simple_2(Player player, Vector2 position)
     {
-       
-        player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
+
+        player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
     }
 
     // Block to Ramp
@@ -188,6 +188,9 @@ public class APIGraphic{
 
     }
 
+
+    // for stoping courtines of moving container and objects
+
     public void Move_Update(Player player,Vector2 pos)
     {
         player.GetComponent<PlayerPhysics>().Set_End(pos);
@@ -225,8 +228,18 @@ public class APIGraphic{
         logicalengine.graphic_PlayerChangeDirectionFinished(player);
     }
 
+    public void Undo_Player(Player player)
+    {
+        player.GetComponent<PlayerPhysics>().Player_Undo();
+    }
+    public void Undo_Objects()
+    {
+        graphicalengine.StopAllCoroutines();
+    }
+
     public void UnitChangeSprite(Unit unit)
     {
+        //Debug.Log(unit);
         if (unit is SimpleContainer)
             graphicalengine.Simple_Container((SimpleContainer)unit);
         else if (unit is DynamicContainer)

@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Threading;
 using System.Runtime.CompilerServices;
+using System.Collections.Generic;
+
 public class GraphicalEngine : MonoBehaviour {
 
     public Database database { get; set; }
@@ -31,7 +33,7 @@ public class GraphicalEngine : MonoBehaviour {
         finish_lock = true;
         if(object_co != null)
             StopCoroutine(object_co);
-       object_co =  StartCoroutine(Move_Object_Coroutine(obj,unit,pos));
+        object_co =  StartCoroutine(Move_Object_Coroutine(obj,unit,pos));
     }
 
      
@@ -47,10 +49,9 @@ public class GraphicalEngine : MonoBehaviour {
             if (remain_distance < 0.01 && finish_lock)
             {
                 finish_lock = false;
-                
                 api.MoveGameObjectFinished(obj,unit);
             }
-
+            
             yield return null;
         }
     }
@@ -63,10 +64,18 @@ public class GraphicalEngine : MonoBehaviour {
             {
                 container.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load("Doors\\Key", typeof(Sprite));
             }
+            else
+                container.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load("", typeof(Sprite));
+
         }
         else
             container.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load("", typeof(Sprite));
         Container_Change_Number(container);
+        Debug.Log(container.name);
+        container.transform.GetChild(3).gameObject.SetActive(false);
+
+        //Change Color
+        Set_Simple_Color(container);
     }
 
     public void Container_Change_Number(Container container)
@@ -89,51 +98,93 @@ public class GraphicalEngine : MonoBehaviour {
 
     public void Gate(Gate gate)
     {
-        gate.GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load("Doors\\Door 2", typeof(Sprite));
+        //gate.GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load("Doors\\Door part 2", typeof(Sprite));
     }
-  
-    public void Dynamic_Container(DynamicContainer container)
+    
+    public void Stop_All_Co()
     {
+        StopAllCoroutines();
+    }
 
+    private Vector3 Ability_Color(List<AbilityType> ability)
+    {
+        if (ability.Count != 0)
+        {
+            if (ability[0] == AbilityType.Key)
+            {
+                return new Vector3(1, 1, 1);
+            }
+            else if (ability[0] == AbilityType.Fuel)
+            {
+                return new Vector3(0, 0.941f, 0.654f);
+            }
+        }
+
+        // else white
+        return new Vector3(1, 1, 1);
+    }
+
+    // Dynamic Container Color
+    private void Set_Dynamic_Color(DynamicContainer container)
+    {
+        Vector3 color = Ability_Color(container.abilities);
+        for (int i = 0; i < container.transform.childCount; i++)
+        {
+            container.transform.GetChild(i).GetComponent<SpriteRenderer>().color = new Color(color.x, color.y, color.z, 1);
+        }
+    }
+
+    private void Set_Simple_Color(SimpleContainer container)
+    {
+        Vector3 color = Ability_Color(container.abilities);
+        for (int i = 0; i < container.transform.childCount; i++)
+        {
+            container.transform.GetChild(i).GetComponent<SpriteRenderer>().color = new Color(color.x, color.y, color.z, 1);
+        }
+    }
+    public void Dynamic_Container(DynamicContainer container)
+    {    
         // On or Off Sprite
         string toggle = @"Containers\Icons\";
         if (container.on)
         {
             toggle += "ABILITY FUEL ON";
+            container.transform.GetChild(2).gameObject.SetActive(true);
             container.transform.GetChild(3).gameObject.SetActive(true);
+            container.GetComponent<Animator>().speed = 4;
         }
         else
         {
             toggle += "ABILITY FUEL OFF";
+            container.transform.GetChild(2).gameObject.SetActive(false);
             container.transform.GetChild(3).gameObject.SetActive(false);
+            container.GetComponent<Animator>().speed = 1;
         }
         container.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load(toggle, typeof(Sprite));
 
         //Change Number of 
         Container_Change_Number(container);
 
+        //change Color
+        Set_Dynamic_Color(container);
 
-        // Rotation for Abilities with DIrection
-        if (container.abilities.Count != 0)
-        {
-            if (container.abilities[0] == AbilityType.Fuel)
-            {
-                int rot = 0;
-                switch (container.direction)
-                {
-                    case Direction.Right: rot = 0; break;
-                    case Direction.Left: rot = 180; break;
-                    case Direction.Up: rot = 90; break;
-                    case Direction.Down: rot = 270; break;
-                }
+        // Rotation for Abilities with Direction
+
+        int rot = 0;
+        switch (container.direction)
+             {
+                 case Direction.Right: rot = 0; break;
+                 case Direction.Left: rot = 180; break;
+                 case Direction.Up: rot = 90; break;
+                 case Direction.Down: rot = 270; break;
+             }
                 container.transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0, 0, rot));
-                
-            }
-            else if (container.abilities[0] == AbilityType.Key)
-            {
+
+        // Direction lights roation
+        container.transform.GetChild(2).rotation = Quaternion.Euler(new Vector3(0, 0, rot-90));
+        if ( container.abilities.Count!= 0 &&  container.abilities[0] == AbilityType.Key)
                 container.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load("Doors\\Key", typeof(Sprite));
-            }
-        }
+            
 
     }
 
