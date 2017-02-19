@@ -5,7 +5,9 @@ using System;
 
 public class Player : Unit
 {
-    public List<AbilityType> abilities;
+    public AbilityType abilitytype;
+    public int abilitycount;
+    public List<Ability> abilities;
     public List<Direction> move_direction;
     public Direction direction { get; set; }
     public int movepercentage { get; set; }
@@ -19,6 +21,7 @@ public class Player : Unit
     public Vector2 nextpos { get; set; }
     public void Awake()
     {
+        abilities = new List<Ability>();
         direction = move_direction[0];
     }
 
@@ -266,7 +269,7 @@ public class Player : Unit
     {
         if (abilities.Count == 0)
             return false;
-        switch (abilities[0])
+        switch (abilities[0].abilitytype)
         {
             case AbilityType.Fuel: return false;
             case AbilityType.Direction: return true;
@@ -280,7 +283,7 @@ public class Player : Unit
 
     public bool Action(Direction dir)
     {
-        switch (abilities[0])
+        switch (abilities[0].abilitytype)
         {
             case AbilityType.Fuel: return true;
             case AbilityType.Direction: return false;
@@ -341,7 +344,7 @@ public class Player : Unit
 
 public class CloneablePlayer : CloneableUnit
 {
-    public List<AbilityType> abilities;
+    public List<Ability> abilities;
     public List<Direction> move_direction;
     public Direction direction;
     public int movepercentage;
@@ -354,7 +357,7 @@ public class CloneablePlayer : CloneableUnit
     public CloneablePlayer(Player player) : base(player.position)
     {
         original = player;
-        abilities = new List<AbilityType>();
+        abilities = new List<Ability>();
         for (int i = 0; i < player.abilities.Count; i++)
             abilities.Add(player.abilities[i]);
         move_direction = new List<Direction>();
@@ -377,7 +380,7 @@ public class CloneablePlayer : CloneableUnit
         original.api.RemoveFromDatabase(original);
         original.position = position;
         original.api.AddToDatabase(original);
-        original.abilities = new List<AbilityType>();
+        original.abilities = new List<Ability>();
         for (int i = 0; i < abilities.Count; i++)
             original.abilities.Add(abilities[i]);
         move_direction = new List<Direction>();

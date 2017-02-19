@@ -32,7 +32,7 @@ public class FunctionalContainer : Container {
         api.AddToSnapshot(ConnectedUnits);
         api.AddToSnapshot(player);
         //api.TakeSnapshot();
-        switch (abilities[0])
+        switch (abilities[0].abilitytype)
         {
             case AbilityType.Fuel: Action_Fuel(true); break;
         }
@@ -50,7 +50,7 @@ public class FunctionalContainer : Container {
             dir = Toolkit.ReverseDirection(dir);
         }
         int count = abilities.Count;
-        if (count != 0 && abilities[0] != AbilityType.Fuel)
+        if (count != 0 && abilities[0].abilitytype != AbilityType.Fuel)
             count = 0;
         if (first)
         {
@@ -206,7 +206,7 @@ public class FunctionalContainer : Container {
     {
         try
         {
-            if (abilities[0] != AbilityType.Fuel)
+            if (abilities[0].abilitytype != AbilityType.Fuel)
                 return;
         }
         catch
