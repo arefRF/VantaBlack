@@ -74,12 +74,13 @@ public class Container : ParentContainer {
             }
             else if((abilities.Count != 0 && abilities[0].abilitytype == AbilityType.Fuel))
             {
-                if (((FunctionalContainer)this).on)
-                    ((FunctionalContainer)this).Action_Fuel(false);
-                else
+                for (int i = 0; i < player.abilities.Count; i++)
                 {
-                    for (int i = 0; i < abilities.Count; i++)
-                        ContainerAbilityChanged(true, i+1);
+                    AddToReservedMove(false, i+1);
+                }
+                if (((FunctionalContainer)this).on)
+                {
+                    CheckReservedList();
                 }
             }
         }
