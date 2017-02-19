@@ -36,19 +36,13 @@ public class CameraController : MonoBehaviour {
         }
 	}
 
-    
-    public void Camera_Move(Vector2 pos,float move_time)
-    {
-
-    }
-
     private IEnumerator Move_Couroutine(Vector3 end,float move_time)
     {
         float remain = (transform.position - end).sqrMagnitude;
         while(remain > float.Epsilon)
         {
             remain = (transform.position - end).sqrMagnitude;
-            transform.position = Vector3.MoveTowards(transform.position, end, Time.deltaTime * move_time);
+            transform.position = Vector3.MoveTowards(transform.position, end, Time.deltaTime / move_time);
             yield return null;
         }
     }
@@ -113,7 +107,7 @@ public class CameraController : MonoBehaviour {
             pos.x = Mathf.Clamp(pos.x, left_bound, right_bound);
             pos.y = Mathf.Clamp(pos.y, lower_bound, upper_bound);
             remain  = (Camera.main.transform.position - pos).sqrMagnitude;
-            pos = Vector3.MoveTowards(Camera.main.transform.position, pos, Time.smoothDeltaTime * move_time);
+            pos = Vector3.MoveTowards(Camera.main.transform.position, pos, Time.smoothDeltaTime / move_time);
             Camera.main.transform.position =pos;
             yield return null;
         }
