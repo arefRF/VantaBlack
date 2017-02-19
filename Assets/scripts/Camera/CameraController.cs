@@ -36,12 +36,6 @@ public class CameraController : MonoBehaviour {
         }
 	}
 
-    
-    public void Camera_Move(Vector2 pos,float move_time)
-    {
-
-    }
-
     private IEnumerator Move_Couroutine(Vector3 end,float move_time)
     {
         float remain = (transform.position - end).sqrMagnitude;
