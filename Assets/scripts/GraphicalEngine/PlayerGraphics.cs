@@ -79,6 +79,11 @@ public class PlayerGraphics : MonoBehaviour {
 
 
     }
+
+    public void Move_Animation(Direction dir)
+    {
+
+    }
     private IEnumerator Move_Camera_Coroutine_X(float pos)
     {
         Debug.Log("Move Camera coroutine");
