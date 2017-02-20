@@ -4,9 +4,46 @@ using System.Collections.Generic;
 using System;
 
 public class Container : ParentContainer {
-    public List<AbilityType> abilities;
+    public AbilityType abilitytype;
+    public int abilitycount;
+    public List<Ability> abilities;
     public int capacity = 4;
 
+    public override void SetInitialSprite()
+    {
+        bool[] notconnected = Toolkit.GetConnectedSides(this);
+        if (notconnected[0] && notconnected[1] && notconnected[2] && notconnected[3])
+            gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Container[1];
+        else if (notconnected[0] && notconnected[1] && notconnected[2])
+            gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Container[2];
+        else if (notconnected[0] && notconnected[2] && notconnected[3])
+            gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Container[3];
+        else if (notconnected[0] && notconnected[1] && notconnected[3])
+            gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Container[4];
+        else if (notconnected[1] && notconnected[2] && notconnected[3])
+            gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Container[5];
+        else if (notconnected[0] && notconnected[2])
+            gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Container[6];
+        else if (notconnected[0] && notconnected[1])
+            gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Container[7];
+        else if (notconnected[1] && notconnected[3])
+            gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Container[8];
+        else if (notconnected[0] && notconnected[3])
+            gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Container[9];
+        else if (notconnected[2] && notconnected[3])
+            gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Container[10];
+        else if (notconnected[1] && notconnected[2])
+            gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Container[11];
+        else if (notconnected[0])
+            gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Container[12];
+        else if (notconnected[1])
+            gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Container[13];
+        else if (notconnected[2])
+            gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Container[14];
+        else if (notconnected[3])
+            gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Container[15];
+        api.ChangeSprite(this);
+    }
 
     void Start()
     {
@@ -15,38 +52,39 @@ public class Container : ParentContainer {
 
     private void Swap(Player player)
     {
-        List<AbilityType> temp = new List<AbilityType>();
+        List<Ability> temp = new List<Ability>();
         for (int i = 0; i < abilities.Count; i++)
             temp.Add(abilities[i]);
         abilities.Clear();
         abilities = player.abilities;
         player.abilities = temp;
         api.ChangeSprite(this);
+        _setability(player);
         if (this is FunctionalContainer) {
-            if ((player.abilities.Count != 0 && player.abilities[0] == AbilityType.Fuel))
+            if ((player.abilities.Count != 0 && player.abilities[0].abilitytype == AbilityType.Fuel))
             {
-                if (((FunctionalContainer)this).on)
-                    ((FunctionalContainer)this).Action_Fuel(false);
-                else
+                for(int i=0; i<player.abilities.Count; i++)
                 {
-                    for(int i=0; i<player.abilities.Count; i++)
-                    {
-                        ContainerAbilityChanged(false, player.abilities.Count - i);
-                    }
+                    AddToReservedMove(false, player.abilities.Count - i);
+                }
+                if (((FunctionalContainer)this).on)
+                {
+                    CheckReservedList();
                 }
             }
-            else if((abilities.Count != 0 && abilities[0] == AbilityType.Fuel))
+            else if((abilities.Count != 0 && abilities[0].abilitytype == AbilityType.Fuel))
             {
-                if (((FunctionalContainer)this).on)
-                    ((FunctionalContainer)this).Action_Fuel(false);
-                else
+                for (int i = 0; i < player.abilities.Count; i++)
                 {
-                    for (int i = 0; i < abilities.Count; i++)
-                        ContainerAbilityChanged(true, i+1);
+                    AddToReservedMove(false, i+1);
+                }
+                if (((FunctionalContainer)this).on)
+                {
+                    CheckReservedList();
                 }
             }
         }
-            
+        
     }
 
     private void PlayerAbsorbAbilities(Player player)
@@ -57,6 +95,7 @@ public class Container : ParentContainer {
             abilities.RemoveAt(0);
             ContainerAbilityChanged(false, abilities.Count);
             api.ChangeSprite(this);
+            _setability(player);
         }
     }
 
@@ -68,9 +107,11 @@ public class Container : ParentContainer {
             player.abilities.RemoveAt(0);
             ContainerAbilityChanged(true, abilities.Count);
             api.ChangeSprite(this);
+            _setability(player);
         }
 
    }
+
     public virtual void PlayerAbsorb(Player player)
     {
         api.AddToSnapshot(this);
@@ -83,7 +124,7 @@ public class Container : ParentContainer {
             PlayerAbsorbAbilities(player);
         else
         {
-            if (abilities[0] == player.abilities[0])
+            if (abilities[0].abilitytype == player.abilities[0].abilitytype)
                 PlayerAbsorbAbilities(player);
             else
                 Swap(player);
@@ -103,7 +144,7 @@ public class Container : ParentContainer {
             PlayerReleaseAbilities(player);
         else
         {
-            if (player.abilities[0] == abilities[0])
+            if (player.abilities[0].abilitytype == abilities[0].abilitytype)
                 PlayerReleaseAbilities(player);
             else
                 Swap(player);
@@ -162,6 +203,7 @@ public class Container : ParentContainer {
                 Swap(player);*/
         }
         api.ChangeSprite(this);
+        _setability(player);
         if (this is FunctionalContainer && ((FunctionalContainer)this).on)
             CheckReservedList();
     }
@@ -207,4 +249,14 @@ public class Container : ParentContainer {
     {
         return;
     }
+    private void _setability(Player player)
+    {
+        abilitycount = abilities.Count;
+        player.abilitycount = player.abilities.Count;
+        if (abilities.Count != 0)
+            abilitytype = abilities[0].abilitytype;
+        if (player.abilities.Count != 0)
+            player.abilitytype = player.abilities[0].abilitytype;
+    }
+    
 }

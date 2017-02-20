@@ -3,9 +3,15 @@ using System.Collections.Generic;
 using System;
 
 public class DynamicContainer : FunctionalContainer {
-    
+
     // Use this for initialization
-    void Start () {
+    public override void Run() {
+        abilities = new List<Ability>();
+        for (int i = 0; i < abilitycount; i++)
+        {
+            abilities.Add(Ability.GetAbilityInstance(abilitytype));
+        }
+        api.ChangeSprite(this);
         moved = 0;
         shouldmove = abilities.Count;
         reservedmoveint = new List<int>();
@@ -14,6 +20,7 @@ public class DynamicContainer : FunctionalContainer {
         stucklevel = 0;
         stuckstatus = 0;
         firstmove = true;
+        base.Run();
 	}
 	
 	// Update is called once per frame
@@ -34,7 +41,7 @@ public class DynamicContainer : FunctionalContainer {
 
 public class CloneableDynamicContainer : CloneableUnit
 {
-    public List<AbilityType> abilities;
+    public List<Ability> abilities;
     public bool on;
     public int moved;
     public int shouldmove;
@@ -52,7 +59,7 @@ public class CloneableDynamicContainer : CloneableUnit
         original = container;
         reservedmovebool = new List<bool>();
         reservedmoveint = new List<int>();
-        abilities = new List<AbilityType>();
+        abilities = new List<Ability>();
         for (int i = 0; i < container.abilities.Count; i++)
             abilities.Add(container.abilities[i]);
         for (int i = 0; i < container.reservedmovebool.Count; i++)
@@ -75,7 +82,7 @@ public class CloneableDynamicContainer : CloneableUnit
     {
         base.Undo();
         DynamicContainer original = (DynamicContainer)base.original;
-        original.abilities = new List<AbilityType>();
+        original.abilities = new List<Ability>();
         original.reservedmovebool = new List<bool>();
         original.reservedmoveint = new List<int>();
         for (int i = 0; i < abilities.Count; i++)
