@@ -32,9 +32,9 @@ public class FunctionalContainer : Container {
         api.AddToSnapshot(ConnectedUnits);
         api.AddToSnapshot(player);
         //api.TakeSnapshot();
-        switch (abilities[0])
+        switch (abilities[0].abilitytype)
         {
-            case AbilityType.Fuel: Action_Fuel(true); break; 
+            case AbilityType.Fuel: Action_Fuel(true); break;
         }
     }
 
@@ -50,7 +50,7 @@ public class FunctionalContainer : Container {
             dir = Toolkit.ReverseDirection(dir);
         }
         int count = abilities.Count;
-        if (count != 0 && abilities[0] != AbilityType.Fuel)
+        if (count != 0 && abilities[0].abilitytype != AbilityType.Fuel)
             count = 0;
         if (first)
         {
@@ -176,6 +176,7 @@ public class FunctionalContainer : Container {
     }
     public void Action_Fuel_Continue(Direction dir,int count)
     {
+        Debug.Log(count);
         gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = true;
         api.RemoveFromStuckList(this);
         if (count == 0)
@@ -204,14 +205,14 @@ public class FunctionalContainer : Container {
     }
     protected override void ContainerAbilityChanged(bool increased, int count)
     {
-        try
+        /*try
         {
-            if (abilities[0] != AbilityType.Fuel)
+            if (abilities[0].abilitytype != AbilityType.Fuel)
                 return;
         }
         catch
         {
-        }
+        }*/
         if (increased && count == 1)
         {
             shouldmove = 1;
@@ -219,6 +220,7 @@ public class FunctionalContainer : Container {
         }
         if (on)
         {
+            Debug.Log("hereee");
             if (increased) {
                 if (stucklevel < 1)
                     Action_Fuel_Continue(direction, count);
@@ -236,6 +238,7 @@ public class FunctionalContainer : Container {
             }
             else
             {
+                Debug.Log(stucklevel);
                 if (stucklevel < 1)
                 {
                     Action_Fuel_Continue(Toolkit.ReverseDirection(direction), count);
@@ -296,6 +299,8 @@ public class FunctionalContainer : Container {
         bool increased = reservedmovebool[0];
         reservedmoveint.RemoveAt(0);
         reservedmovebool.RemoveAt(0);
+        Debug.Log(count);
+        Debug.Log(increased);
         ContainerAbilityChanged(increased, count);
         api.MergeSnapshot();
     }
@@ -307,7 +312,6 @@ public class FunctionalContainer : Container {
 
     protected override void AddToReservedMove(bool increased, int count)
     {
-        Debug.Log("here here here");
         if (increased && count == 1)
         {
             shouldmove = 1;

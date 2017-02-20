@@ -59,6 +59,7 @@ public class APIGraphic{
     {
         //player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
         player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
+        player.gameObject.GetComponent<PlayerGraphics>().Move_Animation(player.direction);
     }
 
     // Block to Branch
@@ -115,6 +116,7 @@ public class APIGraphic{
     public void MovePlayerFinished(GameObject player_obj)
     {
         logicalengine.graphic_PlayerMoveAnimationFinished(player_obj.GetComponent<Player>());
+        player_obj.GetComponent<PlayerGraphics>().Move_Finished();
            
     }    
     public void Fall(Player player, Vector2 position)
@@ -246,7 +248,6 @@ public class APIGraphic{
 
     public void UnitChangeSprite(Unit unit)
     {
-        //Debug.Log(unit);
         if (unit is SimpleContainer)
             graphicalengine.Simple_Container((SimpleContainer)unit);
         else if (unit is DynamicContainer)

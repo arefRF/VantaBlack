@@ -7,7 +7,7 @@ public class LogicalEngine {
     public APIInput apiinput;
     public APIUnit apiunit;
     public Database database;
-    SubEngine_Initializer initializer;
+    public SubEngine_Initializer initializer;
     InputController inputcontroller;
     int sizeX, sizeY;
     public List<Unit> stuckedunits;
@@ -33,6 +33,10 @@ public class LogicalEngine {
     {
         database.units = initializer.init();
         database.state = State.Idle;
+        for (int i = 0; i < sizeX; i++)
+            for (int j = 0; j < sizeY; j++)
+                for (int k = 0; k < database.units[i, j].Count; k++)
+                    database.units[i, j][k].Run();
         inputcontroller = new InputController(this);
         //Applygravity();
     }
