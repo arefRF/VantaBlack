@@ -88,7 +88,6 @@ public class PlayerGraphics : MonoBehaviour {
     public void ChangeColor()
     {
         Vector3 color = Ability_Color(player.abilities);
-           
         if (player.abilities[0].abilitytype == AbilityType.Key)
         {
             transform.GetChild(1).GetChild(0).GetComponent<SpriteRenderer>().color = new Color(color.x,color.y,color.z,1);
