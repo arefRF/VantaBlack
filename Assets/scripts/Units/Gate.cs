@@ -13,6 +13,11 @@ public class Gate : Container {
         base.Run();
     }
 
+    public override void SetInitialSprite()
+    {
+
+    }
+
     public override bool PlayerMoveInto(Direction dir)
     {
         return false;
