@@ -20,4 +20,15 @@ public class Ability{
             default: return null;
         }
     }
+
+
+    public static Jump ConvertPlayerJumpToContainer(Jump jump)
+    {
+        return null;
+    }
+
+    public static Jump ConvertContainerJumpToPlayer(Jump jump)
+    {
+        return null;
+    }
 }

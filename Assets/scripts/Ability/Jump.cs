@@ -19,7 +19,7 @@ public class Jump : Ability {
         shouldjump = GetShouldJump(player.position, direction);
         Debug.Log("shouldjump: " + shouldjump);
         Vector2 finalpos = player.position + shouldjump * Toolkit.DirectiontoVector(direction);
-        engine.apigraphic.Jump(player, this, finalpos);
+        engine.apigraphic.Jump(player, this, finalpos, direction);
         
     }
 
