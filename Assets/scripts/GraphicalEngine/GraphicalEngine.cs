@@ -71,7 +71,14 @@ public class GraphicalEngine : MonoBehaviour {
         else
             container.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load("", typeof(Sprite));
         Container_Change_Number(container);
-        container.transform.GetChild(3).gameObject.SetActive(false);
+        try {
+            container.transform.GetChild(3).gameObject.SetActive(false);
+        }
+        catch
+        {
+            Debug.Log(container.transform.childCount);
+            Debug.Log(container.transform.parent);
+        }
 
         //Change Color
         Set_Simple_Color(container);
