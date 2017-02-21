@@ -277,7 +277,7 @@ public class Player : Unit
         {
             case AbilityType.Fuel: return false;
             case AbilityType.Direction: return true;
-            case AbilityType.Jump: return true;
+            case AbilityType.Jump: ((Jump)abilities[0]).Action(this, Toolkit.ReverseDirection(api.engine.database.gravity_direction)); return true;
             case AbilityType.Blink: return false;
             case AbilityType.Gravity: return false;
             case AbilityType.Rope: return false;
@@ -291,7 +291,7 @@ public class Player : Unit
         {
             case AbilityType.Fuel: return true;
             case AbilityType.Direction: return false;
-            case AbilityType.Jump: ((Jump)abilities[0]).Action(this, dir); return true;
+            case AbilityType.Jump: return false;
             case AbilityType.Blink: return true;
             case AbilityType.Gravity: return true;
             case AbilityType.Rope: return true;

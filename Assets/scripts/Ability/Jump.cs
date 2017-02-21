@@ -8,7 +8,6 @@ public class Jump : Ability {
     LogicalEngine engine;
 	public Jump()
     {
-        engine = Starter.GetEngine();
         abilitytype = AbilityType.Jump;
     }
 
@@ -16,9 +15,9 @@ public class Jump : Ability {
     {
         Debug.Log("jump action begin");
         shouldjump = GetShouldJump(player.position, direction);
-        Debug.Log("shouldjump");
+        Debug.Log("shouldjump: " + shouldjump);
         Vector2 finalpos = player.position + shouldjump * Toolkit.DirectiontoVector(direction);
-        engine.apigraphic.Jump(player, this, finalpos);
+        Starter.GetEngine().apigraphic.Jump(player, this, finalpos);
     }
 
     public void JumpedOnce(Player player, Direction direction)
@@ -40,13 +39,20 @@ public class Jump : Ability {
         {
             position = Toolkit.VectorSum(position, direction);
             if (Toolkit.IsEmpty(position))
+            {
                 num++;
-            if (Toolkit.HasRamp(position) && !Toolkit.IsdoubleRamp(position))
+            }
+            else if (Toolkit.HasRamp(position) && !Toolkit.IsdoubleRamp(position))
             {
                 if (Toolkit.GetRamp(position).IsOnRampSide(Toolkit.ReverseDirection(direction)))
                     num++;
+                else
+                    break;
             }
-            break;
+            else
+            {
+                break;
+            }
         }
         return num;
     }
