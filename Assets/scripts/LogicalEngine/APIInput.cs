@@ -15,7 +15,7 @@ public class APIInput{
 
     public void Action_Key(Direction dir)
     {
-        
+        engine.ActionKeyPressed(dir);
     }
     
     public APIInput(LogicalEngine engine)
