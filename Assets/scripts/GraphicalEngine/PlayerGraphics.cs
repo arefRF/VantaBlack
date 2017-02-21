@@ -35,6 +35,7 @@ public class PlayerGraphics : MonoBehaviour {
 
     public void Lean_Up()
     {
+        
         // transform.GetChild(0).localPosition += new Vector3(0, 1f,0);
         animator.SetInteger("Lean", 1);
         animator.SetBool("isLean", true);
