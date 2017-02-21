@@ -153,7 +153,21 @@ public class APIGraphic{
         logicalengine.graphic_GameObjectMoveAnimationFinished(obj, unit);
     }
 
-    public void Jump(Player player, Vector2 position)
+    public void Jump(Player player,Ability jump_ability, Vector2 position)
+    {
+        
+    }
+    public void Jumped_One(Ability abil)
+    {
+
+    }
+
+    public void Jump_Hit(Player player,Direction dir)
+    {
+
+    }
+
+    public void Jump_Hit_Finish(Player player)
     {
 
     }
