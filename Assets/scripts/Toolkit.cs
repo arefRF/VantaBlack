@@ -470,6 +470,7 @@ public sealed class Toolkit{
 
     public static bool IsConnectedFromPosition(Unit unit, Vector2 pos)
     {
+
             for (int i = 0; i < database.units[(int)pos.x, (int)pos.y].Count; i++)
             {
                 Unit u = database.units[(int)pos.x, (int)pos.y][i];
@@ -477,7 +478,9 @@ public sealed class Toolkit{
                 {
                     return true;
                 }
-            } 
+            }
+      
+        
       
 
 
