@@ -481,14 +481,16 @@ public sealed class Toolkit{
 
     public static bool IsConnectedFromPosition(Unit unit, Vector2 pos)
     {
-            for (int i = 0; i < database.units[(int)pos.x, (int)pos.y].Count; i++)
+        for (int i = 0; i < database.units[(int)pos.x, (int)pos.y].Count; i++)
+        {
+            Unit u = database.units[(int)pos.x, (int)pos.y][i];
+            if (u.gameObject.transform.parent == unit.gameObject.transform.parent)
             {
-                Unit u = database.units[(int)pos.x, (int)pos.y][i];
-                if (u.gameObject.transform.parent == unit.gameObject.transform.parent)
-                {
-                    return true;
-                }
-            }         
+                if (u is Gate)
+                    return false;
+                return true;
+            }
+        }         
         return false;
     }
 
@@ -499,8 +501,6 @@ public sealed class Toolkit{
             Unit u = database.units[(int)pos.x, (int)pos.y][i];
             if (u.gameObject.transform.parent == unit.gameObject.transform.parent)
             {
-                if (u is Gate)
-                    return false;
                 if (u is Ramp && ((Ramp)u).IsOnRampSide(Toolkit.VectorToDirection(unit.position - pos)))
                     return false;
                 return true;

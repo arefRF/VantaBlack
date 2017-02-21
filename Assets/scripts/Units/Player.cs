@@ -237,8 +237,6 @@ public class Player : Unit
             else
             {
                 Vector2 temp = Toolkit.GetRamp(pos).fallOn(this, Toolkit.ReverseDirection(Starter.GetGravityDirection()));
-                Debug.Log(temp);
-                Debug.Log(position);
                 if (temp == position)
                 {
                     api.graphicalengine_Land(this, position);
