@@ -22,7 +22,6 @@ public class Gate : Container {
     {
         if (capacity == abilities.Count)
             return;
-        Debug.Log("here");
         try {
             if (player.abilities[0].abilitytype != AbilityType.Key)
                 return;
@@ -40,6 +39,7 @@ public class Gate : Container {
         {
             abilities.Add(player.abilities[0]);
             player.abilities.RemoveAt(0);
+            _setability(player);    
             api.engine.apigraphic.UnitChangeSprite(this);
         }
     }

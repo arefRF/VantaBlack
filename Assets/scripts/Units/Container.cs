@@ -11,7 +11,7 @@ public class Container : ParentContainer {
 
     public override void SetInitialSprite()
     {
-        bool[] notconnected = Toolkit.GetConnectedSides(this);
+        bool[] notconnected = Toolkit.GetConnectedSidesForContainer(this);
         if (notconnected[0] && notconnected[1] && notconnected[2] && notconnected[3])
             gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Container[1];
         else if (notconnected[0] && notconnected[1] && notconnected[2])
@@ -249,7 +249,7 @@ public class Container : ParentContainer {
     {
         return;
     }
-    private void _setability(Player player)
+    protected void _setability(Player player)
     {
         abilitycount = abilities.Count;
         player.abilitycount = player.abilities.Count;

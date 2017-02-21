@@ -457,6 +457,17 @@ public sealed class Toolkit{
         return null;
     }
 
+    public static bool[] GetConnectedSidesForContainer(Unit unit)
+    {
+        bool[] result = new bool[4];
+        result[0] = !IsConnectedFromPositionForContainer(unit, VectorSum(unit.position, new Vector2(0, 1)));
+        result[1] = !IsConnectedFromPositionForContainer(unit, VectorSum(unit.position, new Vector2(1, 0)));
+        result[2] = !IsConnectedFromPositionForContainer(unit, VectorSum(unit.position, new Vector2(0, -1)));
+        result[3] = !IsConnectedFromPositionForContainer(unit, VectorSum(unit.position, new Vector2(-1, 0)));
+
+        return result;
+    }
+
     public static bool[] GetConnectedSides(Unit unit)
     {
         bool[] result = new bool[4];
@@ -470,7 +481,6 @@ public sealed class Toolkit{
 
     public static bool IsConnectedFromPosition(Unit unit, Vector2 pos)
     {
-
             for (int i = 0; i < database.units[(int)pos.x, (int)pos.y].Count; i++)
             {
                 Unit u = database.units[(int)pos.x, (int)pos.y][i];
@@ -478,13 +488,24 @@ public sealed class Toolkit{
                 {
                     return true;
                 }
+            }         
+        return false;
+    }
+
+    public static bool IsConnectedFromPositionForContainer(Unit unit, Vector2 pos)
+    {
+        for (int i = 0; i < database.units[(int)pos.x, (int)pos.y].Count; i++)
+        {
+            Unit u = database.units[(int)pos.x, (int)pos.y][i];
+            if (u.gameObject.transform.parent == unit.gameObject.transform.parent)
+            {
+                if (u is Gate)
+                    return false;
+                if (u is Ramp && ((Ramp)u).IsOnRampSide(Toolkit.VectorToDirection(unit.position - pos)))
+                    return false;
+                return true;
             }
-      
-        
-      
-
-
-        
+        }
         return false;
     }
 }
