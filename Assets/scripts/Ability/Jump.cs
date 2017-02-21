@@ -27,14 +27,17 @@ public class Jump : Ability {
     public void JumpedOnce(Player player, Direction direction)
     {
         Debug.Log("jumped once");
+        jumped++;
         engine.apiunit.RemoveFromDatabase(player);
         player.position += Toolkit.DirectiontoVector(direction);
         engine.apiunit.AddToDatabase(player);
         if (shouldjump == jumped) {
-            if(number != shouldjump)
-                engine.apigraphic.Jump_Hit(player, direction);
+            if (number != shouldjump)
+                engine.apigraphic.Jump_Hit(player, direction, this);
             else
+            {
                 engine.Applygravity();
+            }
         }
     }
 
