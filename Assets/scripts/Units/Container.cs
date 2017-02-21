@@ -60,6 +60,7 @@ public class Container : ParentContainer {
         player.abilities = temp;
         api.ChangeSprite(this);
         _setability(player);
+        api.engine.apigraphic.Absorb(player, this);
         if (this is FunctionalContainer) {
             if ((player.abilities.Count != 0 && player.abilities[0].abilitytype == AbilityType.Fuel))
             {
