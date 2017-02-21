@@ -136,18 +136,12 @@ public class APIGraphic{
         logicalengine.graphic_LandFinished(player);
         
     }
-    
+
     public void LandOnRamp(Player player, Vector2 position, Unit fallonunit, int ramptype)
     {
-        player.GetComponent<PlayerPhysics>().Land_On_Ramp(position,ramptype);
+        player.GetComponent<PlayerPhysics>().Land_On_Ramp(position, ramptype);
         logicalengine.graphic_LandFinished(player);
     }
-
-    public void MovePlayerToBranch(Player player, Vector2 position, bool isonramp)
-    {
-        player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
-    }
-
 
     public void MoveGameObject(GameObject obj, Vector2 pos, Unit unit)
     {
@@ -160,12 +154,6 @@ public class APIGraphic{
     }
 
     public void Jump(Player player, Vector2 position)
-    {
-
-    }
-
-
-    public void MoveObject(Unit u)
     {
 
     }
@@ -192,9 +180,11 @@ public class APIGraphic{
         gl.Lean_Finished();
     }
 
+    // Change Color of Player in absorb , release , swap
     public void Absorb(Player player, Container container)
     {
-        
+        Debug.Log("change Color");
+        player.GetComponent<PlayerGraphics>().ChangeColor();
     }
 
 

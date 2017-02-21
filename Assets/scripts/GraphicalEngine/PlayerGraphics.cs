@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerGraphics : MonoBehaviour {
     public float move_time = 0.5f;
@@ -7,12 +8,14 @@ public class PlayerGraphics : MonoBehaviour {
     private LogicalEngine engine;
     private Vector2 unmoved_pos;
     private Animator animator;
+    private Player player;
     void Start()
     {
         unmoved_pos = transform.position;
         engine = Starter.GetEngine();
         api = engine.apigraphic;
         animator = GetComponent<Animator>();
+        player = GetComponent<Player>();
     }
 
 
@@ -51,33 +54,10 @@ public class PlayerGraphics : MonoBehaviour {
         transform.GetChild(0).localPosition = new Vector2(0, 0);
         transform.GetChild(1).localPosition = new Vector2(0, 0);
     }
-    public void Player_Move(GameObject player,Vector2 end)
-    {
-        StartCoroutine(Player_Move_Coroutine(end,true));
-    }
 
     private Vector2 Camera_Pos()
     {
         return (Vector2)Camera.main.transform.position + ((Vector2)transform.position - unmoved_pos);
-    }
-
-
-    private IEnumerator Smooth_Move_Camera(Vector3 end)
-    {
-
-        float sqrRemainingDistance = (Camera.main.transform.position - end).sqrMagnitude;
-
-        while (sqrRemainingDistance > float.Epsilon)
-        {
-
-            sqrRemainingDistance = (Camera.main.transform.position - end).sqrMagnitude;
-            Vector3 newPostion = Vector3.MoveTowards(Camera.main.transform.position, end,  2 * Time.deltaTime);
-            Camera.main.transform.position = newPostion;
-            yield return null;
-        }
- 
-
-
     }
 
     public void Move_Animation(Direction dir)
@@ -93,38 +73,9 @@ public class PlayerGraphics : MonoBehaviour {
     {
         animator.SetInteger("Walk", 0);
     }
-    private IEnumerator Move_Camera_Coroutine_X(float pos)
-    {
-        Debug.Log("Move Camera coroutine");
-        Debug.Log(pos);
-        Camera main_camera = Camera.main;
-        float remain = Mathf.Abs(main_camera.transform.position.x - pos);
-        Vector3 end = new Vector3(pos, main_camera.transform.position.y, -15);
-        while ( remain > float.Epsilon)
-        {
-            remain = Mathf.Abs(main_camera.transform.position.x - pos);
-            main_camera.transform.position = Vector3.MoveTowards(main_camera.transform.position,end ,Time.deltaTime * 1/10);
-        }
-        yield return null;
-    }
-
-    private IEnumerator Move_Camera_Coroutine_Y(float pos)
-    {
-        Camera main_camera = Camera.main;
-        float remain = Mathf.Abs(main_camera.transform.position.y - pos);
-        while (remain > float.Epsilon)
-        {
-            remain = Mathf.Abs(main_camera.transform.position.y - pos);
-            main_camera.transform.position = Vector3.MoveTowards(main_camera.transform.position, new Vector2( main_camera.transform.position.x, pos), Time.deltaTime);
-        }
-        yield return null;
-    }
     public void Player_Change_Direction(Player player,Direction dir)
-    { /*
-        if (dir == Direction.Right)
-            transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0, 0, 0));
-        else if (dir == Direction.Left)
-            transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0, 180, 0));*/
+    { 
+
         api.PlayerChangeDirectionFinished(gameObject.GetComponent<Player>());
 
     }  
@@ -133,36 +84,33 @@ public class PlayerGraphics : MonoBehaviour {
     {
         api.PlayerChangeDirectionFinished(gameObject.GetComponent<Player>());
     }
-   
-    private IEnumerator Player_Move_Coroutine(Vector2 end,bool call_finish)
-    {
-        Player player = gameObject.GetComponent<Player>();
-        float remain_distance = ((Vector2)transform.position - end).sqrMagnitude;
-        while(remain_distance > float.Epsilon)
-        {
-            remain_distance = ((Vector2)transform.position - end).sqrMagnitude;
-            Vector2 new_pos = Vector2.MoveTowards(transform.position, end, Time.deltaTime * 1 / move_time);
-            transform.position = new_pos;
-            yield return null;
-        }
-        if (call_finish)
-            api.MovePlayerFinished(gameObject);
 
+    public void ChangeColor()
+    {
+        Vector3 color = Ability_Color(player.abilities);
+           
+            if (player.abilities[0].abilitytype == AbilityType.Key)
+            {
+                transform.GetChild(1).GetChild(0).GetComponent<SpriteRenderer>().color = new Color(color.x,color.y,color.z,1);
+            }
     }
 
-    private IEnumerator Ramp_Move_Coroutine(Vector2 end, Vector2 end2)
+    private Vector3 Ability_Color(List<Ability> ability)
     {
-        Player player = gameObject.GetComponent<Player>();
-        Debug.Log("Ramp Co");
-        float remain_distance = ((Vector2)transform.position - end).sqrMagnitude;
-        while (remain_distance > float.Epsilon)
+        if (ability.Count != 0)
         {
-            remain_distance = ((Vector2)transform.position - end).sqrMagnitude;
-            Vector2 new_pos = Vector2.MoveTowards(transform.position, end, Time.deltaTime * 1 / move_time);
-            transform.position = new_pos;
-            yield return null;
+            if (ability[0].abilitytype == AbilityType.Key)
+            {
+                return new Vector3(1, 1, 1);
+            }
+            else if (ability[0].abilitytype == AbilityType.Fuel)
+            {
+                return new Vector3(0, 0.941f, 0.654f);
+            }
         }
-        Player_Move(gameObject,end2);
+
+        // else white
+        return new Vector3(1, 1, 1);
     }
 
 }
