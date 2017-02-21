@@ -22,13 +22,13 @@ public class Ability{
     }
 
 
-    public static Jump ConvertPlayerJumpToContainer(Jump jump)
+    public virtual Ability ConvertPlayerAbilityToContainer()
     {
-        return null;
+        return this;
     }
 
-    public static Jump ConvertContainerJumpToPlayer(Jump jump)
+    public virtual Ability ConvertContainerAbilityToPlayer()
     {
-        return null;
+        return this;
     }
 }

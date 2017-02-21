@@ -70,4 +70,16 @@ public class Jump : Ability {
         }
         return num;
     }
+
+    public override Ability ConvertContainerAbilityToPlayer()
+    {
+        number = 2;
+        return this;
+    }
+
+    public override Ability ConvertPlayerAbilityToContainer()
+    {
+        number = 4;
+        return this;
+    }
 }
