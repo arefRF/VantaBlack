@@ -209,10 +209,10 @@ public class PlayerPhysics : MonoBehaviour
     }
 
     // jump takes jump ability to call function
-    public void Jump(Vector2 pos,Jump ability)
+    public void Jump(Vector2 pos,Jump ability,Direction dir)
     {
         jump_ability = ability;
-        StartCoroutine(Jump_couroutine(pos,2));
+        StartCoroutine(Jump_couroutine(pos,2,dir));
     }
 
     
@@ -369,18 +369,25 @@ public class PlayerPhysics : MonoBehaviour
 
     }
 
-    private IEnumerator Jump_couroutine(Vector2 pos,float jump_time)
+    private IEnumerator Jump_couroutine(Vector2 pos,float jump_time,Direction direction)
     {
+        float jumped = 0;
         float remain_distance = ((Vector2)player_transofrm.position - pos).sqrMagnitude;
         while(remain_distance > float.Epsilon)
         {
             remain_distance = ((Vector2)player_transofrm.position - pos).sqrMagnitude;
             player_transofrm.position = Vector3.MoveTowards(player_transofrm.position, pos, Time.deltaTime / move_time);
-            
+            Check_Jump(direction);
             yield return null;
         }
 
         api.Jump_Finish(player);
+    }
+
+    private void Check_Jump(Direction direction)
+    {
+        if (((Vector2)player_transofrm.position - player.position).sqrMagnitude >= 1)
+            jump_ability.JumpedOnce(player,direction);
     }
     private Vector2 Ramp_To_Corner_Pos(Direction gravity,Vector2 target)
     {

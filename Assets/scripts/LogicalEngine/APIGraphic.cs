@@ -153,14 +153,14 @@ public class APIGraphic{
         logicalengine.graphic_GameObjectMoveAnimationFinished(obj, unit);
     }
 
-    public void Jump(Player player,Ability jump_ability, Vector2 position)
+    public void Jump(Player player,Ability jump_ability, Vector2 position,Direction dir)
     {
-        
+        player.GetComponent<PlayerPhysics>().Jump(position, (Jump)jump_ability,dir);
     }
 
     public void Jump_Finish(Player player)
     {
-
+        
     }
     public void Jumped_One(Ability abil)
     {
