@@ -8,6 +8,7 @@ public class Gate : Container {
 
     public override void Run()
     {
+        abilities = new List<Ability>();
         capacity = 1;
         base.Run();
     }
@@ -21,6 +22,7 @@ public class Gate : Container {
     {
         if (capacity == abilities.Count)
             return;
+        Debug.Log("here");
         try {
             if (player.abilities[0].abilitytype != AbilityType.Key)
                 return;

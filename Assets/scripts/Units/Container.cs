@@ -10,7 +10,7 @@ public class Container : ParentContainer {
     public int capacity = 4;
 
     public override void SetInitialSprite()
-    {/*
+    {
         bool[] notconnected = Toolkit.GetConnectedSides(this);
         if (notconnected[0] && notconnected[1] && notconnected[2] && notconnected[3])
             gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Container[1];
@@ -43,7 +43,6 @@ public class Container : ParentContainer {
         else if (notconnected[3])
             gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Container[15];
         api.ChangeSprite(this);
-      */ 
     }
 
     void Start()
