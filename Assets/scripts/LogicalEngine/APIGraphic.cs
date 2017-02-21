@@ -157,14 +157,19 @@ public class APIGraphic{
     {
         
     }
-    public void Jumped_One(Ability abil)
+
+    public void Jump_Finish(Player player)
     {
 
+    }
+    public void Jumped_One(Ability abil)
+    {
+        
     }
 
     public void Jump_Hit(Player player,Direction dir)
     {
-
+        Jump_Hit_Finish(player);
     }
 
     public void Jump_Hit_Finish(Player player)
