@@ -13,11 +13,14 @@ public class Jump : Ability {
 
     public void Action(Player player, Direction direction)
     {
+        if (engine == null)
+            engine = Starter.GetEngine();
         Debug.Log("jump action begin");
         shouldjump = GetShouldJump(player.position, direction);
         Debug.Log("shouldjump: " + shouldjump);
         Vector2 finalpos = player.position + shouldjump * Toolkit.DirectiontoVector(direction);
-        Starter.GetEngine().apigraphic.Jump(player, this, finalpos);
+        engine.apigraphic.Jump(player, this, finalpos);
+        
     }
 
     public void JumpedOnce(Player player, Direction direction)
@@ -30,6 +33,11 @@ public class Jump : Ability {
             engine.apigraphic.Jump_Hit(player, direction);
         else
             engine.Applygravity();
+    }
+
+    public void JumpHitFinished(Player player)
+    {
+        engine.Applygravity();
     }
 
     private int GetShouldJump(Vector2 position, Direction direction)
