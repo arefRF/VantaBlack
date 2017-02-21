@@ -389,43 +389,15 @@ public class PlayerPhysics : MonoBehaviour
     }
     private void Rotate_On_Block()
     {
-        transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
-        if (GetComponent<Player>().direction == Direction.Right)
-            transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0, 0, 0));
-        else if (GetComponent<Player>().direction == Direction.Left)
-            transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0, 0, 0));
+
     }
 
    private void Rotate_On_Ramp(int type)
     {
-        Player player = GetComponent<Player>();
-        if (player.direction == Direction.Right)
-        {
-           // StartCoroutine(Rotate_Co(new Vector3(0, 0, Ramp_Rotation_Value(type, player.direction))));
-            transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0, 0, Ramp_Rotation_Value(type, player.direction)));
-        }
-        else if (player.direction == Direction.Left)
-        {
-           // StartCoroutine(Rotate_Co(new Vector3(0, 180, Ramp_Rotation_Value(type, player.direction))));
-            transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0, 0, Ramp_Rotation_Value(type, player.direction)));
-        }
+
     }
 
 
-
-    private IEnumerator Rotate_Co(Vector3 rot)
-    {
-        Debug.Log("Rotate co");
-        Vector3 rotation = new Vector3(transform.GetChild(0).rotation.x, transform.GetChild(0).rotation.y, transform.GetChild(0).rotation.z);
-        float remain = (rotation - rot).sqrMagnitude;
-        while(remain > float.Epsilon)
-        {
-            remain = (rotation - rot).sqrMagnitude;
-            rotation = Vector3.MoveTowards(rotation, rot, Time.deltaTime / 0.3f);
-            transform.GetChild(0).rotation = Quaternion.Euler(rotation);
-            yield return null;
-        }
-    }
     private float Ramp_Rotation_Value(int type,Direction dir)
     {
         if (type == 4)
