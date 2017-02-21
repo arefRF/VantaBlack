@@ -194,7 +194,7 @@ public class APIGraphic{
 
     public void Absorb(Player player, Container container)
     {
-
+        
     }
 
 
