@@ -460,9 +460,10 @@ public class LogicalEngine {
                         }
                         else
                         {
+                            Debug.Log("herere");
+                            player.position = nextpos;
                             database.units[(int)player.position.x, (int)player.position.y].Add(player);
-                            graphic_PlayerMoveAnimationFinished(player);
-                            return;
+                            apigraphic.MovePlayer_Simple_4(player, player.position);
                         }
                     }
                 }

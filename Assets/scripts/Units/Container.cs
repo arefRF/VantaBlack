@@ -96,6 +96,7 @@ public class Container : ParentContainer {
             ContainerAbilityChanged(false, abilities.Count);
             api.ChangeSprite(this);
             _setability(player);
+            api.engine.apigraphic.Absorb(player, this);
         }
     }
 
@@ -108,6 +109,7 @@ public class Container : ParentContainer {
             ContainerAbilityChanged(true, abilities.Count);
             api.ChangeSprite(this);
             _setability(player);
+            api.engine.apigraphic.Absorb(player, this);
         }
 
    }
@@ -214,6 +216,7 @@ public class Container : ParentContainer {
             abilities.Add(player.abilities[0]);
             player.abilities.RemoveAt(0);
             AddToReservedMove(true, abilities.Count);
+            api.engine.apigraphic.Absorb(player, this);
         }
     }
     private void PlayerAbsorbAbilitiesHold(Player player)
@@ -223,6 +226,7 @@ public class Container : ParentContainer {
             player.abilities.Add(abilities[0]);
             abilities.RemoveAt(0);
             AddToReservedMove(false, abilities.Count);
+            api.engine.apigraphic.Absorb(player, this);
         }
     }
     public override bool PlayerMoveInto(Direction dir)
