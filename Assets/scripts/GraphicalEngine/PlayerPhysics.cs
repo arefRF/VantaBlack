@@ -212,6 +212,7 @@ public class PlayerPhysics : MonoBehaviour
     public void Jump(Vector2 pos,Jump ability)
     {
         jump_ability = ability;
+        StartCoroutine(Jump_couroutine(pos,2));
     }
 
     
