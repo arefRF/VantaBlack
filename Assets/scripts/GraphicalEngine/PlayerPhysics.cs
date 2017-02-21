@@ -192,8 +192,7 @@ public class PlayerPhysics : MonoBehaviour
     //fall 
     public void Fall(Vector2 pos)
     {
-        if(last_co!=null)
-            StopCoroutine(last_co);
+        StopAllCoroutines();
         move_type = MoveType.Falling;
         last_co  = StartCoroutine(Accelerated_Move(pos,fall_velocity,fall_acceleration,true));
     }
@@ -371,7 +370,6 @@ public class PlayerPhysics : MonoBehaviour
 
     private IEnumerator Jump_couroutine(Vector2 pos,float jump_time,Direction direction)
     {
-        float jumped = 0;
         float remain_distance = ((Vector2)player_transofrm.position - pos).sqrMagnitude;
         while(remain_distance > float.Epsilon)
         {
