@@ -13,6 +13,7 @@ public class Jump : Ability {
 
     public void Action(Player player, Direction direction)
     {
+        jumped = 0;
         if (engine == null)
             engine = Starter.GetEngine();
         Debug.Log("jump action begin");
@@ -29,10 +30,12 @@ public class Jump : Ability {
         engine.apiunit.RemoveFromDatabase(player);
         player.position += Toolkit.DirectiontoVector(direction);
         engine.apiunit.AddToDatabase(player);
-        if (shouldjump == jumped && number != shouldjump)
-            engine.apigraphic.Jump_Hit(player, direction);
-        else
-            engine.Applygravity();
+        if (shouldjump == jumped) {
+            if(number != shouldjump)
+                engine.apigraphic.Jump_Hit(player, direction);
+            else
+                engine.Applygravity();
+        }
     }
 
     public void JumpHitFinished(Player player)
