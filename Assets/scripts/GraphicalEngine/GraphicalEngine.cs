@@ -97,7 +97,10 @@ public class GraphicalEngine : MonoBehaviour {
 
     public void Gate(Gate gate)
     {
-        //gate.GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load("Doors\\Door part 2", typeof(Sprite));
+        if(gate.abilities[0].abilitytype == AbilityType.Key)
+        {
+            gate.transform.GetChild(6).GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load("Doors/door part 6",typeof(Sprite));
+        }
     }
     
     public void Stop_All_Co()
