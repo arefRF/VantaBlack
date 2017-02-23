@@ -77,10 +77,12 @@ public class InputController {
             //Debug.Log("calling graphicals");
             if (player.movepercentage == 98)
             {
+                Debug.Log("98%");
                 if (!player.ApplyGravity(engine.database.gravity_direction, engine.database.units)){
                     if (!player.Move(direction))
                     {
-                        Lean(player, direction);
+                        /*Debug.Log("here");
+                        Lean(player, direction);*/
                     }
                     else
                     {
