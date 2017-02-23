@@ -60,23 +60,8 @@ public class GetInput : MonoBehaviour {
                   }
                   if (is_space)
                       Get_Space_Arrows();
-                  if (Input.GetKeyDown(KeyCode.W))
-                  {
-                      is_holding = true;
-                      hold_direction = Direction.Up;
-                      StopAllCoroutines();
-                      StartCoroutine(Wait_For_Absorb_Hold());
-                  }
-                  if (Input.GetKeyDown(KeyCode.S))
-                  {
-                      is_holding = true;
-                      hold_direction = Direction.Down;
-                      StopAllCoroutines();
-                      StartCoroutine(Wait_For_Absorb_Hold());
-                  }
                   if (Input.GetKeyDown(KeyCode.A))
                   {
-                      hold_direction = Direction.Left;
                       is_holding = true;
                       StopAllCoroutines();
                       StartCoroutine(Wait_For_Absorb_Hold());
@@ -84,15 +69,19 @@ public class GetInput : MonoBehaviour {
                   if (Input.GetKeyDown(KeyCode.D))
                   {
                       is_holding = true;
-                      hold_direction = Direction.Right;
                       StopAllCoroutines();
-                      StartCoroutine(Wait_For_Absorb_Hold());
+                      StartCoroutine(Wait_For_Release_Hold());
                   }
-                  if (Input.GetKeyUp(KeyCode.D) || Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.S))
+                  if (Input.GetKeyUp(KeyCode.D)  )
                   {
-                      api.AbsorbRelease(hold_direction);
+                      api.Release();
                       is_holding = false;
                   }
+                  if(Input.GetKeyUp(KeyCode.A))
+            {
+                api.Absorb();
+                is_holding = false;
+            }
                   if (Input.GetKeyUp(KeyCode.R))
                   {
                       api.UndoPressed();
@@ -221,7 +210,17 @@ public class GetInput : MonoBehaviour {
         yield return new WaitForSeconds(0.5f);
         if (is_holding)
         {
-            api.AbsorbReleaseHold(hold_direction);
+            api.Absorb_Hold();
+            is_holding = false;
+        }
+    }
+
+    private IEnumerator Wait_For_Release_Hold()
+    {
+        yield return new WaitForSeconds(0.5f);
+        if (is_holding)
+        {
+            api.Release_Hold();
             is_holding = false;
         }
     }

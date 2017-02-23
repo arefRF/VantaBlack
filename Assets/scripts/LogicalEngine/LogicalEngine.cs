@@ -8,7 +8,7 @@ public class LogicalEngine {
     public APIUnit apiunit;
     public Database database;
     public SubEngine_Initializer initializer;
-    InputController inputcontroller;
+    public InputController inputcontroller;
     int sizeX, sizeY;
     public List<Unit> stuckedunits;
     public SnapshotManager snpmanager;

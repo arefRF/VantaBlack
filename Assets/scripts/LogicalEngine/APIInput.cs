@@ -40,12 +40,32 @@ public class APIInput{
 
     public void AbsorbRelease(Direction dir)
     {
-        engine.Input_AbsorbRlease(dir);
+        
+    }
+
+    public void Absorb()
+    {
+        engine.inputcontroller.Absorb();
+    }
+
+    public void Release()
+    {
+        engine.inputcontroller.Release();
+    }
+
+    public void Absorb_Hold()
+    {
+        engine.inputcontroller.AbsorbHold();
+    }
+
+    public void Release_Hold()
+    {
+        engine.inputcontroller.ReleaseHoyld();
     }
 
     public void AbsorbReleaseHold(Direction dir)
     {
-        engine.Input_AbsorbRleaseHold(dir);
+       
     }
     public void ContainerAction()
     {
