@@ -200,7 +200,8 @@ public class Player : Unit
 
     public override bool ApplyGravity(Direction gravitydirection, List<Unit>[,] units)
     {
-        if (lean)
+        Debug.Log("applying gravity");
+        /*if (lean)
             return false;
         if (Stand_On_Ramp(position) || Toolkit.HasBranch(position))
         {
@@ -209,6 +210,7 @@ public class Player : Unit
         Vector2 pos = Toolkit.VectorSum(position, gravitydirection);
         if (!Fall(pos)  && !Stand_On_Ramp(pos))
             return false;
+        Debug.Log("apply");
         while (Fall(pos))
         {
             api.RemoveFromDatabase(this);
@@ -217,9 +219,9 @@ public class Player : Unit
             if (pos.x == 0 || pos.y == 0)
                 break;
             pos = Toolkit.VectorSum(position, gravitydirection);
-        }
+        }   
         state = PlayerState.Falling;
-        api.graphicalengine_Fall(this, position);
+        api.graphicalengine_Fall(this, position);*/
         return true;
     }
 
@@ -269,6 +271,13 @@ public class Player : Unit
         }
         return false;
     }
+
+    private void UseAbility(Ability ability)
+    {
+        abilities.Remove(ability);
+        abilitycount = abilities.Count;
+        api.engine.apigraphic.Absorb(this, null);
+    }
     public bool Action()
     {
         if (abilities.Count == 0)
@@ -277,7 +286,7 @@ public class Player : Unit
         {
             case AbilityType.Fuel: return false;
             case AbilityType.Direction: return true;
-            case AbilityType.Jump: ((Jump)abilities[0]).Action(this, Toolkit.ReverseDirection(api.engine.database.gravity_direction)); return true;
+            case AbilityType.Jump: ((Jump)abilities[0]).Action(this, Toolkit.ReverseDirection(api.engine.database.gravity_direction)); UseAbility(abilities[0]); return true;
             case AbilityType.Blink: return false;
             case AbilityType.Gravity: return false;
             case AbilityType.Rope: return false;

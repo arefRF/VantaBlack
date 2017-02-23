@@ -107,8 +107,6 @@ public class PlayerGraphics : MonoBehaviour {
         }
         else
             path += "player 1";
-        Debug.Log(player.abilities.Count);
-        Debug.Log(path);
         player.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load(path, typeof(Sprite));
     }
     private float[] Ability_Color(List<Ability> ability)
