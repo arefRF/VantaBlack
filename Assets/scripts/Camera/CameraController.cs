@@ -16,6 +16,7 @@ public class CameraController : MonoBehaviour {
         p_transform = player.transform;
         Camera_Bounds_Calculate();
         pos = new Vector3(p_transform.position.x, p_transform.position.y, transform.position.z);
+        AutoMove();
     }
 
 
@@ -24,9 +25,9 @@ public class CameraController : MonoBehaviour {
         vert_view = Camera.main.orthographicSize;
         horz_view = vert_view * Screen.width / Screen.height;
     }
-	
-	// Update is called once per frame
-	void Update () {
+	 
+    public void AutoMove()
+    {
         if (auto_move)
         {
             pos = new Vector3(p_transform.position.x, p_transform.position.y, transform.position.z);
@@ -34,7 +35,8 @@ public class CameraController : MonoBehaviour {
             pos.y = Mathf.Clamp(pos.y, lower_bound, upper_bound);
             transform.position = pos;
         }
-	}
+    }
+
 
     private IEnumerator Move_Couroutine(Vector3 end,float move_time)
     {

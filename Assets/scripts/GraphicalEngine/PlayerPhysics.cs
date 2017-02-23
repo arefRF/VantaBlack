@@ -237,6 +237,7 @@ public class PlayerPhysics : MonoBehaviour
         {
             remain_distance = ((Vector2)player_transofrm.position - end1).sqrMagnitude;
             player_transofrm.position = Vector3.MoveTowards(player_transofrm.position, end1, Time.deltaTime * 1 / move_time);
+            api.Camera_AutoMove();
             yield return null;
         }
         remain_distance = ((Vector2)player_transofrm.position - end2).sqrMagnitude;
@@ -246,6 +247,7 @@ public class PlayerPhysics : MonoBehaviour
             remain_distance = ((Vector2)player_transofrm.position - end2).sqrMagnitude;
             player_transofrm.position = Vector3.MoveTowards(player.transform.position, end2, Time.deltaTime * 1 / move_time);
             Set_Player_Move_Percent(remain_distance);
+            api.Camera_AutoMove();
             yield return null;
         }
         if (call_finish)
@@ -262,6 +264,7 @@ public class PlayerPhysics : MonoBehaviour
         {
             remain_distance = ((Vector2)player_transofrm.position - end1).sqrMagnitude;
             player_transofrm.position = Vector3.MoveTowards(player_transofrm.position, end1, Time.deltaTime * 1 / move_time);
+            api.Camera_AutoMove();
             yield return null;
         }
         remain_distance = ((Vector2)player_transofrm.position - end2).sqrMagnitude;
@@ -271,6 +274,7 @@ public class PlayerPhysics : MonoBehaviour
             remain_distance = ((Vector2)player_transofrm.position - end2).sqrMagnitude;
             player_transofrm.position = Vector3.MoveTowards(player.transform.position, end2, Time.deltaTime * 1 / move_time);
             Set_Player_Move_Percent(remain_distance);
+            api.Camera_AutoMove();
             yield return null;
         }
         if (call_finish)
@@ -287,6 +291,7 @@ public class PlayerPhysics : MonoBehaviour
         {
             remain_distance = ((Vector2)player_transofrm.position -end1).sqrMagnitude;
             player_transofrm.position = Vector3.MoveTowards(player_transofrm.position, end1, Time.deltaTime * 1 /  move_time);
+            api.Camera_AutoMove();
             yield return null;
         }
 
@@ -298,6 +303,7 @@ public class PlayerPhysics : MonoBehaviour
             remain_distance = ((Vector2)player_transofrm.position - end2).sqrMagnitude;
             player_transofrm.position = Vector3.MoveTowards(player.transform.position, end2, Time.deltaTime * 1 /  move_time);
             Set_Player_Move_Percent(remain_distance);
+            api.Camera_AutoMove();
             yield return null;
         }
         if (call_finish)
@@ -320,6 +326,7 @@ public class PlayerPhysics : MonoBehaviour
             remain_distance = ((Vector2)player_transofrm.position - end).sqrMagnitude;
             player_transofrm.position = Vector2.MoveTowards(player_transofrm.position, end, Time.smoothDeltaTime  / move_time);
             Set_Player_Move_Percent(remain_distance);
+            api.Camera_AutoMove();
             yield return null;
         }
 
@@ -357,6 +364,7 @@ public class PlayerPhysics : MonoBehaviour
             remain_distance = ((Vector2)player_transofrm.position - end).sqrMagnitude;
             player_transofrm.position = Vector3.MoveTowards(player_transofrm.position, end, Time.deltaTime * velocity);
             velocity += Time.deltaTime * a;
+            api.Camera_AutoMove();
             yield return null;
         }
         if(call_finish)
@@ -377,6 +385,7 @@ public class PlayerPhysics : MonoBehaviour
             remain_distance = ((Vector2)player_transofrm.position - pos).sqrMagnitude;
             player_transofrm.position = Vector3.MoveTowards(player_transofrm.position, pos, Time.deltaTime / move_time);
             Check_Jump(direction);
+            api.Camera_AutoMove();
             yield return null;
         }
 
