@@ -198,6 +198,10 @@ public class APIGraphic{
         Camera.main.GetComponent<CameraController>().AutoMove();
     }
 
+    public void Fake_Lean(Player player,Direction dir)
+    {
+
+    }
     public void LeanFinished(Player player)
     {
         PlayerGraphics gl = player.GetComponent<PlayerGraphics>();
