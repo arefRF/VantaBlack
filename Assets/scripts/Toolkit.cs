@@ -501,7 +501,7 @@ public sealed class Toolkit{
             Unit u = database.units[(int)pos.x, (int)pos.y][i];
             if (u.gameObject.transform.parent == unit.gameObject.transform.parent)
             {
-                if (u is Ramp && ((Ramp)u).IsOnRampSide(Toolkit.VectorToDirection(unit.position - pos)))
+                if (u is Ramp && ((Ramp)u).IsOnRampSide(VectorToDirection(unit.position - pos)))
                     return false;
                 return true;
             }
