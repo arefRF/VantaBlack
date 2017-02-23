@@ -200,8 +200,7 @@ public class Player : Unit
 
     public override bool ApplyGravity(Direction gravitydirection, List<Unit>[,] units)
     {
-        Debug.Log("applying gravity");
-        /*if (lean)
+        if (lean)
             return false;
         if (Stand_On_Ramp(position) || Toolkit.HasBranch(position))
         {
@@ -210,7 +209,6 @@ public class Player : Unit
         Vector2 pos = Toolkit.VectorSum(position, gravitydirection);
         if (!Fall(pos)  && !Stand_On_Ramp(pos))
             return false;
-        Debug.Log("apply");
         while (Fall(pos))
         {
             api.RemoveFromDatabase(this);
@@ -221,7 +219,7 @@ public class Player : Unit
             pos = Toolkit.VectorSum(position, gravitydirection);
         }   
         state = PlayerState.Falling;
-        api.graphicalengine_Fall(this, position);*/
+        api.graphicalengine_Fall(this, position);
         return true;
     }
 
