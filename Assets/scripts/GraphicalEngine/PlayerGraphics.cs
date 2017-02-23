@@ -88,28 +88,47 @@ public class PlayerGraphics : MonoBehaviour {
 
     public void ChangeColor()
     {
-        Vector3 color = Ability_Color(player.abilities);
-        transform.GetChild(1).GetChild(0).GetComponent<SpriteRenderer>().color = new Color(color.x, color.y, color.z, 1);
-        if (player.abilities.Count == 0)
-            transform.GetChild(1).GetChild(0).GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0);
+        float[] color = Ability_Color(player.abilities);
+        transform.GetChild(1).GetChild(0).GetComponent<SpriteRenderer>().color = new Color(color[0], color[1], color[2], color[3]);
+        ChangeBodyColor();
     }
 
-    private Vector3 Ability_Color(List<Ability> ability)
+    private void ChangeBodyColor()
     {
+        string path = "Player\\";
+        if (player.abilities.Count != 0)
+        {
+            if (player.abilities[0].abilitytype == AbilityType.Fuel)
+                path += "player 1 green";
+            else if (player.abilities[0].abilitytype == AbilityType.Key)
+                path += "player 1";
+            else
+                path += "player 1";
+        }
+        else
+            path += "player 1";
+        Debug.Log(player.abilities.Count);
+        Debug.Log(path);
+        player.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load(path, typeof(Sprite));
+    }
+    private float[] Ability_Color(List<Ability> ability)
+    {
+        float[] color = new float[4];
         if (ability.Count != 0)
         {
             if (ability[0].abilitytype == AbilityType.Key)
             {
-                return new Vector3(1, 1, 1);
+                color = new float[] { 1, 1, 1, 1 };
             }
             else if (ability[0].abilitytype == AbilityType.Fuel)
             {
-                return new Vector3(0, 0.941f, 0.654f);
+                color = new float[] { 0, 0.941f, 0.654f, 1 };
+
             }
         }
-
-        // else white
-        return new Vector3(1, 1, 1);
+        else
+            color = new float[] { 1,1,1,0};
+        return color;
     }
 
 }
