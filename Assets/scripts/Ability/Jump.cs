@@ -20,8 +20,7 @@ public class Jump : Ability {
         Vector2 finalpos = player.position + shouldjump * Toolkit.DirectiontoVector(direction);
         engine.apiunit.AddToSnapshot(player);
         player.state = PlayerState.Jumping;
-        //engine.inputcontroller.LeanUndo(player, player.leandirection);
-        player.lean = false;
+        engine.inputcontroller.LeanUndo(player, player.leandirection);
         player.jumpdirection = direction;
         engine.apigraphic.Jump(player, this, finalpos, direction);
         
