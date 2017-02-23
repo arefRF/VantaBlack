@@ -222,6 +222,10 @@ public class InputController {
                 player.leandirection = direction;
                 engine.apigraphic.Lean(player);
             }
+            else
+            {
+                engine.apigraphic.Fake_Lean(player, direction);
+            }
         }
     }
 }
