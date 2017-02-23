@@ -11,7 +11,7 @@ public class Container : ParentContainer {
 
     public override void SetInitialSprite()
     {
-        bool[] notconnected = Toolkit.GetConnectedSides(this);
+        bool[] notconnected = Toolkit.GetConnectedSidesForContainer(this);
         if (notconnected[0] && notconnected[1] && notconnected[2] && notconnected[3])
             gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Container[1];
         else if (notconnected[0] && notconnected[1] && notconnected[2])
@@ -54,12 +54,14 @@ public class Container : ParentContainer {
     {
         List<Ability> temp = new List<Ability>();
         for (int i = 0; i < abilities.Count; i++)
-            temp.Add(abilities[i]);
+            temp.Add(abilities[i].ConvertContainerAbilityToPlayer());
         abilities.Clear();
-        abilities = player.abilities;
+        for (int i = 0; i < player.abilities.Count; i++)
+            abilities.Add(player.abilities[i].ConvertPlayerAbilityToContainer());
         player.abilities = temp;
         api.ChangeSprite(this);
         _setability(player);
+        api.engine.apigraphic.Absorb(player, this);
         if (this is FunctionalContainer) {
             if ((player.abilities.Count != 0 && player.abilities[0].abilitytype == AbilityType.Fuel))
             {
@@ -91,11 +93,12 @@ public class Container : ParentContainer {
     {
         if(player.abilities.Count<4)
         {
-            player.abilities.Add(abilities[0]);
+            player.abilities.Add(abilities[0].ConvertContainerAbilityToPlayer());
             abilities.RemoveAt(0);
-            ContainerAbilityChanged(false, abilities.Count);
             api.ChangeSprite(this);
             _setability(player);
+            api.engine.apigraphic.Absorb(player, this);
+            ContainerAbilityChanged(false, abilities.Count);
         }
     }
 
@@ -103,11 +106,12 @@ public class Container : ParentContainer {
     {
         if(abilities.Count<4)
         {
-            abilities.Add(player.abilities[0]);
+            abilities.Add(player.abilities[0].ConvertPlayerAbilityToContainer());
             player.abilities.RemoveAt(0);
-            ContainerAbilityChanged(true, abilities.Count);
             api.ChangeSprite(this);
             _setability(player);
+            api.engine.apigraphic.Absorb(player, this);
+            ContainerAbilityChanged(true, abilities.Count);
         }
 
    }
@@ -211,8 +215,9 @@ public class Container : ParentContainer {
     {
         if (abilities.Count < 4)
         {
-            abilities.Add(player.abilities[0]);
+            abilities.Add(player.abilities[0].ConvertPlayerAbilityToContainer());
             player.abilities.RemoveAt(0);
+            api.engine.apigraphic.Absorb(player, this);
             AddToReservedMove(true, abilities.Count);
         }
     }
@@ -220,8 +225,9 @@ public class Container : ParentContainer {
     {
         if (player.abilities.Count < 4)
         {
-            player.abilities.Add(abilities[0]);
+            player.abilities.Add(abilities[0].ConvertContainerAbilityToPlayer());
             abilities.RemoveAt(0);
+            api.engine.apigraphic.Absorb(player, this);
             AddToReservedMove(false, abilities.Count);
         }
     }
@@ -249,7 +255,7 @@ public class Container : ParentContainer {
     {
         return;
     }
-    private void _setability(Player player)
+    protected void _setability(Player player)
     {
         abilitycount = abilities.Count;
         player.abilitycount = player.abilities.Count;

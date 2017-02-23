@@ -19,14 +19,19 @@ public class Player : Unit
     public Direction gravity { get; set; }
 
     public Vector2 nextpos { get; set; }
+
+    public Direction jumpdirection { get; set; }
     public void Awake()
     {
         abilities = new List<Ability>();
         for(int i=0; i<abilitycount; i++)
         {
             abilities.Add(Ability.GetAbilityInstance(abilitytype));
+            if (abilitytype == AbilityType.Jump)
+                ((Jump)abilities[i]).number = 2;
         }
         direction = move_direction[0];
+        state = PlayerState.Idle;
     }
 
     public bool Should_Change_Direction(Direction dir)
@@ -57,10 +62,13 @@ public class Player : Unit
     }
     public bool Can_Lean(Direction dir)
     {
-        if (dir == Direction.Up || dir == Direction.Down)
-            return true;
-        else
-            return false;
+        List<Unit> units = api.engine_GetUnits(Toolkit.VectorSum(position, dir));
+        for(int i=0; i<units.Count; i++)
+        {
+            if (units[i] is Container)
+                return true;
+        }
+        return false;
     }
 
     public override bool Move(Direction dir)
@@ -155,7 +163,9 @@ public class Player : Unit
                 }*/
             }
             else if (units[i].transform.parent.gameObject != parent)
+            {
                 return false;
+            }
         }
         for (int i = 0; i < players.Count; i++)
         {
@@ -205,9 +215,11 @@ public class Player : Unit
             return false;
         }
         Vector2 pos = Toolkit.VectorSum(position, gravitydirection);
+        if (Toolkit.IsdoubleRamp(pos))
+            return false;
         if (!Fall(pos)  && !Stand_On_Ramp(pos))
             return false;
-        while (Fall(pos))
+        while (Fall(pos) || pos.x == 0 || pos.y == 0)
         {
             api.RemoveFromDatabase(this);
             position = pos;
@@ -215,7 +227,7 @@ public class Player : Unit
             if (pos.x == 0 || pos.y == 0)
                 break;
             pos = Toolkit.VectorSum(position, gravitydirection);
-        }
+        }   
         state = PlayerState.Falling;
         api.graphicalengine_Fall(this, position);
         return true;
@@ -237,8 +249,6 @@ public class Player : Unit
             else
             {
                 Vector2 temp = Toolkit.GetRamp(pos).fallOn(this, Toolkit.ReverseDirection(Starter.GetGravityDirection()));
-                Debug.Log(temp);
-                Debug.Log(position);
                 if (temp == position)
                 {
                     api.graphicalengine_Land(this, position);
@@ -269,6 +279,13 @@ public class Player : Unit
         }
         return false;
     }
+
+    private void UseAbility(Ability ability)
+    {
+        abilities.Remove(ability);
+        abilitycount = abilities.Count;
+        api.engine.apigraphic.Absorb(this, null);
+    }
     public bool Action()
     {
         if (abilities.Count == 0)
@@ -277,7 +294,7 @@ public class Player : Unit
         {
             case AbilityType.Fuel: return false;
             case AbilityType.Direction: return true;
-            case AbilityType.Jump: return true;
+            case AbilityType.Jump: ((Jump)abilities[0]).Action(this, Toolkit.ReverseDirection(api.engine.database.gravity_direction)); UseAbility(abilities[0]); return true;
             case AbilityType.Blink: return false;
             case AbilityType.Gravity: return false;
             case AbilityType.Rope: return false;
@@ -399,6 +416,7 @@ public class CloneablePlayer : CloneableUnit
         original.gravity = gravity;
         original.nextpos = new Vector2(nextpos.x, nextpos.y);
         original.lean = false;
+        original.api.engine.apigraphic.Absorb(original, null);
         SetPosition();
     }
 }

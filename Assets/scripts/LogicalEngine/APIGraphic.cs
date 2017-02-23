@@ -136,18 +136,12 @@ public class APIGraphic{
         logicalengine.graphic_LandFinished(player);
         
     }
-    
+
     public void LandOnRamp(Player player, Vector2 position, Unit fallonunit, int ramptype)
     {
-        player.GetComponent<PlayerPhysics>().Land_On_Ramp(position,ramptype);
+        player.GetComponent<PlayerPhysics>().Land_On_Ramp(position, ramptype);
         logicalengine.graphic_LandFinished(player);
     }
-
-    public void MovePlayerToBranch(Player player, Vector2 position, bool isonramp)
-    {
-        player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
-    }
-
 
     public void MoveGameObject(GameObject obj, Vector2 pos, Unit unit)
     {
@@ -159,15 +153,28 @@ public class APIGraphic{
         logicalengine.graphic_GameObjectMoveAnimationFinished(obj, unit);
     }
 
-    public void Jump(Player player, Vector2 position)
+    public void Jump(Player player,Ability jump_ability, Vector2 position,Direction dir)
     {
-
+        player.GetComponent<PlayerPhysics>().Jump(position, (Jump)jump_ability,dir);
     }
 
-
-    public void MoveObject(Unit u)
+    public void Jump_Finish(Player player)
     {
+        
+    }
+    public void Jumped_One(Ability abil)
+    {
+        
+    }
 
+    public void Jump_Hit(Player player,Direction dir,Jump ability)
+    {
+        Jump_Hit_Finish(player,ability);
+    }
+
+    public void Jump_Hit_Finish(Player player,Jump ability)
+    {
+        ability.JumpHitFinished(player);
     }
 
     public void MovePlayerOnPlatform(Player player,Vector2 pos)
@@ -184,17 +191,29 @@ public class APIGraphic{
                case Direction.Up: gl.Lean_Up(); break;
                case Direction.Down: gl.Lean_Down(); break;
            }
+       
+    }
+    public void Camera_AutoMove()
+    {
+        Camera.main.GetComponent<CameraController>().AutoMove();
     }
 
+    public void Fake_Lean(Player player,Direction dir)
+    {
+         
+    }
     public void LeanFinished(Player player)
     {
         PlayerGraphics gl = player.GetComponent<PlayerGraphics>();
         gl.Lean_Finished();
     }
 
+    // Change Color of Player in absorb , release , swap
     public void Absorb(Player player, Container container)
     {
-
+        Debug.Log("change Color");
+        player.GetComponent<PlayerGraphics>().ChangeColor();
+        GameObject.Find("HUD").transform.GetChild(0).GetComponent<HUD>().AbilityChanged(player);
     }
 
 
@@ -246,6 +265,10 @@ public class APIGraphic{
         graphicalengine.StopAllCoroutines();
     }
 
+    public void Player_Co_Stop(Player player)
+    {
+        player.GetComponent<PlayerPhysics>().StopAllCoroutines();
+    }
     public void UnitChangeSprite(Unit unit)
     {
         if (unit is SimpleContainer)

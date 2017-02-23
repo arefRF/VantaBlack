@@ -457,6 +457,17 @@ public sealed class Toolkit{
         return null;
     }
 
+    public static bool[] GetConnectedSidesForContainer(Unit unit)
+    {
+        bool[] result = new bool[4];
+        result[0] = !IsConnectedFromPositionForContainer(unit, VectorSum(unit.position, new Vector2(0, 1)), Direction.Up);
+        result[1] = !IsConnectedFromPositionForContainer(unit, VectorSum(unit.position, new Vector2(1, 0)), Direction.Right);
+        result[2] = !IsConnectedFromPositionForContainer(unit, VectorSum(unit.position, new Vector2(0, -1)), Direction.Down);
+        result[3] = !IsConnectedFromPositionForContainer(unit, VectorSum(unit.position, new Vector2(-1, 0)), Direction.Left);
+
+        return result;
+    }
+
     public static bool[] GetConnectedSides(Unit unit)
     {
         bool[] result = new bool[4];
@@ -470,17 +481,36 @@ public sealed class Toolkit{
 
     public static bool IsConnectedFromPosition(Unit unit, Vector2 pos)
     {
-            for (int i = 0; i < database.units[(int)pos.x, (int)pos.y].Count; i++)
+        for (int i = 0; i < database.units[(int)pos.x, (int)pos.y].Count; i++)
+        {
+            Unit u = database.units[(int)pos.x, (int)pos.y][i];
+            if (u.gameObject.transform.parent == unit.gameObject.transform.parent)
             {
-                Unit u = database.units[(int)pos.x, (int)pos.y][i];
-                if (u.gameObject.transform.parent == unit.gameObject.transform.parent)
-                {
-                    return true;
-                }
+                if (u is Gate)
+                    return false;
+                return true;
             }
+        }         
+        return false;
+    }
 
-
-        
+    public static bool IsConnectedFromPositionForContainer(Unit unit, Vector2 pos, Direction direction)
+    {
+        for (int i = 0; i < database.units[(int)pos.x, (int)pos.y].Count; i++)
+        {
+            Unit u = database.units[(int)pos.x, (int)pos.y][i];
+            if (u.gameObject.transform.parent == unit.gameObject.transform.parent)
+            {
+                if (u is Ramp)
+                {
+                    if (!IsdoubleRamp(u.position) && ((Ramp)u).IsOnRampSide(ReverseDirection(direction)))
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
         return false;
     }
 }

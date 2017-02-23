@@ -8,8 +8,14 @@ public class Gate : Container {
 
     public override void Run()
     {
+        abilities = new List<Ability>();
         capacity = 1;
         base.Run();
+    }
+
+    public override void SetInitialSprite()
+    {
+
     }
 
     public override bool PlayerMoveInto(Direction dir)
@@ -38,6 +44,7 @@ public class Gate : Container {
         {
             abilities.Add(player.abilities[0]);
             player.abilities.RemoveAt(0);
+            _setability(player);    
             api.engine.apigraphic.UnitChangeSprite(this);
         }
     }
@@ -49,6 +56,7 @@ public class Gate : Container {
             return;
         if (Internal)
         {
+            Debug.Log("Internal OPen");
             GetComponent<Animator>().SetBool("Open", true);
             api.RemoveFromDatabase(this);
         }

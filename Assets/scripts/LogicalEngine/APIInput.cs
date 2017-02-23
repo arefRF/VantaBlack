@@ -15,7 +15,7 @@ public class APIInput{
 
     public void Action_Key(Direction dir)
     {
-        
+        engine.ActionKeyPressed(dir);
     }
     
     public APIInput(LogicalEngine engine)
@@ -35,17 +35,37 @@ public class APIInput{
 
     public void ArrowRelease(Direction dir)
     {
-        engine.ArrowkeyReleased(dir);
+        engine.inputcontroller.ArrowkeyReleased(dir);
     }
 
     public void AbsorbRelease(Direction dir)
     {
-        engine.Input_AbsorbRlease(dir);
+        
+    }
+
+    public void Absorb()
+    {
+        engine.inputcontroller.Absorb();
+    }
+
+    public void Release()
+    {
+        engine.inputcontroller.Release();
+    }
+
+    public void Absorb_Hold()
+    {
+        engine.inputcontroller.AbsorbHold();
+    }
+
+    public void Release_Hold()
+    {
+        engine.inputcontroller.ReleaseHold();
     }
 
     public void AbsorbReleaseHold(Direction dir)
     {
-        engine.Input_AbsorbRleaseHold(dir);
+       
     }
     public void ContainerAction()
     {

@@ -14,6 +14,7 @@ public class PlayerPhysics : MonoBehaviour
     private MoveType move_type;
     private Player player;
     private bool set_percent;
+    private Jump jump_ability;
    // private Coroutine lean_stick_co;
     //private Coroutine on_Platform_co;
     private Coroutine last_co;
@@ -193,8 +194,7 @@ public class PlayerPhysics : MonoBehaviour
     //fall 
     public void Fall(Vector2 pos)
     {
-        if(last_co!=null)
-            StopCoroutine(last_co);
+        StopAllCoroutines();
         move_type = MoveType.Falling;
         last_co  = StartCoroutine(Accelerated_Move(pos,fall_velocity,fall_acceleration,true));
     }
@@ -209,11 +209,15 @@ public class PlayerPhysics : MonoBehaviour
 
     }
 
-    public void Jump(Vector2 pos)
+    // jump takes jump ability to call function
+    public void Jump(Vector2 pos,Jump ability,Direction dir)
     {
+        jump_ability = ability;
+        last_co = StartCoroutine(Jump_couroutine(pos, 2, dir));
 
     }
 
+    
     // ramp to corner move
     public void Ramp_To_Corner_Move(Vector2 pos,int type)
     {
@@ -235,6 +239,7 @@ public class PlayerPhysics : MonoBehaviour
         {
             remain_distance = ((Vector2)player_transofrm.position - end1).sqrMagnitude;
             player_transofrm.position = Vector3.MoveTowards(player_transofrm.position, end1, Time.deltaTime * 1 / move_time);
+            api.Camera_AutoMove();
             yield return null;
         }
         remain_distance = ((Vector2)player_transofrm.position - end2).sqrMagnitude;
@@ -244,6 +249,7 @@ public class PlayerPhysics : MonoBehaviour
             remain_distance = ((Vector2)player_transofrm.position - end2).sqrMagnitude;
             player_transofrm.position = Vector3.MoveTowards(player.transform.position, end2, Time.deltaTime * 1 / move_time);
             Set_Player_Move_Percent(remain_distance);
+            api.Camera_AutoMove();
             yield return null;
         }
         if (call_finish)
@@ -260,6 +266,7 @@ public class PlayerPhysics : MonoBehaviour
         {
             remain_distance = ((Vector2)player_transofrm.position - end1).sqrMagnitude;
             player_transofrm.position = Vector3.MoveTowards(player_transofrm.position, end1, Time.deltaTime * 1 / move_time);
+            api.Camera_AutoMove();
             yield return null;
         }
         remain_distance = ((Vector2)player_transofrm.position - end2).sqrMagnitude;
@@ -269,6 +276,7 @@ public class PlayerPhysics : MonoBehaviour
             remain_distance = ((Vector2)player_transofrm.position - end2).sqrMagnitude;
             player_transofrm.position = Vector3.MoveTowards(player.transform.position, end2, Time.deltaTime * 1 / move_time);
             Set_Player_Move_Percent(remain_distance);
+            api.Camera_AutoMove();
             yield return null;
         }
         if (call_finish)
@@ -285,6 +293,7 @@ public class PlayerPhysics : MonoBehaviour
         {
             remain_distance = ((Vector2)player_transofrm.position -end1).sqrMagnitude;
             player_transofrm.position = Vector3.MoveTowards(player_transofrm.position, end1, Time.deltaTime * 1 /  move_time);
+            api.Camera_AutoMove();
             yield return null;
         }
 
@@ -296,6 +305,7 @@ public class PlayerPhysics : MonoBehaviour
             remain_distance = ((Vector2)player_transofrm.position - end2).sqrMagnitude;
             player_transofrm.position = Vector3.MoveTowards(player.transform.position, end2, Time.deltaTime * 1 /  move_time);
             Set_Player_Move_Percent(remain_distance);
+            api.Camera_AutoMove();
             yield return null;
         }
         if (call_finish)
@@ -318,6 +328,7 @@ public class PlayerPhysics : MonoBehaviour
             remain_distance = ((Vector2)player_transofrm.position - end).sqrMagnitude;
             player_transofrm.position = Vector2.MoveTowards(player_transofrm.position, end, Time.smoothDeltaTime  / move_time);
             Set_Player_Move_Percent(remain_distance);
+            api.Camera_AutoMove();
             yield return null;
         }
 
@@ -355,6 +366,7 @@ public class PlayerPhysics : MonoBehaviour
             remain_distance = ((Vector2)player_transofrm.position - end).sqrMagnitude;
             player_transofrm.position = Vector3.MoveTowards(player_transofrm.position, end, Time.deltaTime * velocity);
             velocity += Time.deltaTime * a;
+            api.Camera_AutoMove();
             yield return null;
         }
         if(call_finish)
@@ -365,6 +377,27 @@ public class PlayerPhysics : MonoBehaviour
             }
         }
 
+    }
+
+    private IEnumerator Jump_couroutine(Vector2 pos,float jump_time,Direction direction)
+    {
+        float remain_distance = ((Vector2)player_transofrm.position - pos).sqrMagnitude;
+        while(remain_distance > float.Epsilon)
+        {
+            remain_distance = ((Vector2)player_transofrm.position - pos).sqrMagnitude;
+            player_transofrm.position = Vector3.MoveTowards(player_transofrm.position, pos, Time.deltaTime / move_time);
+            Check_Jump(direction);
+            api.Camera_AutoMove();
+            yield return null;
+        }
+
+        api.Jump_Finish(player);
+    }
+
+    private void Check_Jump(Direction direction)
+    {
+        if (((Vector2)player_transofrm.position - player.position).sqrMagnitude >= 1)
+            jump_ability.JumpedOnce(player, direction);
     }
     private Vector2 Ramp_To_Corner_Pos(Direction gravity,Vector2 target)
     {
@@ -378,8 +411,6 @@ public class PlayerPhysics : MonoBehaviour
 
         return new Vector2(0, 0);
     }
-
-
     private Vector2 On_Ramp_Pos(int type)
     {
         if (type == 4)
@@ -391,43 +422,15 @@ public class PlayerPhysics : MonoBehaviour
     }
     private void Rotate_On_Block()
     {
-        transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
-        if (GetComponent<Player>().direction == Direction.Right)
-            transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0, 0, 0));
-        else if (GetComponent<Player>().direction == Direction.Left)
-            transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0, 0, 0));
+
     }
 
    private void Rotate_On_Ramp(int type)
     {
-        Player player = GetComponent<Player>();
-        if (player.direction == Direction.Right)
-        {
-           // StartCoroutine(Rotate_Co(new Vector3(0, 0, Ramp_Rotation_Value(type, player.direction))));
-            transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0, 0, Ramp_Rotation_Value(type, player.direction)));
-        }
-        else if (player.direction == Direction.Left)
-        {
-           // StartCoroutine(Rotate_Co(new Vector3(0, 180, Ramp_Rotation_Value(type, player.direction))));
-            transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0, 0, Ramp_Rotation_Value(type, player.direction)));
-        }
+
     }
 
 
-
-    private IEnumerator Rotate_Co(Vector3 rot)
-    {
-        Debug.Log("Rotate co");
-        Vector3 rotation = new Vector3(transform.GetChild(0).rotation.x, transform.GetChild(0).rotation.y, transform.GetChild(0).rotation.z);
-        float remain = (rotation - rot).sqrMagnitude;
-        while(remain > float.Epsilon)
-        {
-            remain = (rotation - rot).sqrMagnitude;
-            rotation = Vector3.MoveTowards(rotation, rot, Time.deltaTime / 0.3f);
-            transform.GetChild(0).rotation = Quaternion.Euler(rotation);
-            yield return null;
-        }
-    }
     private float Ramp_Rotation_Value(int type,Direction dir)
     {
         if (type == 4)
