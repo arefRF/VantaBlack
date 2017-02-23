@@ -23,7 +23,7 @@ public class APIUnit {
 
     public void engine_Lean(Player player, Direction dir)
     {
-        engine.Lean(player, dir);
+        engine.inputcontroller.Lean(player, dir);
     }
 
     public List<Unit> engine_GetUnits(Unit unit, Direction dir)
