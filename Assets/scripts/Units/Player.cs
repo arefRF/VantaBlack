@@ -215,6 +215,8 @@ public class Player : Unit
             return false;
         }
         Vector2 pos = Toolkit.VectorSum(position, gravitydirection);
+        if (Toolkit.IsdoubleRamp(pos))
+            return false;
         if (!Fall(pos)  && !Stand_On_Ramp(pos))
             return false;
         while (Fall(pos) || pos.x == 0 || pos.y == 0)
