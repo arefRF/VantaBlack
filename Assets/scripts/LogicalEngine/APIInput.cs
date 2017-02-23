@@ -60,7 +60,7 @@ public class APIInput{
 
     public void Release_Hold()
     {
-        engine.inputcontroller.ReleaseHoyld();
+        engine.inputcontroller.ReleaseHold();
     }
 
     public void AbsorbReleaseHold(Direction dir)

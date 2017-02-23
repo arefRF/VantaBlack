@@ -146,7 +146,7 @@ public class InputController {
         }
     }
 
-    public void ReleaseHoyld()
+    public void ReleaseHold()
     {
         for (int i = 0; i < engine.database.player.Count; i++)
         {
