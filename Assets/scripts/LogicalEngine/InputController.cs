@@ -65,10 +65,7 @@ public class InputController {
                     player.state = PlayerState.Moving;
                 }
             }
-            else if (player.Can_Lean(direction))
-            {
-                Lean(player, direction);
-            }
+            Lean(player, direction);
         }
     }
 
@@ -217,11 +214,14 @@ public class InputController {
 
     public void Lean(Player player, Direction direction)
     {
-        if (!player.lean && player.Can_Lean(direction))
+        if (!player.lean)
         {
-            player.lean = true;
-            player.leandirection = direction;
-            engine.apigraphic.Lean(player);
+            if (player.Can_Lean(direction))
+            {
+                player.lean = true;
+                player.leandirection = direction;
+                engine.apigraphic.Lean(player);
+            }
         }
     }
 }
