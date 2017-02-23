@@ -88,4 +88,24 @@ public class InputController {
             }
         }
     }
+
+    public void Absorb()
+    {
+
+    }
+
+    public void Release()
+    {
+
+    }
+
+    public void AbsorbHold()
+    {
+
+    }
+
+    public void ReleaseHoyld()
+    {
+
+    }
 }
