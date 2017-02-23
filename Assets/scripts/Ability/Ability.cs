@@ -4,16 +4,11 @@ using System.Collections;
 public class Ability{
 
     public AbilityType abilitytype;
+    public bool used;
     public Ability()
     {
-
+        used = false;
     }
-	public void Action_Jump(Player player, int jumpnumber, Direction jumpdirection)
-    {
-
-    }
-
-
 
     public static Ability GetAbilityInstance(AbilityType abilitytype)
     {
@@ -24,5 +19,16 @@ public class Ability{
             case AbilityType.Key: return new Key();
             default: return null;
         }
+    }
+
+
+    public virtual Ability ConvertPlayerAbilityToContainer()
+    {
+        return this;
+    }
+
+    public virtual Ability ConvertContainerAbilityToPlayer()
+    {
+        return this;
     }
 }

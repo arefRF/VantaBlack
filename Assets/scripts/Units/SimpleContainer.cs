@@ -10,6 +10,8 @@ public class SimpleContainer : Container {
         for(int i=0; i<abilitycount; i++)
         {
             abilities.Add(Ability.GetAbilityInstance(abilitytype));
+            if (abilitytype == AbilityType.Jump)
+                ((Jump)abilities[i]).number = 4;
         }
         api.ChangeSprite(this);
         base.Run();

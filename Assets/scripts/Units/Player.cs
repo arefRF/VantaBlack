@@ -25,6 +25,8 @@ public class Player : Unit
         for(int i=0; i<abilitycount; i++)
         {
             abilities.Add(Ability.GetAbilityInstance(abilitytype));
+            if (abilitytype == AbilityType.Jump)
+                ((Jump)abilities[i]).number = 2;
         }
         direction = move_direction[0];
     }
@@ -275,7 +277,7 @@ public class Player : Unit
         {
             case AbilityType.Fuel: return false;
             case AbilityType.Direction: return true;
-            case AbilityType.Jump: return true;
+            case AbilityType.Jump: ((Jump)abilities[0]).Action(this, Toolkit.ReverseDirection(api.engine.database.gravity_direction)); return true;
             case AbilityType.Blink: return false;
             case AbilityType.Gravity: return false;
             case AbilityType.Rope: return false;
@@ -397,6 +399,7 @@ public class CloneablePlayer : CloneableUnit
         original.gravity = gravity;
         original.nextpos = new Vector2(nextpos.x, nextpos.y);
         original.lean = false;
+        original.api.engine.apigraphic.Absorb(original, null);
         SetPosition();
     }
 }

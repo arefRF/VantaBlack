@@ -35,6 +35,7 @@ public class FunctionalContainer : Container {
         switch (abilities[0].abilitytype)
         {
             case AbilityType.Fuel: Action_Fuel(true); break;
+            case AbilityType.Jump: ((Jump)abilities[0]).Action(player, dir); break;
         }
     }
 

@@ -54,9 +54,10 @@ public class Container : ParentContainer {
     {
         List<Ability> temp = new List<Ability>();
         for (int i = 0; i < abilities.Count; i++)
-            temp.Add(abilities[i]);
+            temp.Add(abilities[i].ConvertContainerAbilityToPlayer());
         abilities.Clear();
-        abilities = player.abilities;
+        for (int i = 0; i < player.abilities.Count; i++)
+            abilities.Add(player.abilities[i].ConvertPlayerAbilityToContainer());
         player.abilities = temp;
         api.ChangeSprite(this);
         _setability(player);
@@ -92,7 +93,7 @@ public class Container : ParentContainer {
     {
         if(player.abilities.Count<4)
         {
-            player.abilities.Add(abilities[0]);
+            player.abilities.Add(abilities[0].ConvertContainerAbilityToPlayer());
             abilities.RemoveAt(0);
             api.ChangeSprite(this);
             _setability(player);
@@ -105,7 +106,7 @@ public class Container : ParentContainer {
     {
         if(abilities.Count<4)
         {
-            abilities.Add(player.abilities[0]);
+            abilities.Add(player.abilities[0].ConvertPlayerAbilityToContainer());
             player.abilities.RemoveAt(0);
             api.ChangeSprite(this);
             _setability(player);
@@ -214,7 +215,7 @@ public class Container : ParentContainer {
     {
         if (abilities.Count < 4)
         {
-            abilities.Add(player.abilities[0]);
+            abilities.Add(player.abilities[0].ConvertPlayerAbilityToContainer());
             player.abilities.RemoveAt(0);
             api.engine.apigraphic.Absorb(player, this);
             AddToReservedMove(true, abilities.Count);
@@ -224,7 +225,7 @@ public class Container : ParentContainer {
     {
         if (player.abilities.Count < 4)
         {
-            player.abilities.Add(abilities[0]);
+            player.abilities.Add(abilities[0].ConvertContainerAbilityToPlayer());
             abilities.RemoveAt(0);
             api.engine.apigraphic.Absorb(player, this);
             AddToReservedMove(false, abilities.Count);
