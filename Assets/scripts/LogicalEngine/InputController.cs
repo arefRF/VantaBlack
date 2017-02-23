@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public class InputController {
 
@@ -91,21 +91,77 @@ public class InputController {
 
     public void Absorb()
     {
-
+        for (int i = 0; i < engine.database.player.Count; i++)
+        {
+            if (engine.database.player[i].lean) //for release
+            {
+                List<Unit> units = engine.GetUnits(Toolkit.VectorSum(engine.database.player[i].position, Toolkit.DirectiontoVector(engine.database.player[i].leandirection)));
+                for (int j = 0; j < units.Count; j++)
+                {
+                    if (units[j] is Container)
+                    {
+                        engine.database.player[i].Absorb((Container)units[j]);
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     public void Release()
     {
-
+        for (int i = 0; i < engine.database.player.Count; i++)
+        {
+            if (engine.database.player[i].lean) //for release
+            {
+                List<Unit> units = engine.GetUnits(Toolkit.VectorSum(engine.database.player[i].position, Toolkit.DirectiontoVector(engine.database.player[i].leandirection)));
+                for (int j = 0; j < units.Count; j++)
+                {
+                    if (units[j] is Container)
+                    {
+                        engine.database.player[i].Release((Container)units[j]);
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     public void AbsorbHold()
     {
-
+        for (int i = 0; i < engine.database.player.Count; i++)
+        {
+            if (engine.database.player[i].lean) //for release
+            {
+                List<Unit> units = engine.GetUnits(Toolkit.VectorSum(engine.database.player[i].position, Toolkit.DirectiontoVector(engine.database.player[i].leandirection)));
+                for (int j = 0; j < units.Count; j++)
+                {
+                    if (units[j] is Container)
+                    {
+                        engine.database.player[i].AbsorbHold((Container)units[j]);
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     public void ReleaseHoyld()
     {
-
+        for (int i = 0; i < engine.database.player.Count; i++)
+        {
+            if (engine.database.player[i].lean) //for release
+            {
+                List<Unit> units = engine.GetUnits(Toolkit.VectorSum(engine.database.player[i].position, Toolkit.DirectiontoVector(engine.database.player[i].leandirection)));
+                for (int j = 0; j < units.Count; j++)
+                {
+                    if (units[j] is Container)
+                    {
+                        engine.database.player[i].ReleaseHold((Container)units[j]);
+                        break;
+                    }
+                }
+            }
+        }
     }
 }
