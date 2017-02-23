@@ -23,26 +23,34 @@ public class InputController {
         }
         else if (player.state == PlayerState.Jumping)
         {
-            IdlePLayerMove(player, direction);
+            JumpingPlayerMove(player, direction);
         }
 
     }
 
     private void JumpingPlayerMove(Player player, Direction direction)
     {
-        if (player.Can_Move_Direction(direction))
+        if (!player.lean)
         {
-            if (player.Should_Change_Direction(direction))
+            if (player.Can_Move_Direction(direction))
             {
-                Direction olddir = player.direction;
-                player.direction = direction;
-                engine.apigraphic.PlayerChangeDirection(player, olddir, player.direction);
-                player.state = PlayerState.Jumping;
+                engine.apigraphic.Player_Co_Stop(player);
+                if (player.Should_Change_Direction(direction))
+                {
+                    Direction olddir = player.direction;
+                    player.direction = direction;
+                    engine.apigraphic.PlayerChangeDirection(player, olddir, player.direction);
+                }
+                else if (!player.Move(direction))
+                    Lean(player, direction);
+                else
+                {
+                    player.state = PlayerState.Moving;
+                    
+                }
             }
-            if (player.Move(direction))
-            {
-                player.state = PlayerState.Moving;
-            }
+            else
+                Lean(player, direction);
         }
     }
 
