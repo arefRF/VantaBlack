@@ -216,6 +216,8 @@ public class InputController {
     {
         if (!player.lean)
         {
+            if (player.state == PlayerState.Jumping && direction == Toolkit.ReverseDirection(player.jumpdirection))
+                return;
             if (player.Can_Lean(direction))
             {
                 player.lean = true;

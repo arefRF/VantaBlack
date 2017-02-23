@@ -19,6 +19,8 @@ public class Player : Unit
     public Direction gravity { get; set; }
 
     public Vector2 nextpos { get; set; }
+
+    public Direction jumpdirection;
     public void Awake()
     {
         abilities = new List<Ability>();
