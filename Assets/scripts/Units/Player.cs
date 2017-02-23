@@ -59,10 +59,13 @@ public class Player : Unit
     }
     public bool Can_Lean(Direction dir)
     {
-        if (dir == Direction.Up || dir == Direction.Down)
-            return true;
-        else
-            return false;
+        List<Unit> units = api.engine_GetUnits(Toolkit.VectorSum(position, dir));
+        for(int i=0; i<units.Count; i++)
+        {
+            if (units[i] is Container)
+                return true;
+        }
+        return false;
     }
 
     public override bool Move(Direction dir)
