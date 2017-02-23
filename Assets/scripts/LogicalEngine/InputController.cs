@@ -65,7 +65,8 @@ public class InputController {
                     player.state = PlayerState.Moving;
                 }
             }
-            Lean(player, direction);
+            else
+                Lean(player, direction);
         }
     }
 
@@ -79,6 +80,7 @@ public class InputController {
                 if (!player.ApplyGravity(engine.database.gravity_direction, engine.database.units)){
                     if (!player.Move(direction))
                     {
+                        Lean(player, direction);
                     }
                     else
                     {

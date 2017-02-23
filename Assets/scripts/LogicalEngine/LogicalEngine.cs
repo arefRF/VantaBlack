@@ -534,6 +534,11 @@ public class LogicalEngine {
 
     public void graphic_FallFinished(Player player)
     {
+        if(player.position.x == 0 || player.position.y == 0)
+        {
+            Debug.Log("player died");
+            return;
+        }
         bool isonunit = true;
         if (GetUnits(Toolkit.VectorSum(Toolkit.DirectiontoVector(database.gravity_direction), player.position)).Count == 0)
             isonunit = false;
@@ -554,7 +559,14 @@ public class LogicalEngine {
     
     public List<Unit> GetUnits(Vector2 position)
     {
-        return database.units[(int)position.x, (int)position.y];
+        try {
+            return database.units[(int)position.x, (int)position.y];
+        }
+        catch
+        {
+            Debug.Log("position out of range");
+            return null;
+        }
     }
 
     public void Input_Move(Direction direction)

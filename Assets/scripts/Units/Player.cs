@@ -20,7 +20,7 @@ public class Player : Unit
 
     public Vector2 nextpos { get; set; }
 
-    public Direction jumpdirection;
+    public Direction jumpdirection { get; set; }
     public void Awake()
     {
         abilities = new List<Ability>();
@@ -31,6 +31,7 @@ public class Player : Unit
                 ((Jump)abilities[i]).number = 2;
         }
         direction = move_direction[0];
+        state = PlayerState.Idle;
     }
 
     public bool Should_Change_Direction(Direction dir)
@@ -162,7 +163,9 @@ public class Player : Unit
                 }*/
             }
             else if (units[i].transform.parent.gameObject != parent)
+            {
                 return false;
+            }
         }
         for (int i = 0; i < players.Count; i++)
         {
@@ -214,7 +217,7 @@ public class Player : Unit
         Vector2 pos = Toolkit.VectorSum(position, gravitydirection);
         if (!Fall(pos)  && !Stand_On_Ramp(pos))
             return false;
-        while (Fall(pos))
+        while (Fall(pos) || pos.x == 0 || pos.y == 0)
         {
             api.RemoveFromDatabase(this);
             position = pos;
