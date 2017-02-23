@@ -211,7 +211,8 @@ public class PlayerPhysics : MonoBehaviour
     public void Jump(Vector2 pos,Jump ability,Direction dir)
     {
         jump_ability = ability;
-        StartCoroutine(Jump_couroutine(pos,2,dir));
+        last_co = StartCoroutine(Jump_couroutine(pos, 2, dir));
+
     }
 
     
