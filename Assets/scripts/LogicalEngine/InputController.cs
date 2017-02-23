@@ -4,10 +4,11 @@ using System.Collections.Generic;
 public class InputController {
 
     LogicalEngine engine;
-
+    Database database;
     public InputController(LogicalEngine engine)
     {
         this.engine = engine;
+        database = engine.database;
     }
 
     public void PlayerMoveAction(Player player, Direction direction)
@@ -19,6 +20,29 @@ public class InputController {
         else if(player.state == PlayerState.Moving)
         {
             MovingPlayerMove(player, direction);
+        }
+        else if (player.state == PlayerState.Jumping)
+        {
+            IdlePLayerMove(player, direction);
+        }
+
+    }
+
+    private void JumpingPlayerMove(Player player, Direction direction)
+    {
+        if (player.Can_Move_Direction(direction))
+        {
+            if (player.Should_Change_Direction(direction))
+            {
+                Direction olddir = player.direction;
+                player.direction = direction;
+                engine.apigraphic.PlayerChangeDirection(player, olddir, player.direction);
+                player.state = PlayerState.Jumping;
+            }
+            if (player.Move(direction))
+            {
+                player.state = PlayerState.Moving;
+            }
         }
     }
 
@@ -35,7 +59,7 @@ public class InputController {
                     engine.apigraphic.PlayerChangeDirection(player, olddir, player.direction);
                 }
                 else if (!player.Move(direction))
-                    engine.Lean(player, direction);
+                    Lean(player, direction);
                 else
                 {
                     player.state = PlayerState.Moving;
@@ -43,7 +67,7 @@ public class InputController {
             }
             else if (player.Can_Lean(direction))
             {
-                engine.Lean(player, direction);
+                Lean(player, direction);
             }
         }
     }
@@ -55,6 +79,7 @@ public class InputController {
             //Debug.Log("calling graphicals");
             if (player.movepercentage == 98)
             {
+                Debug.Log("98%");
                 if (!player.ApplyGravity(engine.database.gravity_direction, engine.database.units)){
                     if (!player.Move(direction))
                     {
@@ -162,6 +187,42 @@ public class InputController {
                     }
                 }
             }
+        }
+    }
+
+    public void ArrowkeyReleased(Direction direction)
+    {
+        for (int i = 0; i < database.player.Count; i++)
+        {
+            if(LeanUndo(database.player[i], direction))
+                database.player[i].ApplyGravity(database.gravity_direction, database.units);
+        }
+        //Applygravity();
+    }
+
+    public bool LeanUndo(Player player, Direction direction)
+    {
+        if (player.lean)
+        {
+            player.lean = false;
+            engine.apigraphic.LeanFinished(player);
+            if (engine.leanmove.Contains(player) && !engine.shouldmove.Contains(player))
+            {
+                engine.apiunit.AddToDatabase(player);
+                engine.apigraphic.LeanStickStop(player);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public void Lean(Player player, Direction direction)
+    {
+        if (!player.lean)
+        {
+            player.lean = true;
+            player.leandirection = direction;
+            engine.apigraphic.Lean(player);
         }
     }
 }

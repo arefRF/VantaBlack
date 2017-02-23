@@ -16,17 +16,17 @@ public class Jump : Ability {
         jumped = 0;
         if (engine == null)
             engine = Starter.GetEngine();
-        Debug.Log("jump action begin");
         shouldjump = GetShouldJump(player.position, direction);
-        Debug.Log("shouldjump: " + shouldjump);
         Vector2 finalpos = player.position + shouldjump * Toolkit.DirectiontoVector(direction);
+        player.state = PlayerState.Jumping;
+        engine.inputcontroller.LeanUndo(player, player.leandirection);
         engine.apigraphic.Jump(player, this, finalpos, direction);
         
     }
 
     public void JumpedOnce(Player player, Direction direction)
     {
-        Debug.Log("jumped once");
+
         jumped++;
         engine.apiunit.RemoveFromDatabase(player);
         player.position += Toolkit.DirectiontoVector(direction);
@@ -36,6 +36,7 @@ public class Jump : Ability {
                 engine.apigraphic.Jump_Hit(player, direction, this);
             else
             {
+                player.state = PlayerState.Idle;
                 engine.Applygravity();
             }
         }
@@ -43,6 +44,7 @@ public class Jump : Ability {
 
     public void JumpHitFinished(Player player)
     {
+        player.state = PlayerState.Idle;
         engine.Applygravity();
     }
 

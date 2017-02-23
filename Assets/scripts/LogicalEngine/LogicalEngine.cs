@@ -13,8 +13,8 @@ public class LogicalEngine {
     public List<Unit> stuckedunits;
     public SnapshotManager snpmanager;
 
-    private List<Unit> leanmove;
-    private List<Unit> shouldmove;
+    public List<Unit> leanmove;
+    public List<Unit> shouldmove;
     public LogicalEngine(int x, int y)
     {
         sizeX = x;
@@ -149,7 +149,7 @@ public class LogicalEngine {
     {
         Vector2 nextpos;
         snpmanager.AddToSnapShot(player);
-        if (player.onramp)
+        if (player.onramp && player.state != PlayerState.Jumping)
         {
             List<Unit> units = GetUnits(player.position);
             Ramp ramp;
@@ -370,7 +370,7 @@ public class LogicalEngine {
         }
         else //not on ramp
         {
-            if (Toolkit.IsInsideBranch(player)) //branch move
+            if (Toolkit.IsInsideBranch(player) && player.state != PlayerState.Jumping) //branch move
             {
                 nextpos = Toolkit.VectorSum(player.position, Toolkit.DirectiontoVector(dir));
                 Vector2 temp = Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction));
@@ -460,7 +460,6 @@ public class LogicalEngine {
                         }
                         else
                         {
-                            Debug.Log("herere");
                             player.position = nextpos;
                             database.units[(int)player.position.x, (int)player.position.y].Add(player);
                             apigraphic.MovePlayer_Simple_4(player, player.position);
@@ -509,7 +508,7 @@ public class LogicalEngine {
                         database.units[(int)player.position.x, (int)player.position.y].Remove(player);
                         player.position = nextpos;
                         database.units[(int)player.position.x, (int)player.position.y].Add(player);
-                        apigraphic.MovePlayer_Simple_4(player, nextpos);
+                        apigraphic.MovePlayer_Simple_4(player, player.position);
                     }
                 }
             }
@@ -552,15 +551,7 @@ public class LogicalEngine {
         player.state = PlayerState.Idle;
     }
 
-    public void Lean(Player player, Direction direction)
-    {
-        if (!player.lean)
-        {
-            player.lean = true;
-            player.leandirection = direction;
-            apigraphic.Lean(player);
-        }
-    }
+    
     public List<Unit> GetUnits(Vector2 position)
     {
         return database.units[(int)position.x, (int)position.y];
@@ -574,24 +565,7 @@ public class LogicalEngine {
         }
     }
 
-    public void ArrowkeyReleased(Direction direction)
-    {
-        for(int i=0; i<database.player.Count; i++)
-        {
-            if (database.player[i].lean)
-            {
-                database.player[i].lean = false;
-                apigraphic.LeanFinished(database.player[i]);
-                if(leanmove.Contains(database.player[i]) && !shouldmove.Contains(database.player[i]))
-                {
-                    apiunit.AddToDatabase(database.player[i]);
-                    apigraphic.LeanStickStop(database.player[i]);
-                }
-                database.player[i].ApplyGravity(database.gravity_direction, database.units);
-            }
-        }
-        //Applygravity();
-    }
+    
 
     public void ActionKeyPressed()
     {
