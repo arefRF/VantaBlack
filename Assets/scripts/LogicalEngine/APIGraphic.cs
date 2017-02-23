@@ -191,7 +191,7 @@ public class APIGraphic{
                case Direction.Up: gl.Lean_Up(); break;
                case Direction.Down: gl.Lean_Down(); break;
            }
-        player.GetComponent<PlayerPhysics>().StopAllCoroutines();
+       
     }
     public void Camera_AutoMove()
     {
@@ -200,7 +200,7 @@ public class APIGraphic{
 
     public void Fake_Lean(Player player,Direction dir)
     {
-
+         
     }
     public void LeanFinished(Player player)
     {
@@ -265,6 +265,10 @@ public class APIGraphic{
         graphicalengine.StopAllCoroutines();
     }
 
+    public void Player_Co_Stop(Player player)
+    {
+        player.GetComponent<PlayerPhysics>().StopAllCoroutines();
+    }
     public void UnitChangeSprite(Unit unit)
     {
         if (unit is SimpleContainer)
