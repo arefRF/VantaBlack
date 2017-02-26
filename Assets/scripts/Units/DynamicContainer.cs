@@ -84,6 +84,7 @@ public class CloneableDynamicContainer : CloneableUnit
     {
         base.Undo();
         DynamicContainer original = (DynamicContainer)base.original;
+        original.gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = false;
         original.abilities = new List<Ability>();
         original.reservedmovebool = new List<bool>();
         original.reservedmoveint = new List<int>();

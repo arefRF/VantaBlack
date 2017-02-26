@@ -60,6 +60,7 @@ public class CloneableStaticContainer : CloneableUnit
     {
         base.Undo();
         DynamicContainer original = (DynamicContainer)base.original;
+        original.gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = false;
         original.reservedmovebool = new List<bool>();
         original.reservedmoveint = new List<int>();
         for (int i = 0; i < reservedmovebool.Count; i++)

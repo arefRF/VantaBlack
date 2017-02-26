@@ -149,7 +149,7 @@ public class LogicalEngine {
     {
         try {
             Vector2 nextpos;
-            snpmanager.AddToSnapShot(player);
+            //snpmanager.AddToSnapShot(player);
             if (player.onramp && player.state != PlayerState.Jumping) //ramp move
             {
                 List<Unit> units = GetUnits(player.position);
@@ -193,11 +193,8 @@ public class LogicalEngine {
                 if (goingup)
                 {
                     Vector2 temppos = Toolkit.VectorSum(player.position, dir);
-                    Debug.Log("fhjkljhghjklkjhghjkjhg");
                     if (Toolkit.HasBranch(temppos))
                     {
-                        Debug.Log("asd");
-                        Debug.Log(temppos);
                         database.units[(int)player.position.x, (int)player.position.y].Remove(player);
                         player.position = Toolkit.VectorSum(temppos, Toolkit.ReverseDirection(database.gravity_direction));
                         database.units[(int)player.position.x, (int)player.position.y].Add(player);
