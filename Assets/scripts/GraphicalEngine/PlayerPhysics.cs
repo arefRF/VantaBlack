@@ -97,8 +97,8 @@ public class PlayerPhysics : MonoBehaviour
     }
     public void Land_On_Ramp(Vector2 position,int type)
     {
-        player_transofrm.position = position + On_Ramp_Pos(type);
-        Rotate_On_Ramp(type);
+        Vector2 pos  = position + On_Ramp_Pos(type);
+        StartCoroutine(Constant_Move(pos,0.2f,false)); 
     }
 
     private Vector2 Block_To_Ramp_Pos(int type)
