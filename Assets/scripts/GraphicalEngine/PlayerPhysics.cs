@@ -20,11 +20,15 @@ public class PlayerPhysics : MonoBehaviour
     private Coroutine last_co;
     void Start()
     {
+        Init();
+    }
+
+    private void Init()
+    {
         engine = Starter.GetEngine();
         api = engine.apigraphic;
         player_transofrm = transform;
         player = GetComponent<Player>();
-        move_type = MoveType.Idle;
     }
 
     //ramp to fall
@@ -59,8 +63,6 @@ public class PlayerPhysics : MonoBehaviour
             StopCoroutine(last_co);
         Vector2 end1 = pos  +Ramp_To_Block_Pos(type);
         last_co = StartCoroutine(Ramp_To_Block_Coroutine(end1, pos, move_time, true));
-        
-       
     }
 
     private Vector2 Ramp_To_Block_Pos(int type)
@@ -358,7 +360,16 @@ public class PlayerPhysics : MonoBehaviour
     // For Moves that have Acceleration Like Gravity
     private IEnumerator Accelerated_Move(Vector2 end,float velocity, float a,bool call_finish)
     {
-        float remain_distance = ((Vector2)player_transofrm.position - end).sqrMagnitude;
+        float remain_distance = 0;
+        try
+        {
+             remain_distance = ((Vector2)player_transofrm.position - end).sqrMagnitude;
+        }
+        catch
+        {
+            Init();
+            remain_distance = ((Vector2)player_transofrm.position - end).sqrMagnitude;
+        }
         while(remain_distance > float.Epsilon)
         {
             remain_distance = ((Vector2)player_transofrm.position - end).sqrMagnitude;
@@ -369,6 +380,7 @@ public class PlayerPhysics : MonoBehaviour
         }
         if(call_finish)
         {
+            Debug.Log(move_type);
             switch (move_type)
             {
                 case MoveType.Falling: api.Fall_Finish(player); move_type = MoveType.Idle; break;

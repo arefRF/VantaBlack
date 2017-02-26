@@ -12,7 +12,7 @@ public class CameraController : MonoBehaviour {
     public float move_time = 0.5f;
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
         p_transform = player.transform;
         Camera_Bounds_Calculate();
         pos = new Vector3(p_transform.position.x, p_transform.position.y, transform.position.z);
@@ -30,6 +30,8 @@ public class CameraController : MonoBehaviour {
     {
         if (auto_move)
         {
+            pos = new Vector3(p_transform.position.x, p_transform.position.y, transform.position.z);
+            p_transform = player.transform;
             pos = new Vector3(p_transform.position.x, p_transform.position.y, transform.position.z);
             pos.x = Mathf.Clamp(pos.x, left_bound, right_bound);
             pos.y = Mathf.Clamp(pos.y, lower_bound, upper_bound);
