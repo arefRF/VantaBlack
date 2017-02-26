@@ -212,7 +212,16 @@ public class APIGraphic{
     {
         Debug.Log("change Color");
         player.GetComponent<PlayerGraphics>().ChangeColor();
-        GameObject.Find("HUD").transform.GetChild(0).GetComponent<HUD>().AbilityChanged(player);
+        try
+        {
+            GameObject.Find("HUD").transform.GetChild(0).GetComponent<HUD>().AbilityChanged(player);
+        }
+        catch
+        {
+            GameObject.Find("UI").GetComponent<Get>().hud.SetActive(true);
+            GameObject.Find("HUD").transform.GetChild(0).GetComponent<HUD>().AbilityChanged(player);
+        }
+        
     }
 
 
