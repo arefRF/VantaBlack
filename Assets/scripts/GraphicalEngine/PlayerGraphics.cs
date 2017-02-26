@@ -69,7 +69,6 @@ public class PlayerGraphics : MonoBehaviour {
             animator.SetInteger("Walk", 1);
         else
             animator.SetInteger("Walk", -1);
-
     }
 
     public void Move_Finished()
