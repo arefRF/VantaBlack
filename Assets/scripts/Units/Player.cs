@@ -45,6 +45,8 @@ public class Player : Unit
 
     public bool Can_Move_Direction(Direction dir)
     {
+        if (Toolkit.HasBranch(Toolkit.VectorSum(position, dir)))
+            return true;
         if (Can_Lean(dir))
         {
             Vector2 pos = Toolkit.VectorSum(position, Toolkit.DirectiontoVector(dir));
@@ -62,6 +64,8 @@ public class Player : Unit
     }
     public bool Can_Lean(Direction dir)
     {
+        if (Toolkit.HasBranch(position))
+            return false;
         List<Unit> units = api.engine_GetUnits(Toolkit.VectorSum(position, dir));
         for(int i=0; i<units.Count; i++)
         {

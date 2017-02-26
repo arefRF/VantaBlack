@@ -16,6 +16,8 @@ public class PlayerGraphics : MonoBehaviour {
         api = engine.apigraphic;
         animator = GetComponent<Animator>();
         player = GetComponent<Player>();
+        if(player.abilitycount != 0)
+            engine.apigraphic.Absorb(player, null);
     }
 
 

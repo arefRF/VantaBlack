@@ -26,6 +26,8 @@ public class FunctionalContainer : Container {
 
     public override void Action(Player player, Direction dir)
     {
+        if (gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock)
+            return;
         if (abilities.Count == 0)
             return;
         api.AddToSnapshot(this);
@@ -201,7 +203,7 @@ public class FunctionalContainer : Container {
             stucklevel++;
             CheckReservedList();
         }
-        gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = false;
+        //gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = false;
         //firstmove = true;
     }
     protected override void ContainerAbilityChanged(bool increased, int count)
@@ -221,7 +223,6 @@ public class FunctionalContainer : Container {
         }
         if (on)
         {
-            Debug.Log("hereee");
             if (increased) {
                 if (stucklevel < 1)
                     Action_Fuel_Continue(direction, count);
@@ -239,7 +240,6 @@ public class FunctionalContainer : Container {
             }
             else
             {
-                Debug.Log(stucklevel);
                 if (stucklevel < 1)
                 {
                     Action_Fuel_Continue(Toolkit.ReverseDirection(direction), count);
@@ -300,8 +300,6 @@ public class FunctionalContainer : Container {
         bool increased = reservedmovebool[0];
         reservedmoveint.RemoveAt(0);
         reservedmovebool.RemoveAt(0);
-        Debug.Log(count);
-        Debug.Log(increased);
         ContainerAbilityChanged(increased, count);
         api.MergeSnapshot();
     }
@@ -348,7 +346,7 @@ public class FunctionalContainer : Container {
         {
             if (increased)
                 shouldmove++;
-            else
+            else if(shouldmove > 0)
                 shouldmove--;
         }
         reservedmovebool.Add(increased);
