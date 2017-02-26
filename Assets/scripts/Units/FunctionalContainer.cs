@@ -214,6 +214,8 @@ public class FunctionalContainer : Container {
         catch
         {
         }*/
+        Debug.Log(increased);
+        Debug.Log(count);
         if (increased && count == 1)
         {
             shouldmove = 1;
