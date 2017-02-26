@@ -65,7 +65,6 @@ public class APIGraphic{
     // Block to Branch
     public void MovePlayer_Simple_2(Player player, Vector2 position,Direction direction)
     {
-        Lean(player,direction);
         player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
     }
 
@@ -193,19 +192,6 @@ public class APIGraphic{
            }
        
     }
-    public void Lean(Player player,Direction dir)
-    {
-        PlayerGraphics gl = player.GetComponent<PlayerGraphics>();
-        switch (dir)
-        {
-            case Direction.Right: gl.Lean_Right(); break;
-            case Direction.Left: gl.Lean_Left(); break;
-            case Direction.Up: gl.Lean_Up(); break;
-            case Direction.Down: gl.Lean_Down(); break;
-        }
-
-    }
-
     public void Camera_AutoMove()
     {
         Camera.main.GetComponent<CameraController>().AutoMove();
@@ -271,7 +257,7 @@ public class APIGraphic{
 
     public void Undo_Player(Player player,Unit unit)
     {
-        player.GetComponent<PlayerPhysics>().Player_Undo();
+        player.GetComponent<PlayerPhysics>().Player_Undo(unit);
     }
     public void Undo_Unit(Unit unit)
     {

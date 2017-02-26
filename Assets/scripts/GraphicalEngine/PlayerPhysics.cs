@@ -185,9 +185,13 @@ public class PlayerPhysics : MonoBehaviour
         Rotate_On_Ramp(type);
     }
    
-    public void Player_Undo()
+    public void Player_Undo(Unit unit)
     {
         StopAllCoroutines();
+        if(unit != null && unit is Ramp)
+        {
+            player_transofrm.position = On_Ramp_Pos(((Ramp)unit).type);
+        }
 
     }
 
