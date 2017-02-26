@@ -16,7 +16,6 @@ public class Unit : MonoBehaviour {
     // public abstract bool CanMove(UnitType unittype);
     public virtual void Run()
     {
-        position = gameObject.transform.position;
         SetInitialSprite();
     }
     public virtual void SetInitialSprite()

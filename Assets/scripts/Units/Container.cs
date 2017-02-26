@@ -97,7 +97,6 @@ public class Container : ParentContainer {
             api.ChangeSprite(this);
             _setability(player);
             api.engine.apigraphic.Absorb(player, this);
-            Debug.Log(abilities.Count);
             ContainerAbilityChanged(false, abilities.Count);
         }
     }

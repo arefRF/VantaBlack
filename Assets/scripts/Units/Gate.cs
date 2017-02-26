@@ -98,7 +98,9 @@ public class CloneableGate : CloneableUnit
         original.abilities = new List<Ability>();
         for (int i = 0; i < abilities.Count; i++)
             original.abilities.Add(abilities[i]);
-
+        original.api.AddToDatabase(original);
+        Debug.Log("here");
+        original.api.engine.apigraphic.Undo_Unit(original);
         original.api.engine.apigraphic.UnitChangeSprite(original);
     }
 }
