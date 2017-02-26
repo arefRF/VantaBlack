@@ -147,143 +147,63 @@ public class LogicalEngine {
 
     public void MovePlayer(Player player, Direction dir)
     {
-        Vector2 nextpos;
-        snpmanager.AddToSnapShot(player);
-        if (player.onramp && player.state != PlayerState.Jumping)
-        {
-            List<Unit> units = GetUnits(player.position);
-            Ramp ramp;
-            bool goingup = true;
-            if (units[0] is Ramp)
-                ramp = (Ramp)units[0];
-            else
-                ramp = (Ramp)units[1];
-            switch (database.gravity_direction)
+        try {
+            Vector2 nextpos;
+            snpmanager.AddToSnapShot(player);
+            if (player.onramp && player.state != PlayerState.Jumping)
             {
-                case Direction.Down:
-                    switch (dir)
-                    {
-                        case Direction.Right: if (ramp.type == 1) goingup = false; break;
-                        case Direction.Left: if (ramp.type == 4) goingup = false; break;
-                    }
-                    break;
-                case Direction.Right:
-                    switch (dir)
-                    {
-                        case Direction.Up: if (ramp.type == 4) goingup = false; break;
-                        case Direction.Down: if (ramp.type == 3) goingup = false; break;
-                    }
-                    break;
-                case Direction.Up:
-                    switch (dir)
-                    {
-                        case Direction.Right: if (ramp.type == 2) goingup = false; break;
-                        case Direction.Left: if (ramp.type == 3) goingup = false; break;
-                    }
-                    break;
-                case Direction.Left:
-                    switch (dir)
-                    {
-                        case Direction.Up: if (ramp.type == 1) goingup = false; break;
-                        case Direction.Down: if (ramp.type == 2) goingup = false; break;
-                    }
-                    break;
-            }
-            if (goingup)
-            {
-                Vector2 temppos = Toolkit.VectorSum(player.position, dir);
-                if (Toolkit.HasBranch(temppos))
-                {
-                    database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                    player.position = temppos;
-                    database.units[(int)player.position.x, (int)player.position.y].Add(player);
-                    apigraphic.MovePlayer_Ramp_Branch(player, player.position, ramp.type);
-                }
-                if (Toolkit.HasRamp(temppos))
-                {
-                    Ramp ramptemp = Toolkit.GetRamp(temppos);
-                    nextpos = Toolkit.VectorSum(player.position, Toolkit.VectorSum(Toolkit.DirectiontoVector(Toolkit.ReverseDirection(database.gravity_direction)), Toolkit.DirectiontoVector(dir)));
-                    if (Toolkit.HasBranch(nextpos))
-                    {
-                        database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                        player.position = nextpos;
-                        database.units[(int)player.position.x, (int)player.position.y].Add(player);
-                        apigraphic.MovePlayer_Ramp_2(player, player.position, ramp.type);
-                    }
-                    else if (Toolkit.HasRamp(nextpos) && Toolkit.CanplayerGoOnRampSideFromRamp(Toolkit.GetRamp(nextpos), database.gravity_direction, dir))
-                    {
-                        database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                        player.position = nextpos;
-                        database.units[(int)player.position.x, (int)player.position.y].Add(player);
-                        apigraphic.MovePlayer_Ramp_1(player, nextpos, ((Ramp)units[0]).type);
-                    }
-                    else if (ramptemp.type + ramp.type == 5)
-                    {
-                        apiunit.RemoveFromDatabase(player);
-                        player.position = temppos;
-                        apiunit.AddToDatabase(player);
-                        apigraphic.MovePlayer_Ramp_5(player, player.position, ramptemp.type);
-                    }
-                    else
-                    {
-                        database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                        player.position = nextpos;
-                        database.units[(int)player.position.x, (int)player.position.y].Add(player);
-                        apigraphic.MovePlayer_Ramp_2(player, nextpos, ramp.type);
-                    }
-                }
+                List<Unit> units = GetUnits(player.position);
+                Ramp ramp;
+                bool goingup = true;
+                if (units[0] is Ramp)
+                    ramp = (Ramp)units[0];
                 else
+                    ramp = (Ramp)units[1];
+                switch (database.gravity_direction)
                 {
-                    nextpos = Toolkit.VectorSum(player.position, Toolkit.VectorSum(Toolkit.DirectiontoVector(Toolkit.ReverseDirection(database.gravity_direction)), Toolkit.DirectiontoVector(dir)));
-                    units = GetUnits(nextpos);
-                    if (units.Count == 0)
+                    case Direction.Down:
+                        switch (dir)
+                        {
+                            case Direction.Right: if (ramp.type == 1) goingup = false; break;
+                            case Direction.Left: if (ramp.type == 4) goingup = false; break;
+                        }
+                        break;
+                    case Direction.Right:
+                        switch (dir)
+                        {
+                            case Direction.Up: if (ramp.type == 4) goingup = false; break;
+                            case Direction.Down: if (ramp.type == 3) goingup = false; break;
+                        }
+                        break;
+                    case Direction.Up:
+                        switch (dir)
+                        {
+                            case Direction.Right: if (ramp.type == 2) goingup = false; break;
+                            case Direction.Left: if (ramp.type == 3) goingup = false; break;
+                        }
+                        break;
+                    case Direction.Left:
+                        switch (dir)
+                        {
+                            case Direction.Up: if (ramp.type == 1) goingup = false; break;
+                            case Direction.Down: if (ramp.type == 2) goingup = false; break;
+                        }
+                        break;
+                }
+                if (goingup)
+                {
+                    Vector2 temppos = Toolkit.VectorSum(player.position, dir);
+                    if (Toolkit.HasBranch(temppos))
                     {
-                        units = GetUnits(Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction)));
-                        if (units.Count == 0)
-                        {
-                            database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                            player.position = nextpos;
-                            database.units[(int)player.position.x, (int)player.position.y].Add(player);
-                            apigraphic.MovePlayer_Ramp_3(player, nextpos, ramp.type);
-
-                        }
-                        else
-                        {
-                            if (units[0] is Ramp)
-                            {
-                                database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                                if (Toolkit.IsdoubleRamp(units[0].position))
-                                {
-                                    int type = Toolkit.GetRamp(player.position).type;
-                                    player.position = nextpos;
-                                    database.units[(int)player.position.x, (int)player.position.y].Add(player);
-                                    apigraphic.MovePlayer_Ramp_2(player, player.position, type);
-                                }
-                                else if (((Ramp)units[0]).IsOnRampSide(Toolkit.ReverseDirection(database.gravity_direction)))
-                                {
-                                    player.position = Toolkit.VectorSum(player.position, Toolkit.DirectiontoVector(dir));
-                                    database.units[(int)player.position.x, (int)player.position.y].Add(player);
-                                    apigraphic.MovePlayer_Ramp_5(player, Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction)), ((Ramp)units[0]).type);
-                                }
-                                else
-                                {
-                                    int type = Toolkit.GetRamp(player.position).type;
-                                    player.position = nextpos;
-                                    database.units[(int)player.position.x, (int)player.position.y].Add(player);
-                                    apigraphic.MovePlayer_Ramp_2(player, player.position, type);
-                                }
-                            }
-                            else
-                            {
-                                database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                                player.position = nextpos;
-                                database.units[(int)player.position.x, (int)player.position.y].Add(player);
-                                apigraphic.MovePlayer_Ramp_2(player, nextpos, ramp.type);
-                            }
-                        }
+                        database.units[(int)player.position.x, (int)player.position.y].Remove(player);
+                        player.position = temppos;
+                        database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                        apigraphic.MovePlayer_Ramp_Branch(player, player.position, ramp.type, dir);
                     }
-                    else
+                    if (Toolkit.HasRamp(temppos))
                     {
+                        Ramp ramptemp = Toolkit.GetRamp(temppos);
+                        nextpos = Toolkit.VectorSum(player.position, Toolkit.VectorSum(Toolkit.DirectiontoVector(Toolkit.ReverseDirection(database.gravity_direction)), Toolkit.DirectiontoVector(dir)));
                         if (Toolkit.HasBranch(nextpos))
                         {
                             database.units[(int)player.position.x, (int)player.position.y].Remove(player);
@@ -291,229 +211,315 @@ public class LogicalEngine {
                             database.units[(int)player.position.x, (int)player.position.y].Add(player);
                             apigraphic.MovePlayer_Ramp_2(player, player.position, ramp.type);
                         }
-                        else if (Toolkit.CanplayerGoOnRampSideFromRamp(Toolkit.GetRamp(nextpos), database.gravity_direction, dir))
+                        else if (Toolkit.HasRamp(nextpos) && Toolkit.CanplayerGoOnRampSideFromRamp(Toolkit.GetRamp(nextpos), database.gravity_direction, dir))
                         {
                             database.units[(int)player.position.x, (int)player.position.y].Remove(player);
                             player.position = nextpos;
                             database.units[(int)player.position.x, (int)player.position.y].Add(player);
                             apigraphic.MovePlayer_Ramp_1(player, nextpos, ((Ramp)units[0]).type);
                         }
-                        else if (Toolkit.GetRamp(nextpos).IsOnRampSide(Toolkit.ReverseDirection(dir))) //zir pelle az ramp be zir pelle going up
+                        else if (ramptemp.type + ramp.type == 5)
+                        {
+                            apiunit.RemoveFromDatabase(player);
+                            player.position = temppos;
+                            apiunit.AddToDatabase(player);
+                            apigraphic.MovePlayer_Ramp_5(player, player.position, ramptemp.type);
+                        }
+                        else
                         {
                             database.units[(int)player.position.x, (int)player.position.y].Remove(player);
                             player.position = nextpos;
                             database.units[(int)player.position.x, (int)player.position.y].Add(player);
                             apigraphic.MovePlayer_Ramp_2(player, nextpos, ramp.type);
                         }
-                        else
-                        {
-                            database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                            Debug.Log(player.position);
-                            player.position = Toolkit.VectorSum(player.position, dir);
-                            database.units[(int)player.position.x, (int)player.position.y].Add(player);
-                            apigraphic.MovePlayer_Ramp_5(player, player.position, Toolkit.GetRamp(player.position).type);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                nextpos = Toolkit.VectorSum(player.position, Toolkit.DirectiontoVector(dir));
-                units = GetUnits(nextpos);
-                if(Toolkit.HasRamp(nextpos) && Toolkit.GetRamp(nextpos).ComingOnRampSide(player.position))
-                {
-                    database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                    player.position = nextpos;
-                    database.units[(int)player.position.x, (int)player.position.y].Add(player);
-                    apigraphic.MovePlayer_Ramp_4(player, nextpos, ((Ramp)units[0]).type);
-                }
-                else
-                {
-                    units = GetUnits(Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction)));
-                    database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                    if (Toolkit.HasRamp(Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction))))
-                    {
-                        if (Toolkit.IsdoubleRamp(Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction))))
-                        {
-                            player.position = nextpos;
-                            database.units[(int)player.position.x, (int)player.position.y].Add(player);
-                            apigraphic.MovePlayer_Ramp_2(player, player.position, ramp.type);
-                        }
-                        else if (!Toolkit.GetRamp(Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction))).IsOnRampSide(Toolkit.ReverseDirection(database.gravity_direction)))
-                        {
-                            player.position = nextpos;
-                            database.units[(int)player.position.x, (int)player.position.y].Add(player);
-                            apigraphic.MovePlayer_Ramp_2(player, player.position, ramp.type);
-                        }
-                        else
-                        {
-                            ramp = Toolkit.GetRamp(Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction)));
-                            player.position = Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction));
-                            database.units[(int)player.position.x, (int)player.position.y].Add(player);
-                            apigraphic.MovePlayer_Ramp_1(player, Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction)), ramp.type);
-                        }
-                    }
-                    else if(!Toolkit.IsEmpty(Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction))))
-                    {
-                        player.position = nextpos;
-                        database.units[(int)player.position.x, (int)player.position.y].Add(player);
-                        apigraphic.MovePlayer_Ramp_2(player, nextpos, ramp.type);
                     }
                     else
                     {
-                        player.position = nextpos;
-                        database.units[(int)player.position.x, (int)player.position.y].Add(player);
-                        apigraphic.MovePlayer_Ramp_3(player, nextpos, ramp.type);
-                    }
-                }
-            }
-        }
-        else //not on ramp
-        {
-            if (Toolkit.IsInsideBranch(player) && player.state != PlayerState.Jumping) //branch move
-            {
-                nextpos = Toolkit.VectorSum(player.position, Toolkit.DirectiontoVector(dir));
-                Vector2 temp = Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction));
-                List<Unit> units = GetUnits(nextpos);
-                if(units.Count != 0)
-                {
-                    if(units[0] is Ramp)
-                    {
-                        if (Toolkit.IsdoubleRamp(nextpos))
-                            return;
-                        else if (((Ramp)units[0]).IsOnRampSide(Toolkit.ReverseDirection(dir)))
+                        nextpos = Toolkit.VectorSum(player.position, Toolkit.VectorSum(Toolkit.DirectiontoVector(Toolkit.ReverseDirection(database.gravity_direction)), Toolkit.DirectiontoVector(dir)));
+                        units = GetUnits(nextpos);
+                        if (units.Count == 0)
                         {
-                            database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                            player.position = nextpos;
-                            database.units[(int)player.position.x, (int)player.position.y].Add(player);
-                            apigraphic.MovePlayer_Branch_3(player, nextpos, ((Ramp)units[0]).type);
-                        }
-                    }
-                    else
-                    {
-                        database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                        player.position = nextpos;
-                        database.units[(int)player.position.x, (int)player.position.y].Add(player);
-                        apigraphic.MovePlayer_Branch_1(player, nextpos);
-                    }
-                }
-                else
-                {
-                    if (Toolkit.HasRamp(temp) && !Toolkit.IsdoubleRamp(temp))
-                    {
-                        Ramp ramp = Toolkit.GetRamp(temp);
-                        if (ramp.IsOnRampSide(Toolkit.ReverseDirection(database.gravity_direction)))
-                        {
-                            database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                            player.position = temp;
-                            database.units[(int)player.position.x, (int)player.position.y].Add(player);
-                            apigraphic.MovePlayer_Branch_3(player, player.position, ramp.type);
-                        }
-                    }
-                    else
-                    {
-                        database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                        player.position = nextpos;
-                        database.units[(int)player.position.x, (int)player.position.y].Add(player);
-                        apigraphic.MovePlayer_Branch_2(player, nextpos);
-                    }
-                }
-            }
-            else //simple move
-            {
-                nextpos = Toolkit.VectorSum(player.position, Toolkit.DirectiontoVector(dir));
-                Vector2 temp = Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction));
-                List<Unit> units = GetUnits(nextpos);
-                if (units.Count != 0)
-                {
-
-                    if(units[0] is Branch)
-                    {
-                        database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                        player.position = nextpos;
-                        database.units[(int)player.position.x, (int)player.position.y].Add(player);
-                        apigraphic.MovePlayer_Simple_2(player, nextpos);
-                    }
-                    else if(units[0] is Ramp)
-                    {
-                        database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                        if(Toolkit.CanplayerGoOnRampSideFromFromNoneRamp((Ramp)units[0], database.gravity_direction, dir))
-                        {
-                            player.position = nextpos;
-                            database.units[(int)player.position.x, (int)player.position.y].Add(player);
-                            apigraphic.MovePlayer_Simple_3(player, nextpos, Toolkit.GetRamp(nextpos).type);
-                        }
-                        else if(Toolkit.HasRamp(temp))
-                        {
-                            if(Toolkit.CanplayerGoOnRampSideFromFromNoneRamp(Toolkit.GetRamp(temp), database.gravity_direction, Toolkit.ReverseDirection(dir)))
+                            units = GetUnits(Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction)));
+                            if (units.Count == 0)
                             {
+                                database.units[(int)player.position.x, (int)player.position.y].Remove(player);
+                                player.position = nextpos;
+                                database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                                apigraphic.MovePlayer_Ramp_3(player, nextpos, ramp.type);
+
+                            }
+                            else
+                            {
+                                if (units[0] is Ramp)
+                                {
+                                    database.units[(int)player.position.x, (int)player.position.y].Remove(player);
+                                    if (Toolkit.IsdoubleRamp(units[0].position))
+                                    {
+                                        int type = Toolkit.GetRamp(player.position).type;
+                                        player.position = nextpos;
+                                        database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                                        apigraphic.MovePlayer_Ramp_2(player, player.position, type);
+                                    }
+                                    else if (((Ramp)units[0]).IsOnRampSide(Toolkit.ReverseDirection(database.gravity_direction)))
+                                    {
+                                        player.position = Toolkit.VectorSum(player.position, Toolkit.DirectiontoVector(dir));
+                                        database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                                        apigraphic.MovePlayer_Ramp_5(player, Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction)), ((Ramp)units[0]).type);
+                                    }
+                                    else
+                                    {
+                                        int type = Toolkit.GetRamp(player.position).type;
+                                        player.position = nextpos;
+                                        database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                                        apigraphic.MovePlayer_Ramp_2(player, player.position, type);
+                                    }
+                                }
+                                else
+                                {
+                                    database.units[(int)player.position.x, (int)player.position.y].Remove(player);
+                                    player.position = nextpos;
+                                    database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                                    apigraphic.MovePlayer_Ramp_2(player, nextpos, ramp.type);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (Toolkit.HasBranch(nextpos))
+                            {
+                                database.units[(int)player.position.x, (int)player.position.y].Remove(player);
+                                player.position = nextpos;
+                                database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                                apigraphic.MovePlayer_Ramp_2(player, player.position, ramp.type);
+                            }
+                            else if (Toolkit.CanplayerGoOnRampSideFromRamp(Toolkit.GetRamp(nextpos), database.gravity_direction, dir))
+                            {
+                                database.units[(int)player.position.x, (int)player.position.y].Remove(player);
+                                player.position = nextpos;
+                                database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                                apigraphic.MovePlayer_Ramp_1(player, nextpos, ((Ramp)units[0]).type);
+                            }
+                            else if (Toolkit.GetRamp(nextpos).IsOnRampSide(Toolkit.ReverseDirection(dir))) //zir pelle az ramp be zir pelle going up
+                            {
+                                database.units[(int)player.position.x, (int)player.position.y].Remove(player);
+                                player.position = nextpos;
+                                database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                                apigraphic.MovePlayer_Ramp_2(player, nextpos, ramp.type);
+                            }
+                            else
+                            {
+                                database.units[(int)player.position.x, (int)player.position.y].Remove(player);
+                                Debug.Log(player.position);
+                                player.position = Toolkit.VectorSum(player.position, dir);
+                                database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                                apigraphic.MovePlayer_Ramp_5(player, player.position, Toolkit.GetRamp(player.position).type);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    nextpos = Toolkit.VectorSum(player.position, Toolkit.DirectiontoVector(dir));
+                    units = GetUnits(nextpos);
+                    if (Toolkit.HasRamp(nextpos) && Toolkit.GetRamp(nextpos).ComingOnRampSide(player.position))
+                    {
+                        database.units[(int)player.position.x, (int)player.position.y].Remove(player);
+                        player.position = nextpos;
+                        database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                        apigraphic.MovePlayer_Ramp_4(player, nextpos, ((Ramp)units[0]).type);
+                    }
+                    else
+                    {
+                        units = GetUnits(Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction)));
+                        database.units[(int)player.position.x, (int)player.position.y].Remove(player);
+                        if (Toolkit.HasRamp(Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction))))
+                        {
+                            if (Toolkit.IsdoubleRamp(Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction))))
+                            {
+                                player.position = nextpos;
+                                database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                                apigraphic.MovePlayer_Ramp_2(player, player.position, ramp.type);
+                            }
+                            else if (!Toolkit.GetRamp(Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction))).IsOnRampSide(Toolkit.ReverseDirection(database.gravity_direction)))
+                            {
+                                player.position = nextpos;
+                                database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                                apigraphic.MovePlayer_Ramp_2(player, player.position, ramp.type);
+                            }
+                            else
+                            {
+                                ramp = Toolkit.GetRamp(Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction)));
+                                player.position = Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction));
+                                database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                                apigraphic.MovePlayer_Ramp_1(player, Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction)), ramp.type);
+                            }
+                        }
+                        else if (!Toolkit.IsEmpty(Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction))))
+                        {
+                            player.position = nextpos;
+                            database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                            apigraphic.MovePlayer_Ramp_2(player, nextpos, ramp.type);
+                        }
+                        else
+                        {
+                            player.position = nextpos;
+                            database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                            apigraphic.MovePlayer_Ramp_3(player, nextpos, ramp.type);
+                        }
+                    }
+                }
+            }
+            else //not on ramp
+            {
+                if (Toolkit.IsInsideBranch(player) && player.state != PlayerState.Jumping) //branch move
+                {
+                    nextpos = Toolkit.VectorSum(player.position, Toolkit.DirectiontoVector(dir));
+                    Vector2 temp = Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction));
+                    List<Unit> units = GetUnits(nextpos);
+                    if (units.Count != 0)
+                    {
+                        if (units[0] is Ramp)
+                        {
+                            if (Toolkit.IsdoubleRamp(nextpos))
+                                return;
+                            else if (((Ramp)units[0]).IsOnRampSide(Toolkit.ReverseDirection(dir)))
+                            {
+                                database.units[(int)player.position.x, (int)player.position.y].Remove(player);
+                                player.position = nextpos;
+                                database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                                apigraphic.MovePlayer_Branch_3(player, nextpos, ((Ramp)units[0]).type);
+                            }
+                        }
+                        else
+                        {
+                            database.units[(int)player.position.x, (int)player.position.y].Remove(player);
+                            player.position = nextpos;
+                            database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                            apigraphic.MovePlayer_Branch_1(player, nextpos);
+                        }
+                    }
+                    else
+                    {
+                        if (Toolkit.HasRamp(temp) && !Toolkit.IsdoubleRamp(temp))
+                        {
+                            Ramp ramp = Toolkit.GetRamp(temp);
+                            if (ramp.IsOnRampSide(Toolkit.ReverseDirection(database.gravity_direction)))
+                            {
+                                database.units[(int)player.position.x, (int)player.position.y].Remove(player);
                                 player.position = temp;
                                 database.units[(int)player.position.x, (int)player.position.y].Add(player);
-                                apigraphic.MovePlayer_Simple_3(player, temp, Toolkit.GetRamp(temp).type);
+                                apigraphic.MovePlayer_Branch_3(player, player.position, ramp.type);
+                            }
+                        }
+                        else
+                        {
+                            database.units[(int)player.position.x, (int)player.position.y].Remove(player);
+                            player.position = nextpos;
+                            database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                            apigraphic.MovePlayer_Branch_2(player, nextpos);
+                        }
+                    }
+                }
+                else //simple move
+                {
+                    nextpos = Toolkit.VectorSum(player.position, Toolkit.DirectiontoVector(dir));
+                    Vector2 temp = Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction));
+                    List<Unit> units = GetUnits(nextpos);
+                    if (units.Count != 0)
+                    {
+
+                        if (units[0] is Branch)
+                        {
+                            database.units[(int)player.position.x, (int)player.position.y].Remove(player);
+                            player.position = nextpos;
+                            database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                            apigraphic.MovePlayer_Simple_2(player, nextpos, dir);
+                        }
+                        else if (units[0] is Ramp)
+                        {
+                            database.units[(int)player.position.x, (int)player.position.y].Remove(player);
+                            if (Toolkit.CanplayerGoOnRampSideFromFromNoneRamp((Ramp)units[0], database.gravity_direction, dir))
+                            {
+                                player.position = nextpos;
+                                database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                                apigraphic.MovePlayer_Simple_3(player, nextpos, Toolkit.GetRamp(nextpos).type);
+                            }
+                            else if (Toolkit.HasRamp(temp))
+                            {
+                                if (Toolkit.CanplayerGoOnRampSideFromFromNoneRamp(Toolkit.GetRamp(temp), database.gravity_direction, Toolkit.ReverseDirection(dir)))
+                                {
+                                    player.position = temp;
+                                    database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                                    apigraphic.MovePlayer_Simple_3(player, temp, Toolkit.GetRamp(temp).type);
+                                }
+                                else
+                                {
+                                    player.position = nextpos;
+                                    database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                                    apigraphic.MovePlayer_Simple_4(player, nextpos);
+                                }
                             }
                             else
                             {
                                 player.position = nextpos;
                                 database.units[(int)player.position.x, (int)player.position.y].Add(player);
-                                apigraphic.MovePlayer_Simple_4(player, nextpos);
+                                apigraphic.MovePlayer_Simple_4(player, player.position);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        units = GetUnits(temp);
+                        if (units.Count != 0)
+                        {
+                            if (units[0] is Ramp)
+                            {
+                                database.units[(int)player.position.x, (int)player.position.y].Remove(player);
+                                if (Toolkit.IsdoubleRamp(units[0].position))
+                                {
+                                    player.position = nextpos;
+                                    database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                                    apigraphic.MovePlayer_Simple_1(player, nextpos);
+                                }
+
+                                else if (Toolkit.CanplayerGoOnRampSideFromFromNoneRamp(units[0] as Ramp, database.gravity_direction, Toolkit.ReverseDirection(dir)))
+                                {
+                                    player.position = temp;
+                                    database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                                    apigraphic.MovePlayer_Simple_5(player, temp, ((Ramp)units[0]).type);
+                                }
+                                else
+                                {
+                                    player.position = nextpos;
+                                    database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                                    apigraphic.MovePlayer_Simple_4(player, nextpos);
+                                }
+
+                            }
+                            else
+                            {
+                                database.units[(int)player.position.x, (int)player.position.y].Remove(player);
+                                player.position = nextpos;
+                                database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                                apigraphic.MovePlayer_Simple_1(player, nextpos);
                             }
                         }
                         else
                         {
+                            database.units[(int)player.position.x, (int)player.position.y].Remove(player);
                             player.position = nextpos;
                             database.units[(int)player.position.x, (int)player.position.y].Add(player);
                             apigraphic.MovePlayer_Simple_4(player, player.position);
                         }
                     }
                 }
-                else
-                {
-                    units = GetUnits(temp);
-                    if(units.Count != 0)
-                    {
-                        if(units[0] is Ramp)
-                        {
-                            database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                            if (Toolkit.IsdoubleRamp(units[0].position))
-                            {
-                                player.position = nextpos;
-                                database.units[(int)player.position.x, (int)player.position.y].Add(player);
-                                apigraphic.MovePlayer_Simple_1(player, nextpos);
-                            }
-
-                            else if (Toolkit.CanplayerGoOnRampSideFromFromNoneRamp(units[0] as Ramp, database.gravity_direction, Toolkit.ReverseDirection(dir)))
-                            {
-                                player.position = temp;
-                                database.units[(int)player.position.x, (int)player.position.y].Add(player);
-                                apigraphic.MovePlayer_Simple_5(player, temp, ((Ramp)units[0]).type);
-                            }
-                            else
-                            {
-                                player.position = nextpos;
-                                database.units[(int)player.position.x, (int)player.position.y].Add(player);
-                                apigraphic.MovePlayer_Simple_4(player, nextpos);
-                            }
-                            
-                        }
-                        else
-                        {
-                            database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                            player.position = nextpos;
-                            database.units[(int)player.position.x, (int)player.position.y].Add(player);
-                            apigraphic.MovePlayer_Simple_1(player, nextpos);
-                        }
-                    }
-                    else
-                    {
-                        database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                        player.position = nextpos;
-                        database.units[(int)player.position.x, (int)player.position.y].Add(player);
-                        apigraphic.MovePlayer_Simple_4(player, player.position);
-                    }
-                }
             }
+            snpmanager.takesnapshot();
         }
-        snpmanager.takesnapshot();
+        catch
+        {
+            Debug.Log("cant move!!!");
+        }
     }
 
     public void Undo()
