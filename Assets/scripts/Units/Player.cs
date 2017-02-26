@@ -421,6 +421,9 @@ public class CloneablePlayer : CloneableUnit
         original.nextpos = new Vector2(nextpos.x, nextpos.y);
         original.lean = false;
         original.api.engine.apigraphic.Absorb(original, null);
+        original.abilitycount = original.abilities.Count;
+        if (original.abilitycount != 0)
+            original.abilitytype = original.abilities[0].abilitytype;
         SetPosition();
     }
 }
