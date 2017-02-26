@@ -78,7 +78,7 @@ public class Container : ParentContainer {
             {
                 for (int i = 0; i < player.abilities.Count; i++)
                 {
-                    AddToReservedMove(false, i+1);
+                    AddToReservedMove(false, i);
                 }
                 if (((FunctionalContainer)this).on)
                 {

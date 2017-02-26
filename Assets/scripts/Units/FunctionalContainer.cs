@@ -350,7 +350,7 @@ public class FunctionalContainer : Container {
         {
             if (increased)
                 shouldmove++;
-            else
+            else if(shouldmove > 0)
                 shouldmove--;
         }
         reservedmovebool.Add(increased);
