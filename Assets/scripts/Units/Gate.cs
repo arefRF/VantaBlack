@@ -35,6 +35,10 @@ public class Gate : Container {
         {
             return;
         }
+        api.AddToSnapshot(this);
+        api.AddToSnapshot(player);
+        Debug.Log(player.abilitycount);
+        api.TakeSnapshot();
         PlayerReleaseAbilities(player);
     }
 
@@ -56,6 +60,8 @@ public class Gate : Container {
             return;
         if (Internal)
         {
+            api.AddToSnapshot(this);
+            api.MergeSnapshot();
             Debug.Log("Internal OPen");
             GetComponent<Animator>().SetBool("Open", true);
             api.RemoveFromDatabase(this);
@@ -85,6 +91,7 @@ public class CloneableGate : CloneableUnit
     public List<Ability> abilities;
     public CloneableGate(Gate gate) : base(gate.position)
     {
+        Debug.Log("wtfwtf");
         original = gate;
         abilities = new List<Ability>();
         for (int i = 0; i < gate.abilities.Count; i++)
@@ -93,13 +100,13 @@ public class CloneableGate : CloneableUnit
 
     public override void Undo()
     {
+        Debug.Log("here");
         base.Undo();
         Gate original = (Gate)base.original;
         original.abilities = new List<Ability>();
         for (int i = 0; i < abilities.Count; i++)
             original.abilities.Add(abilities[i]);
         original.api.AddToDatabase(original);
-        Debug.Log("here");
         original.api.engine.apigraphic.Undo_Unit(original);
         original.api.engine.apigraphic.UnitChangeSprite(original);
     }

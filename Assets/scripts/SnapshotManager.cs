@@ -15,6 +15,7 @@ public class SnapshotManager{
 
     public void takesnapshot()
     {
+        Debug.Log("havalahi");
         if (snapshot.clonedunits.Count == 0)
             return;
         database.snapshots.Add(snapshot);
