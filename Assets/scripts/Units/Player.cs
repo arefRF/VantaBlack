@@ -401,9 +401,9 @@ public class CloneablePlayer : CloneableUnit
     public override void Undo()
     {
         Player original = (Player)base.original;
+        original.position = position;
         original.api.StopPlayerCoroutine(original);
         original.api.RemoveFromDatabase(original);
-        original.position = position;
         original.api.AddToDatabase(original);
         original.abilities = new List<Ability>();
         for (int i = 0; i < abilities.Count; i++)
