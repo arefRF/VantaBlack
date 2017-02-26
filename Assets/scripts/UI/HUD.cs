@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class HUD : MonoBehaviour {
     private UnityEngine.UI.Image icon;
 
-    void Start()
+    void Awake()
     {
         icon = transform.GetChild(0).GetComponent<Image>();
     }
@@ -49,7 +49,6 @@ public class HUD : MonoBehaviour {
         }
         else
             path += "";
-
         icon.sprite = (Sprite)Resources.Load(path, typeof(Sprite));
         
     }
