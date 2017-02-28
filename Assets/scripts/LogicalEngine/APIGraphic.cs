@@ -132,7 +132,7 @@ public class APIGraphic{
     public void Land(Player player, Vector2 position, Unit fallonunit)
     {
         player.GetComponent<PlayerPhysics>().Land(position);
-      
+        LandFinished(player);
         
     }
 
