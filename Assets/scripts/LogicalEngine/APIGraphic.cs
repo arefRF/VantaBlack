@@ -290,4 +290,15 @@ public class APIGraphic{
         else if (unit is Gate)
             graphicalengine.Gate((Gate)unit);
     }
+
+    public void Fall_Player_Died(Player player)
+    {
+        player.GetComponent<PlayerPhysics>().Fall_Die(new Vector2(player.position.x, -10));
+        Debug.Log("Died");
+    }
+
+    public void Crush_Player_Died(Player player)
+    {
+        Debug.Log("crush player died");
+    }
 }
