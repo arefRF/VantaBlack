@@ -241,6 +241,11 @@ public class Player : Unit
 
     public void FallFinished()
     {
+        if(position.x <= 0 || position.y <= 0)
+        {
+            api.engine.apigraphic.Fall_Player_Died(this);
+            return;
+        }
         Vector2 pos = Toolkit.VectorSum(position, Starter.GetGravityDirection());
         if (pos.x <= 0 || pos.y <= 0)
             return;

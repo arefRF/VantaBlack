@@ -38,6 +38,9 @@ public class LogicalEngine {
                 for (int k = 0; k < database.units[i, j].Count; k++)
                     database.units[i, j][k].Run();
         inputcontroller = new InputController(this);
+        for(int i=0; i<database.player.Count; i++)
+            snpmanager.AddToSnapShot(database.player[i]);
+        snpmanager.takesnapshot();
         //Applygravity();
     }
 
@@ -561,24 +564,6 @@ public class LogicalEngine {
             database.player[i].ApplyGravity(database.gravity_direction, database.units);
         }
         //apiinput.PlayerMoveFinished();
-    }
-
-    public void graphic_FallFinished(Player player)
-    {
-        if(player.position.x == 0 || player.position.y == 0)
-        {
-            apigraphic.Fall_Player_Died(player);
-            return;
-        }
-        bool isonunit = true;
-        if (GetUnits(Toolkit.VectorSum(Toolkit.DirectiontoVector(database.gravity_direction), player.position)).Count == 0)
-            isonunit = false;
-        if (isonunit)
-        {
-            player.movepercentage = 0;
-        }
-        else
-            player.ApplyGravity(database.gravity_direction, database.units);
     }
 
     public void graphic_LandFinished(Player player)
