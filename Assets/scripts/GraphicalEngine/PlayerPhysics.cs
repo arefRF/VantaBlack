@@ -94,11 +94,13 @@ public class PlayerPhysics : MonoBehaviour
     public void Land(Vector2 position)
     {
         Rotate_On_Block();
+
     }
     public void Land_On_Ramp(Vector2 position,int type)
     {
+        move_type = MoveType.Land;
         Vector2 pos  = position + On_Ramp_Pos(type);
-        StartCoroutine(Constant_Move(pos,0.2f,false)); 
+        StartCoroutine(Constant_Move(pos,0.2f,true)); 
     }
 
     private Vector2 Block_To_Ramp_Pos(int type)
@@ -349,7 +351,10 @@ public class PlayerPhysics : MonoBehaviour
 
         if (call_finish)
         {
+            if(move_type!=MoveType.Land)
                 api.MovePlayerFinished(gameObject);
+            if (move_type != MoveType.Land)
+                api.LandFinished(player);
         }
 
         //cuz it messed with falling
@@ -477,7 +482,7 @@ public class PlayerPhysics : MonoBehaviour
 
     private enum MoveType
     {
-        RampToRamp,RampToSharp,RampToCorner,Falling,BlockToBlock,Idle,LeanStick,RampToFall,BlockToFall,OnPlatform,RampToBlock,BlockToRamp,FallDie
+        RampToRamp,RampToSharp,RampToCorner,Falling,BlockToBlock,Idle,LeanStick,RampToFall,BlockToFall,OnPlatform,RampToBlock,BlockToRamp,FallDie,Land
     }
 
 }

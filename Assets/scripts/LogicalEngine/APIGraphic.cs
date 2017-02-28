@@ -132,14 +132,18 @@ public class APIGraphic{
     public void Land(Player player, Vector2 position, Unit fallonunit)
     {
         player.GetComponent<PlayerPhysics>().Land(position);
-        logicalengine.graphic_LandFinished(player);
+      
         
     }
 
+    public void LandFinished(Player player)
+    {
+        logicalengine.graphic_LandFinished(player);
+    }
     public void LandOnRamp(Player player, Vector2 position, Unit fallonunit, int ramptype)
     {
         player.GetComponent<PlayerPhysics>().Land_On_Ramp(position, ramptype);
-        logicalengine.graphic_LandFinished(player);
+        
     }
 
     public void MoveGameObject(GameObject obj, Vector2 pos, Unit unit)
