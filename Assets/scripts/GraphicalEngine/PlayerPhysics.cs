@@ -202,6 +202,14 @@ public class PlayerPhysics : MonoBehaviour
         move_type = MoveType.Falling;
         last_co  = StartCoroutine(Accelerated_Move(pos,fall_velocity,fall_acceleration,true));
     }
+
+    public void Fall_Die(Vector2 pos)
+    {
+        Camera.main.GetComponent<CameraController>().auto_move = false;
+        move_type = MoveType.FallDie;
+        StopAllCoroutines();
+        StartCoroutine(Accelerated_Move(pos, fall_velocity, fall_acceleration, false));
+    }
     public void Simple_Move(Vector2 pos)
     {
             set_percent = true;
@@ -387,7 +395,6 @@ public class PlayerPhysics : MonoBehaviour
         }
         if(call_finish)
         {
-            Debug.Log(move_type);
             switch (move_type)
             {
                 case MoveType.Falling: api.Fall_Finish(player); move_type = MoveType.Idle; break;
@@ -470,7 +477,7 @@ public class PlayerPhysics : MonoBehaviour
 
     private enum MoveType
     {
-        RampToRamp,RampToSharp,RampToCorner,Falling,BlockToBlock,Idle,LeanStick,RampToFall,BlockToFall,OnPlatform,RampToBlock,BlockToRamp
+        RampToRamp,RampToSharp,RampToCorner,Falling,BlockToBlock,Idle,LeanStick,RampToFall,BlockToFall,OnPlatform,RampToBlock,BlockToRamp,FallDie
     }
 
 }
