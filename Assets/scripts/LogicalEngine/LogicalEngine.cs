@@ -50,13 +50,38 @@ public class LogicalEngine {
             snpmanager.CloneStuckList();
             if (!unit.CanMove(dir, unit.transform.parent.gameObject))
                 return false;
+            
+            for (int i = 0; i < unit.ConnectedUnits.Count; i++)
+                if (!unit.ConnectedUnits[i].CanMove(dir, unit.transform.parent.gameObject))
+                    return false;
+
+            int bound = unit.players.Count;
+            for (int i = 0; i < bound; i++)
+            {
+                if (!unit.players[i].CanMove(dir, unit.transform.parent.gameObject))
+                {
+                    apigraphic.Crush_Player_Died(unit.players[i] as Player);
+                    return false;
+                }
+                unit.players.AddRange(unit.players[i].players);
+
+            }
+            //friction
+            shouldmove.AddRange(unit.EffectedUnits(Toolkit.ReverseDirection(Starter.GetDataBase().gravity_direction)));
             shouldmove.AddRange(unit.players);
             for (int i = 0; i < unit.ConnectedUnits.Count; i++)
             {
-                if (!unit.ConnectedUnits[i].CanMove(dir, unit.transform.parent.gameObject))
+                bound = unit.ConnectedUnits[i].players.Count;
+                for (int j = 0; j < bound; j++)
                 {
-                    return false;
+                    if (!unit.ConnectedUnits[i].players[j].CanMove(dir, unit.ConnectedUnits[i].transform.parent.gameObject))
+                    {
+                        apigraphic.Crush_Player_Died(unit.ConnectedUnits[i].players[j] as Player);
+                        return false;
+                    }
+                    unit.ConnectedUnits[i].players.AddRange(unit.ConnectedUnits[i].players[j].players);
                 }
+                shouldmove.AddRange(unit.ConnectedUnits[i].EffectedUnits(Toolkit.ReverseDirection(Starter.GetDataBase().gravity_direction)));
                 shouldmove.AddRange(unit.ConnectedUnits[i].players);
             }
             for (int i = 0; i < unit.ConnectedUnits.Count; i++)
@@ -542,7 +567,7 @@ public class LogicalEngine {
     {
         if(player.position.x == 0 || player.position.y == 0)
         {
-            Debug.Log("player died");
+            apigraphic.Fall_Player_Died(player);
             return;
         }
         bool isonunit = true;

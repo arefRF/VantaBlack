@@ -202,6 +202,7 @@ public class FunctionalContainer : Container {
             stuckdirection = dir;
             stucklevel++;
             CheckReservedList();
+            gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = false;
         }
         //gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = false;
         //firstmove = true;
