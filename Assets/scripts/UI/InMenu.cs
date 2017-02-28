@@ -6,23 +6,12 @@ public class InMenu : MonoBehaviour {
     private int button;
 	// Use this for initialization
 	void Start () {
-        button = 0;
-        gameObject.transform.GetChild(0).gameObject.SetActive(true);
-        ColorBlock cb = GameObject.Find("inMenuPanel").transform.GetChild(button).GetComponent<Button>().colors;
-        cb.normalColor = Color.red;
-        GameObject.Find("inMenuPanel").transform.GetChild(button).GetComponent<Button>().colors = cb;
-        gameObject.transform.GetChild(0).gameObject.SetActive(false);
+
     }
 
     public void click()
     {
-        if (gameObject.transform.GetChild(0).gameObject.activeSelf)
-        {
-            gameObject.transform.GetChild(0).gameObject.SetActive(false);
-            gameObject.transform.GetChild(1).gameObject.SetActive(false);
-        }
-        else
-            gameObject.transform.GetChild(0).gameObject.SetActive(true);
+
     }
 
 

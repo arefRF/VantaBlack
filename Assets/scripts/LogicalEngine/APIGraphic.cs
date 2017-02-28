@@ -303,6 +303,7 @@ public class APIGraphic{
 
     public void Crush_Player_Died(Player player)
     {
+        GameObject.Find("UI").GetComponent<Get>().inMenu_Show();
         Debug.Log("crush player died");
     }
 }
