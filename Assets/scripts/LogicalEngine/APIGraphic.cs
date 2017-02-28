@@ -120,8 +120,8 @@ public class APIGraphic{
     }    
     public void Fall(Player player, Vector2 position)
     {
+        Debug.Log(position);
         player.GetComponent<PlayerPhysics>().Fall(position);
-        logicalengine.graphic_FallFinished(player);
     }
 
     public void Fall_Finish(Player player)
@@ -298,7 +298,7 @@ public class APIGraphic{
     public void Fall_Player_Died(Player player)
     {
         player.GetComponent<PlayerPhysics>().Fall_Die(new Vector2(player.position.x, -10));
-        Debug.Log("Died");
+        GameObject.Find("UI").GetComponent<Get>().inMenu_Show();
     }
 
     public void Crush_Player_Died(Player player)
