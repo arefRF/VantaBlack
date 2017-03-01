@@ -5,6 +5,7 @@ public class CameraController : MonoBehaviour {
     public Player player;
     public bool auto_move = true;
     public float left_bound, right_bound, upper_bound, lower_bound;
+    public float zoom;
     private Transform p_transform;
     private float vert_view;
     private float horz_view;
@@ -68,6 +69,7 @@ public class CameraController : MonoBehaviour {
 
     public void Camera_Size_Change(float zoom )
     {
+        zoom = this.zoom;
         StartCoroutine(Zoom(zoom,1));
     }
 
