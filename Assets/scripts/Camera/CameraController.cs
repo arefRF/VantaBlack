@@ -11,6 +11,7 @@ public class CameraController : MonoBehaviour {
     private float horz_view;
     private Vector3 pos;
     public float move_time = 0.5f;
+    public float rotation;
 
 	// Use this for initialization
 	void Awake () {
@@ -75,6 +76,7 @@ public class CameraController : MonoBehaviour {
 
     public void Camera_Rotation_Change(float rot, float move_time)
     {
+        rotation = rot;
         StartCoroutine(Rotation(rot,move_time));
     }
     private IEnumerator Zoom(float zoom,float move_time)
