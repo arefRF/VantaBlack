@@ -80,7 +80,6 @@ public class Gate : Container {
     private void Change_Scene()
     {
         Debug.Log("changing scene");
-        Debug.Log(sceneloader);
         //SceneManager.LoadScene(sceneName);
         sceneloader.Load(sceneName);
     }

@@ -13,7 +13,6 @@ public class SceneLoader : MonoBehaviour{
         if (loadScene == false)
         {
             loadScene = true;
-            Debug.Log("starting coroutine");
             // ...and start a coroutine that will load the desired scene.
             StartCoroutine(LoadNewScene());
 
