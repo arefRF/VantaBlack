@@ -568,6 +568,7 @@ public class LogicalEngine {
 
     public void graphic_LandFinished(Player player)
     {
+        Debug.Log("we are here");
         player.movepercentage = 0;
         player.state = PlayerState.Idle;
     }
@@ -629,8 +630,8 @@ public class LogicalEngine {
     public void graphic_PlayerMoveAnimationFinished(Player player)
     {
         player.movepercentage = 0;
-        Applygravity();
-        player.state = PlayerState.Idle;
+        if(!player.ApplyGravity(database.gravity_direction, database.units))
+            player.state = PlayerState.Idle;
     }
 
     public void graphic_LeanStickMoveFinished(Player player)
@@ -661,7 +662,7 @@ public class LogicalEngine {
 
     public void graphic_PlayerChangeDirectionFinished(Player player)
     {
-        player.state = PlayerState.Idle;
+        //player.state = PlayerState.Idle;
     }
     public void UnitToGraphic_Land(Unit unit, Unit landingunit,Vector2 landingposition)
     {

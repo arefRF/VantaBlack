@@ -214,7 +214,6 @@ public class APIGraphic{
     // Change Color of Player in absorb , release , swap
     public void Absorb(Player player, Container container)
     {
-        Debug.Log("change Color");
         player.GetComponent<PlayerGraphics>().ChangeColor();
         try
         {

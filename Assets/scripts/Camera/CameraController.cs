@@ -20,6 +20,7 @@ public class CameraController : MonoBehaviour {
         pos = new Vector3(p_transform.position.x, p_transform.position.y, transform.position.z);
         AutoMove();
         zoom = Camera.main.orthographicSize;
+        
     }
 
 
