@@ -17,9 +17,23 @@ public class SnapshotManager{
     {
         if (snapshot.clonedunits.Count == 0)
             return;
+        TakeCameraSnapshot();
         database.snapshots.Add(snapshot);
         snapshot = new Snapshot();
     }
+
+    private void TakeCameraSnapshot()
+    {
+        CameraController controller = Camera.main.GetComponent<CameraController>();
+        snapshot.camerasnapshot.left_bound = controller.left_bound;
+        snapshot.camerasnapshot.right_bound = controller.right_bound;
+        snapshot.camerasnapshot.upper_bound = controller.upper_bound;
+        snapshot.camerasnapshot.lower_bound = controller.lower_bound;
+        snapshot.camerasnapshot.zoom = controller.zoom;
+        snapshot.camerasnapshot.rotation = controller.rotation;
+        snapshot.camerasnapshot.move_time = controller.move_time;
+    }
+
     private void AddStucktoOtherList(List<Unit> copyto, List<Unit> copyfrom)
     {
         copyto.Clear();
@@ -81,7 +95,7 @@ public class SnapshotManager{
             Snapshot snp = database.snapshots[database.snapshots.Count - 1];
             database.snapshots.RemoveAt(database.snapshots.Count - 1);
             Undo(snp);
-            engine.apigraphic.Camera_AutoMove();
+            UndoCamera(snp);
         }
     }
 
@@ -93,16 +107,37 @@ public class SnapshotManager{
             snapshot.clonedunits[i].Undo();
         }
     }
+
+    private void UndoCamera(Snapshot snp)
+    {
+        CameraController controller = Camera.main.GetComponent<CameraController>();
+        Debug.Log(snp.camerasnapshot.left_bound);
+        Debug.Log(snp.camerasnapshot.right_bound);
+        Debug.Log(snp.camerasnapshot.upper_bound);
+        Debug.Log(snp.camerasnapshot.lower_bound);
+        controller.Camera_Offset_Change(snp.camerasnapshot.left_bound, snp.camerasnapshot.right_bound, snp.camerasnapshot.lower_bound, snp.camerasnapshot.upper_bound);
+        //controller.Camera_Rotation_Change(snp.camerasnapshot.rotation, snp.camerasnapshot.move_time);
+        //controller.Camera_Size_Change(snp.camerasnapshot.zoom);
+    }
 }
 
 public class Snapshot
 {
     public List<CloneableUnit> clonedunits;
     public List<Unit> stuckedunits;
+    public CameraSnapShot camerasnapshot;
     public Snapshot()
     {
         clonedunits = new List<CloneableUnit>();
         stuckedunits = new List<Unit>();
+        camerasnapshot = new CameraSnapShot();
     }
 }
 
+public class CameraSnapShot
+{
+    public float left_bound, right_bound, upper_bound, lower_bound;
+    public float zoom;
+    public float rotation;
+    public float move_time;
+}
