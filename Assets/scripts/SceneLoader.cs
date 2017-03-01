@@ -1,43 +1,23 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
-public class SceneLoader : MonoBehaviour {
+public class SceneLoader : MonoBehaviour{
     private bool loadScene = false;
+    private string scene;
 
-    [SerializeField]
-    private int scene;
-    [SerializeField]
-    private Text loadingText;
-
-
-    // Updates once per frame
-    void Update()
+    public void Load(string scene)
     {
-
+        this.scene = scene;
         // If the player has pressed the space bar and a new scene is not loading yet...
-        if (Input.GetKeyUp(KeyCode.Space) && loadScene == false)
+        if (loadScene == false)
         {
-
-            // ...set the loadScene boolean to true to prevent loading a new scene more than once...
             loadScene = true;
-
-            // ...change the instruction text to read "Loading..."
-            loadingText.text = "Loading...";
-
+            Debug.Log("starting coroutine");
             // ...and start a coroutine that will load the desired scene.
             StartCoroutine(LoadNewScene());
 
         }
-
-        // If the new scene has started loading...
-        if (loadScene == true)
-        {
-
-            // ...then pulse the transparency of the loading text to let the player know that the computer is still working.
-            loadingText.color = new Color(loadingText.color.r, loadingText.color.g, loadingText.color.b, Mathf.PingPong(Time.time, 1));
-
-        }
-
     }
 
 
@@ -47,11 +27,10 @@ public class SceneLoader : MonoBehaviour {
 
         // This line waits for 3 seconds before executing the next line in the coroutine.
         // This line is only necessary for this demo. The scenes are so simple that they load too fast to read the "Loading..." text.
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(1);
 
         // Start an asynchronous operation to load the scene that was passed to the LoadNewScene coroutine.
-        AsyncOperation async = Application.LoadLevelAsync(scene);
-
+        AsyncOperation async = SceneManager.LoadSceneAsync(scene);
         // While the asynchronous operation to load the new scene is not yet complete, continue waiting until it's done.
         while (!async.isDone)
         {
