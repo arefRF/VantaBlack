@@ -4,12 +4,13 @@ using UnityEngine.SceneManagement;
 public class Gate : Container {
 
     public string sceneName;
-    public bool Internal;
-
+    public GateType gatetype;
+    public SceneLoader sceneloader;
     public override void Run()
     {
         abilities = new List<Ability>();
         capacity = 1;
+        sceneloader = GameObject.Find("SceneLoader").GetComponent<SceneLoader>();
         base.Run();
     }
 
@@ -37,7 +38,6 @@ public class Gate : Container {
         }
         api.AddToSnapshot(this);
         api.AddToSnapshot(player);
-        Debug.Log(player.abilitycount);
         api.TakeSnapshot();
         PlayerReleaseAbilities(player);
     }
@@ -50,15 +50,13 @@ public class Gate : Container {
             player.abilities.RemoveAt(0);
             _setability(player);    
             api.engine.apigraphic.UnitChangeSprite(this);
+            Action();
         }
     }
-    public override void Action(Player player, Direction dir)
+
+    public void Action()
     {
-        if (abilities == null)
-            return;
-        if (abilities.Count != capacity)
-            return;
-        if (Internal)
+        if (gatetype == GateType.Internal)
         {
             api.AddToSnapshot(this);
             api.MergeSnapshot();
@@ -66,14 +64,24 @@ public class Gate : Container {
             GetComponent<Animator>().SetBool("Open", true);
             api.RemoveFromDatabase(this);
         }
-        else
+        else if(gatetype == GateType.InternalChangeScene)
+        {
+            SceneManager.LoadScene(sceneName);
+        }
+        else if(gatetype == GateType.External)
         {
             Change_Scene();
         }
     }
+
+    public override void Action(Player player, Direction dir)
+    {   
+    }
     private void Change_Scene()
     {
-       SceneManager.LoadScene(sceneName);
+        Debug.Log("changing scene");
+        //SceneManager.LoadScene(sceneName);
+        sceneloader.Load(sceneName);
     }
     public override void PlayerAbsorb(Player player)
     {
@@ -91,7 +99,6 @@ public class CloneableGate : CloneableUnit
     public List<Ability> abilities;
     public CloneableGate(Gate gate) : base(gate.position)
     {
-        Debug.Log("wtfwtf");
         original = gate;
         abilities = new List<Ability>();
         for (int i = 0; i < gate.abilities.Count; i++)
@@ -100,7 +107,6 @@ public class CloneableGate : CloneableUnit
 
     public override void Undo()
     {
-        Debug.Log("here");
         base.Undo();
         Gate original = (Gate)base.original;
         original.abilities = new List<Ability>();

@@ -568,7 +568,6 @@ public class LogicalEngine {
 
     public void graphic_LandFinished(Player player)
     {
-        Debug.Log("we are here");
         player.movepercentage = 0;
         player.state = PlayerState.Idle;
     }

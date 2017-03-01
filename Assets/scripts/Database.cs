@@ -69,3 +69,8 @@ public enum PlayerState
 {
     Idle, Falling, Jumping, Moving
 }
+
+public enum GateType
+{
+    Internal, InternalChangeScene, External
+}
