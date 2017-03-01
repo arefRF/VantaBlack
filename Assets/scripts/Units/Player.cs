@@ -34,6 +34,11 @@ public class Player : Unit
         state = PlayerState.Idle;
     }
 
+    public void Update()
+    {
+        //Debug.Log(state);
+    }
+
     public bool Should_Change_Direction(Direction dir)
     {
         for (int i = 0; i < move_direction.Count; i++)
