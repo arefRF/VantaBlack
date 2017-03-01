@@ -9,6 +9,13 @@ public class ObjectShow : MonoBehaviour {
 
     void Start()
     {
+        Set_Object();
+
+    }
+    void Set_Object()
+    {
+        if (text_obj != null)
+            text_obj.SetActive(false);
         GameObject tutorial = GameObject.Find(parent_name);
         for (int i = 0; i < tutorial.transform.childCount; i++)
         {
@@ -19,9 +26,9 @@ public class ObjectShow : MonoBehaviour {
     }
     void OnTriggerEnter2D(Collider2D col)
     {
-        if(col.gameObject.tag == "Player")
+        if (col.gameObject.tag == "Player")
         {
-            text_obj.SetActive(true);
+            Show_Object();
         }
     }
 
@@ -31,5 +38,16 @@ public class ObjectShow : MonoBehaviour {
         {
             text_obj.SetActive(false);
         }
+    }
+
+    public void Show_Object()
+    {
+        Set_Object();
+        text_obj.SetActive(true);
+    }
+
+    public void Hide_Object()
+    {
+        text_obj.SetActive(false);
     }
 }
