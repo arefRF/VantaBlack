@@ -202,7 +202,14 @@ public class APIGraphic{
 
     public void Fake_Lean(Player player,Direction dir)
     {
-         
+        PlayerGraphics gl = player.GetComponent<PlayerGraphics>();
+        switch (player.leandirection)
+        {
+            case Direction.Right: gl.FakeLean_Right(); break;
+            case Direction.Left: gl.FakeLean_Left(); break;
+            case Direction.Up: gl.FakeLean_Up(); break;
+            case Direction.Down: gl.FakeLean_Down(); break;
+        }
     }
     public void LeanFinished(Player player)
     {
@@ -303,5 +310,12 @@ public class APIGraphic{
     {
         GameObject.Find("UI").GetComponent<Get>().inMenu_Show();
         Debug.Log("crush player died");
+    }
+
+    public void Fake_Lean_Undo(Player player)
+    {
+        Debug.Log("fake lean undo");
+        PlayerGraphics gl = player.GetComponent<PlayerGraphics>();
+        gl.FakeLean_Finished();
     }
 }

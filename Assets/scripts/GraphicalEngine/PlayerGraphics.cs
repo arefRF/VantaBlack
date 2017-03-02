@@ -50,6 +50,36 @@ public class PlayerGraphics : MonoBehaviour {
         animator.SetBool("isLean", true);
     }
 
+    public void FakeLean_Down()
+    {
+        animator.SetInteger("Lean", 3);
+        animator.SetBool("isFakeLean", true);
+    }
+
+    public void FakeLean_Right()
+    {
+        animator.SetInteger("Lean", 2);
+        animator.SetBool("isFakeLean", true);
+    }
+    public void FakeLean_Left()
+    {
+        animator.SetInteger("Lean", 4);
+        animator.SetBool("isFakeLean", true);
+    }
+    public void FakeLean_Up()
+    {
+        animator.SetInteger("Lean", 1);
+        animator.SetBool("isFakeLean", true);
+    }
+
+    public void FakeLean_Finished()
+    {
+        animator.SetBool("isFakeLean", false);
+        animator.SetInteger("Lean", 0);
+        transform.GetChild(0).localPosition = new Vector2(0, 0);
+        transform.GetChild(1).localPosition = new Vector2(0, 0);
+    }
+
     public void Lean_Finished()
     {
         animator.SetBool("isLean", false);
