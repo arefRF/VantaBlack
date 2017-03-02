@@ -102,10 +102,13 @@ public class GraphicalEngine : MonoBehaviour {
 
     private void Set_Dynamic_Special_Icon(DynamicContainer container)
     {
-        if (container.abilities[0].abilitytype == AbilityType.Fuel)
+        if (container.abilities.Count != 0)
         {
-            SpriteRenderer fuel_icon = container.transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>();
-            fuel_icon.sprite = (Sprite)Resources.Load("Containers//Icons//ABILITY FUEL OFF", typeof(Sprite));
+            if (container.abilities[0].abilitytype == AbilityType.Fuel)
+            {
+                SpriteRenderer fuel_icon = container.transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>();
+                fuel_icon.sprite = (Sprite)Resources.Load("Containers//Icons//ABILITY FUEL OFF", typeof(Sprite));
+            }
         }
     }
     private void Set_Icon(Container container)
