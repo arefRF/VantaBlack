@@ -6,7 +6,7 @@ public class Rock : Unit
 {
     public override void SetInitialSprite()
     {
-        bool[] notconnected = Toolkit.GetConnectedSidesForContainer(this);
+        bool[] notconnected = Toolkit.GetConnectedSides(this);
         if (notconnected[0] && notconnected[1] && notconnected[2] && notconnected[3])
             gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Rock[1];
         else if (notconnected[0] && notconnected[1] && notconnected[2])

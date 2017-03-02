@@ -97,6 +97,15 @@ public class SnapshotManager{
                 database.snapshots.RemoveAt(database.snapshots.Count - 1);
             Undo(snp);
             UndoCamera(snp);
+            try
+            {
+                GameObject.Find("HUD").transform.GetChild(0).GetComponent<HUD>().AbilityChanged(database.player[0]);
+            }
+            catch
+            {
+                GameObject.Find("UI").GetComponent<Get>().hud.SetActive(true);
+                GameObject.Find("HUD").transform.GetChild(0).GetComponent<HUD>().AbilityChanged(database.player[0]);
+            }
         }
     }
 
