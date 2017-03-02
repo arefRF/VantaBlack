@@ -203,7 +203,7 @@ public class APIGraphic{
 
     public void Fake_Lean(Player player,Direction dir)
     {
-         
+        Debug.Log("fake lean");
     }
     public void LeanFinished(Player player)
     {
@@ -308,6 +308,6 @@ public class APIGraphic{
 
     public void Fake_Lean_Undo(Player player)
     {
-
+        Debug.Log("fake lean undo");
     }
 }
