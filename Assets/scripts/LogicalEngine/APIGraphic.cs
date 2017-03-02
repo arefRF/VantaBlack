@@ -316,7 +316,6 @@ public class APIGraphic{
 
     public void Fake_Lean_Undo(Player player)
     {
-        Debug.Log("fake lean undo");
         PlayerGraphics gl = player.GetComponent<PlayerGraphics>();
         gl.FakeLean_Finished();
     }
