@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Resources/Containers/Static/Static Container Push 2.png.meta
 guid: 071e6345ba68e18418a23920cc0952bd
 timeCreated: 1488376827
+=======
+guid: 1bd2f60b1c3fcf44eac3e61570604264
+timeCreated: 1488433373
+>>>>>>> 2d58d9881f4448719c046832ccece1165493aa37:Assets/Resources/Containers/Static/Static Container Push 2.png.meta
 licenseType: Pro
 TextureImporter:
   fileIDToRecycleName: {}

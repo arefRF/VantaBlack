@@ -16,7 +16,6 @@ public class PlayerGraphics : MonoBehaviour {
         api = engine.apigraphic;
         animator = GetComponent<Animator>();
         player = GetComponent<Player>();
-        if(player.abilitycount != 0)
             engine.apigraphic.Absorb(player, null);
     }
 
@@ -48,6 +47,36 @@ public class PlayerGraphics : MonoBehaviour {
         //transform.GetChild(0).localPosition +=  new Vector3( 0, -1f,0);
         animator.SetInteger("Lean", 3);
         animator.SetBool("isLean", true);
+    }
+
+    public void FakeLean_Down()
+    {
+        animator.SetInteger("Lean", 3);
+        animator.SetBool("isFakeLean", true);
+    }
+
+    public void FakeLean_Right()
+    {
+        animator.SetInteger("Lean", 2);
+        animator.SetBool("isFakeLean", true);
+    }
+    public void FakeLean_Left()
+    {
+        animator.SetInteger("Lean", 4);
+        animator.SetBool("isFakeLean", true);
+    }
+    public void FakeLean_Up()
+    {
+        animator.SetInteger("Lean", 1);
+        animator.SetBool("isFakeLean", true);
+    }
+
+    public void FakeLean_Finished()
+    {
+        animator.SetBool("isFakeLean", false);
+        animator.SetInteger("Lean", 0);
+        transform.GetChild(0).localPosition = new Vector2(0, 0);
+        transform.GetChild(1).localPosition = new Vector2(0, 0);
     }
 
     public void Lean_Finished()

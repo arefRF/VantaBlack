@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Resources/Containers/Static/Static Container Dish.png.meta
 guid: 98000e0761c116743ae4a1e5c5733fcc
 timeCreated: 1488376831
+=======
+guid: 3b00a572ea24bf44185a6c98c0e5f333
+timeCreated: 1488433375
+>>>>>>> 2d58d9881f4448719c046832ccece1165493aa37:Assets/Resources/Containers/Static/Static Container Dish.png.meta
 licenseType: Pro
 TextureImporter:
   fileIDToRecycleName: {}

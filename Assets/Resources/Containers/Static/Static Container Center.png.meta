@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Resources/Containers/Static/Static Container Center.png.meta
 guid: dccc1a9ea9e629340a750a075490fe50
 timeCreated: 1488376833
+=======
+guid: 700eaeb37447bf1499bc7c3a37672be7
+timeCreated: 1488433379
+>>>>>>> 2d58d9881f4448719c046832ccece1165493aa37:Assets/Resources/Containers/Static/Static Container Center.png.meta
 licenseType: Pro
 TextureImporter:
   fileIDToRecycleName: {}

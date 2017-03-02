@@ -84,6 +84,8 @@ public class Unit : MonoBehaviour {
         {
             if(units[i] is Player)
             {
+                if (Toolkit.HasBranch(Toolkit.VectorSum(position, dir)) || Toolkit.HasRamp(Toolkit.VectorSum(position, dir)))
+                    continue;
                 result.Add(units[i]);
                 result.AddRange(units[i].EffectedUnits(dir));
             }

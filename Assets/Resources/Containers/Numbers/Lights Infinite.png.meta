@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Resources/Containers/Numbers/Lights Infinite.png.meta
 guid: 3b8d111906d27584fb2016de3100c8f2
 timeCreated: 1488376829
+=======
+guid: ca00b7e2d22e783438a62b893aec4f2c
+timeCreated: 1488433385
+>>>>>>> 2d58d9881f4448719c046832ccece1165493aa37:Assets/Resources/Containers/Numbers/Lights Infinite.png.meta
 licenseType: Pro
 TextureImporter:
   fileIDToRecycleName: {}
