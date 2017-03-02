@@ -244,7 +244,7 @@ public class InputController {
 
     public void FakeLean(Player player, Direction direction)
     {
-        if (player.state == PlayerState.Idle)
+        if (player.state == PlayerState.Idle || player.state == PlayerState.Fakelean)
         {
             player.state = PlayerState.Fakelean;
             player.leandirection = direction;
@@ -254,7 +254,7 @@ public class InputController {
 
     public bool FakeLeanUndo(Player player, Direction direction)
     {
-        if (player.state == PlayerState.Fakelean && player.leandirection == direction)
+        if (player.state == PlayerState.Fakelean)
         {
             player.state = PlayerState.Idle;
             engine.apigraphic.Fake_Lean_Undo(player);
