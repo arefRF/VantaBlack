@@ -65,6 +65,7 @@ public class GraphicalEngine : MonoBehaviour {
             if (off)
                 obj.SetActive(false);
         }
+        Set_Icon(container);
         /*
         if (container.abilities.Count != 0)
         {
@@ -92,19 +93,26 @@ public class GraphicalEngine : MonoBehaviour {
         Set_Simple_Color(container);
         */
     }
+
+    private void Set_Dynamic_Special_Icon(DynamicContainer container)
+    {
+        if (container.abilities[0].abilitytype == AbilityType.Fuel)
+        {
+            SpriteRenderer fuel_icon = container.transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>();
+            fuel_icon.sprite = (Sprite)Resources.Load("Containers//Icons//ABILITY FUEL OFF", typeof(Sprite));
+        }
+    }
     private void Set_Icon(Container container)
     {
         if (container.abilities.Count != 0)
         {
-            if(container.abilities[0].abilitytype == AbilityType.Fuel)
-            {
-               SpriteRenderer icon =  container.transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>();
-               
-            }
+            SpriteRenderer icon = container.transform.GetChild(1).GetComponent<SpriteRenderer>();
+            string path = Icon_Path(container.abilities[0].abilitytype);
+            icon.sprite = (Sprite)Resources.Load(path, typeof(Sprite));
         }
         else
         {
-            
+              
         }
     }
 
@@ -186,7 +194,10 @@ public class GraphicalEngine : MonoBehaviour {
         }
     }
     public void Dynamic_Container(DynamicContainer container)
-    {    /*
+    {
+        Set_Icon(container);
+        Set_Dynamic_Special_Icon(container);
+        /*
         // On or Off Sprite
         string toggle = @"Containers\Icons\";
         if (container.on)
