@@ -87,13 +87,24 @@ public class LogicalEngine {
                 shouldmove.AddRange(unit.ConnectedUnits[i].EffectedUnits(Toolkit.ReverseDirection(Starter.GetDataBase().gravity_direction)));
                 shouldmove.AddRange(unit.ConnectedUnits[i].players);
             }
+            for (int i = 0; i < unit.ConnectedUnits.Count; i++)
+            {
+                Unit u = unit.ConnectedUnits[i];
+                Vector2 newpos = Toolkit.VectorSum(u.position, Toolkit.DirectiontoVector(dir));
+                database.units[(int)u.position.x, (int)u.position.y].Remove(u);
+                u.position = newpos;
+                database.units[(int)u.position.x, (int)u.position.y].Add(u);
+            }
             if (((FunctionalContainer)unit).firstmove)
             {
                 snpmanager.AddToSnapShot(unit);
                 snpmanager.AddToSnapShot(unit.ConnectedUnits);
             }
             leanmove.AddRange(GetRelatedLeanedPlayers(unit.gameObject.transform.parent.gameObject));
+            database.units[(int)unit.position.x, (int)unit.position.y].Remove(unit);
             Vector2 tempposition = unit.position - (Vector2)unit.gameObject.transform.localPosition;
+            unit.position = Toolkit.VectorSum(unit.position, Toolkit.DirectiontoVector(dir));
+            database.units[(int)unit.position.x, (int)unit.position.y].Add(unit);
             for(int i=0; i<leanmove.Count; i++)
             {
                 bool flag = false;
@@ -139,29 +150,13 @@ public class LogicalEngine {
             {
                 snpmanager.MergeSnapshot();
             }
-            Debug.Log("move begin");
-            apigraphic.MoveGameObject(unit.transform.parent.gameObject, Toolkit.VectorSum(tempposition, dir), unit, dir);
+            apigraphic.MoveGameObject(unit.transform.parent.gameObject, Toolkit.VectorSum(tempposition, dir), unit);
         }
         else
         {
 
         }
         return true;
-    }
-
-    public void ContainerMove50PercentFinished(GameObject gameobject, Unit unit, Direction dir)
-    {
-        Debug.Log("50%%%");
-        apiunit.RemoveFromDatabase(unit);
-        unit.position = Toolkit.VectorSum(unit.position, dir);
-        apiunit.AddToDatabase(unit);
-        for(int i=0; i<unit.ConnectedUnits.Count; i++)
-        {
-            apiunit.RemoveFromDatabase(unit.ConnectedUnits[i]);
-            unit.ConnectedUnits[i].position = Toolkit.VectorSum(unit.ConnectedUnits[i].position, dir);
-            apiunit.AddToDatabase(unit.ConnectedUnits[i]);
-        }
-        Applygravity();
     }
 
     public List<Unit> GetRelatedLeanedPlayers(GameObject parent)

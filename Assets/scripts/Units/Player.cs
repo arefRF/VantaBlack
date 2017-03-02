@@ -219,10 +219,11 @@ public class Player : Unit
     {
         if (lean)
         {
-            if(!Toolkit.IsEmpty(Toolkit.VectorSum(position, leandirection)))
+            /*if(!Toolkit.IsEmpty(Toolkit.VectorSum(position, leandirection)))
                 return false;
             api.engine.apigraphic.LeanFinished(this);
-            lean = false;
+            lean = false;*/
+            return false;
         }
         if (Stand_On_Ramp(position) || Toolkit.HasBranch(position))
         {

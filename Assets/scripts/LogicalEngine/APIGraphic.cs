@@ -151,11 +151,6 @@ public class APIGraphic{
     {
         graphicalengine.Move_Object(obj,unit, pos);
     }
-
-    public void Container_Fifty_Finish(GameObject obj,Direction dir,Unit unit)
-    {
-        logicalengine.ContainerMove50PercentFinished(obj, unit, dir);
-    }
     public void MoveGameObjectFinished(GameObject obj, Unit unit)
     {
         logicalengine.graphic_GameObjectMoveAnimationFinished(obj, unit);
