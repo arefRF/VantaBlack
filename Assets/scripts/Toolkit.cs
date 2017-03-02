@@ -471,11 +471,21 @@ public sealed class Toolkit{
     public static bool[] GetConnectedSides(Unit unit)
     {
         bool[] result = new bool[4];
-        result[0] = !IsConnectedFromPosition(unit, VectorSum(unit.position, new Vector2(0, 1)));
-        result[1] = !IsConnectedFromPosition(unit, VectorSum(unit.position, new Vector2(1, 0)));
-        result[2] = !IsConnectedFromPosition(unit, VectorSum(unit.position, new Vector2(0, -1)));
-        result[3] = !IsConnectedFromPosition(unit, VectorSum(unit.position, new Vector2(-1, 0)));
+        result[0] = !IsConnectedFromPosition(unit, VectorSum(unit.position, Direction.Up));
+        result[1] = !IsConnectedFromPosition(unit, VectorSum(unit.position, Direction.Right));
+        result[2] = !IsConnectedFromPosition(unit, VectorSum(unit.position, Direction.Down));
+        result[3] = !IsConnectedFromPosition(unit, VectorSum(unit.position, Direction.Left));
         
+        return result;
+    }
+
+    public static bool[] GetConnectedSidesForBranch(Unit unit)
+    {
+        bool[] result = new bool[4];
+        result[0] = !IsConnectedFromPositionToBranch(unit, Direction.Up);
+        result[1] = !IsConnectedFromPositionToBranch(unit, Direction.Right);
+        result[2] = !IsConnectedFromPositionToBranch(unit, Direction.Down);
+        result[3] = !IsConnectedFromPositionToBranch(unit, Direction.Left);
         return result;
     }
 
@@ -493,7 +503,21 @@ public sealed class Toolkit{
         }         
         return false;
     }
-
+    public static bool IsConnectedFromPositionToBranch(Unit unit, Direction direction)
+    {
+        Vector2 pos = VectorSum(unit.position, direction);
+        for (int i = 0; i < database.units[(int)pos.x, (int)pos.y].Count; i++)
+        {
+            Unit u = database.units[(int)pos.x, (int)pos.y][i];
+            if (u.gameObject.transform.parent == unit.gameObject.transform.parent)
+            {
+                if (u is Branch)
+                    return true;
+                return false;
+            }
+        }
+        return false;
+    }
     public static bool IsConnectedFromPositionForContainer(Unit unit, Vector2 pos, Direction direction)
     {
         for (int i = 0; i < database.units[(int)pos.x, (int)pos.y].Count; i++)

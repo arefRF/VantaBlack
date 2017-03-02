@@ -93,7 +93,8 @@ public class SnapshotManager{
         if (database.snapshots.Count != 0)
         {
             Snapshot snp = database.snapshots[database.snapshots.Count - 1];
-            database.snapshots.RemoveAt(database.snapshots.Count - 1);
+            if(database.snapshots.Count > 1)
+                database.snapshots.RemoveAt(database.snapshots.Count - 1);
             Undo(snp);
             UndoCamera(snp);
         }
