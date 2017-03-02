@@ -20,7 +20,7 @@ public class GraphicalEngine : MonoBehaviour {
     private float lean_move = 0.2f;
     private bool finish_lock;
     private Coroutine object_co;
-    private string[] simple_objects_off = new string[] { "Direction","Glass","Switches","Border","Icon Holder"};
+    private string[] simple_objects_off = new string[] { "Direction","Glass","Switches","Border","Icon Holder","Glow"};
     void Start()
     {
         engine = Starter.GetEngine();
