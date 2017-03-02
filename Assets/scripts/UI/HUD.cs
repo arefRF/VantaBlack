@@ -67,7 +67,6 @@ public class HUD : MonoBehaviour {
 
     private void countChange(Player player)
     {
-        Debug.Log(player.abilities.Count);
         if(player.abilities.Count != 0 && player.abilities[0].abilitytype == AbilityType.Key)
         {
             count.sprite = countsprite[5];
