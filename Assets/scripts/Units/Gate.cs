@@ -50,6 +50,7 @@ public class Gate : Container {
             player.abilities.RemoveAt(0);
             _setability(player);    
             api.engine.apigraphic.UnitChangeSprite(this);
+            api.engine.apigraphic.Absorb(player, null);
             Action();
         }
     }
