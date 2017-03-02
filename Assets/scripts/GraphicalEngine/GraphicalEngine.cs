@@ -20,6 +20,7 @@ public class GraphicalEngine : MonoBehaviour {
     private float lean_move = 0.2f;
     private bool finish_lock;
     private Coroutine object_co;
+    private string[] simple_objects_off = new string[] { "Direction","Glass"};
     void Start()
     {
         engine = Starter.GetEngine();
@@ -57,6 +58,15 @@ public class GraphicalEngine : MonoBehaviour {
 
     public void Simple_Container(SimpleContainer container)
     {
+        for(int i = 0; i < container.transform.childCount; i++)
+        {
+            GameObject obj = container.transform.GetChild(i).gameObject;
+            bool off = System.Array.Exists(simple_objects_off,delegate (string s) { return s == obj.name; });
+            if (off)
+                obj.SetActive(false);
+        }
+        Set_Icon(container);
+        /*
         if (container.abilities.Count != 0)
         {
             if (container.abilities[0].abilitytype == AbilityType.Key)
@@ -81,6 +91,39 @@ public class GraphicalEngine : MonoBehaviour {
 
         //Change Color
         Set_Simple_Color(container);
+        */
+    }
+
+    private void Set_Dynamic_Special_Icon(DynamicContainer container)
+    {
+        if (container.abilities[0].abilitytype == AbilityType.Fuel)
+        {
+            SpriteRenderer fuel_icon = container.transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>();
+            fuel_icon.sprite = (Sprite)Resources.Load("Containers//Icons//ABILITY FUEL OFF", typeof(Sprite));
+        }
+    }
+    private void Set_Icon(Container container)
+    {
+        if (container.abilities.Count != 0)
+        {
+            SpriteRenderer icon = container.transform.GetChild(1).GetComponent<SpriteRenderer>();
+            string path = Icon_Path(container.abilities[0].abilitytype);
+            icon.sprite = (Sprite)Resources.Load(path, typeof(Sprite));
+        }
+        else
+        {
+              
+        }
+    }
+
+    private string Icon_Path(AbilityType type)
+    {
+        string path = @"Containers/Icons";
+        if(type == AbilityType.Fuel)
+        {
+            path += "ABILITY FUEL FULL";
+        }
+        return path;
     }
 
     public void Container_Change_Number(Container container)
@@ -151,7 +194,10 @@ public class GraphicalEngine : MonoBehaviour {
         }
     }
     public void Dynamic_Container(DynamicContainer container)
-    {    
+    {
+        Set_Icon(container);
+        Set_Dynamic_Special_Icon(container);
+        /*
         // On or Off Sprite
         string toggle = @"Containers\Icons\";
         if (container.on)
@@ -193,7 +239,7 @@ public class GraphicalEngine : MonoBehaviour {
         if ( container.abilities.Count!= 0 &&  container.abilities[0].abilitytype == AbilityType.Key)
                 container.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load("Doors\\Key", typeof(Sprite));
             
-
+        */
     }
 
     
