@@ -146,7 +146,7 @@ public class APIGraphic{
         
     }
 
-    public void MoveGameObject(GameObject obj, Vector2 pos, Unit unit)
+    public void MoveGameObject(GameObject obj, Vector2 pos, Unit unit, Direction direction)
     {
         graphicalengine.Move_Object(obj,unit, pos);
     }
