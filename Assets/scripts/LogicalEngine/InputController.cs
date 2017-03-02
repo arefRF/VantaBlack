@@ -246,9 +246,12 @@ public class InputController {
     {
         if (player.state == PlayerState.Idle || player.state == PlayerState.Fakelean)
         {
-            player.state = PlayerState.Fakelean;
-            player.leandirection = direction;
-            engine.apigraphic.Fake_Lean(player, direction);
+            if (!Toolkit.HasBranch(player.position))
+            {
+                player.state = PlayerState.Fakelean;
+                player.leandirection = direction;
+                engine.apigraphic.Fake_Lean(player, direction);
+            }
         }
     }
 
