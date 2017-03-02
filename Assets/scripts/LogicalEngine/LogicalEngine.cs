@@ -139,6 +139,7 @@ public class LogicalEngine {
             {
                 snpmanager.MergeSnapshot();
             }
+            Debug.Log("move begin");
             apigraphic.MoveGameObject(unit.transform.parent.gameObject, Toolkit.VectorSum(tempposition, dir), unit, dir);
         }
         else
@@ -148,8 +149,9 @@ public class LogicalEngine {
         return true;
     }
 
-    public void ContainerMove50PercentFinished(GameObject gameonbject, Unit unit, Direction dir)
+    public void ContainerMove50PercentFinished(GameObject gameobject, Unit unit, Direction dir)
     {
+        Debug.Log("50%%%");
         apiunit.RemoveFromDatabase(unit);
         unit.position = Toolkit.VectorSum(unit.position, dir);
         apiunit.AddToDatabase(unit);
@@ -159,6 +161,7 @@ public class LogicalEngine {
             unit.ConnectedUnits[i].position = Toolkit.VectorSum(unit.ConnectedUnits[i].position, dir);
             apiunit.AddToDatabase(unit.ConnectedUnits[i]);
         }
+        Applygravity();
     }
 
     public List<Unit> GetRelatedLeanedPlayers(GameObject parent)

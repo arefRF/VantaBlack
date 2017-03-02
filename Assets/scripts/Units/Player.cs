@@ -218,7 +218,12 @@ public class Player : Unit
     public override bool ApplyGravity(Direction gravitydirection, List<Unit>[,] units)
     {
         if (lean)
-            return false;
+        {
+            if(!Toolkit.IsEmpty(Toolkit.VectorSum(position, leandirection)))
+                return false;
+            api.engine.apigraphic.LeanFinished(this);
+            lean = false;
+        }
         if (Stand_On_Ramp(position) || Toolkit.HasBranch(position))
         {
             return false;
