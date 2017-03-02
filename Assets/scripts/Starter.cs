@@ -37,7 +37,6 @@ public class Starter : MonoBehaviour{
     {
         return GameObject.Find("Starter").GetComponent<Starter>().database;
     }
-
     public static LogicalEngine GetEngine()
     {
         return staticengine;

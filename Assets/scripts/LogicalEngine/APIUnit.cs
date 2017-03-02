@@ -151,7 +151,10 @@ public class APIUnit {
 
     public void StopPlayerCoroutine(Player player)
     {
-        engine.apigraphic.Undo_Player(player);
+        Unit unit = null;
+        if (Toolkit.HasRamp(player.position) && !Toolkit.IsdoubleRamp(player.position))
+            unit = Toolkit.GetRamp(player.position);
+        engine.apigraphic.Undo_Player(player, unit);
     }
 }
 

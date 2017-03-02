@@ -4,12 +4,13 @@ using UnityEngine.SceneManagement;
 public class Gate : Container {
 
     public string sceneName;
-    public bool Internal;
-
+    public GateType gatetype;
+    public SceneLoader sceneloader;
     public override void Run()
     {
         abilities = new List<Ability>();
         capacity = 1;
+        sceneloader = GameObject.Find("SceneLoader").GetComponent<SceneLoader>();
         base.Run();
     }
 
@@ -35,6 +36,9 @@ public class Gate : Container {
         {
             return;
         }
+        api.AddToSnapshot(this);
+        api.AddToSnapshot(player);
+        api.TakeSnapshot();
         PlayerReleaseAbilities(player);
     }
 
@@ -46,28 +50,38 @@ public class Gate : Container {
             player.abilities.RemoveAt(0);
             _setability(player);    
             api.engine.apigraphic.UnitChangeSprite(this);
+            Action();
         }
     }
-    public override void Action(Player player, Direction dir)
+
+    public void Action()
     {
-        if (abilities == null)
-            return;
-        if (abilities.Count != capacity)
-            return;
-        if (Internal)
+        if (gatetype == GateType.Internal)
         {
+            api.AddToSnapshot(this);
+            api.MergeSnapshot();
             Debug.Log("Internal OPen");
             GetComponent<Animator>().SetBool("Open", true);
             api.RemoveFromDatabase(this);
         }
-        else
+        else if(gatetype == GateType.InternalChangeScene)
+        {
+            SceneManager.LoadScene(sceneName);
+        }
+        else if(gatetype == GateType.External)
         {
             Change_Scene();
         }
     }
+
+    public override void Action(Player player, Direction dir)
+    {   
+    }
     private void Change_Scene()
     {
-       SceneManager.LoadScene(sceneName);
+        Debug.Log("changing scene");
+        //SceneManager.LoadScene(sceneName);
+        sceneloader.Load(sceneName);
     }
     public override void PlayerAbsorb(Player player)
     {
@@ -98,7 +112,8 @@ public class CloneableGate : CloneableUnit
         original.abilities = new List<Ability>();
         for (int i = 0; i < abilities.Count; i++)
             original.abilities.Add(abilities[i]);
-
+        original.api.AddToDatabase(original);
+        original.api.engine.apigraphic.Undo_Unit(original);
         original.api.engine.apigraphic.UnitChangeSprite(original);
     }
 }

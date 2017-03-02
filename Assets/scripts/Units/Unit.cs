@@ -16,7 +16,6 @@ public class Unit : MonoBehaviour {
     // public abstract bool CanMove(UnitType unittype);
     public virtual void Run()
     {
-        position = gameObject.transform.position;
         SetInitialSprite();
     }
     public virtual void SetInitialSprite()
@@ -74,15 +73,6 @@ public class Unit : MonoBehaviour {
             if (!flag)
                 return false;
         }
-        int bound = players.Count;
-        for (int i=0; i < bound; i++)
-        {
-            if (!players[i].CanMove(dir, parent))
-                return false;
-            players.AddRange(players[i].players);
-        }
-        //friction
-        players.AddRange(EffectedUnits(Toolkit.ReverseDirection(Starter.GetDataBase().gravity_direction)));
         return true;
     }
 

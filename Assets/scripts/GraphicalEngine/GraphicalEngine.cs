@@ -7,7 +7,6 @@ using System.Collections.Generic;
 public class GraphicalEngine : MonoBehaviour {
 
     public Database database { get; set; }
-    private UI ui;
     private bool fall = false;
     private int fall_pos;
     private float gravity = 9.8f;

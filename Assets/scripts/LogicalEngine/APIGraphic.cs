@@ -49,7 +49,7 @@ public class APIGraphic{
     }
 
     //ramp to branch
-    public void MovePlayer_Ramp_Branch(Player player,Vector2 position,int type)
+    public void MovePlayer_Ramp_Branch(Player player,Vector2 position,int type,Direction direction)
     {
         player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
     }
@@ -63,9 +63,8 @@ public class APIGraphic{
     }
 
     // Block to Branch
-    public void MovePlayer_Simple_2(Player player, Vector2 position)
+    public void MovePlayer_Simple_2(Player player, Vector2 position,Direction direction)
     {
-
         player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
     }
 
@@ -121,8 +120,8 @@ public class APIGraphic{
     }    
     public void Fall(Player player, Vector2 position)
     {
+        Debug.Log(position);
         player.GetComponent<PlayerPhysics>().Fall(position);
-        logicalengine.graphic_FallFinished(player);
     }
 
     public void Fall_Finish(Player player)
@@ -133,14 +132,18 @@ public class APIGraphic{
     public void Land(Player player, Vector2 position, Unit fallonunit)
     {
         player.GetComponent<PlayerPhysics>().Land(position);
-        logicalengine.graphic_LandFinished(player);
+        LandFinished(player);
         
     }
 
+    public void LandFinished(Player player)
+    {
+        logicalengine.graphic_LandFinished(player);
+    }
     public void LandOnRamp(Player player, Vector2 position, Unit fallonunit, int ramptype)
     {
         player.GetComponent<PlayerPhysics>().Land_On_Ramp(position, ramptype);
-        logicalengine.graphic_LandFinished(player);
+        
     }
 
     public void MoveGameObject(GameObject obj, Vector2 pos, Unit unit)
@@ -211,9 +214,17 @@ public class APIGraphic{
     // Change Color of Player in absorb , release , swap
     public void Absorb(Player player, Container container)
     {
-        Debug.Log("change Color");
         player.GetComponent<PlayerGraphics>().ChangeColor();
-        GameObject.Find("HUD").transform.GetChild(0).GetComponent<HUD>().AbilityChanged(player);
+        try
+        {
+            GameObject.Find("HUD").transform.GetChild(0).GetComponent<HUD>().AbilityChanged(player);
+        }
+        catch
+        {
+            GameObject.Find("UI").GetComponent<Get>().hud.SetActive(true);
+            GameObject.Find("HUD").transform.GetChild(0).GetComponent<HUD>().AbilityChanged(player);
+        }
+        
     }
 
 
@@ -256,9 +267,13 @@ public class APIGraphic{
         logicalengine.graphic_PlayerChangeDirectionFinished(player);
     }
 
-    public void Undo_Player(Player player)
+    public void Undo_Player(Player player,Unit unit)
     {
-        player.GetComponent<PlayerPhysics>().Player_Undo();
+        player.GetComponent<PlayerPhysics>().Player_Undo(unit);
+    }
+    public void Undo_Unit(Unit unit)
+    {
+
     }
     public void Undo_Objects()
     {
@@ -277,5 +292,17 @@ public class APIGraphic{
             graphicalengine.Dynamic_Container((DynamicContainer)unit);
         else if (unit is Gate)
             graphicalengine.Gate((Gate)unit);
+    }
+
+    public void Fall_Player_Died(Player player)
+    {
+        player.GetComponent<PlayerPhysics>().Fall_Die(new Vector2(player.position.x, -10));
+        GameObject.Find("UI").GetComponent<Get>().inMenu_Show();
+    }
+
+    public void Crush_Player_Died(Player player)
+    {
+        GameObject.Find("UI").GetComponent<Get>().inMenu_Show();
+        Debug.Log("crush player died");
     }
 }

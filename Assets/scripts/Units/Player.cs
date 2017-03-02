@@ -34,6 +34,11 @@ public class Player : Unit
         state = PlayerState.Idle;
     }
 
+    public void Update()
+    {
+        //Debug.Log(state);
+    }
+
     public bool Should_Change_Direction(Direction dir)
     {
         for (int i = 0; i < move_direction.Count; i++)
@@ -45,6 +50,8 @@ public class Player : Unit
 
     public bool Can_Move_Direction(Direction dir)
     {
+        if (Toolkit.HasBranch(Toolkit.VectorSum(position, dir)))
+            return true;
         if (Can_Lean(dir))
         {
             Vector2 pos = Toolkit.VectorSum(position, Toolkit.DirectiontoVector(dir));
@@ -62,6 +69,8 @@ public class Player : Unit
     }
     public bool Can_Lean(Direction dir)
     {
+        if (Toolkit.HasBranch(position))
+            return false;
         List<Unit> units = api.engine_GetUnits(Toolkit.VectorSum(position, dir));
         for(int i=0; i<units.Count; i++)
         {
@@ -237,6 +246,11 @@ public class Player : Unit
 
     public void FallFinished()
     {
+        if(position.x <= 0 || position.y <= 0)
+        {
+            api.engine.apigraphic.Fall_Player_Died(this);
+            return;
+        }
         Vector2 pos = Toolkit.VectorSum(position, Starter.GetGravityDirection());
         if (pos.x <= 0 || pos.y <= 0)
             return;
@@ -397,9 +411,9 @@ public class CloneablePlayer : CloneableUnit
     public override void Undo()
     {
         Player original = (Player)base.original;
-        original.api.StopPlayerCoroutine(original);
         original.api.RemoveFromDatabase(original);
         original.position = position;
+        original.api.StopPlayerCoroutine(original);
         original.api.AddToDatabase(original);
         original.abilities = new List<Ability>();
         for (int i = 0; i < abilities.Count; i++)
@@ -417,7 +431,11 @@ public class CloneablePlayer : CloneableUnit
         original.nextpos = new Vector2(nextpos.x, nextpos.y);
         original.lean = false;
         original.api.engine.apigraphic.Absorb(original, null);
+        original.abilitycount = original.abilities.Count;
+        if (original.abilitycount != 0)
+            original.abilitytype = original.abilities[0].abilitytype;
         SetPosition();
+        original.state = PlayerState.Idle;
     }
 }
 

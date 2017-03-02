@@ -5,18 +5,22 @@ public class CameraController : MonoBehaviour {
     public Player player;
     public bool auto_move = true;
     public float left_bound, right_bound, upper_bound, lower_bound;
+    public float zoom;
     private Transform p_transform;
     private float vert_view;
     private float horz_view;
     private Vector3 pos;
     public float move_time = 0.5f;
+    public float rotation;
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
         p_transform = player.transform;
         Camera_Bounds_Calculate();
         pos = new Vector3(p_transform.position.x, p_transform.position.y, transform.position.z);
         AutoMove();
+        zoom = Camera.main.orthographicSize;
+        
     }
 
 
@@ -34,7 +38,7 @@ public class CameraController : MonoBehaviour {
             pos.x = Mathf.Clamp(pos.x, left_bound, right_bound);
             pos.y = Mathf.Clamp(pos.y, lower_bound, upper_bound);
             transform.position = pos;
-        }
+        } 
     }
 
 
@@ -68,11 +72,13 @@ public class CameraController : MonoBehaviour {
 
     public void Camera_Size_Change(float zoom )
     {
+        zoom = this.zoom;
         StartCoroutine(Zoom(zoom,1));
     }
 
     public void Camera_Rotation_Change(float rot, float move_time)
     {
+        rotation = rot;
         StartCoroutine(Rotation(rot,move_time));
     }
     private IEnumerator Zoom(float zoom,float move_time)

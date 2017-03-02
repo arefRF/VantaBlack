@@ -78,7 +78,7 @@ public class Container : ParentContainer {
             {
                 for (int i = 0; i < player.abilities.Count; i++)
                 {
-                    AddToReservedMove(false, i+1);
+                    AddToReservedMove(false, i);
                 }
                 if (((FunctionalContainer)this).on)
                 {
@@ -86,7 +86,6 @@ public class Container : ParentContainer {
                 }
             }
         }
-        
     }
 
     private void PlayerAbsorbAbilities(Player player)
@@ -118,6 +117,8 @@ public class Container : ParentContainer {
 
     public virtual void PlayerAbsorb(Player player)
     {
+        if (gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock)
+            return;
         api.AddToSnapshot(this);
         if (this is FunctionalContainer)
             api.AddToSnapshot(ConnectedUnits);
@@ -138,6 +139,8 @@ public class Container : ParentContainer {
 
     public virtual void PlayerRelease(Player player)
     {
+        if (gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock)
+            return;
         api.AddToSnapshot(this);
         if (this is FunctionalContainer)
             api.AddToSnapshot(ConnectedUnits);
@@ -158,6 +161,8 @@ public class Container : ParentContainer {
 
     public virtual void PlayerAbsorbHold(Player player)
     {
+        if (gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock)
+            return;
         if (abilities.Count == 0)
             return;
         api.AddToSnapshot(this);
@@ -186,6 +191,8 @@ public class Container : ParentContainer {
 
     public virtual void PlayerReleaseHold(Player player)
     {
+        if (gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock)
+            return;
         if (player.abilities.Count == 0)
             return;
         api.AddToSnapshot(this);

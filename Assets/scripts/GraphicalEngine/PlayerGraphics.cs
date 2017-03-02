@@ -16,6 +16,8 @@ public class PlayerGraphics : MonoBehaviour {
         api = engine.apigraphic;
         animator = GetComponent<Animator>();
         player = GetComponent<Player>();
+        if(player.abilitycount != 0)
+            engine.apigraphic.Absorb(player, null);
     }
 
 
@@ -67,7 +69,6 @@ public class PlayerGraphics : MonoBehaviour {
             animator.SetInteger("Walk", 1);
         else
             animator.SetInteger("Walk", -1);
-
     }
 
     public void Move_Finished()
