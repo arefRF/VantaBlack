@@ -6,11 +6,6 @@ public class Branch : Unit {
     public override void SetInitialSprite()
     {
         bool[] notconnected = Toolkit.GetConnectedSidesForBranch(this);
-        Debug.Log(this);
-        Debug.Log("not connected to branch from UP: " + notconnected[0]);
-        Debug.Log("not connected to branch from Right: " + notconnected[1]);
-        Debug.Log("not connected to branch from Down: " + notconnected[2]);
-        Debug.Log("not connected to branch from Left: " + notconnected[3]);
 
         if (notconnected[0] && notconnected[1] && notconnected[2] && notconnected[3])
         {
@@ -99,7 +94,6 @@ public class Branch : Unit {
 
     private void SetJointOrEntrance(Direction direction)
     {
-        Debug.Log("fuck you : " + direction);
         if(Toolkit.IsConnectedFromPosition(this, Toolkit.VectorSum(position, direction)))
         {
             if (!Toolkit.HasBranch(Toolkit.VectorSum(position, direction)))
