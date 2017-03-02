@@ -33,7 +33,7 @@ public class Branch : Unit {
         else if (notconnected[1] && notconnected[2] && notconnected[3])
         {
             transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Branch[0];
-            transform.GetChild(0).transform.rotation = Quaternion.Euler(0, 0, 270);
+            transform.GetChild(0).transform.rotation = Quaternion.Euler(0, 0, 90);
         }
         else if (notconnected[0] && notconnected[2])
         {
