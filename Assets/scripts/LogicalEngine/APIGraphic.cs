@@ -195,7 +195,6 @@ public class APIGraphic{
                case Direction.Up: gl.Lean_Up(); break;
                case Direction.Down: gl.Lean_Down(); break;
            }
-       
     }
     public void Camera_AutoMove()
     {
