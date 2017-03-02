@@ -159,6 +159,11 @@ public class LogicalEngine {
         return true;
     }
 
+    public void ContainerMove50PercentFinished(GameObject gameonject, Unit unit)
+    {
+
+    }
+
     public List<Unit> GetRelatedLeanedPlayers(GameObject parent)
     {
         List<Unit> players = new List<Unit>();
