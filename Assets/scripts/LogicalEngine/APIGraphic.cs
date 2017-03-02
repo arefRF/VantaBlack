@@ -147,9 +147,9 @@ public class APIGraphic{
     }
 
     // object move
-    public void MoveGameObject(GameObject obj, Vector2 pos, Unit unit, Direction direction)
+    public void MoveGameObject(GameObject obj, Vector2 pos, Unit unit)
     {
-        graphicalengine.Move_Object(obj,unit, pos,direction);
+        graphicalengine.Move_Object(obj,unit, pos);
     }
 
     public void Container_Fifty_Finish(GameObject obj,Direction dir,Unit unit)

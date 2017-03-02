@@ -28,30 +28,24 @@ public class GraphicalEngine : MonoBehaviour {
         api = engine.apigraphic;
        
     }
-    public void Move_Object(GameObject obj,Unit unit, Vector2 pos,Direction dir)
+    public void Move_Object(GameObject obj,Unit unit, Vector2 pos)
     {
         finish_lock = true;
         if(object_co != null)
             StopCoroutine(object_co);
-        object_co =  StartCoroutine(Move_Object_Coroutine(obj,unit,pos,dir));
+        object_co =  StartCoroutine(Move_Object_Coroutine(obj,unit,pos));
     }
 
      
-    private IEnumerator Move_Object_Coroutine(GameObject obj, Unit unit,Vector2 end,Direction dir)
+    private IEnumerator Move_Object_Coroutine(GameObject obj, Unit unit,Vector2 end)
     {
         float remain_distance = ((Vector2)obj.transform.position - end).sqrMagnitude;
         float move_time = 1f;
-        bool fifty_lock = false;
         while (remain_distance > float.Epsilon)
         {
             remain_distance = ((Vector2)obj.transform.position - end).sqrMagnitude;
             Vector3 new_pos = Vector3.MoveTowards(obj.transform.position, end, Time.deltaTime * 1 / move_time);
             obj.transform.position = new_pos;
-            if(remain_distance < 0.5 && !fifty_lock)
-            {
-                api.Container_Fifty_Finish(obj, dir, unit);
-                fifty_lock = true;
-            }
             if (remain_distance < 0.01 && finish_lock)
             {
                 finish_lock = false;
