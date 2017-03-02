@@ -305,4 +305,9 @@ public class APIGraphic{
         GameObject.Find("UI").GetComponent<Get>().inMenu_Show();
         Debug.Log("crush player died");
     }
+
+    public void Fake_Lean_Undo(Player player)
+    {
+
+    }
 }

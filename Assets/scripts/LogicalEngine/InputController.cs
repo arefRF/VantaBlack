@@ -201,7 +201,7 @@ public class InputController {
     {
         for (int i = 0; i < database.player.Count; i++)
         {
-            if(LeanUndo(database.player[i], direction))
+            if(LeanUndo(database.player[i], direction) || FakeLeanUndo(database.player[i], direction))
                 database.player[i].ApplyGravity(database.gravity_direction, database.units);
         }
         //Applygravity();
@@ -237,8 +237,26 @@ public class InputController {
             }
             else
             {
-                engine.apigraphic.Fake_Lean(player, direction);
+                FakeLean(player, direction);
             }
         }
+    }
+
+    public void FakeLean(Player player, Direction direction)
+    {
+        player.state = PlayerState.Fakelean;
+        player.leandirection = direction;
+        engine.apigraphic.Fake_Lean(player, direction);
+    }
+
+    public bool FakeLeanUndo(Player player, Direction direction)
+    {
+        if (player.state == PlayerState.Fakelean)
+        {
+            player.state = PlayerState.Idle;
+            engine.apigraphic.Fake_Lean_Undo(player);
+            return true;
+        }
+        return false;
     }
 }
