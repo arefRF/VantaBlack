@@ -121,6 +121,7 @@ public class APIGraphic{
     public void Fall(Player player, Vector2 position)
     {
         Debug.Log(position);
+        player.GetComponent<Animator>().SetInteger("Walk", 0);
         player.GetComponent<PlayerPhysics>().Fall(position);
     }
 
@@ -146,11 +147,11 @@ public class APIGraphic{
         
     }
 
+    // object move
     public void MoveGameObject(GameObject obj, Vector2 pos, Unit unit)
     {
         graphicalengine.Move_Object(obj,unit, pos);
     }
-
     public void MoveGameObjectFinished(GameObject obj, Unit unit)
     {
         logicalengine.graphic_GameObjectMoveAnimationFinished(obj, unit);
@@ -194,7 +195,6 @@ public class APIGraphic{
                case Direction.Up: gl.Lean_Up(); break;
                case Direction.Down: gl.Lean_Down(); break;
            }
-       
     }
     public void Camera_AutoMove()
     {
@@ -203,7 +203,14 @@ public class APIGraphic{
 
     public void Fake_Lean(Player player,Direction dir)
     {
-         
+        PlayerGraphics gl = player.GetComponent<PlayerGraphics>();
+        switch (player.leandirection)
+        {
+            case Direction.Right: gl.FakeLean_Right(); break;
+            case Direction.Left: gl.FakeLean_Left(); break;
+            case Direction.Up: gl.FakeLean_Up(); break;
+            case Direction.Down: gl.FakeLean_Down(); break;
+        }
     }
     public void LeanFinished(Player player)
     {
@@ -304,5 +311,11 @@ public class APIGraphic{
     {
         GameObject.Find("UI").GetComponent<Get>().inMenu_Show();
         Debug.Log("crush player died");
+    }
+
+    public void Fake_Lean_Undo(Player player)
+    {
+        PlayerGraphics gl = player.GetComponent<PlayerGraphics>();
+        gl.FakeLean_Finished();
     }
 }
