@@ -80,13 +80,13 @@ public class GraphicalEngine : MonoBehaviour {
                 fuel_icon.sprite = (Sprite)Resources.Load("Containers\\Icons\\ABILITY FUEL OFF", typeof(Sprite));
             }
         }
-        Vector3 color = Ability_Color(container.abilities);
+        Vector3 color = Ability_Color(container.abilities, ComplimentColor(container));
         fuel_icon.color = new Color(color.x, color.y, color.z, 1);
     }
     private void Set_Icon(Container container)
     {
         SpriteRenderer icon = GetObjectInChild(container.gameObject, "Icon").GetComponent<SpriteRenderer>();
-        Vector3 color = Ability_Color(container.abilities);
+        Vector3 color = Ability_Color(container.abilities, ComplimentColor(container));
         icon.color = new Color(color.x, color.y, color.z, 1);
         if (container.abilities.Count != 0)
         {
@@ -142,7 +142,7 @@ public class GraphicalEngine : MonoBehaviour {
             lights = @"Containers\Lights Infinite";
         SpriteRenderer number = GetObjectInChild(container.gameObject, "Number").GetComponent<SpriteRenderer>();
         number.sprite = (Sprite)Resources.Load(lights, typeof(Sprite));
-        Vector3 color = Ability_Color(container.abilities);
+        Vector3 color = Ability_Color(container.abilities, ComplimentColor(container));
         number.color = new Color(color.x, color.y, color.y, 1);
     }
 
@@ -159,7 +159,7 @@ public class GraphicalEngine : MonoBehaviour {
         StopAllCoroutines();
     }
 
-    private Vector3 Ability_Color(List<Ability> ability)
+    private Vector3 Ability_Color(List<Ability> ability,bool compliment)
     {
         if (ability.Count != 0)
         {
@@ -169,7 +169,10 @@ public class GraphicalEngine : MonoBehaviour {
             }
             else if (ability[0].abilitytype == AbilityType.Fuel)
             {
-                return new Vector3(0, 0.941f, 0.654f);
+                if (compliment)
+                    return new Vector3(1, 1, 1);
+                else
+                    return new Vector3(0, 0.941f, 0.654f);
             }
         }
 
@@ -192,8 +195,15 @@ public class GraphicalEngine : MonoBehaviour {
         GetObjectInChild(container.gameObject,"Icon Holder").transform.rotation = Quaternion.Euler(new Vector3(0, 0, rot));
         GameObject direction = GetObjectInChild(container.gameObject, "Direction");
         direction.transform.rotation = Quaternion.Euler(0, 0, rot-90);
-        Vector3 color = Ability_Color(container.abilities);
+        Vector3 color = Ability_Color(container.abilities,false);
         direction.GetComponent<SpriteRenderer>().color = new Color(color.x, color.y, color.z, 1);
+    }
+    private bool ComplimentColor(Container container)
+    {
+        if (container is DynamicContainer)
+            return ((DynamicContainer)container).on;
+        else
+            return false;
     }
 
     // Dynamic Container Color
@@ -216,8 +226,10 @@ public class GraphicalEngine : MonoBehaviour {
             GetObjectInChild(container.gameObject, "Switches").GetComponent<Animator>().SetBool("On", true);
             GetObjectInChild(container.gameObject, "Glass").GetComponent<SpriteRenderer>().sprite =
                 (Sprite)Resources.Load("Containers\\Active\\Glass On", typeof(Sprite));
+            Vector3 color = Ability_Color(container.abilities, false);
+            GetObjectInChild(container.gameObject, "Glass").GetComponent<SpriteRenderer>().color = new Color(color.x, color.y, color.z,1);
 
-            
+
         }
         else
         {
@@ -226,6 +238,7 @@ public class GraphicalEngine : MonoBehaviour {
             GetObjectInChild(container.gameObject, "Switches").GetComponent<Animator>().SetBool("On", false);
             GetObjectInChild(container.gameObject, "Glass").GetComponent<SpriteRenderer>().sprite =
     (Sprite)Resources.Load("Containers\\Active\\Glass Off", typeof(Sprite));
+            GetObjectInChild(container.gameObject, "Glass").GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
         }
     }
 
