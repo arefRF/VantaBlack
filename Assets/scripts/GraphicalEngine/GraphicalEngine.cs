@@ -93,7 +93,7 @@ public class GraphicalEngine : MonoBehaviour {
             if (container.abilities[0].abilitytype == AbilityType.Fuel)
             {
                 if(container is DynamicContainer)
-                    icon.color = new Color(color.x, color.y, color.z, 0.2f);
+                    icon.color = new Color(color.x, color.y, color.z, 0.1f);
                     
             }
             string path = Icon_Path(container.abilities[0].abilitytype);
@@ -111,10 +111,12 @@ public class GraphicalEngine : MonoBehaviour {
     private string Icon_Path(AbilityType type)
     {
         string path = @"Containers\Icons\";
-        if(type == AbilityType.Fuel)
+        if (type == AbilityType.Fuel)
         {
             path += "ABILITY FUEL FULL";
         }
+        else if (type == AbilityType.Key)
+            path = @"Doors\Key B";
         return path;
     }
     private GameObject GetObjectInChild(GameObject parent,string name) 
@@ -143,7 +145,7 @@ public class GraphicalEngine : MonoBehaviour {
         SpriteRenderer number = GetObjectInChild(container.gameObject, "Number").GetComponent<SpriteRenderer>();
         number.sprite = (Sprite)Resources.Load(lights, typeof(Sprite));
         Vector3 color = Ability_Color(container.abilities, ComplimentColor(container));
-        number.color = new Color(color.x, color.y, color.y, 1);
+        number.color = new Color(color.x, color.y, color.z, 1);
     }
 
     public void Gate(Gate gate)
@@ -238,7 +240,8 @@ public class GraphicalEngine : MonoBehaviour {
             GetObjectInChild(container.gameObject, "Switches").GetComponent<Animator>().SetBool("On", false);
             GetObjectInChild(container.gameObject, "Glass").GetComponent<SpriteRenderer>().sprite =
     (Sprite)Resources.Load("Containers\\Active\\Glass Off", typeof(Sprite));
-            GetObjectInChild(container.gameObject, "Glass").GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
+            Vector3 color = Ability_Color(container.abilities, false);
+            GetObjectInChild(container.gameObject, "Glass").GetComponent<SpriteRenderer>().color = new Color(1,1, 1, 1);
         }
     }
 
