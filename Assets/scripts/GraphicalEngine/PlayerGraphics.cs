@@ -90,50 +90,55 @@ public class PlayerGraphics : MonoBehaviour {
     public void MoveToBranch(Direction dir)
     {
         if (dir == Direction.Up)
-        { 
-            animator.SetInteger("Branch", 3);
-            StartCoroutine(Simple_Move(player.position, 0.9f));
+        {
+            player.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 0);
         }
+        else if (dir == Direction.Down)
+        {
+            player.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 180);
+        }
+        else if (dir == Direction.Left)
+        {
+            player.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 90);
+        }
+        else
+            player.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 270);
+
+        animator.SetInteger("Branch", 1);
+        StartCoroutine(Simple_Move(player.position, 0.65f));
+    }
+    public void MoveToBranchAnimationFinished()
+    {
+        animator.SetInteger("Branch", 0);
+    }
+
+    public void BranchExitAnimationFinished()
+    {
+        animator.SetInteger("Branch", 0);
     }
 
     public void BranchExit(Direction dir)
     {
-        if(dir == Direction.Down)
+        if (dir == Direction.Up)
         {
-            animator.SetInteger("Branch", -3);
-            StartCoroutine(Simple_Move(player.position, 0.4f));
+            player.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 180);
         }
-    }
-    public void BranchEntered(Direction direction)
-    {
-        api.MovePlayerFinished(player.gameObject);
-        animator.SetInteger("Branch", -5);
-    }
-    public void BranchExited(Direction dir)
-    {
-        api.MovePlayerFinished(player.gameObject);
-        animator.SetInteger("Branch", 0);
+        else if (dir == Direction.Down)
+        {
+            player.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 0);
+        }
+        else if (dir == Direction.Left)
+        {
+            player.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 270);
+        }
+        else
+            player.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 90);
+        animator.SetInteger("Branch", -1);
+        StartCoroutine(Simple_Move(player.position, 0.65f));
     }
 
 
-    private IEnumerator Set_Branch_Exited()
-    {
-        yield return null;
-        yield return null;
-    
-    }
-    private IEnumerator Set_Branch_Enterd()
-    {
-        yield return null;
-        yield return null;
 
-    }
-    private IEnumerator Set_Pos()
-    {
-        yield return null;
-        player.transform.position = player.position;
-        api.MovePlayerFinished(player.gameObject);
-    }
     private IEnumerator Simple_Move(Vector2 end, float move_time)
     {
         float remain_distance = ((Vector2)transform.position - end).sqrMagnitude;
@@ -144,29 +149,10 @@ public class PlayerGraphics : MonoBehaviour {
             api.Camera_AutoMove();
             yield return new WaitForSeconds(0.001f);
         }
-
-
-        // if it needs Call Finished Move of API
-    }
-    private IEnumerator Set_Pos_Delay(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        player.transform.position = player.position;
         api.MovePlayerFinished(player.gameObject);
+        animator.SetInteger("Branch", 0);
     }
-    private AnimationClip GetAnimationClip(string name)
-    {
-        if (!animator) return null; // no animator
 
-        foreach (AnimationClip clip in animator.runtimeAnimatorController.animationClips)
-        {
-            if (clip.name == name)
-            {
-                return clip;
-            }
-        }
-        return null; // no clip by that name
-    }
 
     public void Move_Animation(Direction dir)
     {
