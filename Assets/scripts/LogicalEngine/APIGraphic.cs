@@ -64,7 +64,7 @@ public class APIGraphic{
     // Block to Branch
     public void MovePlayer_Simple_2(Player player, Vector2 position,Direction direction)
     {
-        //player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
+        player.gameObject.GetComponent<PlayerPhysics>().StopAllCoroutines();
         player.GetComponent<PlayerGraphics>().MoveToBranch(direction);
     }
 
@@ -100,6 +100,7 @@ public class APIGraphic{
     // Branch to fall
     public void MovePlayer_Branch_2(Player player, Vector2 position,Direction dir)
     {
+        player.GetComponent<PlayerPhysics>().StopAllCoroutines();
         player.GetComponent<PlayerGraphics>().BranchExit(dir);
         //player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
     }
