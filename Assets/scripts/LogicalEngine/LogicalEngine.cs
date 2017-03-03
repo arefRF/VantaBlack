@@ -444,7 +444,7 @@ public class LogicalEngine {
                             database.units[(int)player.position.x, (int)player.position.y].Remove(player);
                             player.position = nextpos;
                             database.units[(int)player.position.x, (int)player.position.y].Add(player);
-                            apigraphic.MovePlayer_Branch_2(player, nextpos);
+                            apigraphic.MovePlayer_Branch_2(player, nextpos,dir);
                         }
                     }
                 }

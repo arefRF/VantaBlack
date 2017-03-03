@@ -93,14 +93,14 @@ public class APIGraphic{
     // Branch to Block
     public void MovePlayer_Branch_1(Player player, Vector2 position)
     {
-
+        player.GetComponent<PlayerGraphics>().StopAllCoroutines();
         player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
     }
 
-    // Branch to allall
-    public void MovePlayer_Branch_2(Player player, Vector2 position)
+    // Branch to fall
+    public void MovePlayer_Branch_2(Player player, Vector2 position,Direction dir)
     {
-
+        Debug.Log(dir);
         player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
     }
 

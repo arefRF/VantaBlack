@@ -106,16 +106,15 @@ public class PlayerGraphics : MonoBehaviour {
     public void BranchEntered(Direction direction)
     {
         player.transform.GetChild(0).position = new Vector2(0, 0);
-        api.MovePlayerFinished(player.gameObject);
+        
         animator.SetInteger("Branch", 0);
-        GetComponent<PlayerPhysics>().Simple_Move(player.position);
+        StartCoroutine(Set_Pos_Delay(0.11f));
     }
-
     private IEnumerator Set_Pos_Delay(float delay)
     {
         yield return new WaitForSeconds(delay);
         player.transform.position = player.position;
-
+        api.MovePlayerFinished(player.gameObject);
     }
     private AnimationClip GetAnimationClip(string name)
     {
