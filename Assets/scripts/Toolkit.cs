@@ -45,26 +45,6 @@ public sealed class Toolkit{
         }
     }
 
-    public static bool IsEmptySpace(Vector2 position,  Direction d)
-    {
-        try {
-            Vector2 temp = DirectiontoVector(ReverseDirection(d));
-            temp = Toolkit.VectorSum(position, Toolkit.DirectiontoVector(d));
-            for (int i = 0; i < database.units[(int)temp.x, (int)temp.y].Count; i++)
-            {
-                Unit u = database.units[(int)temp.x, (int)temp.y][i];
-                if (u.unitType == UnitType.Wall || u.unitType == UnitType.Switch || u.unitType == UnitType.Pipe)
-                    continue;
-                else { return false; }
-            }
-            return true;
-        }
-        catch
-        {
-            return false;
-        }
-    }
-
     public static Vector2 DirectiontoVector(Direction d)
     {
         switch (d)
@@ -88,30 +68,6 @@ public sealed class Toolkit{
         }
     }
 
-    public static bool CanMove(Vector2 position, Direction d)
-    {
-        try
-        {
-            /*foreach(Unit u in Database.database.units[1,1])
-            {
-                Wall.print(u.unitType);
-            }*/
-            Vector2 temp = DirectiontoVector(ReverseDirection(d));
-
-            for (int i = 0; i < database.units[(int)position.x, (int)position.y].Count; i++)
-            {
-                Unit u = database.units[(int)position.x, (int)position.y][i];
-                if (u.unitType == UnitType.Wall || u.unitType == UnitType.Switch || u.unitType == UnitType.Pipe)
-                    continue;
-                else { return false; }
-            }
-            return true;
-        }
-        catch
-        {
-            return false;
-        }
-    }
 
     public static Unit GetUnitByCodeNumber(int codenumber)
     {
@@ -196,15 +152,6 @@ public sealed class Toolkit{
             default: return false;
         }
     }
-
-    public static void AddUnitToPosition(Unit u, Vector2 position)
-    {
-        if (u.unitType == UnitType.Wall)
-        {
-            return;
-        }
-        database.units[(int)position.x, (int)position.y].Add(u);
-    }
     public static Unit GetUnit(GameObject gameobject)
     {
         for (int i = 0; i < database.Xsize; i++)
@@ -220,17 +167,6 @@ public sealed class Toolkit{
         }
 
         return null;
-    }
-
-    public static bool IsOnRamp(Unit unit)
-    {
-        for(int i=0; i<database.units[(int)unit.position.x, (int)unit.position.y].Count; i++)
-        {
-            Unit u = database.units[(int)unit.position.x, (int)unit.position.y][i];
-            if (u.unitType == UnitType.Ramp)
-                return true;
-        }
-        return false;
     }
 
     public static Unit GetUnitToFallOn(List<Unit> units, Direction dir)

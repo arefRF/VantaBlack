@@ -46,11 +46,6 @@ public class TimeLaps
     }
 }
 
-public enum UnitType
-{
-    Block, Pipe, Box, Magnet, Switch, Wall, Container, Player, Rock, Door, BlockSwitch, Ramp
-}
-
 public enum State
 {
     Idle, Busy, Busy_Moving
