@@ -280,7 +280,10 @@ public class APIGraphic{
     }
     public void Undo_Unit(Unit unit)
     {
-
+        if(unit is Gate)
+        {
+            //unit.transform.GetChild(6).GetComponent<SpriteRenderer> = (Sprite)Resources.Load("")
+        }
     }
     public void Undo_Objects()
     {
