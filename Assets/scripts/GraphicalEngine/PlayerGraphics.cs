@@ -105,17 +105,10 @@ public class PlayerGraphics : MonoBehaviour {
             player.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 270);
         animator.SetInteger("Walk", 0);
         animator.SetInteger("Branch", 1);
+        StopAllCoroutines();
         StartCoroutine(Simple_Move(player.position, 0.65f));
     }
-    public void MoveToBranchAnimationFinished()
-    {
-        animator.SetInteger("Branch", 0);
-    }
 
-    public void BranchExitAnimationFinished()
-    {
-        animator.SetInteger("Branch", 0);
-    }
 
     public void BranchExit(Direction dir)
     {
@@ -134,10 +127,19 @@ public class PlayerGraphics : MonoBehaviour {
         else
             player.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 90);
         animator.SetInteger("Branch", -1);
+        StopAllCoroutines();
         StartCoroutine(Simple_Move(player.position, 0.65f));
     }
 
+    public void MoveToBranchAnimationFinished()
+    {
+        animator.SetInteger("Branch", 0);
+    }
 
+    public void BranchExitAnimationFinished()
+    {
+        animator.SetInteger("Branch", 0);
+    }
 
     private IEnumerator Simple_Move(Vector2 end, float move_time)
     {
