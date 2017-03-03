@@ -65,7 +65,8 @@ public class APIGraphic{
     // Block to Branch
     public void MovePlayer_Simple_2(Player player, Vector2 position,Direction direction)
     {
-        player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
+        //player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
+        player.GetComponent<PlayerGraphics>().MoveToBranch(direction);
     }
 
     // Block to Ramp

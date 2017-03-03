@@ -87,9 +87,33 @@ public class PlayerGraphics : MonoBehaviour {
         transform.GetChild(1).localPosition = new Vector2(0, 0);
     }
 
-    private Vector2 Camera_Pos()
+    public void MoveToBranch(Direction dir)
     {
-        return (Vector2)Camera.main.transform.position + ((Vector2)transform.position - unmoved_pos);
+        if (dir == Direction.Up)
+        { 
+            animator.SetInteger("Branch", 3);
+        }
+    }
+
+    public void BranchExit(Direction dir)
+    {
+        if(dir == Direction.Down)
+        {
+       
+        }
+    }
+    private AnimationClip GetAnimationClip(string name)
+    {
+        if (!animator) return null; // no animator
+
+        foreach (AnimationClip clip in animator.runtimeAnimatorController.animationClips)
+        {
+            if (clip.name == name)
+            {
+                return clip;
+            }
+        }
+        return null; // no clip by that name
     }
 
     public void Move_Animation(Direction dir)
