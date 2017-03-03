@@ -102,6 +102,14 @@ public class PlayerGraphics : MonoBehaviour {
        
         }
     }
+
+    public void BranchEntered(Direction direction)
+    {
+        player.transform.GetChild(0).position = new Vector2(0, 0);
+        player.transform.position = player.position;
+        api.MovePlayerFinished(player.gameObject);
+        animator.SetInteger("Branch", 0);
+    }
     private AnimationClip GetAnimationClip(string name)
     {
         if (!animator) return null; // no animator
