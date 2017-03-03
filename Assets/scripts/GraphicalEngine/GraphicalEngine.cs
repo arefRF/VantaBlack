@@ -21,6 +21,10 @@ public class GraphicalEngine : MonoBehaviour {
     private bool finish_lock;
     private Coroutine object_co;
     private string[] simple_objects_off = new string[] { "Direction","Glass","Switches","Border","Icon Holder","Glow"};
+    void Awake()
+    {
+        Application.targetFrameRate = 240;
+    }
     void Start()
     {
         engine = Starter.GetEngine();
