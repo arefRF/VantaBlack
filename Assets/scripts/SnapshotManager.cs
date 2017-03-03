@@ -123,7 +123,7 @@ public class SnapshotManager{
         CameraController controller = Camera.main.GetComponent<CameraController>();
         controller.Camera_Offset_Change(snp.camerasnapshot.left_bound, snp.camerasnapshot.right_bound, snp.camerasnapshot.lower_bound, snp.camerasnapshot.upper_bound);
         controller.Camera_Rotation_Change(snp.camerasnapshot.rotation, snp.camerasnapshot.move_time);
-        controller.Camera_Size_Change(snp.camerasnapshot.zoom);
+        controller.Camera_Size_Change(snp.camerasnapshot.zoom, 0);
     }
 }
 
