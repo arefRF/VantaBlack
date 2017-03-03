@@ -36,8 +36,8 @@ public class Gate : Container {
         {
             return;
         }
-        api.AddToSnapshot(this);
         api.AddToSnapshot(player);
+        api.AddToSnapshot(this);
         api.TakeSnapshot();
         PlayerReleaseAbilities(player);
     }
@@ -59,8 +59,6 @@ public class Gate : Container {
     {
         if (gatetype == GateType.Internal)
         {
-            api.AddToSnapshot(this);
-            api.MergeSnapshot();
             Debug.Log("Internal OPen");
             GetComponent<Animator>().SetBool("Open", true);
             api.RemoveFromDatabase(this);
@@ -98,10 +96,12 @@ public class Gate : Container {
 public class CloneableGate : CloneableUnit
 {
     public List<Ability> abilities;
+
     public CloneableGate(Gate gate) : base(gate.position)
     {
         original = gate;
         abilities = new List<Ability>();
+        Debug.Log(gate.abilities.Count);
         for (int i = 0; i < gate.abilities.Count; i++)
             abilities.Add(gate.abilities[i]);
     }
@@ -116,5 +116,6 @@ public class CloneableGate : CloneableUnit
         original.api.AddToDatabase(original);
         original.api.engine.apigraphic.Undo_Unit(original);
         original.api.engine.apigraphic.UnitChangeSprite(original);
+        original.GetComponent<Animator>().SetBool("Open", false);
     }
 }
