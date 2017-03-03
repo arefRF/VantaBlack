@@ -61,11 +61,11 @@ public class APIGraphic{
         player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
         player.gameObject.GetComponent<PlayerGraphics>().Move_Animation(player.direction);
     }
-
     // Block to Branch
     public void MovePlayer_Simple_2(Player player, Vector2 position,Direction direction)
     {
-        player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
+        //player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
+        player.GetComponent<PlayerGraphics>().MoveToBranch(direction);
     }
 
     // Block to Ramp
@@ -93,15 +93,15 @@ public class APIGraphic{
     // Branch to Block
     public void MovePlayer_Branch_1(Player player, Vector2 position)
     {
-
+        player.GetComponent<PlayerGraphics>().StopAllCoroutines();
         player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
     }
 
-    // Branch to allall
-    public void MovePlayer_Branch_2(Player player, Vector2 position)
+    // Branch to fall
+    public void MovePlayer_Branch_2(Player player, Vector2 position,Direction dir)
     {
-
-        player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
+        player.GetComponent<PlayerGraphics>().BranchExit(dir);
+        //player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
     }
 
     // Branch to Ramp

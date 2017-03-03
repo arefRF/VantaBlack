@@ -87,10 +87,72 @@ public class PlayerGraphics : MonoBehaviour {
         transform.GetChild(1).localPosition = new Vector2(0, 0);
     }
 
-    private Vector2 Camera_Pos()
+    public void MoveToBranch(Direction dir)
     {
-        return (Vector2)Camera.main.transform.position + ((Vector2)transform.position - unmoved_pos);
+        if (dir == Direction.Up)
+        {
+            player.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 0);
+        }
+        else if (dir == Direction.Down)
+        {
+            player.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 180);
+        }
+        else if (dir == Direction.Left)
+        {
+            player.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 90);
+        }
+        else
+            player.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 270);
+
+        animator.SetInteger("Branch", 1);
+        StartCoroutine(Simple_Move(player.position, 0.65f));
     }
+    public void MoveToBranchAnimationFinished()
+    {
+        animator.SetInteger("Branch", 0);
+    }
+
+    public void BranchExitAnimationFinished()
+    {
+        animator.SetInteger("Branch", 0);
+    }
+
+    public void BranchExit(Direction dir)
+    {
+        if (dir == Direction.Up)
+        {
+            player.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 180);
+        }
+        else if (dir == Direction.Down)
+        {
+            player.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 0);
+        }
+        else if (dir == Direction.Left)
+        {
+            player.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 270);
+        }
+        else
+            player.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 90);
+        animator.SetInteger("Branch", -1);
+        StartCoroutine(Simple_Move(player.position, 0.65f));
+    }
+
+
+
+    private IEnumerator Simple_Move(Vector2 end, float move_time)
+    {
+        float remain_distance = ((Vector2)transform.position - end).sqrMagnitude;
+        while (remain_distance > float.Epsilon)
+        {
+            remain_distance = ((Vector2)transform.position - end).sqrMagnitude;
+            transform.position = Vector2.MoveTowards(transform.position, end, Time.smoothDeltaTime / move_time);
+            api.Camera_AutoMove();
+            yield return new WaitForSeconds(0.001f);
+        }
+        api.MovePlayerFinished(player.gameObject);
+        animator.SetInteger("Branch", 0);
+    }
+
 
     public void Move_Animation(Direction dir)
     {
