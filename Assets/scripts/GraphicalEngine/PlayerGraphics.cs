@@ -165,6 +165,7 @@ public class PlayerGraphics : MonoBehaviour {
 
     public void Move_Animation(Direction dir)
     {
+        ResetStates();
         if (dir == Direction.Right)
             animator.SetInteger("Walk", 1);
         else
@@ -173,6 +174,7 @@ public class PlayerGraphics : MonoBehaviour {
 
     public void Move_Finished()
     {
+        Debug.Log("Move graphic finish");
         animator.SetInteger("Walk", 0);
     }
     public void Player_Change_Direction(Player player,Direction dir)

@@ -214,7 +214,7 @@ public class PlayerPhysics : MonoBehaviour
     }
     public void Simple_Move(Vector2 pos)
     {
-            set_percent = true;
+        set_percent = true;
         if (last_co != null)
             StopCoroutine(last_co);
             Rotate_On_Block();
