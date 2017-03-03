@@ -100,8 +100,8 @@ public class APIGraphic{
     // Branch to fall
     public void MovePlayer_Branch_2(Player player, Vector2 position,Direction dir)
     {
-        Debug.Log(dir);
-        player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
+        player.GetComponent<PlayerGraphics>().BranchExit(dir);
+        //player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
     }
 
     // Branch to Ramp

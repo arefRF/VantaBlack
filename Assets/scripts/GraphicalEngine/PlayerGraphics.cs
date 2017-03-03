@@ -92,6 +92,7 @@ public class PlayerGraphics : MonoBehaviour {
         if (dir == Direction.Up)
         { 
             animator.SetInteger("Branch", 3);
+            StartCoroutine(Simple_Move(player.position, 0.9f));
         }
     }
 
@@ -99,16 +100,53 @@ public class PlayerGraphics : MonoBehaviour {
     {
         if(dir == Direction.Down)
         {
-       
+            animator.SetInteger("Branch", -3);
+            StartCoroutine(Simple_Move(player.position, 0.4f));
         }
     }
-
     public void BranchEntered(Direction direction)
     {
-        player.transform.GetChild(0).position = new Vector2(0, 0);
-        
+        api.MovePlayerFinished(player.gameObject);
+        animator.SetInteger("Branch", -5);
+    }
+    public void BranchExited(Direction dir)
+    {
+        api.MovePlayerFinished(player.gameObject);
         animator.SetInteger("Branch", 0);
-        StartCoroutine(Set_Pos_Delay(0.11f));
+    }
+
+
+    private IEnumerator Set_Branch_Exited()
+    {
+        yield return null;
+        yield return null;
+    
+    }
+    private IEnumerator Set_Branch_Enterd()
+    {
+        yield return null;
+        yield return null;
+
+    }
+    private IEnumerator Set_Pos()
+    {
+        yield return null;
+        player.transform.position = player.position;
+        api.MovePlayerFinished(player.gameObject);
+    }
+    private IEnumerator Simple_Move(Vector2 end, float move_time)
+    {
+        float remain_distance = ((Vector2)transform.position - end).sqrMagnitude;
+        while (remain_distance > float.Epsilon)
+        {
+            remain_distance = ((Vector2)transform.position - end).sqrMagnitude;
+            transform.position = Vector2.MoveTowards(transform.position, end, Time.smoothDeltaTime / move_time);
+            api.Camera_AutoMove();
+            yield return new WaitForSeconds(0.001f);
+        }
+
+
+        // if it needs Call Finished Move of API
     }
     private IEnumerator Set_Pos_Delay(float delay)
     {
