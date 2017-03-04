@@ -106,6 +106,8 @@ public class InputController {
         }
         else if (direction == Toolkit.ReverseDirection(player.direction))
         {
+            if (Toolkit.HasBranch(player.position) || Toolkit.HasBranch(Toolkit.VectorSum(player.position, direction)))
+                return;
             player.movepercentage = 0;  
             Direction olddir = player.direction;
             player.direction = direction;
@@ -201,7 +203,7 @@ public class InputController {
     {
         for (int i = 0; i < database.player.Count; i++)
         {
-            if(LeanUndo(database.player[i], direction))
+            if(LeanUndo(database.player[i], direction) || FakeLeanUndo(database.player[i], direction))
                 database.player[i].ApplyGravity(database.gravity_direction, database.units);
         }
         //Applygravity();
@@ -237,8 +239,32 @@ public class InputController {
             }
             else
             {
+                FakeLean(player, direction);
+            }
+        }
+    }
+
+    public void FakeLean(Player player, Direction direction)
+    {
+        if (player.state == PlayerState.Idle || player.state == PlayerState.Fakelean)
+        {
+            if (!Toolkit.HasBranch(player.position))
+            {
+                player.state = PlayerState.Fakelean;
+                player.leandirection = direction;
                 engine.apigraphic.Fake_Lean(player, direction);
             }
         }
+    }
+
+    public bool FakeLeanUndo(Player player, Direction direction)
+    {
+        if (player.state == PlayerState.Fakelean)
+        {
+            player.state = PlayerState.Idle;
+            engine.apigraphic.Fake_Lean_Undo(player);
+            return true;
+        }
+        return false;
     }
 }

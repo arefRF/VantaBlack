@@ -7,7 +7,8 @@ public class SubEngine_Initializer{
     int x, y;
     APIUnit api;
     LogicalEngine engine;
-    public Sprite[] sprite_Container, sprite_Rock;
+    public Sprite[] sprite_Container, sprite_Rock, sprite_Branch;
+    public Sprite sprite_BranchJoint;
 
     public SubEngine_Initializer(int x, int y, LogicalEngine engine)
     {
@@ -18,8 +19,15 @@ public class SubEngine_Initializer{
 
         sprite_Container = new Sprite[16];
         sprite_Rock = new Sprite[16];
+        sprite_Branch = new Sprite[6];
         string containerrootpath = "Containers\\Box";
         string rockrootpath = "Rocks\\Rock";
+        string branchrootpath = "Branch\\";
+        for(int i=0; i<6; i++)
+        {
+            sprite_Branch[i] = Resources.Load<Sprite>(branchrootpath + (i + 1));
+        }
+        sprite_BranchJoint = Resources.Load<Sprite>(branchrootpath + "Joint");
 
         for (int i=1; i < 16; i++)
         {

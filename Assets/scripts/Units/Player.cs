@@ -154,10 +154,10 @@ public class Player : Unit
                 players.Add(units[i]);
                 continue;
             }
-            else if (units[i] is Branch)
+            /*else if (units[i] is Branch)
             {
                 continue;
-            }
+            }*/
             else if (units[i] is Ramp && units[i].transform.parent.gameObject != parent)
             {
                 return false;
@@ -218,7 +218,13 @@ public class Player : Unit
     public override bool ApplyGravity(Direction gravitydirection, List<Unit>[,] units)
     {
         if (lean)
+        {
+            /*if(!Toolkit.IsEmpty(Toolkit.VectorSum(position, leandirection)))
+                return false;
+            api.engine.apigraphic.LeanFinished(this);
+            lean = false;*/
             return false;
+        }
         if (Stand_On_Ramp(position) || Toolkit.HasBranch(position))
         {
             return false;

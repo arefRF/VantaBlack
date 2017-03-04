@@ -16,7 +16,6 @@ public class PlayerGraphics : MonoBehaviour {
         api = engine.apigraphic;
         animator = GetComponent<Animator>();
         player = GetComponent<Player>();
-        if(player.abilitycount != 0)
             engine.apigraphic.Absorb(player, null);
     }
 
@@ -50,6 +49,36 @@ public class PlayerGraphics : MonoBehaviour {
         animator.SetBool("isLean", true);
     }
 
+    public void FakeLean_Down()
+    {
+        animator.SetInteger("Lean", 3);
+        animator.SetBool("isFakeLean", true);
+    }
+
+    public void FakeLean_Right()
+    {
+        animator.SetInteger("Lean", 2);
+        animator.SetBool("isFakeLean", true);
+    }
+    public void FakeLean_Left()
+    {
+        animator.SetInteger("Lean", 4);
+        animator.SetBool("isFakeLean", true);
+    }
+    public void FakeLean_Up()
+    {
+        animator.SetInteger("Lean", 1);
+        animator.SetBool("isFakeLean", true);
+    }
+
+    public void FakeLean_Finished()
+    {
+        animator.SetBool("isFakeLean", false);
+        animator.SetInteger("Lean", 0);
+        transform.GetChild(0).localPosition = new Vector2(0, 0);
+        transform.GetChild(1).localPosition = new Vector2(0, 0);
+    }
+
     public void Lean_Finished()
     {
         animator.SetBool("isLean", false);
@@ -58,13 +87,85 @@ public class PlayerGraphics : MonoBehaviour {
         transform.GetChild(1).localPosition = new Vector2(0, 0);
     }
 
-    private Vector2 Camera_Pos()
+    public void MoveToBranch(Direction dir)
     {
-        return (Vector2)Camera.main.transform.position + ((Vector2)transform.position - unmoved_pos);
+        if (dir == Direction.Up)
+        {
+            player.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 0);
+        }
+        else if (dir == Direction.Down)
+        {
+            player.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 180);
+        }
+        else if (dir == Direction.Left)
+        {
+            player.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 90);
+        }
+        else
+            player.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 270);
+        ResetStates();
+        animator.SetInteger("Branch", 1);
+        StopAllCoroutines();
+        StartCoroutine(Simple_Move(player.position, 0.65f));
     }
+
+    private void ResetStates()
+    {
+        animator.SetBool("isFakeLean", false);
+        animator.SetBool("isLean", false);
+        animator.SetInteger("Walk", 0);
+        animator.SetInteger("Branch", 0);
+    }
+    public void BranchExit(Direction dir)
+    {
+        if (dir == Direction.Up)
+        {
+            player.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 180);
+        }
+        else if (dir == Direction.Down)
+        {
+            player.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 0);
+        }
+        else if (dir == Direction.Left)
+        {
+            player.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 270);
+        }
+        else
+            player.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 90);
+        ResetStates();
+        animator.SetInteger("Branch", -1);
+        StopAllCoroutines();
+        StartCoroutine(Simple_Move(player.position, 0.65f));
+    }
+
+    public void MoveToBranchAnimationFinished()
+    {
+        animator.SetInteger("Branch", 0);
+    }
+
+    public void BranchExitAnimationFinished()
+    {
+        animator.SetInteger("Branch", 0);
+    }
+
+    private IEnumerator Simple_Move(Vector2 end, float move_time)
+    {
+        float remain_distance = ((Vector2)transform.position - end).sqrMagnitude;
+        while (remain_distance > float.Epsilon)
+        {
+            remain_distance = ((Vector2)transform.position - end).sqrMagnitude;
+            transform.position = Vector2.MoveTowards(transform.position, end, Time.smoothDeltaTime / move_time);
+            api.Camera_AutoMove();
+            yield return new WaitForSeconds(0.001f);
+        }
+        api.MovePlayerFinished(player.gameObject);
+        animator.SetInteger("Branch", 0);
+    }
+
 
     public void Move_Animation(Direction dir)
     {
+        ResetStates();
         if (dir == Direction.Right)
             animator.SetInteger("Walk", 1);
         else
@@ -73,6 +174,7 @@ public class PlayerGraphics : MonoBehaviour {
 
     public void Move_Finished()
     {
+        Debug.Log("Move graphic finish");
         animator.SetInteger("Walk", 0);
     }
     public void Player_Change_Direction(Player player,Direction dir)

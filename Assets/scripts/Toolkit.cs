@@ -45,26 +45,6 @@ public sealed class Toolkit{
         }
     }
 
-    public static bool IsEmptySpace(Vector2 position,  Direction d)
-    {
-        try {
-            Vector2 temp = DirectiontoVector(ReverseDirection(d));
-            temp = Toolkit.VectorSum(position, Toolkit.DirectiontoVector(d));
-            for (int i = 0; i < database.units[(int)temp.x, (int)temp.y].Count; i++)
-            {
-                Unit u = database.units[(int)temp.x, (int)temp.y][i];
-                if (u.unitType == UnitType.Wall || u.unitType == UnitType.Switch || u.unitType == UnitType.Pipe)
-                    continue;
-                else { return false; }
-            }
-            return true;
-        }
-        catch
-        {
-            return false;
-        }
-    }
-
     public static Vector2 DirectiontoVector(Direction d)
     {
         switch (d)
@@ -88,30 +68,6 @@ public sealed class Toolkit{
         }
     }
 
-    public static bool CanMove(Vector2 position, Direction d)
-    {
-        try
-        {
-            /*foreach(Unit u in Database.database.units[1,1])
-            {
-                Wall.print(u.unitType);
-            }*/
-            Vector2 temp = DirectiontoVector(ReverseDirection(d));
-
-            for (int i = 0; i < database.units[(int)position.x, (int)position.y].Count; i++)
-            {
-                Unit u = database.units[(int)position.x, (int)position.y][i];
-                if (u.unitType == UnitType.Wall || u.unitType == UnitType.Switch || u.unitType == UnitType.Pipe)
-                    continue;
-                else { return false; }
-            }
-            return true;
-        }
-        catch
-        {
-            return false;
-        }
-    }
 
     public static Unit GetUnitByCodeNumber(int codenumber)
     {
@@ -196,15 +152,6 @@ public sealed class Toolkit{
             default: return false;
         }
     }
-
-    public static void AddUnitToPosition(Unit u, Vector2 position)
-    {
-        if (u.unitType == UnitType.Wall)
-        {
-            return;
-        }
-        database.units[(int)position.x, (int)position.y].Add(u);
-    }
     public static Unit GetUnit(GameObject gameobject)
     {
         for (int i = 0; i < database.Xsize; i++)
@@ -220,17 +167,6 @@ public sealed class Toolkit{
         }
 
         return null;
-    }
-
-    public static bool IsOnRamp(Unit unit)
-    {
-        for(int i=0; i<database.units[(int)unit.position.x, (int)unit.position.y].Count; i++)
-        {
-            Unit u = database.units[(int)unit.position.x, (int)unit.position.y][i];
-            if (u.unitType == UnitType.Ramp)
-                return true;
-        }
-        return false;
     }
 
     public static Unit GetUnitToFallOn(List<Unit> units, Direction dir)
@@ -471,11 +407,21 @@ public sealed class Toolkit{
     public static bool[] GetConnectedSides(Unit unit)
     {
         bool[] result = new bool[4];
-        result[0] = !IsConnectedFromPosition(unit, VectorSum(unit.position, new Vector2(0, 1)));
-        result[1] = !IsConnectedFromPosition(unit, VectorSum(unit.position, new Vector2(1, 0)));
-        result[2] = !IsConnectedFromPosition(unit, VectorSum(unit.position, new Vector2(0, -1)));
-        result[3] = !IsConnectedFromPosition(unit, VectorSum(unit.position, new Vector2(-1, 0)));
+        result[0] = !IsConnectedFromPosition(unit, VectorSum(unit.position, Direction.Up));
+        result[1] = !IsConnectedFromPosition(unit, VectorSum(unit.position, Direction.Right));
+        result[2] = !IsConnectedFromPosition(unit, VectorSum(unit.position, Direction.Down));
+        result[3] = !IsConnectedFromPosition(unit, VectorSum(unit.position, Direction.Left));
         
+        return result;
+    }
+
+    public static bool[] GetConnectedSidesForBranch(Unit unit)
+    {
+        bool[] result = new bool[4];
+        result[0] = !IsConnectedFromPositionToBranch(unit, Direction.Up);
+        result[1] = !IsConnectedFromPositionToBranch(unit, Direction.Right);
+        result[2] = !IsConnectedFromPositionToBranch(unit, Direction.Down);
+        result[3] = !IsConnectedFromPositionToBranch(unit, Direction.Left);
         return result;
     }
 
@@ -486,14 +432,28 @@ public sealed class Toolkit{
             Unit u = database.units[(int)pos.x, (int)pos.y][i];
             if (u.gameObject.transform.parent == unit.gameObject.transform.parent)
             {
-                if (u is Gate)
+                if (u is Gate || u is Branch)
                     return false;
                 return true;
             }
         }         
         return false;
     }
-
+    public static bool IsConnectedFromPositionToBranch(Unit unit, Direction direction)
+    {
+        Vector2 pos = VectorSum(unit.position, direction);
+        for (int i = 0; i < database.units[(int)pos.x, (int)pos.y].Count; i++)
+        {
+            Unit u = database.units[(int)pos.x, (int)pos.y][i];
+            if (u.gameObject.transform.parent == unit.gameObject.transform.parent)
+            {
+                if (u is Branch)
+                    return true;
+                return false;
+            }
+        }
+        return false;
+    }
     public static bool IsConnectedFromPositionForContainer(Unit unit, Vector2 pos, Direction direction)
     {
         for (int i = 0; i < database.units[(int)pos.x, (int)pos.y].Count; i++)

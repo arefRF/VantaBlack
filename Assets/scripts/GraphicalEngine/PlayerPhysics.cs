@@ -214,7 +214,7 @@ public class PlayerPhysics : MonoBehaviour
     }
     public void Simple_Move(Vector2 pos)
     {
-            set_percent = true;
+        set_percent = true;
         if (last_co != null)
             StopCoroutine(last_co);
             Rotate_On_Block();
@@ -343,12 +343,12 @@ public class PlayerPhysics : MonoBehaviour
         while(remain_distance > float.Epsilon)
         {
             remain_distance = ((Vector2)transform.position - end).sqrMagnitude;
-            transform.position = Vector2.MoveTowards(transform.position, end, Time.smoothDeltaTime  / move_time);
+            transform.position = Vector2.MoveTowards(transform.position, end, Time.smoothDeltaTime  / move_time );
             Set_Player_Move_Percent(remain_distance);
             api.Camera_AutoMove();
-            yield return null;
+            yield return new WaitForSeconds(0.001f);
         }
-
+       
         if (call_finish)
         {
             if(move_type!=MoveType.Land)

@@ -93,9 +93,19 @@ public class SnapshotManager{
         if (database.snapshots.Count != 0)
         {
             Snapshot snp = database.snapshots[database.snapshots.Count - 1];
-            database.snapshots.RemoveAt(database.snapshots.Count - 1);
+            if(database.snapshots.Count > 1)
+                database.snapshots.RemoveAt(database.snapshots.Count - 1);
             Undo(snp);
             UndoCamera(snp);
+            try
+            {
+                GameObject.Find("HUD").transform.GetChild(0).GetComponent<HUD>().AbilityChanged(database.player[0]);
+            }
+            catch
+            {
+                GameObject.Find("UI").GetComponent<Get>().hud.SetActive(true);
+                GameObject.Find("HUD").transform.GetChild(0).GetComponent<HUD>().AbilityChanged(database.player[0]);
+            }
         }
     }
 
@@ -113,7 +123,7 @@ public class SnapshotManager{
         CameraController controller = Camera.main.GetComponent<CameraController>();
         controller.Camera_Offset_Change(snp.camerasnapshot.left_bound, snp.camerasnapshot.right_bound, snp.camerasnapshot.lower_bound, snp.camerasnapshot.upper_bound);
         controller.Camera_Rotation_Change(snp.camerasnapshot.rotation, snp.camerasnapshot.move_time);
-        controller.Camera_Size_Change(snp.camerasnapshot.zoom);
+        controller.Camera_Size_Change(snp.camerasnapshot.zoom, 0);
     }
 }
 

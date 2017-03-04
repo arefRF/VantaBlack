@@ -8,7 +8,7 @@ public class Ramp : Unit {
     {
         string ramprootpath = "Ramps\\Ramp-type";
         string ramp_path = "";
-        bool[] notconnected = Toolkit.GetConnectedSidesForContainer(this);
+        bool[] notconnected = Toolkit.GetConnectedSides(this);
         if (type == 1)
         {
             ramp_path = ramprootpath + "1-";

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 public class Unit : MonoBehaviour {
     public Vector2 position { get; set; }
-    public UnitType unitType { get; set; }
     public long codeNumber { get; set; }
     public APIUnit api { get; set; }
 
@@ -84,6 +83,8 @@ public class Unit : MonoBehaviour {
         {
             if(units[i] is Player)
             {
+                if (Toolkit.HasBranch(Toolkit.VectorSum(position, dir)) || Toolkit.HasRamp(Toolkit.VectorSum(position, dir)))
+                    continue;
                 result.Add(units[i]);
                 result.AddRange(units[i].EffectedUnits(dir));
             }

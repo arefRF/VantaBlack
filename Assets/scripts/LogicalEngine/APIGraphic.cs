@@ -15,21 +15,21 @@ public class APIGraphic{
     //Ramp to Ramp
     public void MovePlayer_Ramp_1(Player player, Vector2 position,int ramptype)
     {
-    
+        player.GetComponent<PlayerGraphics>().StopAllCoroutines();
         player.GetComponent<PlayerPhysics>().Ramp_To_Ramp_Move(position,ramptype);
     }
     
     // Ramp to Block
     public void MovePlayer_Ramp_2(Player player, Vector2 position,int type)
     {
-    
+        player.GetComponent<PlayerGraphics>().StopAllCoroutines();
         player.GetComponent<PlayerPhysics>().Ramp_To_Block_Move(position,type);
     }
 
     //Ramp to fall
     public void MovePlayer_Ramp_3(Player player, Vector2 position,int type)
     {
-      
+        player.GetComponent<PlayerGraphics>().StopAllCoroutines();
         player.gameObject.GetComponent<PlayerPhysics>().Ramp_To_Fall(position,type);
     }
 
@@ -37,20 +37,23 @@ public class APIGraphic{
     // Ramp to corner
     public void MovePlayer_Ramp_4(Player player, Vector2 position,int type)
     {
-      
+        player.GetComponent<PlayerGraphics>().StopAllCoroutines();
+        player.GetComponent<PlayerGraphics>().StopAllCoroutines();
         player.gameObject.GetComponent<PlayerPhysics>().Ramp_To_Corner_Move(position,type);
     }
 
     //Ramp to sharp
     public void MovePlayer_Ramp_5(Player player, Vector2 position,int type)
     {
-        
+
+        player.GetComponent<PlayerGraphics>().StopAllCoroutines();
         player.gameObject.GetComponent<PlayerPhysics>().Ramp_To_Sharp_Move(position,type);
     }
 
     //ramp to branch
     public void MovePlayer_Ramp_Branch(Player player,Vector2 position,int type,Direction direction)
     {
+        player.GetComponent<PlayerGraphics>().StopAllCoroutines();
         player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
     }
 
@@ -58,34 +61,37 @@ public class APIGraphic{
     public void MovePlayer_Simple_1(Player player, Vector2 position)
     {
         //player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
+        player.GetComponent<PlayerGraphics>().StopAllCoroutines();
         player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
         player.gameObject.GetComponent<PlayerGraphics>().Move_Animation(player.direction);
     }
-
     // Block to Branch
     public void MovePlayer_Simple_2(Player player, Vector2 position,Direction direction)
     {
-        player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
+        player.GetComponent<PlayerGraphics>().StopAllCoroutines();
+        player.gameObject.GetComponent<PlayerPhysics>().StopAllCoroutines();
+        player.GetComponent<PlayerGraphics>().MoveToBranch(direction);
     }
 
     // Block to Ramp
     public void MovePlayer_Simple_3(Player player, Vector2 position, int ramptype)
     {
-
+        player.GetComponent<PlayerGraphics>().StopAllCoroutines();
         player.GetComponent<PlayerPhysics>().Block_To_Ramp_Move(position,ramptype);
-        //player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
+       
     }
 
     // Block to fall
     public void MovePlayer_Simple_4(Player player, Vector2 position)
     {
+        player.GetComponent<PlayerGraphics>().StopAllCoroutines();
         player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
     }
     
     // Block to Ramp (tekrari)
     public void MovePlayer_Simple_5(Player player, Vector2 position , int ramptype)
     {
-
+        player.GetComponent<PlayerGraphics>().StopAllCoroutines();
         player.GetComponent<PlayerPhysics>().Block_To_Ramp_Move(position,ramptype);
         //player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
     }
@@ -93,21 +99,25 @@ public class APIGraphic{
     // Branch to Block
     public void MovePlayer_Branch_1(Player player, Vector2 position)
     {
-
+        player.GetComponent<PlayerGraphics>().StopAllCoroutines();
+        player.GetComponent<PlayerPhysics>().StopAllCoroutines();
         player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
     }
 
-    // Branch to allall
-    public void MovePlayer_Branch_2(Player player, Vector2 position)
+    // Branch to fall
+    public void MovePlayer_Branch_2(Player player, Vector2 position,Direction dir)
     {
-
-        player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
+        player.GetComponent<PlayerPhysics>().StopAllCoroutines();
+        player.GetComponent<PlayerGraphics>().StopAllCoroutines();
+        player.GetComponent<PlayerGraphics>().BranchExit(dir);
+        //player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
     }
 
     // Branch to Ramp
     public void MovePlayer_Branch_3(Player player, Vector2 position, int ramptype)
     {
-
+        player.GetComponent<PlayerGraphics>().StopAllCoroutines();
+        player.GetComponent<PlayerPhysics>().StopAllCoroutines();
         player.gameObject.GetComponent<PlayerPhysics>().Block_To_Ramp_Move(position,ramptype);
     }
 
@@ -120,7 +130,9 @@ public class APIGraphic{
     }    
     public void Fall(Player player, Vector2 position)
     {
+        player.GetComponent<PlayerGraphics>().StopAllCoroutines();
         Debug.Log(position);
+        player.GetComponent<Animator>().SetInteger("Walk", 0);
         player.GetComponent<PlayerPhysics>().Fall(position);
     }
 
@@ -131,6 +143,7 @@ public class APIGraphic{
 
     public void Land(Player player, Vector2 position, Unit fallonunit)
     {
+        player.GetComponent<PlayerGraphics>().StopAllCoroutines();
         player.GetComponent<PlayerPhysics>().Land(position);
         LandFinished(player);
         
@@ -142,15 +155,16 @@ public class APIGraphic{
     }
     public void LandOnRamp(Player player, Vector2 position, Unit fallonunit, int ramptype)
     {
+        player.GetComponent<PlayerGraphics>().StopAllCoroutines();
         player.GetComponent<PlayerPhysics>().Land_On_Ramp(position, ramptype);
         
     }
 
+    // object move
     public void MoveGameObject(GameObject obj, Vector2 pos, Unit unit)
     {
         graphicalengine.Move_Object(obj,unit, pos);
     }
-
     public void MoveGameObjectFinished(GameObject obj, Unit unit)
     {
         logicalengine.graphic_GameObjectMoveAnimationFinished(obj, unit);
@@ -182,6 +196,7 @@ public class APIGraphic{
 
     public void MovePlayerOnPlatform(Player player,Vector2 pos)
     {
+        player.GetComponent<PlayerGraphics>().StopAllCoroutines();
         player.GetComponent<PlayerPhysics>().On_Platform_Move(pos);
     }
     public void Lean(Player player)
@@ -194,7 +209,6 @@ public class APIGraphic{
                case Direction.Up: gl.Lean_Up(); break;
                case Direction.Down: gl.Lean_Down(); break;
            }
-       
     }
     public void Camera_AutoMove()
     {
@@ -203,7 +217,14 @@ public class APIGraphic{
 
     public void Fake_Lean(Player player,Direction dir)
     {
-         
+        PlayerGraphics gl = player.GetComponent<PlayerGraphics>();
+        switch (player.leandirection)
+        {
+            case Direction.Right: gl.FakeLean_Right(); break;
+            case Direction.Left: gl.FakeLean_Left(); break;
+            case Direction.Up: gl.FakeLean_Up(); break;
+            case Direction.Down: gl.FakeLean_Down(); break;
+        }
     }
     public void LeanFinished(Player player)
     {
@@ -273,7 +294,10 @@ public class APIGraphic{
     }
     public void Undo_Unit(Unit unit)
     {
-
+        if(unit is Gate)
+        {
+            //unit.transform.GetChild(6).GetComponent<SpriteRenderer> = (Sprite)Resources.Load("")
+        }
     }
     public void Undo_Objects()
     {
@@ -304,5 +328,11 @@ public class APIGraphic{
     {
         GameObject.Find("UI").GetComponent<Get>().inMenu_Show();
         Debug.Log("crush player died");
+    }
+
+    public void Fake_Lean_Undo(Player player)
+    {
+        PlayerGraphics gl = player.GetComponent<PlayerGraphics>();
+        gl.FakeLean_Finished();
     }
 }

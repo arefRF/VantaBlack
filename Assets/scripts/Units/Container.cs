@@ -96,7 +96,6 @@ public class Container : ParentContainer {
             abilities.RemoveAt(0);
             api.ChangeSprite(this);
             _setability(player);
-            api.engine.apigraphic.Absorb(player, this);
             ContainerAbilityChanged(false, abilities.Count);
         }
     }
@@ -109,7 +108,6 @@ public class Container : ParentContainer {
             player.abilities.RemoveAt(0);
             api.ChangeSprite(this);
             _setability(player);
-            api.engine.apigraphic.Absorb(player, this);
             ContainerAbilityChanged(true, abilities.Count);
         }
 
@@ -185,7 +183,9 @@ public class Container : ParentContainer {
                 Swap(player);*/
         }
         api.ChangeSprite(this);
-        if(this is FunctionalContainer && ((FunctionalContainer)this).on)
+        
+        _setability(player);
+        if (this is FunctionalContainer && ((FunctionalContainer)this).on)
             CheckReservedList();
     }
 
@@ -215,6 +215,7 @@ public class Container : ParentContainer {
         }
         api.ChangeSprite(this);
         _setability(player);
+        api.engine.apigraphic.Absorb(player, null);
         if (this is FunctionalContainer && ((FunctionalContainer)this).on)
             CheckReservedList();
     }
@@ -270,6 +271,7 @@ public class Container : ParentContainer {
             abilitytype = abilities[0].abilitytype;
         if (player.abilities.Count != 0)
             player.abilitytype = player.abilities[0].abilitytype;
+        api.engine.apigraphic.Absorb(player, null);
     }
     
 }
