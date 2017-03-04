@@ -1,11 +1,16 @@
 fileFormatVersion: 2
 <<<<<<< HEAD:Assets/Resources/Containers/Static/Static Container Push 1.png.meta
+guid: 737dfccc2feb56b44838aca12fb17766
+timeCreated: 1488376935
+=======
+<<<<<<< HEAD:Assets/Resources/Containers/Static/Static Container Push 1.png.meta
 guid: 893e904e30d9e814b9b7e2badce5f85c
 timeCreated: 1488376831
 =======
 guid: 4b91da29aa3b95c48a91c569fcc959a4
 timeCreated: 1488433376
 >>>>>>> 2d58d9881f4448719c046832ccece1165493aa37:Assets/Resources/Containers/Static/Static Container Push 1.png.meta
+>>>>>>> 041b357c6f97926e9d316c840be35192011f0f61:Assets/Resources/Containers/Static/Static Container Push 1.png.meta
 licenseType: Pro
 TextureImporter:
   fileIDToRecycleName: {}
@@ -35,7 +40,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     filterMode: -1
-    aniso: -1
+    aniso: 16
     mipBias: -1
     wrapMode: 1
   nPOTScale: 0
