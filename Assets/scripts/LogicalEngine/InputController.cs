@@ -106,6 +106,8 @@ public class InputController {
         }
         else if (direction == Toolkit.ReverseDirection(player.direction))
         {
+            if (Toolkit.HasBranch(player.position) || Toolkit.HasBranch(Toolkit.VectorSum(player.position, direction)))
+                return;
             player.movepercentage = 0;  
             Direction olddir = player.direction;
             player.direction = direction;

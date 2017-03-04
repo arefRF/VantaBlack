@@ -6,6 +6,7 @@ public class CameraController : MonoBehaviour {
     public bool auto_move = true;
     public float left_bound, right_bound, upper_bound, lower_bound;
     public float zoom;
+    public float zoomtime;
     private Transform p_transform;
     private float vert_view;
     private float horz_view;
@@ -70,10 +71,11 @@ public class CameraController : MonoBehaviour {
 
     }
 
-    public void Camera_Size_Change(float zoom )
+    public void Camera_Size_Change(float zoom , float zoomtime)
     {
-        zoom = this.zoom;
-        StartCoroutine(Zoom(zoom,1));
+        this.zoom = zoom;
+        this.zoomtime = zoomtime;
+        StartCoroutine(Zoom(zoom,zoomtime));
     }
 
     public void Camera_Rotation_Change(float rot, float move_time)
@@ -84,8 +86,10 @@ public class CameraController : MonoBehaviour {
     private IEnumerator Zoom(float zoom,float move_time)
     {
         float remain = Mathf.Abs( Camera.main.orthographicSize - zoom);
+        Debug.Log(zoom);
         while (remain> float.Epsilon)
         {
+            Debug.Log("here");
             remain = Mathf.Abs(Camera.main.orthographicSize - zoom);
             Camera.main.orthographicSize = Mathf.MoveTowards(Camera.main.orthographicSize, zoom, Time.smoothDeltaTime / move_time);
             yield return null; 
