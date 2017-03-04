@@ -121,7 +121,6 @@ public class APIGraphic{
     }    
     public void Fall(Player player, Vector2 position)
     {
-        Debug.Log(position);
         player.GetComponent<Animator>().SetInteger("Walk", 0);
         player.GetComponent<PlayerPhysics>().Fall(position);
     }
