@@ -414,6 +414,16 @@ public sealed class Toolkit{
         
         return result;
     }
+    public static bool[] GetConnectedSidesForRamp(Unit unit)
+    {
+        bool[] result = new bool[4];
+        result[0] = !IsConnectedFromPositionForRamp(unit, VectorSum(unit.position, Direction.Up));
+        result[1] = !IsConnectedFromPositionForRamp(unit, VectorSum(unit.position, Direction.Right));
+        result[2] = !IsConnectedFromPositionForRamp(unit, VectorSum(unit.position, Direction.Down));
+        result[3] = !IsConnectedFromPositionForRamp(unit, VectorSum(unit.position, Direction.Left));
+
+        return result;
+    }
 
     public static bool[] GetConnectedSidesForBranch(Unit unit)
     {
@@ -439,6 +449,22 @@ public sealed class Toolkit{
         }         
         return false;
     }
+
+    public static bool IsConnectedFromPositionForRamp(Unit unit, Vector2 pos)
+    {
+        for (int i = 0; i < database.units[(int)pos.x, (int)pos.y].Count; i++)
+        {
+            Unit u = database.units[(int)pos.x, (int)pos.y][i];
+            if (u.gameObject.transform.parent == unit.gameObject.transform.parent)
+            {
+                if (u is Gate)
+                    return false;
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static bool IsConnectedFromPositionToBranch(Unit unit, Direction direction)
     {
         Vector2 pos = VectorSum(unit.position, direction);
