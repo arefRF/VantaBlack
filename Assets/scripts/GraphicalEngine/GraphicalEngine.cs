@@ -30,7 +30,7 @@ public class GraphicalEngine : MonoBehaviour {
         engine = Starter.GetEngine();
         database = Starter.GetDataBase();
         api = engine.apigraphic;
-        Cursor.visible = false;
+       
        
     }
     public void Move_Object(GameObject obj,Unit unit, Vector2 pos)
