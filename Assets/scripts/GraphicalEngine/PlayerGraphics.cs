@@ -78,7 +78,16 @@ public class PlayerGraphics : MonoBehaviour {
         transform.GetChild(0).localPosition = new Vector2(0, 0);
         transform.GetChild(1).localPosition = new Vector2(0, 0);
     }
+    public void Shield_Color_Hide()
+    {
+        
+        transform.GetChild(1).GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0);
+    }
+    public void Shield_Color_Show()
+    {
 
+        transform.GetChild(1).GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
+    }
     public void Lean_Finished()
     {
         animator.SetBool("isLean", false);
