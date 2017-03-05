@@ -441,6 +441,14 @@ public class CloneablePlayer : CloneableUnit
         if (original.abilitycount != 0)
             original.abilitytype = original.abilities[0].abilitytype;
         SetPosition();
+        if (!Toolkit.HasBranch(original.position))
+        {
+            //Debug.Log(Resources.Load<Sprite>("Player\\1"));
+            original.transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Player\\1");
+            Debug.Log(original.transform.GetChild(1).GetComponent<SpriteRenderer>().sprite);
+            Debug.Log(original.transform.GetChild(1).name);
+            original.transform.GetChild(1).GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
+        }
         original.state = PlayerState.Idle;
     }
 }

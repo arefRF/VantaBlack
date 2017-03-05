@@ -78,7 +78,15 @@ public class PlayerGraphics : MonoBehaviour {
         transform.GetChild(0).localPosition = new Vector2(0, 0);
         transform.GetChild(1).localPosition = new Vector2(0, 0);
     }
-
+    public void Shield_Color_Hide()
+    {
+        
+        transform.GetChild(1).GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0);
+    }
+    public void Shield_Color_Show()
+    {
+        transform.GetChild(1).GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
+    }
     public void Lean_Finished()
     {
         animator.SetBool("isLean", false);
@@ -116,7 +124,7 @@ public class PlayerGraphics : MonoBehaviour {
         animator.SetInteger("Walk", 0);
         animator.SetInteger("Branch", 0);
     }
-    public void BranchExit(Direction dir)
+    public void BranchExit(Direction dir,int ramp_type)
     {
         if (dir == Direction.Up)
         {
@@ -135,14 +143,26 @@ public class PlayerGraphics : MonoBehaviour {
         ResetStates();
         animator.SetInteger("Branch", -1);
         StopAllCoroutines();
-        StartCoroutine(Simple_Move(player.position, 0.65f));
+        Vector2 pos = On_Ramp_Pos(ramp_type) + player.position;
+        StartCoroutine(Simple_Move(pos, 0.65f));
+    }
+    private Vector2 On_Ramp_Pos(int type)
+    {
+        if (type == 4)
+            return new Vector2(-0.22f, 0.2f);
+        else if (type == 1)
+            return new Vector2(0.19f, 0.25f);
+
+        return new Vector2(0, 0);
     }
 
+    // animation calls this
     public void MoveToBranchAnimationFinished()
     {
         animator.SetInteger("Branch", 0);
     }
 
+    // animation calss this
     public void BranchExitAnimationFinished()
     {
         animator.SetInteger("Branch", 0);
@@ -203,7 +223,7 @@ public class PlayerGraphics : MonoBehaviour {
             if (player.abilities[0].abilitytype == AbilityType.Fuel)
                 path += "player 1 green";
             else if (player.abilities[0].abilitytype == AbilityType.Key)
-                path += "player 1";
+                path += "player 1 white";
             else
                 path += "player 1";
         }

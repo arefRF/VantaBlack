@@ -5,10 +5,12 @@ using UnityEngine.SceneManagement;
 public class SceneLoader : MonoBehaviour{
     private bool loadScene = false;
     private string scene;
+    private float loadtime;
 
-    public void Load(string scene)
+    public void Load(string scene, float loadtime)
     {
         this.scene = scene;
+        this.loadtime = loadtime;
         // If the player has pressed the space bar and a new scene is not loading yet...
         if (loadScene == false)
         {
@@ -26,7 +28,7 @@ public class SceneLoader : MonoBehaviour{
 
         // This line waits for 3 seconds before executing the next line in the coroutine.
         // This line is only necessary for this demo. The scenes are so simple that they load too fast to read the "Loading..." text.
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(loadtime);
 
         // Start an asynchronous operation to load the scene that was passed to the LoadNewScene coroutine.
         AsyncOperation async = SceneManager.LoadSceneAsync(scene);

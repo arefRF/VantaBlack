@@ -53,8 +53,10 @@ public class APIGraphic{
     //ramp to branch
     public void MovePlayer_Ramp_Branch(Player player,Vector2 position,int type,Direction direction)
     {
+        Debug.Log("ramp to branch");
         player.GetComponent<PlayerGraphics>().StopAllCoroutines();
-        player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
+        player.gameObject.GetComponent<PlayerPhysics>().StopAllCoroutines();
+        player.GetComponent<PlayerGraphics>().MoveToBranch(direction);
     }
 
     //  Block to Block
@@ -111,7 +113,7 @@ public class APIGraphic{
     {
         player.GetComponent<PlayerPhysics>().StopAllCoroutines();
         player.GetComponent<PlayerGraphics>().StopAllCoroutines();
-        player.GetComponent<PlayerGraphics>().BranchExit(dir);
+        player.GetComponent<PlayerGraphics>().BranchExit(dir,0);
         //player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
     }
 
@@ -120,7 +122,7 @@ public class APIGraphic{
     {
         player.GetComponent<PlayerGraphics>().StopAllCoroutines();
         player.GetComponent<PlayerPhysics>().StopAllCoroutines();
-        player.GetComponent<PlayerGraphics>().BranchExit(dir);
+        player.GetComponent<PlayerGraphics>().BranchExit(dir,ramptype);
         //player.gameObject.GetComponent<PlayerPhysics>().Block_To_Ramp_Move(position,ramptype);
     }
 

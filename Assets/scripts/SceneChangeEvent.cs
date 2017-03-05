@@ -7,7 +7,7 @@ public class SceneChangeEvent : MonoBehaviour
     public string scenename;
     public bool smoothchange;
     SceneLoader sceneloader;
-
+    public float loadtime;
     public void Start()
     {
         sceneloader = GameObject.Find("SceneLoader").GetComponent<SceneLoader>();
@@ -20,7 +20,7 @@ public class SceneChangeEvent : MonoBehaviour
             if (smoothchange)
             {
 
-                sceneloader.Load(scenename);
+                sceneloader.Load(scenename, loadtime);
             }
         }
     }
