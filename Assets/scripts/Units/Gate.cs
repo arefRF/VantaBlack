@@ -80,7 +80,7 @@ public class Gate : Container {
     {
         Debug.Log("changing scene");
         //SceneManager.LoadScene(sceneName);
-        sceneloader.Load(sceneName);
+        sceneloader.Load(sceneName, 1);
     }
     public override void PlayerAbsorb(Player player)
     {
