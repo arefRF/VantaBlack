@@ -36,7 +36,7 @@ public class ObjectShow : MonoBehaviour {
     {
         if(col.gameObject.tag == "Player")
         {
-            text_obj.SetActive(false);
+            Hide_Object();
         }
     }
 
