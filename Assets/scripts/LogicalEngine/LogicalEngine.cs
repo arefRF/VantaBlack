@@ -415,7 +415,7 @@ public class LogicalEngine {
                                 database.units[(int)player.position.x, (int)player.position.y].Remove(player);
                                 player.position = nextpos;
                                 database.units[(int)player.position.x, (int)player.position.y].Add(player);
-                                apigraphic.MovePlayer_Branch_3(player, nextpos, ((Ramp)units[0]).type);
+                                apigraphic.MovePlayer_Branch_3(player, nextpos, ((Ramp)units[0]).type,dir);
                             }
                         }
                         else
@@ -423,7 +423,7 @@ public class LogicalEngine {
                             database.units[(int)player.position.x, (int)player.position.y].Remove(player);
                             player.position = nextpos;
                             database.units[(int)player.position.x, (int)player.position.y].Add(player);
-                            apigraphic.MovePlayer_Branch_1(player, nextpos);
+                            apigraphic.MovePlayer_Branch_1(player, nextpos,dir);
                         }
                     }
                     else
@@ -436,7 +436,7 @@ public class LogicalEngine {
                                 database.units[(int)player.position.x, (int)player.position.y].Remove(player);
                                 player.position = temp;
                                 database.units[(int)player.position.x, (int)player.position.y].Add(player);
-                                apigraphic.MovePlayer_Branch_3(player, player.position, ramp.type);
+                                apigraphic.MovePlayer_Branch_3(player, player.position, ramp.type,dir);
                             }
                         }
                         else
