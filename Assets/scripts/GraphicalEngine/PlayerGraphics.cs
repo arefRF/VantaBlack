@@ -223,7 +223,7 @@ public class PlayerGraphics : MonoBehaviour {
             if (player.abilities[0].abilitytype == AbilityType.Fuel)
                 path += "player 1 green";
             else if (player.abilities[0].abilitytype == AbilityType.Key)
-                path += "player 1";
+                path += "player 1 white";
             else
                 path += "player 1";
         }
