@@ -101,8 +101,8 @@ public class APIGraphic{
     {
         player.GetComponent<PlayerGraphics>().StopAllCoroutines();
         player.GetComponent<PlayerPhysics>().StopAllCoroutines();
-        player.GetComponent<PlayerGraphics>().BranchExit(dir);
-       // player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
+        //player.GetComponent<PlayerGraphics>().BranchExit(dir);
+       player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
 
     }
 
@@ -132,7 +132,7 @@ public class APIGraphic{
            
     }    
     public void Fall(Player player, Vector2 position)
-    {
+    {   
         player.GetComponent<PlayerGraphics>().StopAllCoroutines();
         player.GetComponent<Animator>().SetInteger("Walk", 0);
         player.GetComponent<PlayerPhysics>().Fall(position);

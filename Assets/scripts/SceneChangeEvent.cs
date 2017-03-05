@@ -8,6 +8,11 @@ public class SceneChangeEvent : MonoBehaviour
     public bool smoothchange;
     SceneLoader sceneloader;
 
+    public void Start()
+    {
+        sceneloader = GameObject.Find("SceneLoader").GetComponent<SceneLoader>();
+    }
+
     void OnTriggerEnter2D(Collider2D col)
     {
         if (col.tag == "Player")
@@ -15,7 +20,7 @@ public class SceneChangeEvent : MonoBehaviour
             if (smoothchange)
             {
 
-                SceneManager.LoadSceneAsync(scenename);
+                sceneloader.Load(scenename);
             }
         }
     }

@@ -23,9 +23,14 @@ public class CameraEvent : MonoBehaviour {
         }   
     }
 
+    void OnTriggerStay2D(Collider2D col)
+    {
+    }
+
+    void OnTriggerStay(Collider other)
+    {
+        //Debug.Log("Still colliding with trigger object " + other.name);
+    }
 
 
-   
-
-    
 }
