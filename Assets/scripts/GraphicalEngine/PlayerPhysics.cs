@@ -455,26 +455,6 @@ public class PlayerPhysics : MonoBehaviour
     }
 
 
-    private float Ramp_Rotation_Value(int type,Direction dir)
-    {
-        if (type == 4)
-        {
-            if (dir == Direction.Right)
-                return 45;
-            else
-                return -45;
-        }
-        else if (type == 1)
-        {
-            if (dir == Direction.Right)
-                return -45;
-            else
-                return 45;
-        }
-
-        else
-            return 0;
-    }
 
     private enum MoveType
     {
