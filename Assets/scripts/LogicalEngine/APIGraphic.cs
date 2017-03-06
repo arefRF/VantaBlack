@@ -53,8 +53,10 @@ public class APIGraphic{
     //ramp to branch
     public void MovePlayer_Ramp_Branch(Player player,Vector2 position,int type,Direction direction)
     {
+        Debug.Log("ramp to branch");
         player.GetComponent<PlayerGraphics>().StopAllCoroutines();
-        player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
+        player.gameObject.GetComponent<PlayerPhysics>().StopAllCoroutines();
+        player.GetComponent<PlayerGraphics>().MoveToBranch(direction);
     }
 
     //  Block to Block
@@ -97,11 +99,13 @@ public class APIGraphic{
     }
 
     // Branch to Block
-    public void MovePlayer_Branch_1(Player player, Vector2 position)
+    public void MovePlayer_Branch_1(Player player, Vector2 position,Direction dir)
     {
         player.GetComponent<PlayerGraphics>().StopAllCoroutines();
         player.GetComponent<PlayerPhysics>().StopAllCoroutines();
-        player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
+        //player.GetComponent<PlayerGraphics>().BranchExit(dir);
+       player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
+
     }
 
     // Branch to fall
@@ -109,16 +113,17 @@ public class APIGraphic{
     {
         player.GetComponent<PlayerPhysics>().StopAllCoroutines();
         player.GetComponent<PlayerGraphics>().StopAllCoroutines();
-        player.GetComponent<PlayerGraphics>().BranchExit(dir);
+        player.GetComponent<PlayerGraphics>().BranchExit(dir,0);
         //player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
     }
 
     // Branch to Ramp
-    public void MovePlayer_Branch_3(Player player, Vector2 position, int ramptype)
+    public void MovePlayer_Branch_3(Player player, Vector2 position, int ramptype,Direction dir)
     {
         player.GetComponent<PlayerGraphics>().StopAllCoroutines();
         player.GetComponent<PlayerPhysics>().StopAllCoroutines();
-        player.gameObject.GetComponent<PlayerPhysics>().Block_To_Ramp_Move(position,ramptype);
+        player.GetComponent<PlayerGraphics>().BranchExit(dir,ramptype);
+        //player.gameObject.GetComponent<PlayerPhysics>().Block_To_Ramp_Move(position,ramptype);
     }
 
 
@@ -129,9 +134,8 @@ public class APIGraphic{
            
     }    
     public void Fall(Player player, Vector2 position)
-    {
+    {   
         player.GetComponent<PlayerGraphics>().StopAllCoroutines();
-        Debug.Log(position);
         player.GetComponent<Animator>().SetInteger("Walk", 0);
         player.GetComponent<PlayerPhysics>().Fall(position);
     }

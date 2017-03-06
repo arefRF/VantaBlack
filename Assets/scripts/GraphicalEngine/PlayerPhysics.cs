@@ -247,7 +247,6 @@ public class PlayerPhysics : MonoBehaviour
     // block to ramp co
     private IEnumerator Block_To_Ramp_Coroutine(Vector2 end1, Vector2 end2, float mvoe_time, bool call_finish,int type)
     {
-        Debug.Log("block to ramp");
         set_percent = true;
         float remain_distance = ((Vector2)player_transofrm.position - end1).sqrMagnitude;
         while (remain_distance > float.Epsilon)
@@ -275,7 +274,6 @@ public class PlayerPhysics : MonoBehaviour
 
     private IEnumerator Ramp_To_Block_Coroutine(Vector2 end1,Vector2 end2,float mvoe_time,bool call_finish)
     {
-        Debug.Log("ramp to block");
         set_percent = true;
         float remain_distance = ((Vector2)player_transofrm.position - end1).sqrMagnitude;
         while(remain_distance > float.Epsilon)
@@ -457,26 +455,6 @@ public class PlayerPhysics : MonoBehaviour
     }
 
 
-    private float Ramp_Rotation_Value(int type,Direction dir)
-    {
-        if (type == 4)
-        {
-            if (dir == Direction.Right)
-                return 45;
-            else
-                return -45;
-        }
-        else if (type == 1)
-        {
-            if (dir == Direction.Right)
-                return -45;
-            else
-                return 45;
-        }
-
-        else
-            return 0;
-    }
 
     private enum MoveType
     {

@@ -11,7 +11,6 @@ public class DisableTutEvent : MonoBehaviour {
             {
                 if (transform.parent.GetChild(i).name == event_name)
                 {
-                    transform.parent.GetChild(i).GetComponent<ObjectShow>().Hide_Object();
                     transform.parent.GetChild(i).gameObject.SetActive(false);
                 }
             }
