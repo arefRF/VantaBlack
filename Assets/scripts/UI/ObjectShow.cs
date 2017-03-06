@@ -6,15 +6,11 @@ public class ObjectShow : MonoBehaviour {
     private GameObject tutorial;
     private GameObject text_obj;
 
-    void Start()
-    {
-
-    }
-
     void OnTriggerEnter2D(Collider2D col)
     {
         if (col.gameObject.tag == "Player")
         {
+            
             GameObject.Find("TutorialAnimation").GetComponent<Animator>().SetBool(name,true);
         }
     }
