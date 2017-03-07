@@ -100,6 +100,7 @@ public class APIGraphic{
     // Block to Ramp (tekrari)
     public void MovePlayer_Simple_5(Player player, Vector2 position , int ramptype)
     {
+        Debug.Log(ramptype);
         player.GetComponent<PlayerGraphics>().StopAllCoroutines();
         player.GetComponent<PlayerPhysics>().Block_To_Ramp_Move(position,ramptype);
         //player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
