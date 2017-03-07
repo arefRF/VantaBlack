@@ -179,7 +179,6 @@ public class FunctionalContainer : Container {
     }
     public void Action_Fuel_Continue(Direction dir,int count)
     {
-        Debug.Log(count);
         gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = true;
         api.RemoveFromStuckList(this);
         if (count == 0)

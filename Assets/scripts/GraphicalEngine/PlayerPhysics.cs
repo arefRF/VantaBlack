@@ -300,7 +300,6 @@ public class PlayerPhysics : MonoBehaviour
     }
     private IEnumerator Ramp_To_Sharp_Coroutine(Vector2 end1, Vector2 end2, float move_time, bool call_finish,int type)
     {
-        Debug.Log("ramp to sharp");
         set_percent = true;
         // 1st part of mvoe
         float remain_distance = ((Vector2)player_transofrm.position - end1).sqrMagnitude;
