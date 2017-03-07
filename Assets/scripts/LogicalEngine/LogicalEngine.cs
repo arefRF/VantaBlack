@@ -406,7 +406,14 @@ public class LogicalEngine {
                     List<Unit> units = GetUnits(nextpos);
                     if (units.Count != 0)
                     {
-                        if (units[0] is Ramp)
+                        if(units[0] is Branch)
+                        {
+                            database.units[(int)player.position.x, (int)player.position.y].Remove(player);
+                            player.position = nextpos;
+                            database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                            apigraphic.MovePlayer_Branch_Branch(player, player.position);
+                        }
+                        else if (units[0] is Ramp)
                         {
                             if (Toolkit.IsdoubleRamp(nextpos))
                                 return;

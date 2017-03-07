@@ -73,8 +73,9 @@ public class PlayerGraphics : MonoBehaviour {
 
     public void FakeLean_Finished()
     {
-        animator.SetBool("isFakeLean", false);
         animator.SetInteger("Lean", 0);
+        animator.SetBool("isFakeLean", false);
+        
         transform.GetChild(0).localPosition = new Vector2(0, 0);
         transform.GetChild(1).localPosition = new Vector2(0, 0);
     }
