@@ -104,8 +104,8 @@ public class APIGraphic{
         Debug.Log("branch to block");
         player.GetComponent<PlayerGraphics>().StopAllCoroutines();
         player.GetComponent<PlayerPhysics>().StopAllCoroutines();
-        //player.GetComponent<PlayerGraphics>().BranchExit(dir);
-       player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
+        player.GetComponent<PlayerGraphics>().BranchExit(dir,0);
+      // player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
 
     }
 
