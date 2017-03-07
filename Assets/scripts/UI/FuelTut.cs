@@ -13,7 +13,6 @@ public class FuelTut : MonoBehaviour {
 
     void OnTriggerStay2D(Collider2D col)
     {
-        Debug.Log(col.gameObject.tag);
         if (col.gameObject.tag == "Dynamic Container")
         {
             if (col.GetComponent<DynamicContainer>().abilities.Count != 0)
