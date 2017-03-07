@@ -11,6 +11,7 @@ public class SpecialTut : MonoBehaviour
             Player player = col.GetComponent<Player>();
             if (player.abilities.Count == 0)
             {
+                Debug.Log("false");
                 GameObject.Find("TutorialAnimation").GetComponent<Animator>().SetBool(name, false);
             }
 
