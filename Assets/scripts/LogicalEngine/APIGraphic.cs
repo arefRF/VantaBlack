@@ -67,6 +67,13 @@ public class APIGraphic{
         player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
         player.gameObject.GetComponent<PlayerGraphics>().Move_Animation(player.direction);
     }
+
+    public void MovePlayer_Branch_Branch(Player player,Vector2 pos)
+    {
+        player.GetComponent<PlayerGraphics>().StopAllCoroutines();
+        player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(pos);
+        player.gameObject.GetComponent<PlayerGraphics>().Move_Animation(player.direction);
+    }
     // Block to Branch
     public void MovePlayer_Simple_2(Player player, Vector2 position,Direction direction)
     {
