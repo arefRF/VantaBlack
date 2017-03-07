@@ -16,6 +16,16 @@ public class InMenu : MonoBehaviour {
         
     }
 
+    public void Resume()
+    {
+        GameObject.Find("UI").GetComponent<Get>().inMenu_Show();
+    }
+
+    public void Quit()
+    {
+        SceneManager.LoadScene("Menu");
+    }
+
     public void Undo()
     {
         api.UndoPressed();
