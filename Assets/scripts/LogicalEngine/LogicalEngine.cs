@@ -406,7 +406,14 @@ public class LogicalEngine {
                     List<Unit> units = GetUnits(nextpos);
                     if (units.Count != 0)
                     {
-                        if (units[0] is Ramp)
+                        if(units[0] is Branch)
+                        {
+                            database.units[(int)player.position.x, (int)player.position.y].Remove(player);
+                            player.position = nextpos;
+                            database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                            apigraphic.MovePlayer_Branch_Branch(player, player.position);
+                        }
+                        else if (units[0] is Ramp)
                         {
                             if (Toolkit.IsdoubleRamp(nextpos))
                                 return;
@@ -438,13 +445,20 @@ public class LogicalEngine {
                                 database.units[(int)player.position.x, (int)player.position.y].Add(player);
                                 apigraphic.MovePlayer_Branch_3(player, player.position, ramp.type,dir);
                             }
+                            else
+                            {
+                                database.units[(int)player.position.x, (int)player.position.y].Remove(player);
+                                player.position = nextpos;
+                                database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                                apigraphic.MovePlayer_Branch_1(player, player.position, dir);
+                            }
                         }
                         else
                         {
                             database.units[(int)player.position.x, (int)player.position.y].Remove(player);
                             player.position = nextpos;
                             database.units[(int)player.position.x, (int)player.position.y].Add(player);
-                            apigraphic.MovePlayer_Branch_2(player, nextpos,dir);
+                            apigraphic.MovePlayer_Branch_1(player, nextpos,dir);
                         }
                     }
                 }
@@ -503,7 +517,7 @@ public class LogicalEngine {
                             if (units[0] is Ramp)
                             {
                                 database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                                if (Toolkit.IsdoubleRamp(units[0].position))
+                                if (Toolkit.IsdoubleRamp(temp))
                                 {
                                     player.position = nextpos;
                                     database.units[(int)player.position.x, (int)player.position.y].Add(player);

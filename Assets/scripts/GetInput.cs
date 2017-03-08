@@ -46,7 +46,9 @@ public class GetInput : MonoBehaviour {
         }
         else
         {
-
+            if (Input.GetKeyDown(KeyCode.Escape))
+                GameObject.Find("UI").GetComponent<Get>().inMenu_Show();
+                
            Get_Lean_Undo();
 
             // Directional Abilities use
