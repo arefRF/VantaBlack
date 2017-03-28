@@ -245,21 +245,24 @@ public class PlayerPhysics : MonoBehaviour
 
 
     // block to ramp co
-    private IEnumerator Block_To_Ramp_Coroutine(Vector2 end1, Vector2 end2, float mvoe_time, bool call_finish,int type)
+    private IEnumerator Block_To_Ramp_Coroutine(Vector2 end1, Vector2 end2, float move_time, bool call_finish,int type)
     {
         set_percent = true;
         float remain_distance = ((Vector2)player_transofrm.position - end1).sqrMagnitude;
-        while (remain_distance > float.Epsilon)
+        Debug.Log("start of part 1");
+       while (remain_distance > float.Epsilon)
         {
             remain_distance = ((Vector2)player_transofrm.position - end1).sqrMagnitude;
-            player_transofrm.position = Vector3.MoveTowards(player_transofrm.position, end1, Time.deltaTime * 1 / move_time);
+            player_transofrm.position = Vector3.MoveTowards(player_transofrm.position, end1, Time.deltaTime * 1 /move_time);
             api.Camera_AutoMove();
             yield return null;
         }
         remain_distance = ((Vector2)player_transofrm.position - end2).sqrMagnitude;
         Rotate_On_Ramp(type);
+        Debug.Log("start of part 2");
         while (remain_distance > float.Epsilon)
         {
+            Debug.Log("part 2");
             remain_distance = ((Vector2)player_transofrm.position - end2).sqrMagnitude;
             player_transofrm.position = Vector3.MoveTowards(player.transform.position, end2, Time.deltaTime * 1 / move_time);
             Set_Player_Move_Percent(remain_distance);
@@ -300,7 +303,6 @@ public class PlayerPhysics : MonoBehaviour
     }
     private IEnumerator Ramp_To_Sharp_Coroutine(Vector2 end1, Vector2 end2, float move_time, bool call_finish,int type)
     {
-        Debug.Log("ramp to sharp");
         set_percent = true;
         // 1st part of mvoe
         float remain_distance = ((Vector2)player_transofrm.position - end1).sqrMagnitude;

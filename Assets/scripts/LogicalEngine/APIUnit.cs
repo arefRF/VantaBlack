@@ -41,8 +41,6 @@ public class APIUnit {
     public void engine_LandOnRamp(Ramp ramp, Unit landingunit, int ramptype)
     {
         engine.UnitToGraphic_LandOnRamp(landingunit, ramp, ramp.position, ramptype);
-        Debug.Log(landingunit.position);
-        Debug.Log("landing on ramp");
     }
 
     public void graphicalengine_Land(Unit unit, Vector2 landposition)
