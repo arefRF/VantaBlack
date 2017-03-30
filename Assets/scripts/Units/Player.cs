@@ -218,27 +218,27 @@ public class Player : Unit
 
     public override bool ApplyGravity(Direction gravitydirection, List<Unit>[,] units)
     {
-        List<Unit> under = GetUnderUnits();
-        for (int i = 0; i < under.Count; i++)
+        if (lean)
+            return false;
+        if (Stand_On_Ramp(position) || Toolkit.HasBranch(position))
         {
-            // not falling (On Object)
-            if (IsOnObject(under[i]))
-                return false;
+            return false;
         }
-        print("passed");
-        bool falling = true;
-        while (position.x != 0 && position.y != 0 && falling)
+        Vector2 pos = Toolkit.VectorSum(position, gravitydirection);
+        if (Toolkit.IsdoubleRamp(pos))
+            return false;
+        if (!Fall(pos) && !Stand_On_Ramp(pos))
+            return false;
+
+        position = pos;
+        while (position.x != 0 && position.y != 0 && Fall(pos))
         {
-            print(position);
-            print(gravity);
-            position += Toolkit.DirectiontoVector(gravity);
-            under = GetUnderUnits();
-            for (int i = 0; i < under.Count; i++)
-            {
-                if (IsOnObject(under[i]))
-                    falling = false;
-            }
+            api.RemoveFromDatabase(this);
+                  
+            api.AddToDatabase(this);
+            position = Toolkit.VectorSum(position, gravitydirection);
         }
+        state = PlayerState.Falling;
         api.graphicalengine_Fall(this, position);
         return true;
     }
@@ -269,7 +269,16 @@ public class Player : Unit
         return units;
     }
 
-    
+    private bool Fall(Vector2 position)
+    {
+        List<Unit> under = GetUnderUnits();
+        for (int i = 0; i < under.Count; i++)
+        {
+            if (IsOnObject(under[i]))
+                return false;
+        }
+        return true;
+    }
 
     public void FallFinished()
     {
@@ -373,30 +382,7 @@ public class Player : Unit
         return false;
     }
 
-    private bool Fall(Vector2 position)
-    {
-        List<Unit>[,] units = Starter.GetDataBase().units;
-        if (units[(int)position.x, (int)position.y].Count != 0)
-        {
-            for (int i = 0; i < units[(int)position.x, (int)position.y].Count; i++)
-            {
-                Unit unit = units[(int)position.x, (int)position.y][i];
-                if (unit is Ramp)
-                {
-                    Ramp ramp = (Ramp)unit;
-                    // Land On Ramp should be called
-                    return false;
-                }
 
-            }
-            // There is Some Object and fall should stop
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-    }
 
     public override CloneableUnit Clone()
     {
