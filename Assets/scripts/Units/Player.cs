@@ -217,8 +217,34 @@ public class Player : Unit
 
     public override bool ApplyGravity(Direction gravitydirection, List<Unit>[,] units)
     {
-
+        List<Unit> under = GetUnderUnits();
+        for(int i = 0; i < under.Count; i++)
+        {
+            if (IsOnObject(under[i]))
+                return true;
+        }
         return true;
+    }
+
+    private bool IsOnObject(Unit obj)
+    {
+        if(!obj is Ramp)
+        {
+            return true;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    private List<Unit> GetUnderUnits()
+    {
+        List<Unit> units = new List<Unit>();
+        int x = (int)position.x;
+        int y = (int)position.y;
+        Database db = Starter.GetDataBase();
+        units.AddRange(db.units[x, y]);
+        return units;
     }
 
     
