@@ -245,9 +245,13 @@ public class Player : Unit
 
     private bool IsOnObject(Unit obj)
     {
-        if(!(obj is Ramp))
+        if(obj is Ramp)
         {
-            return true;
+            Ramp ramp = (Ramp)obj;
+            if (ramp.type == 1 || ramp.type == 4)
+                return false;
+            else
+                return true;
         }
         else
         {
@@ -260,7 +264,8 @@ public class Player : Unit
         int x = (int)position.x;
         int y = (int)position.y;
         Database db = Starter.GetDataBase();
-        units.AddRange(db.units[x, y-1]);
+        if(x!=0 && y!=0)
+            units.AddRange(db.units[x, y-1]);
         return units;
     }
 
