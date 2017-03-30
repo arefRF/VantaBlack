@@ -217,34 +217,7 @@ public class Player : Unit
 
     public override bool ApplyGravity(Direction gravitydirection, List<Unit>[,] units)
     {
-        if (lean)
-        {
-            /*if(!Toolkit.IsEmpty(Toolkit.VectorSum(position, leandirection)))
-                return false;
-            api.engine.apigraphic.LeanFinished(this);
-            lean = false;*/
-            return false;
-        }
-        if (Stand_On_Ramp(position) || Toolkit.HasBranch(position))
-        {
-            return false;
-        }
-        Vector2 pos = Toolkit.VectorSum(position, gravitydirection);
-        if (Toolkit.IsdoubleRamp(pos))
-            return false;
-        if (!Fall(pos)  && !Stand_On_Ramp(pos))
-            return false;
-        while (Fall(pos) || pos.x == 0 || pos.y == 0)
-        {
-            api.RemoveFromDatabase(this);
-            position = pos;
-            api.AddToDatabase(this);
-            if (pos.x == 0 || pos.y == 0)
-                break;
-            pos = Toolkit.VectorSum(position, gravitydirection);
-        }   
-        state = PlayerState.Falling;
-        api.graphicalengine_Fall(this, position);
+
         return true;
     }
 
