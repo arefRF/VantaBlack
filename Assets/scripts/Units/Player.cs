@@ -32,6 +32,7 @@ public class Player : Unit
         }
         direction = move_direction[0];
         state = PlayerState.Idle;
+        gravity = Direction.Down;
     }
 
     public void Update()
@@ -218,17 +219,33 @@ public class Player : Unit
     public override bool ApplyGravity(Direction gravitydirection, List<Unit>[,] units)
     {
         List<Unit> under = GetUnderUnits();
-        for(int i = 0; i < under.Count; i++)
+        for (int i = 0; i < under.Count; i++)
         {
+            // not falling (On Object)
             if (IsOnObject(under[i]))
-                return true;
+                return false;
         }
+        print("passed");
+        bool falling = true;
+        while (position.x != 0 && position.y != 0 && falling)
+        {
+            print(position);
+            print(gravity);
+            position += Toolkit.DirectiontoVector(gravity);
+            under = GetUnderUnits();
+            for (int i = 0; i < under.Count; i++)
+            {
+                if (IsOnObject(under[i]))
+                    falling = false;
+            }
+        }
+        api.graphicalengine_Fall(this, position);
         return true;
     }
 
     private bool IsOnObject(Unit obj)
     {
-        if(!obj is Ramp)
+        if(!(obj is Ramp))
         {
             return true;
         }
@@ -243,7 +260,7 @@ public class Player : Unit
         int x = (int)position.x;
         int y = (int)position.y;
         Database db = Starter.GetDataBase();
-        units.AddRange(db.units[x, y]);
+        units.AddRange(db.units[x, y-1]);
         return units;
     }
 

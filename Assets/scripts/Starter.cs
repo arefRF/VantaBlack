@@ -46,4 +46,9 @@ public class Starter : MonoBehaviour{
         return staticengine.database.gravity_direction;
     }
 
+    public static Direction GetDefaulatGravity()
+    {
+        return Database.GravityDirection;
+    }
+
 }
