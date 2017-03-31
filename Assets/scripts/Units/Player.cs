@@ -218,10 +218,14 @@ public class Player : Unit
 
     public override bool ApplyGravity(Direction gravitydirection, List<Unit>[,] units)
     {
+        // to avoid exception
         if (position.x <= 0 || position.y <= 0)
+            return false;
+        if (state == PlayerState.Falling)
             return false;
         if (lean)
             return false;
+
         if (Stand_On_Ramp(position) || Toolkit.HasBranch(position))
         {
             return false;
@@ -236,7 +240,8 @@ public class Player : Unit
             if (!Stand_On_Ramp(pos))
                 return false;
         }
-
+        if (!NewFall())
+            return false;
         while (position.x != 0 && position.y != 0 && NewFall())
         {
             api.RemoveFromDatabase(this);
@@ -256,7 +261,7 @@ public class Player : Unit
             if(Mathf.Abs(obj.transform.position.x - transform.position.x) < 0.4)
                 return !Stand_On_Ramp(position);
         }
-        if (Mathf.Abs(obj.transform.position.x - transform.position.x) < 0.3)
+        if (Mathf.Abs(obj.transform.position.x - transform.position.x) < 0.4)
             return true;
         else
             return false;
