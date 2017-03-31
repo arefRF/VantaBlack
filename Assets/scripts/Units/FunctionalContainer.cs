@@ -67,7 +67,6 @@ public class FunctionalContainer : Container
 
     private void SetCurrentState()
     {
-        Debug.Log("h");
         if (currentState > nextState)
             currentState--;
         else if (currentState < nextState)

@@ -228,7 +228,7 @@ public class Player : Unit
         Vector2 pos = Toolkit.VectorSum(position, gravitydirection);
         if (Toolkit.IsdoubleRamp(pos))
             return false;
-
+        
         if (units[(int)pos.x, (int)pos.y].Count != 0)
         {
             if (!Stand_On_Ramp(pos))
@@ -253,7 +253,7 @@ public class Player : Unit
             if(Mathf.Abs(obj.transform.position.x - transform.position.x) < 0.4)
                 return !Stand_On_Ramp(position);
         }
-        if (Mathf.Abs(obj.transform.position.x - transform.position.x) < 0.4)
+        if (Mathf.Abs(obj.transform.position.x - transform.position.x) < 0.3)
             return true;
         else
             return false;
