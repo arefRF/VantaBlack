@@ -21,6 +21,9 @@ public class Player : Unit
     public Vector2 nextpos { get; set; }
 
     public Direction jumpdirection { get; set; }
+
+    public Jump oneJump { get; set; }
+    public bool isonejumping { get; set; }
     public void Awake()
     {
         abilities = new List<Ability>();
@@ -31,6 +34,7 @@ public class Player : Unit
                 ((Jump)abilities[i]).number = 2;
         }
         direction = move_direction[0];
+        oneJump = new Jump(1);
         state = PlayerState.Idle;
         gravity = Direction.Down;
     }
@@ -211,7 +215,10 @@ public class Player : Unit
         position = pos;
         api.AddToDatabase(this);
         api.engine.apigraphic.Player_Co_Stop(this);
-        UseAbility(abilities[0]);
+        if (!isonejumping)
+            UseAbility(abilities[0]);
+        else
+            isonejumping = false;
         api.engine_Move(this, dir);
         return true;
     }
@@ -290,6 +297,7 @@ public class Player : Unit
 
     public override bool ApplyGravity(Direction gravitydirection, List<Unit>[,] units)
     {
+        isonejumping = false;
         // to avoid exception
         if (position.x <= 0 || position.y <= 0)
             return false;
