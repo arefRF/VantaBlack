@@ -229,15 +229,11 @@ public class Player : Unit
         if (Toolkit.IsdoubleRamp(pos))
             return false;
 
-        print("before stand");
-
         if (units[(int)pos.x, (int)pos.y].Count != 0)
         {
             if (!Stand_On_Ramp(pos))
                 return false;
         }
-
-        print("before while");
 
         while (position.x != 0 && position.y != 0 && NewFall())
         {
@@ -282,8 +278,6 @@ public class Player : Unit
         {
             if (IsOnObject(under[i]))
             {
-                print(under[i]);
-                print("is on object");
                 return false;
             }
         }
@@ -404,7 +398,6 @@ public class Player : Unit
 
     private bool Stand_On_Ramp(Vector2 pos)
     {
-        print(pos);
         List<Unit>[,] units = Starter.GetDataBase().units;
         for (int i = 0; i < units[(int)pos.x, (int)pos.y].Count; i++)
         {
