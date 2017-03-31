@@ -218,7 +218,7 @@ public class Player : Unit
 
     public override bool ApplyGravity(Direction gravitydirection, List<Unit>[,] units)
     {
-        if (position.x < 0 || position.y < 0)
+        if (position.x <= 0 || position.y <= 0)
             return false;
         if (lean)
             return false;
