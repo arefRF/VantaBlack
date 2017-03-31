@@ -24,7 +24,7 @@ public class Player : Unit
     public void Awake()
     {
         abilities = new List<Ability>();
-        for(int i=0; i<abilitycount; i++)
+        for (int i = 0; i < abilitycount; i++)
         {
             abilities.Add(Ability.GetAbilityInstance(abilitytype));
             if (abilitytype == AbilityType.Jump)
@@ -73,7 +73,7 @@ public class Player : Unit
         if (Toolkit.HasBranch(position))
             return false;
         List<Unit> units = api.engine_GetUnits(Toolkit.VectorSum(position, dir));
-        for(int i=0; i<units.Count; i++)
+        for (int i = 0; i < units.Count; i++)
         {
             if (units[i] is Container)
                 return true;
@@ -184,10 +184,10 @@ public class Player : Unit
                 Debug.Log(players[i]);
                 return false;
             }
-            
+
         }
         int bound = players.Count;
-        for(int i = 0; i< bound; i++)
+        for (int i = 0; i < bound; i++)
         {
             players.AddRange(players[i].players);
         }
@@ -224,19 +224,26 @@ public class Player : Unit
         {
             return false;
         }
+
         Vector2 pos = Toolkit.VectorSum(position, gravitydirection);
         if (Toolkit.IsdoubleRamp(pos))
             return false;
-        if (!Fall(pos) && !Stand_On_Ramp(pos))
-            return false;
 
-        position = pos;
-        while (position.x != 0 && position.y != 0 && Fall(pos))
+        print("before stand");
+
+        if (units[(int)pos.x, (int)pos.y].Count != 0)
+        {
+            if (!Stand_On_Ramp(pos))
+                return false;
+        }
+
+        print("before while");
+
+        while (position.x != 0 && position.y != 0 && NewFall())
         {
             api.RemoveFromDatabase(this);
-                  
-            api.AddToDatabase(this);
             position = Toolkit.VectorSum(position, gravitydirection);
+            api.AddToDatabase(this);
         }
         state = PlayerState.Falling;
         api.graphicalengine_Fall(this, position);
@@ -247,16 +254,13 @@ public class Player : Unit
     {
         if(obj is Ramp)
         {
-            Ramp ramp = (Ramp)obj;
-            if (ramp.type == 1 || ramp.type == 4)
-                return false;
-            else
-                return true;
+            if(Mathf.Abs(obj.transform.position.x - transform.position.x) < 0.4)
+                return !Stand_On_Ramp(position);
         }
-        else
-        {
+        if (Mathf.Abs(obj.transform.position.x - transform.position.x) < 0.4)
             return true;
-        }
+        else
+            return false;
     }
     private List<Unit> GetUnderUnits()
     {
@@ -266,18 +270,49 @@ public class Player : Unit
         Database db = Starter.GetDataBase();
         if(x!=0 && y!=0)
             units.AddRange(db.units[x, y-1]);
+        units.AddRange(db.units[x - 1, y - 1]);
+        units.AddRange(db.units[x + 1, y - 1]);
         return units;
     }
 
-    private bool Fall(Vector2 position)
+    private bool NewFall()
     {
         List<Unit> under = GetUnderUnits();
         for (int i = 0; i < under.Count; i++)
         {
             if (IsOnObject(under[i]))
+            {
+                print(under[i]);
+                print("is on object");
                 return false;
+            }
         }
         return true;
+    }
+
+    private bool Fall(Vector2 position)
+    {
+        List<Unit>[,] units = Starter.GetDataBase().units;
+        if (units[(int)position.x, (int)position.y].Count != 0)
+        {
+            for (int i = 0; i < units[(int)position.x, (int)position.y].Count; i++)
+            {
+                Unit unit = units[(int)position.x, (int)position.y][i];
+                if (unit is Ramp)
+                {
+                    Ramp ramp = (Ramp)unit;
+                    // Land On Ramp should be called
+                    return false;
+                }
+
+            }
+            // There is Some Object and fall should stop
+            return false;
+        }
+        else
+        {
+            return true;
+        }
     }
 
     public void FallFinished()
@@ -367,16 +402,17 @@ public class Player : Unit
     }
 
 
-    private bool Stand_On_Ramp(Vector2 position)
+    private bool Stand_On_Ramp(Vector2 pos)
     {
+        print(pos);
         List<Unit>[,] units = Starter.GetDataBase().units;
-        for (int i = 0; i < units[(int)position.x, (int)position.y].Count; i++)
+        for (int i = 0; i < units[(int)pos.x, (int)pos.y].Count; i++)
         {
-            if (units[(int)position.x, (int)position.y][i] is Ramp)
+            if (units[(int)pos.x, (int)pos.y][i] is Ramp)
             {
-                Ramp ramp = (Ramp)units[(int)position.x, (int)position.y][i];
-                //if player can move to it , it should not fall
-                return ramp.PlayerMoveInto(Direction.Up);
+                Ramp ramp = (Ramp)units[(int)pos.x, (int)pos.y][i];
+                //if player can move to it , it should  fall
+                return ramp.PlayerMoveInto(Toolkit.ReverseDirection(gravity));
             }
         }
         return false;
