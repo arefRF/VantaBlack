@@ -52,6 +52,7 @@ public class FunctionalContainer : Container
 
     public void Action_Fuel()
     {
+        api.engine.Applygravity();
         if (currentState == nextState)
             return;
         if (!MoveContainer(GetMoveDirection()))
