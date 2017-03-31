@@ -258,13 +258,20 @@ public class Player : Unit
     {
         if(obj is Ramp)
         {
-            if(Mathf.Abs(obj.transform.position.x - transform.position.x) < 0.4)
+            if (Mathf.Abs(obj.transform.position.x - transform.position.x) < 0.5)
                 return !Stand_On_Ramp(position);
+            else
+                return false;
         }
-        if (Mathf.Abs(obj.transform.position.x - transform.position.x) < 0.4)
-            return true;
         else
-            return false;
+        {
+            if (gravity == Direction.Down || gravity == Direction.Up)
+            {
+                return Mathf.Abs(obj.transform.position.x - transform.position.x) < 0.5;
+            }
+            else
+                return Mathf.Abs(obj.transform.position.y - transform.position.y) < 0.5;
+        }
     }
     private List<Unit> GetUnderUnits()
     {
@@ -272,10 +279,31 @@ public class Player : Unit
         int x = (int)position.x;
         int y = (int)position.y;
         Database db = Starter.GetDataBase();
-        if(x!=0 && y!=0)
-            units.AddRange(db.units[x, y-1]);
-        units.AddRange(db.units[x - 1, y - 1]);
-        units.AddRange(db.units[x + 1, y - 1]);
+        if (gravity == Direction.Down)
+        {
+            units.AddRange(db.units[x, y - 1]);
+            units.AddRange(db.units[x - 1, y - 1]);
+            units.AddRange(db.units[x + 1, y - 1]);
+        }
+        else if(gravity == Direction.Up)
+        {
+            units.AddRange(db.units[x, y + 1]);
+            units.AddRange(db.units[x - 1, y + 1]);
+            units.AddRange(db.units[x + 1, y + 1]);
+        }
+        else if(gravity == Direction.Right)
+        {
+            units.AddRange(db.units[x + 1, y]);
+            units.AddRange(db.units[x + 1, y - 1]);
+            units.AddRange(db.units[x + 1, y + 1]);
+        }
+        else if(gravity == Direction.Left)
+        {
+            units.AddRange(db.units[x - 1, y]);
+            units.AddRange(db.units[x - 1, y - 1]);
+            units.AddRange(db.units[x - 1, y + 1]);
+        }
+
         return units;
     }
 
