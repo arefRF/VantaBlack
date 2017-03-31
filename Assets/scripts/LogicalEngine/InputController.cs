@@ -62,7 +62,12 @@ public class InputController {
     {
         if (!player.lean)
         {
-            if (player.Can_Move_Direction(direction))
+            if(!player.Can_Lean(direction) && database.gravity_direction == Toolkit.ReverseDirection(direction))
+            {
+                player.isonejumping = true;
+                player.oneJump.Action(player, direction);
+            }
+            else if (player.Can_Move_Direction(direction))
             {
                 if (player.Should_Change_Direction(direction))
                 {
@@ -241,6 +246,7 @@ public class InputController {
                 return;
             if (player.Can_Lean(direction))
             {
+                player.isonejumping = false;
                 engine.apigraphic.Player_Co_Stop(player);
                 player.lean = true;
                 player.leandirection = direction;

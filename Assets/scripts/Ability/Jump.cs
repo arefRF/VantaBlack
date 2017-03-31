@@ -11,6 +11,12 @@ public class Jump : Ability {
         abilitytype = AbilityType.Jump;
     }
 
+    public Jump(int number)
+    {
+        abilitytype = AbilityType.Jump;
+        this.number = number;
+    }
+
     public void Action(Player player, Direction direction)
     {
         jumped = 0;
