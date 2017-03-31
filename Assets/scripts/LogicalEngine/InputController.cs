@@ -81,7 +81,7 @@ public class InputController {
             }
             else
             {
-                player.UseAbility(player.abilities[0]);
+                Lean(player, direction);
             }
         }
     }
