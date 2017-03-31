@@ -27,7 +27,6 @@ public class GetInput : MonoBehaviour {
         api = engine.apiinput;
         api.input = this;
     }
-
     // Update is called once per frame
     void Update()
     {
@@ -50,7 +49,6 @@ public class GetInput : MonoBehaviour {
                 GameObject.Find("UI").GetComponent<Get>().inMenu_Show();
                 
            Get_Lean_Undo();
-
             // Directional Abilities use
             if (Input.GetKeyUp(KeyCode.Space))
                 is_space = false; 

@@ -21,6 +21,7 @@ public class GraphicalEngine : MonoBehaviour {
     private bool finish_lock;
     private Coroutine object_co;
     private string[] simple_objects_off = new string[] { "Direction","Glass","Switches","Border","Icon Holder","Glow"};
+    private List<MoveObject> move_objects;
     void Awake()
     {
         Application.targetFrameRate = 240;
@@ -30,15 +31,31 @@ public class GraphicalEngine : MonoBehaviour {
         engine = Starter.GetEngine();
         database = Starter.GetDataBase();
         api = engine.apigraphic;
+        move_objects = new List<MoveObject>();
        
        
     }
     public void Move_Object(GameObject obj,Unit unit, Vector2 pos)
     {
         finish_lock = true;
-        if(object_co != null)
-            StopCoroutine(object_co);
-        object_co =  StartCoroutine(Move_Object_Coroutine(obj,unit,pos));
+        StopSameCo(unit);
+        MoveObject move = new MoveObject();
+        move.code = unit.codeNumber;
+        move.co =  StartCoroutine(Move_Object_Coroutine(obj,unit,pos));
+        move_objects.Add(move);
+       
+    }
+
+    private void StopSameCo(Unit unit)
+    {
+
+        for(int i = 0; i < move_objects.Count; i++)
+        {
+            if (move_objects[i].code == unit.codeNumber)
+            {
+                StopCoroutine(move_objects[i].co);
+            }
+        }
     }
 
      
