@@ -67,7 +67,7 @@ public class Container : ParentContainer {
         api.engine.apigraphic.Absorb(player, this);
         SetNextState();
         if (this is FunctionalContainer && player.abilities.Count != 0 && player.abilities[0].abilitytype == AbilityType.Fuel) { //shayad moshkel dashte bashe
-            SetNextState();
+            ((FunctionalContainer)this).SetOnorOff();
             ((FunctionalContainer)this).Action_Fuel();
         }
     }

@@ -613,6 +613,8 @@ public class LogicalEngine {
     {
         for(int i=0; i<database.player.Count; i++)
         {
+            if (database.player[i].state != PlayerState.Idle)
+                continue;
             if (database.player[i].lean && !Toolkit.IsInsideBranch(database.player[i]))
             {
                 Vector2 newpos = Toolkit.VectorSum(database.player[i].position, Toolkit.DirectiontoVector(database.player[i].leandirection));
@@ -636,6 +638,8 @@ public class LogicalEngine {
     {
         for(int i=0; i<database.player.Count; i++)
         {
+            if (database.player[i].state != PlayerState.Idle)
+                continue;
             if (database.player[i].lean)
                 continue;
             database.player[i].Action(dir);

@@ -34,23 +34,27 @@ public class InputController {
         {
             if (player.Can_Move_Direction(direction))
             {
-                engine.apigraphic.Player_Co_Stop(player);
                 if (player.Should_Change_Direction(direction))
                 {
                     Direction olddir = player.direction;
                     player.direction = direction;
                     engine.apigraphic.PlayerChangeDirection(player, olddir, player.direction);
                 }
-                else if (!player.Move(direction))
-                    Lean(player, direction);
-                else
-                {
+                else if (player.JumpingMove(direction))
                     player.state = PlayerState.Moving;
-                    
+
+                else if (player.Can_Lean(direction))
+                {
+                    player.UseAbility(player.abilities[0]);
+                    Lean(player, direction);
+
                 }
             }
-            else
+            else if (player.Can_Lean(direction))
+            {
+                player.UseAbility(player.abilities[0]);
                 Lean(player, direction);
+            }
         }
     }
 
@@ -67,14 +71,18 @@ public class InputController {
                     engine.apigraphic.PlayerChangeDirection(player, olddir, player.direction);
                 }
                 else if (!player.Move(direction))
+                {
                     Lean(player, direction);
+                }
                 else
                 {
                     player.state = PlayerState.Moving;
                 }
             }
             else
-                Lean(player, direction);
+            {
+                player.UseAbility(player.abilities[0]);
+            }
         }
     }
 
@@ -233,6 +241,7 @@ public class InputController {
                 return;
             if (player.Can_Lean(direction))
             {
+                engine.apigraphic.Player_Co_Stop(player);
                 player.lean = true;
                 player.leandirection = direction;
                 engine.apigraphic.Lean(player);
