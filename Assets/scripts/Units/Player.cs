@@ -144,6 +144,78 @@ public class Player : Unit
         return true;
     }
 
+    public bool JumpingMove(Direction dir)
+    {
+        Vector2 pos = position;
+        if (Toolkit.GetDeltaPositionAndTransformPosition(this) > 0.4)
+            pos = Toolkit.VectorSum(pos, Toolkit.ReverseDirection(Starter.GetGravityDirection()));
+        Ramp ramp = null;
+        List<Unit> units = api.engine_GetUnits(Toolkit.VectorSum(pos, dir));
+        onramp = false;
+        List<Unit> temp = api.engine_GetUnits(pos);
+        bool goingup = true;
+        for (int i = 0; i < temp.Count; i++)
+        {
+            if (temp[i] is Ramp)
+            {
+                ramp = (Ramp)temp[i];
+                if (ramp.IsOnRampSide(Toolkit.ReverseDirection(Starter.GetGravityDirection())))
+                {
+                    onramp = true;
+                }
+            }
+        }
+        if (onramp)
+        {
+            Direction gravitydirection = Starter.GetDataBase().gravity_direction;
+            switch (gravitydirection)
+            {
+                case Direction.Down:
+                    switch (dir)
+                    {
+                        case Direction.Right: if (ramp.type == 1) goingup = false; break;
+                        case Direction.Left: if (ramp.type == 4) goingup = false; break;
+                    }
+                    break;
+                case Direction.Right:
+                    switch (dir)
+                    {
+                        case Direction.Up: if (ramp.type == 4) goingup = false; break;
+                        case Direction.Down: if (ramp.type == 3) goingup = false; break;
+                    }
+                    break;
+                case Direction.Up:
+                    switch (dir)
+                    {
+                        case Direction.Right: if (ramp.type == 2) goingup = false; break;
+                        case Direction.Left: if (ramp.type == 3) goingup = false; break;
+                    }
+                    break;
+                case Direction.Left:
+                    switch (dir)
+                    {
+                        case Direction.Up: if (ramp.type == 1) goingup = false; break;
+                        case Direction.Down: if (ramp.type == 2) goingup = false; break;
+                    }
+                    break;
+            }
+            if (goingup)
+                units = api.engine_GetUnits(Toolkit.VectorSum(Toolkit.VectorSum(Toolkit.DirectiontoVector(Toolkit.ReverseDirection(gravitydirection)), Toolkit.DirectiontoVector(dir)), pos));
+        }
+        for (int i = 0; i < units.Count; i++)
+        {
+            if (!units[i].PlayerMoveInto(Toolkit.ReverseDirection(dir)))
+                return false;
+        }
+        api.RemoveFromDatabase(this);
+        position = pos;
+        api.AddToDatabase(this);
+        api.engine.apigraphic.Player_Co_Stop(this);
+        UseAbility(abilities[0]);
+        api.engine_Move(this, dir);
+        return true;
+    }
+
     public override bool CanMove(Direction dir, GameObject parent)
     {
         List<Unit> units = api.engine_GetUnits(this, dir);
@@ -395,7 +467,7 @@ public class Player : Unit
         return false;
     }
 
-    private void UseAbility(Ability ability)
+    public void UseAbility(Ability ability)
     {
         abilities.Remove(ability);
         abilitycount = abilities.Count;
@@ -409,7 +481,7 @@ public class Player : Unit
         {
             case AbilityType.Fuel: return false;
             case AbilityType.Direction: return true;
-            case AbilityType.Jump: ((Jump)abilities[0]).Action(this, Toolkit.ReverseDirection(api.engine.database.gravity_direction)); UseAbility(abilities[0]); return true;
+            case AbilityType.Jump: ((Jump)abilities[0]).Action(this, Toolkit.ReverseDirection(api.engine.database.gravity_direction)); return true;
             case AbilityType.Blink: return false;
             case AbilityType.Gravity: return false;
             case AbilityType.Rope: return false;

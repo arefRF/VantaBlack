@@ -499,5 +499,17 @@ public sealed class Toolkit{
         }
         return false;
     }
+
+    public static double GetDeltaPositionAndTransformPosition(Unit unit)
+    {
+        if(database.gravity_direction == Direction.Up || database.gravity_direction == Direction.Down)
+        {
+            return Mathf.Abs(unit.position.y - unit.transform.position.y);
+        }
+        else
+        {
+            return Mathf.Abs(unit.position.x - unit.transform.position.x);
+        }
+    }
 }
 
