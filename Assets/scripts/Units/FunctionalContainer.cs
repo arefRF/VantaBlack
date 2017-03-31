@@ -42,7 +42,7 @@ public class FunctionalContainer : Container
         if (!on)
             nextState = 0;
         else
-            nextState = abilities.Count - currentState;
+            nextState = abilities.Count;
         for(int i=0; i<sameContainer.Count; i++)
         {
             ((FunctionalContainer)sameContainer[i]).on = on;
@@ -52,26 +52,21 @@ public class FunctionalContainer : Container
 
     public void Action_Fuel()
     {
-        if (firstmove)
-        {
-            firstmove = false;
-            SetNextState();
-        }
         if (currentState == nextState)
-        {
-            firstmove = true;
             return;
-        }
         if (!MoveContainer(GetMoveDirection()))
         {
             api.AddToStuckList(this);
             return;
         }
         SetCurrentState();
+        if (firstmove)
+            firstmove = false;
     }
 
     private void SetCurrentState()
     {
+        Debug.Log("h");
         if (currentState > nextState)
             currentState--;
         else if (currentState < nextState)

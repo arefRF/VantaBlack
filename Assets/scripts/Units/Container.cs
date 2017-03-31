@@ -66,7 +66,8 @@ public class Container : ParentContainer {
         _setability(player);
         api.engine.apigraphic.Absorb(player, this);
         SetNextState();
-        if (this is FunctionalContainer && player.abilities.Count != 0 && player.abilities[0].abilitytype == AbilityType.Fuel) { //shayad moshkel dashte bashe 
+        if (this is FunctionalContainer && player.abilities.Count != 0 && player.abilities[0].abilitytype == AbilityType.Fuel) { //shayad moshkel dashte bashe
+            SetNextState();
             ((FunctionalContainer)this).Action_Fuel();
         }
     }
@@ -94,7 +95,10 @@ public class Container : ParentContainer {
                         ((FunctionalContainer)this).Action_Fuel();
                     }
                     else if (abilities[0].abilitytype == AbilityType.Fuel)
+                    {
+                        SetNextState();
                         ((FunctionalContainer)this).Action_Fuel();
+                    }
                 }
             }
         }
@@ -118,7 +122,10 @@ public class Container : ParentContainer {
                 if (((FunctionalContainer)this).on)
                 {
                     if (abilities.Count != 0 && abilities[0].abilitytype == AbilityType.Fuel)
+                    {
+                        SetNextState();
                         ((FunctionalContainer)this).Action_Fuel();
+                    }
                 }
             }
         }
@@ -206,7 +213,10 @@ public class Container : ParentContainer {
                     ((FunctionalContainer)this).Action_Fuel();
                 }
                 else if (abilities[0].abilitytype == AbilityType.Fuel)
+                {
+                    SetNextState();
                     ((FunctionalContainer)this).Action_Fuel();
+                }
             }
         }
     }
@@ -243,7 +253,10 @@ public class Container : ParentContainer {
             if (((FunctionalContainer)this).on)
             {
                 if (abilities.Count != 0 && abilities[0].abilitytype == AbilityType.Fuel)
+                {
+                    SetNextState();
                     ((FunctionalContainer)this).Action_Fuel();
+                }
             }
         }
     }
