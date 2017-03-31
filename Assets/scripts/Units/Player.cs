@@ -218,6 +218,8 @@ public class Player : Unit
 
     public override bool ApplyGravity(Direction gravitydirection, List<Unit>[,] units)
     {
+        if (position.x < 0 || position.y < 0)
+            return false;
         if (lean)
             return false;
         if (Stand_On_Ramp(position) || Toolkit.HasBranch(position))
@@ -244,6 +246,7 @@ public class Player : Unit
         state = PlayerState.Falling;
         api.graphicalengine_Fall(this, position);
         return true;
+          
     }
 
     private bool IsOnObject(Unit obj)
