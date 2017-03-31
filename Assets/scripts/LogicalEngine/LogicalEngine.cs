@@ -620,7 +620,9 @@ public class LogicalEngine {
                 for(int j=0; j<units.Count; j++)
                 {
                     if (units[i] is ParentContainer)
+                    {
                         ((ParentContainer)units[i]).Action(database.player[i], Toolkit.ReverseDirection(database.player[i].leandirection));
+                    }
                 }
             }
             else
@@ -703,12 +705,11 @@ public class LogicalEngine {
             {
                 if (!u.gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock)
                 {
-                    ((FunctionalContainer)u).ResetStuckLevel();
                     stuckedunits.RemoveAt(i);
                     ((FunctionalContainer)u).firstmove = false;
                     snpmanager.AddToSnapShot(u);
                     snpmanager.AddToSnapShot(u.ConnectedUnits);
-                    ((FunctionalContainer)u).Action_Fuel(false);
+                    ((FunctionalContainer)u).Action_Fuel();
                 }
             }
         }
@@ -728,12 +729,11 @@ public class LogicalEngine {
                 Debug.Log(u.gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock);
                 if (!u.gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock)
                 {
-                    ((FunctionalContainer)u).ResetStuckLevel();
                     stuckedunits.RemoveAt(i);
                     ((FunctionalContainer)u).firstmove = false;
                     snpmanager.AddToSnapShot(u);
                     snpmanager.AddToSnapShot(u.ConnectedUnits);
-                    ((FunctionalContainer)u).Action_Fuel(false);
+                    ((FunctionalContainer)u).Action_Fuel();
                 }
             }
         }

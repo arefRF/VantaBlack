@@ -118,10 +118,7 @@ public class APIUnit {
 
     public void GameObjectAnimationFinished(FunctionalContainer unit)
     {
-        if (unit.reservedmoveint.Count == 0)
-            unit.Action_Fuel(false);
-        else
-            unit.CheckReservedList();
+        unit.Action_Fuel();
     }
 
     public void AddToSnapshot(Unit unit)

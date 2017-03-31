@@ -8,6 +8,7 @@ public class Container : ParentContainer {
     public int abilitycount;
     public List<Ability> abilities;
     public int capacity = 4;
+    public List<Container> sameContainer;
 
     public override void SetInitialSprite()
     {
@@ -52,6 +53,8 @@ public class Container : ParentContainer {
 
     private void Swap(Player player)
     {
+        if (abilities.Count > 4)
+            return;
         List<Ability> temp = new List<Ability>();
         for (int i = 0; i < abilities.Count; i++)
             temp.Add(abilities[i].ConvertContainerAbilityToPlayer());
@@ -62,29 +65,9 @@ public class Container : ParentContainer {
         api.ChangeSprite(this);
         _setability(player);
         api.engine.apigraphic.Absorb(player, this);
-        if (this is FunctionalContainer) {
-            if ((player.abilities.Count != 0 && player.abilities[0].abilitytype == AbilityType.Fuel))
-            {
-                for(int i=0; i<player.abilities.Count; i++)
-                {
-                    AddToReservedMove(false, player.abilities.Count - i);
-                }
-                if (((FunctionalContainer)this).on)
-                {
-                    CheckReservedList();
-                }
-            }
-            else if((abilities.Count != 0 && abilities[0].abilitytype == AbilityType.Fuel))
-            {
-                for (int i = 0; i < player.abilities.Count; i++)
-                {
-                    AddToReservedMove(false, i);
-                }
-                if (((FunctionalContainer)this).on)
-                {
-                    CheckReservedList();
-                }
-            }
+        SetNextState();
+        if (this is FunctionalContainer && player.abilities.Count != 0 && player.abilities[0].abilitytype == AbilityType.Fuel) { //shayad moshkel dashte bashe 
+            ((FunctionalContainer)this).Action_Fuel();
         }
     }
 
@@ -94,21 +77,50 @@ public class Container : ParentContainer {
         {
             player.abilities.Add(abilities[0].ConvertContainerAbilityToPlayer());
             abilities.RemoveAt(0);
+            for(int i=0; i<sameContainer.Count; i++)
+            {
+                sameContainer[i].abilities.RemoveAt(0);
+            }
             api.ChangeSprite(this);
             _setability(player);
-            ContainerAbilityChanged(false, abilities.Count);
+            SetNextState();
+            if(this is FunctionalContainer)
+            {
+                if (((FunctionalContainer)this).on)
+                {
+                    if (abilities.Count == 0)
+                    {
+                        ((FunctionalContainer)this).SetOnorOff();
+                        ((FunctionalContainer)this).Action_Fuel();
+                    }
+                    else if (abilities[0].abilitytype == AbilityType.Fuel)
+                        ((FunctionalContainer)this).Action_Fuel();
+                }
+            }
         }
     }
 
     public virtual void PlayerReleaseAbilities(Player player)
     {
-        if(abilities.Count<4)
+        if(abilities.Count<capacity)
         {
             abilities.Add(player.abilities[0].ConvertPlayerAbilityToContainer());
+            for(int i=0; i<sameContainer.Count; i++)
+            {
+                sameContainer[i].abilities.Add(abilities[abilities.Count - 1]);
+            }
             player.abilities.RemoveAt(0);
             api.ChangeSprite(this);
             _setability(player);
-            ContainerAbilityChanged(true, abilities.Count);
+            SetNextState();
+            if (this is FunctionalContainer)
+            {
+                if (((FunctionalContainer)this).on)
+                {
+                    if (abilities.Count != 0 && abilities[0].abilitytype == AbilityType.Fuel)
+                        ((FunctionalContainer)this).Action_Fuel();
+                }
+            }
         }
 
    }
@@ -174,7 +186,7 @@ public class Container : ParentContainer {
         }
         else
         {
-            if (abilities[0] == player.abilities[0])
+            if (abilities[0].abilitytype == player.abilities[0].abilitytype)
             {
                 while (abilities.Count != 0 && player.abilities.Count < 4)
                     PlayerAbsorbAbilitiesHold(player);
@@ -183,10 +195,20 @@ public class Container : ParentContainer {
                 Swap(player);*/
         }
         api.ChangeSprite(this);
-        
         _setability(player);
-        if (this is FunctionalContainer && ((FunctionalContainer)this).on)
-            CheckReservedList();
+        if (this is FunctionalContainer)
+        {
+            if (((FunctionalContainer)this).on)
+            {
+                if (abilities.Count == 0)
+                {
+                    ((FunctionalContainer)this).SetOnorOff();
+                    ((FunctionalContainer)this).Action_Fuel();
+                }
+                else if (abilities[0].abilitytype == AbilityType.Fuel)
+                    ((FunctionalContainer)this).Action_Fuel();
+            }
+        }
     }
 
     public virtual void PlayerReleaseHold(Player player)
@@ -200,14 +222,14 @@ public class Container : ParentContainer {
         api.AddToSnapshot(player);
         if (abilities.Count == 0)
         {
-            while(player.abilities.Count != 0 && abilities.Count < 4)
+            while(player.abilities.Count != 0 && abilities.Count < capacity)
                 PlayerReleaseAbilitiesHold(player);
         }
         else
         {
-            if (player.abilities[0] == abilities[0])
+            if (player.abilities[0].abilitytype == abilities[0].abilitytype)
             {
-                while (player.abilities.Count != 0 && abilities.Count < 4)
+                while (player.abilities.Count != 0 && abilities.Count < capacity)
                     PlayerReleaseAbilitiesHold(player);
             }
             /*else
@@ -216,17 +238,26 @@ public class Container : ParentContainer {
         api.ChangeSprite(this);
         _setability(player);
         api.engine.apigraphic.Absorb(player, null);
-        if (this is FunctionalContainer && ((FunctionalContainer)this).on)
-            CheckReservedList();
+        if (this is FunctionalContainer)
+        {
+            if (((FunctionalContainer)this).on)
+            {
+                if (abilities.Count != 0 && abilities[0].abilitytype == AbilityType.Fuel)
+                    ((FunctionalContainer)this).Action_Fuel();
+            }
+        }
     }
     public virtual void PlayerReleaseAbilitiesHold(Player player)
     {
-        if (abilities.Count < 4)
+        if (abilities.Count < capacity)
         {
             abilities.Add(player.abilities[0].ConvertPlayerAbilityToContainer());
+            for (int i = 0; i < sameContainer.Count; i++)
+            {
+                sameContainer[i].abilities.Add(abilities[abilities.Count - 1]);
+            }
             player.abilities.RemoveAt(0);
             api.engine.apigraphic.Absorb(player, this);
-            AddToReservedMove(true, abilities.Count);
         }
     }
     private void PlayerAbsorbAbilitiesHold(Player player)
@@ -235,10 +266,19 @@ public class Container : ParentContainer {
         {
             player.abilities.Add(abilities[0].ConvertContainerAbilityToPlayer());
             abilities.RemoveAt(0);
+            for (int i = 0; i < sameContainer.Count; i++)
+            {
+                sameContainer[i].abilities.RemoveAt(0);
+            }
             api.engine.apigraphic.Absorb(player, this);
-            AddToReservedMove(false, abilities.Count);
         }
     }
+
+    public virtual void SetNextState()
+    {
+
+    }
+
     public override bool PlayerMoveInto(Direction dir)
     {
         return false;
@@ -249,26 +289,18 @@ public class Container : ParentContainer {
         return;
     }
 
-    protected virtual void ContainerAbilityChanged(bool increased, int count)
-    {
-        return;
-    }
-
-    protected virtual void AddToReservedMove(bool increased, int count)
-    {
-        return;
-    }
-
-    public virtual void CheckReservedList()
-    {
-        return;
-    }
     protected void _setability(Player player)
     {
         abilitycount = abilities.Count;
+        for (int i = 0; i < sameContainer.Count; i++)
+            sameContainer[i].abilitycount = abilitycount;
         player.abilitycount = player.abilities.Count;
         if (abilities.Count != 0)
+        {
             abilitytype = abilities[0].abilitytype;
+            for (int i = 0; i < sameContainer.Count; i++)
+                sameContainer[i].abilitytype = abilitytype;
+        }
         if (player.abilities.Count != 0)
             player.abilitytype = player.abilities[0].abilitytype;
         api.engine.apigraphic.Absorb(player, null);
