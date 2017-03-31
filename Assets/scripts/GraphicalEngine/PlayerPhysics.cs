@@ -249,7 +249,6 @@ public class PlayerPhysics : MonoBehaviour
     {
         set_percent = true;
         float remain_distance = ((Vector2)player_transofrm.position - end1).sqrMagnitude;
-        Debug.Log("start of part 1");
        while (remain_distance > float.Epsilon)
         {
             remain_distance = ((Vector2)player_transofrm.position - end1).sqrMagnitude;
@@ -259,10 +258,8 @@ public class PlayerPhysics : MonoBehaviour
         }
         remain_distance = ((Vector2)player_transofrm.position - end2).sqrMagnitude;
         Rotate_On_Ramp(type);
-        Debug.Log("start of part 2");
         while (remain_distance > float.Epsilon)
         {
-            Debug.Log("part 2");
             remain_distance = ((Vector2)player_transofrm.position - end2).sqrMagnitude;
             player_transofrm.position = Vector3.MoveTowards(player.transform.position, end2, Time.deltaTime * 1 / move_time);
             Set_Player_Move_Percent(remain_distance);

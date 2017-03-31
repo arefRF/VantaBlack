@@ -24,7 +24,7 @@ public class Player : Unit
     public void Awake()
     {
         abilities = new List<Ability>();
-        for(int i=0; i<abilitycount; i++)
+        for (int i = 0; i < abilitycount; i++)
         {
             abilities.Add(Ability.GetAbilityInstance(abilitytype));
             if (abilitytype == AbilityType.Jump)
@@ -32,6 +32,7 @@ public class Player : Unit
         }
         direction = move_direction[0];
         state = PlayerState.Idle;
+        gravity = Direction.Down;
     }
 
     public void Update()
@@ -72,7 +73,7 @@ public class Player : Unit
         if (Toolkit.HasBranch(position))
             return false;
         List<Unit> units = api.engine_GetUnits(Toolkit.VectorSum(position, dir));
-        for(int i=0; i<units.Count; i++)
+        for (int i = 0; i < units.Count; i++)
         {
             if (units[i] is Container)
                 return true;
@@ -183,10 +184,10 @@ public class Player : Unit
                 Debug.Log(players[i]);
                 return false;
             }
-            
+
         }
         int bound = players.Count;
-        for(int i = 0; i< bound; i++)
+        for (int i = 0; i < bound; i++)
         {
             players.AddRange(players[i].players);
         }
@@ -218,37 +219,95 @@ public class Player : Unit
     public override bool ApplyGravity(Direction gravitydirection, List<Unit>[,] units)
     {
         if (lean)
-        {
-            /*if(!Toolkit.IsEmpty(Toolkit.VectorSum(position, leandirection)))
-                return false;
-            api.engine.apigraphic.LeanFinished(this);
-            lean = false;*/
             return false;
-        }
         if (Stand_On_Ramp(position) || Toolkit.HasBranch(position))
         {
             return false;
         }
+
         Vector2 pos = Toolkit.VectorSum(position, gravitydirection);
         if (Toolkit.IsdoubleRamp(pos))
             return false;
-        if (!Fall(pos)  && !Stand_On_Ramp(pos))
-            return false;
-        while (Fall(pos) || pos.x == 0 || pos.y == 0)
+
+        if (units[(int)pos.x, (int)pos.y].Count != 0)
+        {
+            if (!Stand_On_Ramp(pos))
+                return false;
+        }
+
+        while (position.x != 0 && position.y != 0 && NewFall())
         {
             api.RemoveFromDatabase(this);
-            position = pos;
+            position = Toolkit.VectorSum(position, gravitydirection);
             api.AddToDatabase(this);
-            if (pos.x == 0 || pos.y == 0)
-                break;
-            pos = Toolkit.VectorSum(position, gravitydirection);
-        }   
+        }
         state = PlayerState.Falling;
         api.graphicalengine_Fall(this, position);
         return true;
     }
 
-    
+    private bool IsOnObject(Unit obj)
+    {
+        if(obj is Ramp)
+        {
+            if(Mathf.Abs(obj.transform.position.x - transform.position.x) < 0.4)
+                return !Stand_On_Ramp(position);
+        }
+        if (Mathf.Abs(obj.transform.position.x - transform.position.x) < 0.4)
+            return true;
+        else
+            return false;
+    }
+    private List<Unit> GetUnderUnits()
+    {
+        List<Unit> units = new List<Unit>();
+        int x = (int)position.x;
+        int y = (int)position.y;
+        Database db = Starter.GetDataBase();
+        if(x!=0 && y!=0)
+            units.AddRange(db.units[x, y-1]);
+        units.AddRange(db.units[x - 1, y - 1]);
+        units.AddRange(db.units[x + 1, y - 1]);
+        return units;
+    }
+
+    private bool NewFall()
+    {
+        List<Unit> under = GetUnderUnits();
+        for (int i = 0; i < under.Count; i++)
+        {
+            if (IsOnObject(under[i]))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private bool Fall(Vector2 position)
+    {
+        List<Unit>[,] units = Starter.GetDataBase().units;
+        if (units[(int)position.x, (int)position.y].Count != 0)
+        {
+            for (int i = 0; i < units[(int)position.x, (int)position.y].Count; i++)
+            {
+                Unit unit = units[(int)position.x, (int)position.y][i];
+                if (unit is Ramp)
+                {
+                    Ramp ramp = (Ramp)unit;
+                    // Land On Ramp should be called
+                    return false;
+                }
+
+            }
+            // There is Some Object and fall should stop
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
 
     public void FallFinished()
     {
@@ -337,45 +396,22 @@ public class Player : Unit
     }
 
 
-    private bool Stand_On_Ramp(Vector2 position)
+    private bool Stand_On_Ramp(Vector2 pos)
     {
         List<Unit>[,] units = Starter.GetDataBase().units;
-        for (int i = 0; i < units[(int)position.x, (int)position.y].Count; i++)
+        for (int i = 0; i < units[(int)pos.x, (int)pos.y].Count; i++)
         {
-            if (units[(int)position.x, (int)position.y][i] is Ramp)
+            if (units[(int)pos.x, (int)pos.y][i] is Ramp)
             {
-                Ramp ramp = (Ramp)units[(int)position.x, (int)position.y][i];
-                //if player can move to it , it should not fall
-                return ramp.PlayerMoveInto(Direction.Up);
+                Ramp ramp = (Ramp)units[(int)pos.x, (int)pos.y][i];
+                //if player can move to it , it should  fall
+                return ramp.PlayerMoveInto(Toolkit.ReverseDirection(gravity));
             }
         }
         return false;
     }
 
-    private bool Fall(Vector2 position)
-    {
-        List<Unit>[,] units = Starter.GetDataBase().units;
-        if (units[(int)position.x, (int)position.y].Count != 0)
-        {
-            for (int i = 0; i < units[(int)position.x, (int)position.y].Count; i++)
-            {
-                Unit unit = units[(int)position.x, (int)position.y][i];
-                if (unit is Ramp)
-                {
-                    Ramp ramp = (Ramp)unit;
-                    // Land On Ramp should be called
-                    return false;
-                }
 
-            }
-            // There is Some Object and fall should stop
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-    }
 
     public override CloneableUnit Clone()
     {
