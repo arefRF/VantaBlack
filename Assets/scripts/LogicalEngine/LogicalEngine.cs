@@ -613,23 +613,24 @@ public class LogicalEngine {
     {
         for(int i=0; i<database.player.Count; i++)
         {
-            if (database.player[i].state != PlayerState.Idle)
-                continue;
-            if (database.player[i].lean && !Toolkit.IsInsideBranch(database.player[i]))
+            if (database.player[i].state == PlayerState.Idle || database.player[i].state == PlayerState.Lean)
             {
-                Vector2 newpos = Toolkit.VectorSum(database.player[i].position, Toolkit.DirectiontoVector(database.player[i].leandirection));
-                List<Unit> units = GetUnits(newpos);
-                for(int j=0; j<units.Count; j++)
+                if (database.player[i].lean && !Toolkit.IsInsideBranch(database.player[i]))
                 {
-                    if (units[i] is ParentContainer)
+                    Vector2 newpos = Toolkit.VectorSum(database.player[i].position, Toolkit.DirectiontoVector(database.player[i].leandirection));
+                    List<Unit> units = GetUnits(newpos);
+                    for (int j = 0; j < units.Count; j++)
                     {
-                        ((ParentContainer)units[i]).Action(database.player[i], Toolkit.ReverseDirection(database.player[i].leandirection));
+                        if (units[i] is ParentContainer)
+                        {
+                            ((ParentContainer)units[i]).Action(database.player[i], Toolkit.ReverseDirection(database.player[i].leandirection));
+                        }
                     }
                 }
-            }
-            else
-            {
-                database.player[i].Action();
+                else
+                {
+                    database.player[i].Action();
+                }
             }
         }
     }

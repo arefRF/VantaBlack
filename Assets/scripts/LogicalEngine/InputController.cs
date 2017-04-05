@@ -44,16 +44,24 @@ public class InputController {
                 else if (player.JumpingMove(direction))
                     player.state = PlayerState.Moving;
 
-                else if (player.Can_Lean(direction))
+                else
                 {
-                    engine.apiunit.AddToDatabase(player);
-                    if (!player.isonejumping)
-                        player.UseAbility(player.abilities[0]);
-                    else
-                        player.isonejumping = false;
-                    player.currentAbility = null;
-                    Lean(player, direction);
+                    if (Toolkit.GetDeltaPositionAndTransformPosition(player) > 0.8)
+                    {
+                        engine.apiunit.RemoveFromDatabase(player);
+                        player.position = Toolkit.VectorSum(player.position, Toolkit.ReverseDirection(database.gravity_direction));
+                        engine.apiunit.AddToDatabase(player);
+                    }
+                    if (player.Can_Lean(direction))
+                    {
+                        if (!player.isonejumping)
+                            player.UseAbility(player.abilities[0]);
+                        else
+                            player.isonejumping = false;
+                        player.currentAbility = null;
+                        Lean(player, direction);
 
+                    }
                 }
             }
             else
@@ -244,8 +252,9 @@ public class InputController {
 
     public bool LeanUndo(Player player, Direction direction)
     {
-        if (player.lean)
+        if (player.lean && player.leandirection == direction)
         {
+            player.state = PlayerState.Idle;
             player.lean = false;
             engine.apigraphic.LeanFinished(player);
             if (engine.leanmove.Contains(player) && !engine.shouldmove.Contains(player))
@@ -270,6 +279,7 @@ public class InputController {
                 pos = Toolkit.VectorSum(pos, Toolkit.ReverseDirection(database.gravity_direction));
             if (player.Can_Lean(Toolkit.VectorSum(pos, direction)))
             {
+                player.state = PlayerState.Lean;
                 player.transform.position = player.position;
                 player.isonejumping = false;
                 engine.apigraphic.Player_Co_Stop(player);
@@ -299,7 +309,7 @@ public class InputController {
 
     public bool FakeLeanUndo(Player player, Direction direction)
     {
-        if (player.state == PlayerState.Fakelean)
+        if (player.state == PlayerState.Fakelean || player.leandirection == direction)
         {
             player.state = PlayerState.Idle;
             engine.apigraphic.Fake_Lean_Undo(player);
