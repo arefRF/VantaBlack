@@ -53,6 +53,14 @@ public class Jump : Ability {
 
     public void JumpHitFinished(Player player)
     {
+        if(shouldjump != number)
+        {
+            if (Toolkit.HasBranch(Toolkit.VectorSum(player.position, Toolkit.ReverseDirection(Starter.GetGravityDirection()))))
+            {
+                player.state = PlayerState.Idle;
+                engine.MovePlayer(player, Toolkit.ReverseDirection(Starter.GetGravityDirection()));
+            }
+        }
         player.state = PlayerState.Idle;
         engine.Applygravity();
     }

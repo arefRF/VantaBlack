@@ -62,6 +62,10 @@ public class InputController {
                         Lean(player, direction);
 
                     }
+                    else if (Toolkit.HasBranch(player.position))
+                    {
+                        Debug.Log("unhandeled!");
+                    }
                 }
             }
             else
@@ -82,6 +86,11 @@ public class InputController {
                     Debug.Log(player.position);
                     Lean(player, direction);
                 }
+                else if (Toolkit.HasBranch(Toolkit.VectorSum(pos, direction)))
+                {
+                    player.state = PlayerState.Idle;
+                    engine.MovePlayer(player, direction);
+                }
             }
         }
     }
@@ -90,7 +99,7 @@ public class InputController {
     {
         if (!player.lean)
         {
-            if(!player.Can_Lean(direction) && database.gravity_direction == Toolkit.ReverseDirection(direction))
+            if(!Toolkit.IsInsideBranch(player) && !player.Can_Lean(direction) && database.gravity_direction == Toolkit.ReverseDirection(direction) && !Toolkit.HasBranch(Toolkit.VectorSum(player.position, direction)))
             {
                 player.isonejumping = true;
                 player.oneJump.Action(player, direction);
@@ -109,6 +118,7 @@ public class InputController {
                 }
                 else
                 {
+                    Debug.Log("here");
                     player.state = PlayerState.Moving;
                 }
             }
