@@ -17,21 +17,21 @@ public class SnapshotManager{
     {
         if (snapshot.clonedunits.Count == 0)
             return;
-        TakeCameraSnapshot();
+        //TakeCameraSnapshot();
         database.snapshots.Add(snapshot);
         snapshot = new Snapshot();
     }
 
     private void TakeCameraSnapshot()
     {
-        CameraController controller = Camera.main.GetComponent<CameraController>();
+       CameraController controller = Camera.main.GetComponent<CameraController>();
         snapshot.camerasnapshot.left_bound = controller.left_bound;
         snapshot.camerasnapshot.right_bound = controller.right_bound;
         snapshot.camerasnapshot.upper_bound = controller.upper_bound;
         snapshot.camerasnapshot.lower_bound = controller.lower_bound;
         snapshot.camerasnapshot.zoom = controller.zoom;
         snapshot.camerasnapshot.rotation = controller.rotation;
-        snapshot.camerasnapshot.move_time = controller.move_time;
+        snapshot.camerasnapshot.move_time = controller.move_time; 
     }
 
     private void AddStucktoOtherList(List<Unit> copyto, List<Unit> copyfrom)

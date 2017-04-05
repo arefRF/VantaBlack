@@ -225,7 +225,7 @@ public class APIGraphic{
     }
     public void Camera_AutoMove()
     {
-        Camera.main.GetComponent<CameraController>().AutoMove();
+       // Camera.main.GetComponent<CameraController>().AutoMove();
     }
 
     public void Fake_Lean(Player player,Direction dir)

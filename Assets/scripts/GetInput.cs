@@ -53,6 +53,7 @@ public class GetInput : MonoBehaviour {
             if (Input.GetKeyUp(KeyCode.Space))
                 is_space = false; 
             Get_Move();
+
                   if (Input.GetKeyDown(KeyCode.Space))
                   {
                       if (!api.Action_Key())
@@ -78,10 +79,10 @@ public class GetInput : MonoBehaviour {
                       is_holding = false;
                   }
                   if(Input.GetKeyUp(KeyCode.A))
-            {
-                api.Absorb();
-                is_holding = false;
-            }
+                  {
+                      api.Absorb();
+                      is_holding = false;
+                  }
                   if (Input.GetKeyUp(KeyCode.R))
                   {
                       api.UndoPressed();
@@ -272,10 +273,8 @@ public class GetInput : MonoBehaviour {
 
     private void Set_Camera(Vector3 pos)
     {
-
         pos = Toolkit.VectorSum(Camera.main.transform.position, pos);
         pos.z = -10;
         Camera.main.transform.position = pos;
-
     }
 }
