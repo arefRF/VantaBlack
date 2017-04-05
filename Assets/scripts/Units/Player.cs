@@ -24,6 +24,8 @@ public class Player : Unit
 
     public Jump oneJump { get; set; }
     public bool isonejumping { get; set; }
+
+    public Ability currentAbility { get; set; }
     public void Awake()
     {
         abilities = new List<Ability>();
@@ -77,6 +79,19 @@ public class Player : Unit
         if (Toolkit.HasBranch(position))
             return false;
         List<Unit> units = api.engine_GetUnits(Toolkit.VectorSum(position, dir));
+        for (int i = 0; i < units.Count; i++)
+        {
+            if (units[i] is Container)
+                return true;
+        }
+        return false;
+    }
+
+    public bool Can_Lean(Vector2 pos)
+    {
+        if (Toolkit.HasBranch(position))
+            return false;
+        List<Unit> units = api.engine_GetUnits(pos);
         for (int i = 0; i < units.Count; i++)
         {
             if (units[i] is Container)
@@ -151,8 +166,10 @@ public class Player : Unit
     public bool JumpingMove(Direction dir)
     {
         Vector2 pos = position;
-        if (Toolkit.GetDeltaPositionAndTransformPosition(this) > 0.4)
+        if (Toolkit.GetDeltaPositionAndTransformPosition(this) > 0.7)
             pos = Toolkit.VectorSum(pos, Toolkit.ReverseDirection(Starter.GetGravityDirection()));
+        else if (((Jump)currentAbility).jumped == 0)
+            return false;
         Ramp ramp = null;
         List<Unit> units = api.engine_GetUnits(Toolkit.VectorSum(pos, dir));
         onramp = false;
@@ -215,10 +232,13 @@ public class Player : Unit
         position = pos;
         api.AddToDatabase(this);
         api.engine.apigraphic.Player_Co_Stop(this);
-        if (!isonejumping)
+        if (!isonejumping && state == PlayerState.Jumping)
+        {
             UseAbility(abilities[0]);
+        }
         else
             isonejumping = false;
+        currentAbility = null;
         api.engine_Move(this, dir);
         return true;
     }
@@ -314,14 +334,15 @@ public class Player : Unit
         Vector2 pos = Toolkit.VectorSum(position, gravitydirection);
         if (Toolkit.IsdoubleRamp(pos))
             return false;
-        
         if (units[(int)pos.x, (int)pos.y].Count != 0)
         {
             if (!Stand_On_Ramp(pos))
                 return false;
         }
+
         if (!NewFall())
             return false;
+        
         while (position.x != 0 && position.y != 0 && NewFall())
         {
             api.RemoveFromDatabase(this);
