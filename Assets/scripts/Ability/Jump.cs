@@ -4,7 +4,7 @@ using System.Collections;
 public class Jump : Ability {
 
     public int number;
-    private int shouldjump, jumped;
+    public int shouldjump, jumped;
     LogicalEngine engine;
 	public Jump()
     {
@@ -19,6 +19,7 @@ public class Jump : Ability {
 
     public void Action(Player player, Direction direction)
     {
+        player.currentAbility = this;
         jumped = 0;
         if (engine == null)
             engine = Starter.GetEngine();
@@ -34,7 +35,6 @@ public class Jump : Ability {
 
     public void JumpedOnce(Player player, Direction direction)
     {
-
         jumped++;
         engine.apiunit.RemoveFromDatabase(player);
         player.position += Toolkit.DirectiontoVector(direction);
@@ -44,6 +44,7 @@ public class Jump : Ability {
                 engine.apigraphic.Jump_Hit(player, direction, this);
             else
             {
+                player.currentAbility = null;
                 player.state = PlayerState.Idle;
                 engine.Applygravity();
             }

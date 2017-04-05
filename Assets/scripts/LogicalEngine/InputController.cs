@@ -32,6 +32,7 @@ public class InputController {
     {
         if (!player.lean)
         {
+            
             if (player.Can_Move_Direction(direction))
             {
                 if (player.Should_Change_Direction(direction))
@@ -45,15 +46,34 @@ public class InputController {
 
                 else if (player.Can_Lean(direction))
                 {
-                    player.UseAbility(player.abilities[0]);
+                    engine.apiunit.AddToDatabase(player);
+                    if (!player.isonejumping)
+                        player.UseAbility(player.abilities[0]);
+                    else
+                        player.isonejumping = false;
+                    player.currentAbility = null;
                     Lean(player, direction);
 
                 }
             }
-            else if (player.Can_Lean(direction))
+            else
             {
-                player.UseAbility(player.abilities[0]);
-                Lean(player, direction);
+                Vector2 pos = player.position;
+                if (Toolkit.GetDeltaPositionAndTransformPosition(player) > 0.8)
+                    pos = Toolkit.VectorSum(pos, Toolkit.ReverseDirection(database.gravity_direction));
+                if (player.Can_Lean(Toolkit.VectorSum(pos, direction)))
+                {
+                    engine.apiunit.RemoveFromDatabase(player);
+                    player.position = pos;
+                    engine.apiunit.AddToDatabase(player);
+                    if (!player.isonejumping)
+                        player.UseAbility(player.abilities[0]);
+                    else
+                        player.isonejumping = false;
+                    player.currentAbility = null;
+                    Debug.Log(player.position);
+                    Lean(player, direction);
+                }
             }
         }
     }
@@ -233,6 +253,7 @@ public class InputController {
                 engine.apiunit.AddToDatabase(player);
                 engine.apigraphic.LeanStickStop(player);
             }
+            player.ApplyGravity(database.gravity_direction, database.units);
             return true;
         }
         return false;
@@ -244,8 +265,12 @@ public class InputController {
         {
             if (player.state == PlayerState.Jumping && direction == Toolkit.ReverseDirection(player.jumpdirection))
                 return;
-            if (player.Can_Lean(direction))
+            Vector2 pos = player.position;
+            if (Toolkit.GetDeltaPositionAndTransformPosition(player) > 0.8)
+                pos = Toolkit.VectorSum(pos, Toolkit.ReverseDirection(database.gravity_direction));
+            if (player.Can_Lean(Toolkit.VectorSum(pos, direction)))
             {
+                player.transform.position = player.position;
                 player.isonejumping = false;
                 engine.apigraphic.Player_Co_Stop(player);
                 player.lean = true;
