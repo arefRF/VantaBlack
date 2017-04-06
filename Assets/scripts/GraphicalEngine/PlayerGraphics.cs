@@ -75,7 +75,6 @@ public class PlayerGraphics : MonoBehaviour {
     {
         animator.SetInteger("Lean", 0);
         animator.SetBool("isFakeLean", false);
-        
         transform.GetChild(0).localPosition = new Vector2(0, 0);
         transform.GetChild(1).localPosition = new Vector2(0, 0);
     }
@@ -120,10 +119,10 @@ public class PlayerGraphics : MonoBehaviour {
 
     private void ResetStates()
     {
-        animator.SetBool("isFakeLean", false);
+       /* animator.SetBool("isFakeLean", false);
         animator.SetBool("isLean", false);
         animator.SetInteger("Walk", 0);
-        animator.SetInteger("Branch", 0);
+        animator.SetInteger("Branch", 0); */
     }
     public void BranchExit(Direction dir,int ramp_type)
     {
@@ -210,10 +209,10 @@ public class PlayerGraphics : MonoBehaviour {
     }
 
     public void ChangeColor()
-    {
+    {/*
         float[] color = Ability_Color(player.abilities);
         transform.GetChild(1).GetChild(0).GetComponent<SpriteRenderer>().color = new Color(color[0], color[1], color[2], color[3]);
-        ChangeBodyColor();
+        ChangeBodyColor(); */
     }
 
     private void ChangeBodyColor()
