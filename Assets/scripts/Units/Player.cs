@@ -318,6 +318,7 @@ public class Player : Unit
 
     public override bool ApplyGravity(Direction gravitydirection, List<Unit>[,] units)
     {
+        Debug.Log("here");
         isonejumping = false;
         // to avoid exception
         if (position.x <= 0 || position.y <= 0)
@@ -499,9 +500,12 @@ public class Player : Unit
 
     public void UseAbility(Ability ability)
     {
-        abilities.Remove(ability);
-        abilitycount = abilities.Count;
-        api.engine.apigraphic.Absorb(this, null);
+        if (currentAbility == ability)
+        {
+            abilities.Remove(ability);
+            abilitycount = abilities.Count;
+            api.engine.apigraphic.Absorb(this, null);
+        }
     }
     public bool Action()
     {
