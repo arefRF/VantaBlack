@@ -38,7 +38,12 @@ public class Player : Unit
         direction = move_direction[0];
         oneJump = new Jump(1);
         state = PlayerState.Idle;
-        gravity = Direction.Down;
+
+    }
+
+    void Start()
+    {
+        gravity = Starter.GetGravityDirection();
     }
 
     public void Update()
@@ -351,9 +356,17 @@ public class Player : Unit
             api.AddToDatabase(this);
         }
         state = PlayerState.Falling;
-        api.graphicalengine_Fall(this, position);
+        api.graphicalengine_Fall(this, FallPos());
         return true;
           
+    }
+
+    private Vector2 FallPos()
+    {
+        if (gravity == Direction.Down || gravity == Direction.Up)
+            return new Vector2(transform.position.x, position.y);
+        else
+            return new Vector2(position.x, transform.position.y);
     }
 
     private bool IsOnObject(Unit obj)

@@ -227,6 +227,8 @@ public class PlayerPhysics : MonoBehaviour
     public void Jump(Vector2 pos,Jump ability,Direction dir)
     {
         jump_ability = ability;
+        if (last_co != null)
+            StopCoroutine(last_co);
         last_co = StartCoroutine(Jump_couroutine(pos, 2, dir));
 
     }
@@ -413,14 +415,15 @@ public class PlayerPhysics : MonoBehaviour
             api.Camera_AutoMove();
             yield return null;
         }
-
         api.Jump_Finish(player);
     }
 
     private void Check_Jump(Direction direction)
     {
         if (((Vector2)player_transofrm.position - player.position).sqrMagnitude >= 1)
+        {
             jump_ability.JumpedOnce(player, direction);
+        }
     }
     private Vector2 Ramp_To_Corner_Pos(Direction gravity,Vector2 target)
     {

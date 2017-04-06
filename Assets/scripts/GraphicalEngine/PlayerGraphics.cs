@@ -22,29 +22,24 @@ public class PlayerGraphics : MonoBehaviour {
 
     public void Lean_Right()
     {
-        //transform.GetChild(0).localPosition +=  new Vector3(1f,0,0);
         animator.SetInteger("Lean", 2);
         animator.SetBool("isLean", true);
     }
 
     public void Lean_Left()
     {
-        //transform.GetChild(0).localPosition += new Vector3(-1f, 0,0);
         animator.SetInteger("Lean", 4);
         animator.SetBool("isLean", true);
     }
 
     public void Lean_Up()
     {
-        
-        // transform.GetChild(0).localPosition += new Vector3(0, 1f,0);
         animator.SetInteger("Lean", 1);
         animator.SetBool("isLean", true);
     }
 
     public void Lean_Down()
     {
-        //transform.GetChild(0).localPosition +=  new Vector3( 0, -1f,0);
         animator.SetInteger("Lean", 3);
         animator.SetBool("isLean", true);
     }
