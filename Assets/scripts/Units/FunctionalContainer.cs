@@ -60,6 +60,7 @@ public class FunctionalContainer : Container
             api.AddToStuckList(this);
             return;
         }
+        api.CheckstuckedList();
         SetCurrentState();
         if (firstmove)
             firstmove = false;
