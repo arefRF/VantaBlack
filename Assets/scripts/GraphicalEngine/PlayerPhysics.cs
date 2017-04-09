@@ -420,7 +420,7 @@ public class PlayerPhysics : MonoBehaviour
 
     private void Check_Jump(Direction direction)
     {
-        if (((Vector2)player_transofrm.position - player.position).sqrMagnitude >= 1)
+        if (((Vector2)player_transofrm.position - player.position).sqrMagnitude >= 0.8)
             jump_ability.JumpedOnce(player, direction);
     }
     private Vector2 Ramp_To_Corner_Pos(Direction gravity,Vector2 target)
