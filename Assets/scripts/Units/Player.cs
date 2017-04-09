@@ -460,6 +460,12 @@ public class Player : Unit
         }
     }
 
+    public void TeleportFinished()
+    {
+        state = PlayerState.Idle;
+        currentAbility = null;
+        ApplyGravity(gravity,api.engine.database.units);
+    }
     public void FallFinished()
     {
         if(position.x <= 0 || position.y <= 0)
@@ -540,12 +546,14 @@ public class Player : Unit
 
     public bool Action(Direction dir)
     {
+        if (abilities.Count == 0)
+            return false;
         switch (abilities[0].abilitytype)
         {
             case AbilityType.Fuel: return true;
             case AbilityType.Direction: return false;
             case AbilityType.Jump: return false;
-            case AbilityType.Teleport: return true;
+            case AbilityType.Teleport:((Teleport)abilities[0]).Action(this,dir); return true;
             case AbilityType.Gravity: return true;
             case AbilityType.Rope: return true;
             default: return false;

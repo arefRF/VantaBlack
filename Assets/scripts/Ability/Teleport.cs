@@ -13,6 +13,24 @@ public class Teleport : Ability {
         engine = Starter.GetEngine();
     }
 
+    public void Action(Player player,Direction dir)
+    {
+        if(engine == null)
+            engine = Starter.GetEngine();
+        Vector2 pos = player.position + Toolkit.DirectiontoVector(dir) * length ;
+        int x = (int)pos.x;
+        int y = (int)pos.y;
+        if(engine.database.units[x,y].Count == 0)
+        {
+            player.currentAbility = this;
+            player.UseAbility(this);
+            player.state = PlayerState.Busy;
+            engine.apiunit.RemoveFromDatabase(player);
+            player.position = pos;
+            engine.apiunit.AddToDatabase(player);
+            engine.apigraphic.Teleport(player, pos);
+        }
+    }
     private void Action_player(Player player, Direction dir)
     {
         /*Vector2 destpos = Toolkit.VectorSum(player.position, 2 * Toolkit.DirectiontoVector(dir));

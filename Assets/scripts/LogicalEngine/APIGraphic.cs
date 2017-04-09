@@ -315,6 +315,11 @@ public class APIGraphic{
             //unit.transform.GetChild(6).GetComponent<SpriteRenderer> = (Sprite)Resources.Load("")
         }
     }
+
+    public void Teleport(Player player,Vector2 pos)
+    {
+        player.GetComponent<PlayerGraphics>().Teleport(pos);
+    }
     public void Undo_Objects()
     {
         graphicalengine.StopAllCoroutines();

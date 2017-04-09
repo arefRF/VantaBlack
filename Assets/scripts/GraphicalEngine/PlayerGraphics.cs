@@ -203,6 +203,17 @@ public class PlayerGraphics : MonoBehaviour {
         api.PlayerChangeDirectionFinished(gameObject.GetComponent<Player>());
     }
 
+    public void Teleport(Vector2 pos)
+    {
+        player.transform.position = pos;
+        StartCoroutine(TPFinish());
+    }
+
+    private IEnumerator TPFinish()
+    {
+        yield return new WaitForSeconds(0.1f);
+        player.TeleportFinished();
+    }
     public void ChangeColor()
     {/*
         float[] color = Ability_Color(player.abilities);
