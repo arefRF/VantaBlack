@@ -7,10 +7,9 @@ public class APIInput{
     public GetInput input { get; set; }
     
   
-    public bool Action_Key()
+    public void Action_Key()
     {
         engine.ActionKeyPressed();
-        return true;
     }
 
     public void Action_Key(Direction dir)
