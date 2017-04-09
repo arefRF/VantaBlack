@@ -530,11 +530,13 @@ public sealed class Toolkit{
     {
         List<Unit> to = new List<Unit>();
         Vector2 pos = VectorSum(player.position, dir);
-        if (((Jump)player.currentAbility).jumped != 0)
-        {
+        Debug.Log(player.jumpdirection);
+        Debug.Log(dir);
+        if(player.jumpdirection == dir)
+            to.AddRange(database.GetUnits(pos));
+        else if (((Jump)player.currentAbility).jumped != 0)
             if (GetDeltaPositionAndTransformPosition(player) < 0.5)
                 to.AddRange(database.GetUnits(pos));
-        }
         pos = VectorSum(pos, Direction.Up);
         to.AddRange(database.GetUnits(pos));
         pos = VectorSum(pos, 2 * DirectiontoVector(dir));
