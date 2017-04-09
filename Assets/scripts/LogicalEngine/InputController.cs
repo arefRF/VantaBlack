@@ -52,7 +52,6 @@ public class InputController {
                     Unit nearest = Toolkit.GetNearestUnit(player, direction);
                     if (nearest != null && player.Can_Lean(Toolkit.GetNearestUnit(player, direction).position))
                     {
-                        Debug.Log("here");
                         engine.apiunit.RemoveFromDatabase(player);
                         engine.apiunit.AddToDatabase(player);
                         if (!player.isonejumping)
