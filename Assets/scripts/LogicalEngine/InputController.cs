@@ -288,12 +288,10 @@ public class InputController {
             if (player.currentAbility != null && player.currentAbility.abilitytype == AbilityType.Jump && ((Jump)player.currentAbility).jumped == 0)
                 return;
             Vector2 pos = player.position;
-            Debug.Log("here");
             if (Toolkit.GetDeltaPositionAndTransformPosition(player) > 0.8)
                 pos = Toolkit.VectorSum(pos, Toolkit.ReverseDirection(database.gravity_direction));
             if (player.Can_Lean(Toolkit.VectorSum(pos, direction)))
             {
-                Debug.Log("here");
                 player.state = PlayerState.Lean;
                 player.transform.position = player.position;
                 player.isonejumping = false;
@@ -311,7 +309,6 @@ public class InputController {
 
     public void FakeLean(Player player, Direction direction)
     {
-        Debug.Log("here");
         if (player.state == PlayerState.Idle || player.state == PlayerState.Fakelean)
         {
             if (!Toolkit.HasBranch(player.position))

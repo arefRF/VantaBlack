@@ -323,7 +323,6 @@ public class Player : Unit
 
     public override bool ApplyGravity(Direction gravitydirection, List<Unit>[,] units)
     {
-        Debug.Log("here");
         isonejumping = false;
         // to avoid exception
         if (position.x <= 0 || position.y <= 0)
