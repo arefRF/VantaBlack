@@ -51,13 +51,16 @@ public class GetInput : MonoBehaviour {
            Get_Lean_Undo();
             // Directional Abilities use
             if (Input.GetKeyUp(KeyCode.Space))
-                is_space = false; 
-            Get_Move();
+                is_space = false;
+            if (is_space)
+                Get_Space_Arrows();
+            else
+                Get_Move();
 
                   if (Input.GetKeyDown(KeyCode.Space))
                   {
-                      if (!api.Action_Key())
-                          is_space = true;
+                      api.Action_Key();
+                      is_space = true;
                   }
                   if (is_space)
                       Get_Space_Arrows();
