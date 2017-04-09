@@ -22,29 +22,24 @@ public class PlayerGraphics : MonoBehaviour {
 
     public void Lean_Right()
     {
-        //transform.GetChild(0).localPosition +=  new Vector3(1f,0,0);
         animator.SetInteger("Lean", 2);
         animator.SetBool("isLean", true);
     }
 
     public void Lean_Left()
     {
-        //transform.GetChild(0).localPosition += new Vector3(-1f, 0,0);
         animator.SetInteger("Lean", 4);
         animator.SetBool("isLean", true);
     }
 
     public void Lean_Up()
     {
-        
-        // transform.GetChild(0).localPosition += new Vector3(0, 1f,0);
         animator.SetInteger("Lean", 1);
         animator.SetBool("isLean", true);
     }
 
     public void Lean_Down()
     {
-        //transform.GetChild(0).localPosition +=  new Vector3( 0, -1f,0);
         animator.SetInteger("Lean", 3);
         animator.SetBool("isLean", true);
     }
@@ -75,7 +70,6 @@ public class PlayerGraphics : MonoBehaviour {
     {
         animator.SetInteger("Lean", 0);
         animator.SetBool("isFakeLean", false);
-        
         transform.GetChild(0).localPosition = new Vector2(0, 0);
         transform.GetChild(1).localPosition = new Vector2(0, 0);
     }
@@ -120,10 +114,10 @@ public class PlayerGraphics : MonoBehaviour {
 
     private void ResetStates()
     {
-        animator.SetBool("isFakeLean", false);
+       /* animator.SetBool("isFakeLean", false);
         animator.SetBool("isLean", false);
         animator.SetInteger("Walk", 0);
-        animator.SetInteger("Branch", 0);
+        animator.SetInteger("Branch", 0); */
     }
     public void BranchExit(Direction dir,int ramp_type)
     {
@@ -210,10 +204,10 @@ public class PlayerGraphics : MonoBehaviour {
     }
 
     public void ChangeColor()
-    {
+    {/*
         float[] color = Ability_Color(player.abilities);
         transform.GetChild(1).GetChild(0).GetComponent<SpriteRenderer>().color = new Color(color[0], color[1], color[2], color[3]);
-        ChangeBodyColor();
+        ChangeBodyColor(); */
     }
 
     private void ChangeBodyColor()

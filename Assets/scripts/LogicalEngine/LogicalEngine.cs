@@ -61,6 +61,13 @@ public class LogicalEngine {
             int bound = unit.players.Count;
             for (int i = 0; i < bound; i++)
             {
+                if (Toolkit.HasBranch(Toolkit.VectorSum(unit.players[i].position, dir)))
+                {
+                    inputcontroller.LeanUndo(unit.players[i] as Player, Toolkit.ReverseDirection(dir), PlayerState.Idle);
+                    MovePlayer(unit.players[i] as Player, dir);
+                    unit.players.RemoveAt(i);
+                    continue;
+                }
                 if (!unit.players[i].CanMove(dir, unit.transform.parent.gameObject))
                 {
                     apigraphic.Crush_Player_Died(unit.players[i] as Player);
@@ -77,8 +84,17 @@ public class LogicalEngine {
                 bound = unit.ConnectedUnits[i].players.Count;
                 for (int j = 0; j < bound; j++)
                 {
+                    if (Toolkit.HasBranch(Toolkit.VectorSum(unit.ConnectedUnits[i].players[i].position, dir)))
+                    {
+                        inputcontroller.LeanUndo(unit.ConnectedUnits[i].players[i] as Player, Toolkit.ReverseDirection(dir), PlayerState.Idle);
+                        inputcontroller.FakeLeanUndo(unit.ConnectedUnits[i].players[i] as Player, Toolkit.ReverseDirection(dir));
+                        MovePlayer(unit.ConnectedUnits[i].players[i] as Player, dir);
+                        unit.ConnectedUnits[i].players.RemoveAt(i);
+                        continue;
+                    }
                     if (!unit.ConnectedUnits[i].players[j].CanMove(dir, unit.ConnectedUnits[i].transform.parent.gameObject))
                     {
+                        Debug.Log(2);
                         apigraphic.Crush_Player_Died(unit.ConnectedUnits[i].players[j] as Player);
                         return false;
                     }
@@ -116,12 +132,21 @@ public class LogicalEngine {
                         flag = true;
                     }
                 }
-                if (!flag && leanmove[i].CanMove(dir, unit.transform.parent.gameObject))
+                if (!flag)
                 {
-                    if (((FunctionalContainer)unit).firstmove)
-                        snpmanager.AddToSnapShot(leanmove[i]);
-                    ((Player)leanmove[i]).nextpos = Toolkit.VectorSum(leanmove[i].position, Toolkit.DirectiontoVector(dir));
-                    apigraphic.LeanStickMove((Player)leanmove[i], ((Player)leanmove[i]).nextpos);
+                    if (leanmove[i].CanMove(dir, unit.transform.parent.gameObject))
+                    {
+                        if (((FunctionalContainer)unit).firstmove)
+                            snpmanager.AddToSnapShot(leanmove[i]);
+                        ((Player)leanmove[i]).nextpos = Toolkit.VectorSum(leanmove[i].position, Toolkit.DirectiontoVector(dir));
+                        apigraphic.LeanStickMove((Player)leanmove[i], ((Player)leanmove[i]).nextpos);
+                    }
+                    else
+                    {
+                        Player tempplayer = shouldmove[i] as Player;
+                        inputcontroller.LeanUndo(tempplayer, tempplayer.leandirection, PlayerState.Idle);
+                        inputcontroller.FakeLeanUndo(tempplayer, tempplayer.leandirection);
+                    }
                 }
             }
             for (int i = 0; i < shouldmove.Count; i++)
@@ -142,6 +167,12 @@ public class LogicalEngine {
                     shouldmove[i].position = Toolkit.VectorSum(shouldmove[i].position, Toolkit.DirectiontoVector(dir));
                     database.units[(int)shouldmove[i].position.x, (int)shouldmove[i].position.y].Add(shouldmove[i]);
                     apigraphic.MovePlayerOnPlatform((Player)shouldmove[i], shouldmove[i].position);
+                }
+                else
+                {
+                    Player tempplayer = shouldmove[i] as Player;
+                    inputcontroller.LeanUndo(tempplayer, tempplayer.leandirection, PlayerState.Idle);
+                    inputcontroller.FakeLeanUndo(tempplayer, tempplayer.leandirection);
                 }
             }
             if (((FunctionalContainer)unit).firstmove)
@@ -673,7 +704,7 @@ public class LogicalEngine {
         {
             apiunit.GameObjectAnimationFinished((FunctionalContainer)unit);
         }
-        CheckStuckedUnit(unit);
+        //CheckStuckedUnit(unit);
     }
     public void graphic_AbsorbReleaseFinished(Player player)
     {

@@ -227,6 +227,8 @@ public class PlayerPhysics : MonoBehaviour
     public void Jump(Vector2 pos,Jump ability,Direction dir)
     {
         jump_ability = ability;
+        if (last_co != null)
+            StopCoroutine(last_co);
         last_co = StartCoroutine(Jump_couroutine(pos, 2, dir));
 
     }
@@ -413,7 +415,6 @@ public class PlayerPhysics : MonoBehaviour
             api.Camera_AutoMove();
             yield return null;
         }
-
         api.Jump_Finish(player);
     }
 

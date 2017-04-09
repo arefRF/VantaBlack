@@ -19,6 +19,7 @@ public class Jump : Ability {
 
     public void Action(Player player, Direction direction)
     {
+        player.state = PlayerState.Jumping;
         player.currentAbility = this;
         jumped = 0;
         if (engine == null)
@@ -26,8 +27,7 @@ public class Jump : Ability {
         shouldjump = GetShouldJump(player.position, direction);
         Vector2 finalpos = player.position + shouldjump * Toolkit.DirectiontoVector(direction);
         engine.apiunit.AddToSnapshot(player);
-        player.state = PlayerState.Jumping;
-        engine.inputcontroller.LeanUndo(player, player.leandirection);
+        engine.inputcontroller.LeanUndo(player, player.leandirection, PlayerState.Jumping);
         player.jumpdirection = direction;
         engine.apigraphic.Jump(player, this, finalpos, direction);
         
@@ -44,7 +44,7 @@ public class Jump : Ability {
                 engine.apigraphic.Jump_Hit(player, direction, this);
             else
             {
-                player.currentAbility = null;
+                //player.currentAbility = null;
                 player.state = PlayerState.Idle;
                 engine.Applygravity();
             }
@@ -53,7 +53,15 @@ public class Jump : Ability {
 
     public void JumpHitFinished(Player player)
     {
-        player.state = PlayerState.Idle;
+        if(shouldjump != number)
+        {
+            if (Toolkit.HasBranch(Toolkit.VectorSum(player.position, Toolkit.ReverseDirection(Starter.GetGravityDirection()))))
+            {
+                //player.state = PlayerState.Idle;
+                engine.MovePlayer(player, Toolkit.ReverseDirection(Starter.GetGravityDirection()));
+            }
+        }
+        //player.state = PlayerState.Idle;
         engine.Applygravity();
     }
 

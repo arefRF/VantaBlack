@@ -6,8 +6,8 @@ public class FunctionalContainer : Container
 {
     public Direction direction;
     public bool on;
-    public int currentState;
-    public int nextState;
+    public int currentState { get; set; }
+    public int nextState { get; set; }
     public bool firstmove { get; set; }
 
     public override bool PlayerMoveInto(Direction dir)
@@ -60,6 +60,7 @@ public class FunctionalContainer : Container
             api.AddToStuckList(this);
             return;
         }
+        api.CheckstuckedList();
         SetCurrentState();
         if (firstmove)
             firstmove = false;
