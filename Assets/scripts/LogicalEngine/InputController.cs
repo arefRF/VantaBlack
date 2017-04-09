@@ -277,14 +277,20 @@ public class InputController {
     {
         if (!player.lean)
         {
-            if (player.state == PlayerState.Jumping && direction == Toolkit.ReverseDirection(player.jumpdirection))
-                return;
-            Vector2 pos = player.position;
-            Unit nearest = Toolkit.GetNearestUnit(player, direction);
-            if (nearest != null && player.Can_Lean(nearest.position))
+            Vector2 pos = Toolkit.VectorSum(player.position, direction);
+            if (player.state == PlayerState.Jumping)
+            {
+                if(direction == Toolkit.ReverseDirection(player.jumpdirection))
+                    return;
+                Unit nearest = Toolkit.GetNearestUnitForJumpingPlayer(player, direction);
+                if (nearest == null)
+                    return;
+                pos = nearest.position;
+            }
+            if (player.Can_Lean(pos))
             {
                 player.api.RemoveFromDatabase(player);
-                player.position = Toolkit.VectorSum(Toolkit.GetNearestUnit(player, direction).position, Toolkit.ReverseDirection(direction));
+                player.position = Toolkit.VectorSum(pos, Toolkit.ReverseDirection(direction));
                 player.api.AddToDatabase(player);
                 player.state = PlayerState.Lean;
                 player.transform.position = player.position;

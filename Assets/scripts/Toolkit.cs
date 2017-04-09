@@ -526,12 +526,15 @@ public sealed class Toolkit{
 
     }
 
-    public static Unit GetNearesrUnitForJumpingPlayer(Player player, Direction dir)
+    public static Unit GetNearestUnitForJumpingPlayer(Player player, Direction dir)
     {
         List<Unit> to = new List<Unit>();
         Vector2 pos = VectorSum(player.position, dir);
-        if(GetDeltaPositionAndTransformPosition(player) < 0.3)
-            to.AddRange(database.GetUnits(pos));
+        if (((Jump)player.currentAbility).jumped != 0)
+        {
+            if (GetDeltaPositionAndTransformPosition(player) < 0.5)
+                to.AddRange(database.GetUnits(pos));
+        }
         pos = VectorSum(pos, Direction.Up);
         to.AddRange(database.GetUnits(pos));
         pos = VectorSum(pos, 2 * DirectiontoVector(dir));
