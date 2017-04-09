@@ -96,7 +96,7 @@ public class Player : Unit
     {
         if (Toolkit.HasBranch(position))
             return false;
-        List<Unit> units = api.engine_GetUnits(pos);
+        List<Unit> units = api.engine.database.GetUnits(pos);
         for (int i = 0; i < units.Count; i++)
         {
             if (units[i] is Container)
@@ -531,7 +531,7 @@ public class Player : Unit
                 if (!Toolkit.IsInsideBranch(this))
                     ((Jump)abilities[0]).Action(this, Toolkit.ReverseDirection(api.engine.database.gravity_direction));
                 return true;
-            case AbilityType.Blink: return false;
+            case AbilityType.Teleport: return false;
             case AbilityType.Gravity: return false;
             case AbilityType.Rope: return false;
             default: return false;
@@ -545,7 +545,7 @@ public class Player : Unit
             case AbilityType.Fuel: return true;
             case AbilityType.Direction: return false;
             case AbilityType.Jump: return false;
-            case AbilityType.Blink: return true;
+            case AbilityType.Teleport: return true;
             case AbilityType.Gravity: return true;
             case AbilityType.Rope: return true;
             default: return false;

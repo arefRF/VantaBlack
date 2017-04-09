@@ -35,6 +35,7 @@ public class Jump : Ability {
 
     public void JumpedOnce(Player player, Direction direction)
     {
+        Debug.Log("jumped once");
         jumped++;
         engine.apiunit.RemoveFromDatabase(player);
         player.position += Toolkit.DirectiontoVector(direction);

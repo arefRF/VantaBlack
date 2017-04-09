@@ -511,5 +511,50 @@ public sealed class Toolkit{
             return Mathf.Abs(unit.position.x - unit.transform.position.x);
         }
     }
+    
+    public static Unit GetNearestUnit(Unit From, Direction dir)
+    {
+        
+        List<Unit> to = new List<Unit>();
+        Vector2 pos = VectorSum(From.position, dir);
+        to.AddRange(database.GetUnits(pos));
+        pos = VectorSum(pos, Direction.Up);
+        to.AddRange(database.GetUnits(pos));
+        pos = VectorSum(pos, 2 * DirectiontoVector(dir));
+        to.AddRange(database.GetUnits(pos));
+        return GetNearestUnit(From, to.ToArray());
+
+    }
+
+    public static Unit GetNearesrUnitForJumpingPlayer(Player player, Direction dir)
+    {
+        List<Unit> to = new List<Unit>();
+        Vector2 pos = VectorSum(player.position, dir);
+        if(GetDeltaPositionAndTransformPosition(player) < 0.3)
+            to.AddRange(database.GetUnits(pos));
+        pos = VectorSum(pos, Direction.Up);
+        to.AddRange(database.GetUnits(pos));
+        pos = VectorSum(pos, 2 * DirectiontoVector(dir));
+        to.AddRange(database.GetUnits(pos));
+        return GetNearestUnit(player, to.ToArray());
+    }
+
+    public static Unit GetNearestUnit(Unit From, Unit[] To)
+    {
+        if (To.Length == 0)
+            return null;
+        int result = 0;
+        double min = (From.position - To[0].position).sqrMagnitude;
+        for(int i=1; i < To.Length; i++)
+        {
+            double temp = (From.position - To[1].position).sqrMagnitude;
+            if (min > temp)
+            {
+                temp = min;
+                result++;
+            }
+        }
+        return To[result];
+    }
 }
 

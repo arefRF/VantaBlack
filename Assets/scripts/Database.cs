@@ -25,6 +25,11 @@ public class Database {
     public List<Snapshot> snapshots;
 
     public static Direction GravityDirection;
+
+    public List<Unit> GetUnits(Vector2 position)
+    {
+        return units[(int)position.x, (int)position.y];
+    }
 }
 
 
@@ -57,7 +62,7 @@ public enum Direction
 
 public enum AbilityType
 {
-     Fuel,Direction, Jump, Gravity, Blink, Rope, Key
+     Fuel,Direction, Jump, Gravity, Teleport, Rope, Key
 }
 
 public enum PlayerState
