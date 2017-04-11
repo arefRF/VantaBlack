@@ -9,7 +9,7 @@ public class Database {
         snapshots = new List<Snapshot>();
         turn = i;
     }
-
+    public List<Pipe> pipes;
     public List<Player> player;
     public readonly int numberOfSnapshot = 5;
     public int snapShotCount;
