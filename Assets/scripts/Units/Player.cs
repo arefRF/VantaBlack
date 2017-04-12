@@ -580,7 +580,7 @@ public class Player : Unit
                 return true;
             case AbilityType.Teleport: return false;
             case AbilityType.Gravity: return false;
-            case AbilityType.Rope: return false;
+            case AbilityType.Rope: ((Rope)abilities[0]).Action(this); return true;
             default: return false;
         }
     }
