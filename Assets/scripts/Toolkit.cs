@@ -575,14 +575,14 @@ public sealed class Toolkit{
         {
             bool keepgoing = true;
 
-            for(int j=0; j<result.Count && keepgoing; j++)
+            for (int j = 0; j < result.Count && keepgoing; j++)
             {
                 switch (direction)
                 {
-                    case Direction.Down: if (units[i].position.y < result[j].position.y) result.Insert(j - 1, units[i]); keepgoing = false; break;
-                    case Direction.Up: if (units[i].position.y > result[j].position.y) result.Insert(j - 1, units[i]); keepgoing = false; break;
-                    case Direction.Right: if (units[i].position.x > result[j].position.x) result.Insert(j - 1, units[i]); keepgoing = false; break;
-                    case Direction.Left: if (units[i].position.x < result[j].position.x) result.Insert(j - 1, units[i]); keepgoing = false; break;
+                    case Direction.Down: if (units[i].position.y < result[j].position.y) { result.Insert(j - 1, units[i]); keepgoing = false; } break;
+                    case Direction.Up: if (units[i].position.y > result[j].position.y) { result.Insert(j - 1, units[i]); keepgoing = false; } break;
+                    case Direction.Right: if (units[i].position.x > result[j].position.x) { result.Insert(j - 1, units[i]); keepgoing = false; } break;
+                    case Direction.Left: if (units[i].position.x < result[j].position.x) { result.Insert(j - 1, units[i]); keepgoing = false; } break;
                 }
                 if(j==result.Count - 1)
                 {
