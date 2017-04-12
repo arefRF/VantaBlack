@@ -61,7 +61,11 @@ public class Teleport : Ability {
                     portals.Add(functionalContainers[i]);
         }
 
+        foreach (Unit u in portals)
+            Debug.Log(u);
         portals = Toolkit.SortByDirection(portals, Direction.Left);
+        foreach (Unit u in portals)
+            Debug.Log(u);
         for (int i = 0; i < portals.Count; i++)
             if (portals[i] == container)
                 current = i;
