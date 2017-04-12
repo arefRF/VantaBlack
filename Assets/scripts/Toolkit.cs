@@ -512,6 +512,13 @@ public sealed class Toolkit{
         }
     }
     
+
+    /// <summary>
+    /// fgt bara graity payin
+    /// </summary>
+    /// <param name="From"></param>
+    /// <param name="dir"></param>
+    /// <returns></returns>
     public static Unit GetNearestUnit(Unit From, Direction dir)
     {
         
@@ -520,7 +527,7 @@ public sealed class Toolkit{
         to.AddRange(database.GetUnits(pos));
         pos = VectorSum(pos, Direction.Up);
         to.AddRange(database.GetUnits(pos));
-        pos = VectorSum(pos, 2 * DirectiontoVector(dir));
+        pos = VectorSum(pos, 2 * DirectiontoVector(Direction.Down));
         to.AddRange(database.GetUnits(pos));
         return GetNearestUnit(From, to.ToArray());
 
@@ -530,8 +537,6 @@ public sealed class Toolkit{
     {
         List<Unit> to = new List<Unit>();
         Vector2 pos = VectorSum(player.position, dir);
-        Debug.Log(player.jumpdirection);
-        Debug.Log(dir);
         if(player.jumpdirection == dir)
             to.AddRange(database.GetUnits(pos));
         else if (((Jump)player.currentAbility).jumped != 0)
@@ -543,7 +548,7 @@ public sealed class Toolkit{
         to.AddRange(database.GetUnits(pos));
         return GetNearestUnit(player, to.ToArray());
     }
-
+        
     public static Unit GetNearestUnit(Unit From, Unit[] To)
     {
         if (To.Length == 0)

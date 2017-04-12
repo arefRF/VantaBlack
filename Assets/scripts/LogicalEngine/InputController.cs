@@ -32,7 +32,7 @@ public class InputController {
 
     private void JumpingPlayerMove(Player player, Direction direction)
     {
-        if (!player.lean)
+        if (!player.lean && player.state == PlayerState.Jumping)
         {
             
             if (player.Can_Move_Direction(direction))
@@ -49,12 +49,12 @@ public class InputController {
                 }
                 else
                 {
-                    Unit nearest = Toolkit.GetNearestUnit(player, direction);
-                    if (nearest != null && player.Can_Lean(Toolkit.GetNearestUnit(player, direction).position))
+                    Unit nearest = Toolkit.GetNearestUnit(player, direction); 
+                    if (nearest != null && player.Can_Lean(nearest.position))
                     {
                         engine.apiunit.RemoveFromDatabase(player);
                         engine.apiunit.AddToDatabase(player);
-                        if (!player.isonejumping)
+                        if (!player.isonejumping && player.abilities.Count > 0)
                             player.UseAbility(player.abilities[0]);
                         else
                             player.isonejumping = false;
@@ -100,6 +100,7 @@ public class InputController {
     {
         if (!player.lean)
         {
+            engine.pipecontroller.CheckPipes();
             if(!Toolkit.IsInsideBranch(player) && !player.Can_Lean(direction) && database.gravity_direction == Toolkit.ReverseDirection(direction) && !Toolkit.HasBranch(Toolkit.VectorSum(player.position, direction)))
             {
                 player.isonejumping = true;
@@ -254,8 +255,10 @@ public class InputController {
     {
         for (int i = 0; i < database.player.Count; i++)
         {
-            if(LeanUndo(database.player[i], direction, PlayerState.Idle) || FakeLeanUndo(database.player[i], direction))
+            if (LeanUndo(database.player[i], direction, PlayerState.Idle) || FakeLeanUndo(database.player[i], direction))
+            {
                 database.player[i].ApplyGravity(database.gravity_direction, database.units);
+            }
         }
         //Applygravity();
     }
@@ -280,7 +283,6 @@ public class InputController {
 
     public void Lean(Player player, Direction direction)
     {
-        Debug.Log("here");
         if (!player.lean)
         {
             Vector2 pos = Toolkit.VectorSum(player.position, direction);
@@ -288,7 +290,6 @@ public class InputController {
             {
                 if (direction == Toolkit.ReverseDirection(player.jumpdirection))
                     return;
-                Debug.Log("here");
                 Unit nearest = Toolkit.GetNearestUnitForJumpingPlayer(player, direction);
                 if (nearest == null)
                     return;
@@ -329,7 +330,7 @@ public class InputController {
 
     public bool FakeLeanUndo(Player player, Direction direction)
     {
-        if (player.state == PlayerState.Fakelean || player.leandirection == direction)
+        if (player.state == PlayerState.Fakelean && player.leandirection == direction)
         {
             player.state = PlayerState.Idle;
             engine.apigraphic.Fake_Lean_Undo(player);

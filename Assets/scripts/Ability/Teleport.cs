@@ -15,6 +15,7 @@ public class Teleport : Ability {
 
     public void Action(Player player,Direction dir)
     {
+        Debug.Log("action called");
         if(engine == null)
             engine = Starter.GetEngine();
         Vector2 pos = player.position + Toolkit.DirectiontoVector(dir) * length ;

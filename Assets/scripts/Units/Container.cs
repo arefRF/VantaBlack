@@ -307,16 +307,34 @@ public class Container : ParentContainer {
         abilitycount = abilities.Count;
         for (int i = 0; i < sameContainer.Count; i++)
             sameContainer[i].abilitycount = abilitycount;
-        player.abilitycount = player.abilities.Count;
+        if(player != null)
+            player.abilitycount = player.abilities.Count;
         if (abilities.Count != 0)
         {
             abilitytype = abilities[0].abilitytype;
             for (int i = 0; i < sameContainer.Count; i++)
                 sameContainer[i].abilitytype = abilitytype;
         }
-        if (player.abilities.Count != 0)
-            player.abilitytype = player.abilities[0].abilitytype;
-        api.engine.apigraphic.Absorb(player, null);
+        if (player != null)
+        {
+            if (player.abilities.Count != 0)
+                player.abilitytype = player.abilities[0].abilitytype;
+            api.engine.apigraphic.Absorb(player, null);
+        }
     }
     
+
+    public void PipeAbsorb(Container othercontainer)
+    {
+        if (abilities.Count != 0 && othercontainer.abilities.Count == 0)
+            return;
+        for (int i = 0; i < othercontainer.abilities.Count; i++)
+            abilities.Add(othercontainer.abilities[i]);
+        othercontainer.abilities.Clear();
+        _setability(null);
+        othercontainer._setability(null);
+        api.engine.apigraphic.UnitChangeSprite(this);
+        api.engine.apigraphic.UnitChangeSprite(othercontainer);
+    }
 }
+

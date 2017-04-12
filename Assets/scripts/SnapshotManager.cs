@@ -78,10 +78,10 @@ public class SnapshotManager{
 
     public void AddToSnapShot(Unit unit)
     {
-        for (int i = 0; i < snapshot.clonedunits.Count; i++)
+        /*for (int i = 0; i < snapshot.clonedunits.Count; i++)
             if (snapshot.clonedunits[i].original == unit)
                 return;
-        snapshot.clonedunits.Add(unit.Clone());
+        snapshot.clonedunits.Add(unit.Clone());*/
     }
     public void AddToSnapShot(List<Unit> units)
     {

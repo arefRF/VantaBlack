@@ -238,7 +238,7 @@ public class Player : Unit
         position = pos;
         api.AddToDatabase(this);
         api.engine.apigraphic.Player_Co_Stop(this);
-        if (!isonejumping && state == PlayerState.Jumping)
+        if (!isonejumping && state == PlayerState.Jumping && abilities.Count > 0)
         {
             UseAbility(abilities[0]);
         }

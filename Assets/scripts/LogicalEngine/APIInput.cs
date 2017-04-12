@@ -45,21 +45,25 @@ public class APIInput{
     public void Absorb()
     {
         engine.inputcontroller.Absorb();
+        engine.pipecontroller.CheckPipes();
     }
 
     public void Release()
     {
         engine.inputcontroller.Release();
+        engine.pipecontroller.CheckPipes();
     }
 
     public void Absorb_Hold()
     {
         engine.inputcontroller.AbsorbHold();
+        engine.pipecontroller.CheckPipes();
     }
 
     public void Release_Hold()
     {
         engine.inputcontroller.ReleaseHold();
+        engine.pipecontroller.CheckPipes();
     }
 
     public void AbsorbReleaseHold(Direction dir)
