@@ -26,6 +26,7 @@ public class Gravity : Ability {
     {
         if (players == null)
             SetVariables();
+        engine.database.gravity_direction = container.direction;
         for (int i = 0; i < players.Count; i++)
             players[i].SetGravity(container.direction);
         engine.pipecontroller.CheckPipes();

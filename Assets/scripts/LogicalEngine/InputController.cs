@@ -71,7 +71,7 @@ public class InputController {
             else
             {
                 Vector2 pos = player.position;
-                if (Toolkit.GetDeltaPositionAndTransformPosition(player) > 0.9)
+                if (Toolkit.GetDeltaPositionAndTransformPosition(player, player.GetGravity()) > 0.9)
                 {
                     pos = Toolkit.VectorSum(pos, direction);
                 }
@@ -100,7 +100,6 @@ public class InputController {
     {
         if (!player.lean)
         {
-            engine.pipecontroller.CheckPipes();
             if(!Toolkit.IsInsideBranch(player) && !player.Can_Lean(direction) && player.GetGravity() == Toolkit.ReverseDirection(direction) && !Toolkit.HasBranch(Toolkit.VectorSum(player.position, direction)))
 
             {

@@ -201,7 +201,7 @@ public class Player : Unit
     public bool JumpingMove(Direction dir)
     {
         Vector2 pos = position;
-        if (Toolkit.GetDeltaPositionAndTransformPosition(this) > 0.7)
+        if (Toolkit.GetDeltaPositionAndTransformPosition(this, GetGravity()) > 0.7)
             pos = Toolkit.VectorSum(pos, Toolkit.ReverseDirection(Starter.GetGravityDirection()));
         else if (((Jump)currentAbility).jumped == 0)
             return false;

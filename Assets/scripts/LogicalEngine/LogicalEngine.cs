@@ -43,6 +43,7 @@ public class LogicalEngine {
         for(int i=0; i<database.player.Count; i++)
             snpmanager.AddToSnapShot(database.player[i]);
         snpmanager.takesnapshot();
+        pipecontroller.CheckPipes();
         //Applygravity();
     }
 

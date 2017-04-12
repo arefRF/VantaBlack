@@ -500,9 +500,9 @@ public sealed class Toolkit{
         return false;
     }
 
-    public static double GetDeltaPositionAndTransformPosition(Unit unit)
+    public static double GetDeltaPositionAndTransformPosition(Unit unit, Direction gravitydirection)
     {
-        if(database.gravity_direction == Direction.Up || database.gravity_direction == Direction.Down)
+        if(gravitydirection == Direction.Up || gravitydirection == Direction.Down)
         {
             return Mathf.Abs(unit.position.y - unit.transform.position.y);
         }
@@ -540,7 +540,7 @@ public sealed class Toolkit{
         if(player.jumpdirection == dir)
             to.AddRange(database.GetUnits(pos));
         else if (((Jump)player.currentAbility).jumped != 0)
-            if (GetDeltaPositionAndTransformPosition(player) < 0.5)
+            if (GetDeltaPositionAndTransformPosition(player, player.GetGravity()) < 0.5)
                 to.AddRange(database.GetUnits(pos));
         pos = VectorSum(pos, Direction.Up);
         to.AddRange(database.GetUnits(pos));

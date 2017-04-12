@@ -15,7 +15,7 @@ public class Database {
     public List<Player> player;
     public readonly int numberOfSnapshot = 5;
     public int snapShotCount;
-    public Direction gravity_direction;
+    public Direction gravity_direction { get; set; }
     public List<Unit>[,] units;
     public long turn;
     public List<TimeLaps> timeLaps;
