@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using System.Collections.Generic;
 public class APIGraphic{
 
     LogicalEngine logicalengine;
@@ -316,6 +316,19 @@ public class APIGraphic{
         }
     }
 
+    public void EnterPortalMode(List<Unit> portals,Container container)
+    {
+        graphicalengine.EnterPortalMode(portals,container);
+    }
+
+    public void QuitPOrtalMode(List<Unit> portals)
+    {
+        graphicalengine.QuitPortalMode(portals);
+    }
+    public void ProtalHighlight(Unit current,Unit pre)
+    {
+        graphicalengine.PortalHighlighter(current, pre);
+    }
     public void Teleport(Player player,Vector2 pos)
     {
         player.GetComponent<PlayerGraphics>().Teleport(pos);
@@ -351,6 +364,7 @@ public class APIGraphic{
         Debug.Log("crush player died");
     }
 
+    
     public void Fake_Lean_Undo(Player player)
     {
         PlayerGraphics gl = player.GetComponent<PlayerGraphics>();

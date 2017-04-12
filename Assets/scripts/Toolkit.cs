@@ -579,10 +579,10 @@ public sealed class Toolkit{
             {
                 switch (direction)
                 {
-                    case Direction.Down: if (units[i].position.y < result[j].position.y) { result.Insert(j - 1, units[i]); keepgoing = false; } break;
-                    case Direction.Up: if (units[i].position.y > result[j].position.y) { result.Insert(j - 1, units[i]); keepgoing = false; } break;
-                    case Direction.Right: if (units[i].position.x > result[j].position.x) { result.Insert(j - 1, units[i]); keepgoing = false; } break;
-                    case Direction.Left: if (units[i].position.x < result[j].position.x) { result.Insert(j - 1, units[i]); keepgoing = false; } break;
+                    case Direction.Down: if (units[i].position.y < result[j].position.y) { result.Insert(Mathf.Max(j - 1, 0), units[i]); keepgoing = false; } break;
+                    case Direction.Up: if (units[i].position.y > result[j].position.y) { result.Insert(Mathf.Max(j - 1, 0), units[i]); keepgoing = false; } break;
+                    case Direction.Right: if (units[i].position.x > result[j].position.x) { result.Insert(Mathf.Max(j - 1, 0), units[i]); keepgoing = false; } break;
+                    case Direction.Left:if (units[i].position.x < result[j].position.x) { result.Insert(Mathf.Max(j - 1, 0), units[i]); keepgoing = false; } break;
                 }
                 if(j==result.Count - 1)
                 {

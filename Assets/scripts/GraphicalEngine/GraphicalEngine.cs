@@ -267,5 +267,29 @@ public class GraphicalEngine : MonoBehaviour {
         }
     }
 
+    public void EnterPortalMode(List<Unit> containers,Container container)
+    {
+        for(int i = 0; i < containers.Count; i++)
+        {
+            containers[i].GetComponent<SpriteRenderer>().color = new Color(0.3f, 0.5f, 0.8f, 1);
+        }
+        container.GetComponent<SpriteRenderer>().color = new Color(0.6f, 0.1f, 0.8f, 1);
+    }
+
+    public void QuitPortalMode(List<Unit> containers)
+    {
+        for (int i = 0; i < containers.Count; i++)
+        {
+            containers[i].GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
+        }
+    }
+
+    // highlight current and make portal color the previous one
+    public void PortalHighlighter(Unit current,Unit pre)
+    {
+        current.GetComponent<SpriteRenderer>().color = new Color(0.6f, 0.1f, 0.8f, 1);
+        pre.GetComponent<SpriteRenderer>().color = new Color(0.3f, 0.5f, 0.8f, 1);
+    }
+
     
 }
