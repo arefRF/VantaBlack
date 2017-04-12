@@ -16,7 +16,7 @@ public class Player : Unit
     public bool lean { get; set; }
 
     public bool onramp { get; set; }
-    public Direction gravity { get; set; }
+    private Direction gravity { get; set; }
 
     public Vector2 nextpos { get; set; }
 
@@ -26,6 +26,9 @@ public class Player : Unit
     public bool isonejumping { get; set; }
 
     public Ability currentAbility { get; set; }
+    private List<Unit>[,] units;
+    private int x_bound;
+    private int y_bound;
     public void Awake()
     {
         abilities = new List<Ability>();
@@ -40,10 +43,37 @@ public class Player : Unit
         state = PlayerState.Idle;
 
     }
+    public Direction GetGravity(){
+        return gravity;
+    }
+
+    public void SetGravity(Direction dir)
+    {
+        gravity = dir;
+        Update_Move_Direction();
+    }
+
+    private void Update_Move_Direction()
+    {
+        if (gravity == Direction.Down || gravity == Direction.Up)
+        {
+            move_direction[0] = Direction.Right;
+            move_direction[1] = Direction.Left;
+        }
+        else
+        {
+            move_direction[0] = Direction.Up;
+            move_direction[1] = Direction.Down;
+        }
+            
+    }
 
     void Start()
     {
         gravity = Starter.GetGravityDirection();
+        units = Starter.GetDataBase().units;
+        x_bound = GameObject.Find("Starter").GetComponent<Starter>().x;
+        y_bound = GameObject.Find("Starter").GetComponent<Starter>().y;
     }
 
     public void Update()
@@ -321,7 +351,7 @@ public class Player : Unit
         return false;
     }
 
-    public override bool ApplyGravity(Direction gravitydirection, List<Unit>[,] units)
+    public override bool ApplyGravity()
     {
         isonejumping = false;
         // to avoid exception
@@ -337,7 +367,7 @@ public class Player : Unit
             return false;
         }
 
-        Vector2 pos = Toolkit.VectorSum(position, gravitydirection);
+        Vector2 pos = Toolkit.VectorSum(position, gravity);
         if (Toolkit.IsdoubleRamp(pos))
             return false;
         if (units[(int)pos.x, (int)pos.y].Count != 0)
@@ -349,16 +379,25 @@ public class Player : Unit
         if (!NewFall())
             return false;
         
-        while (position.x != 0 && position.y != 0 && NewFall())
+        while (IsInBound(position) && NewFall())
         {
             api.RemoveFromDatabase(this);
-            position = Toolkit.VectorSum(position, gravitydirection);
+            position = Toolkit.VectorSum(position,gravity);
             api.AddToDatabase(this);
         }
         state = PlayerState.Falling;
         api.graphicalengine_Fall(this, FallPos());
         return true;
           
+    }
+
+    private bool IsInBound(Vector2 pos)
+    {
+        if (pos.x == 1 || pos.y == 1)
+            return false;
+        if (pos.x == x_bound-1 || pos.y == y_bound-1)
+            return false;
+        return true;
     }
 
     private Vector2 FallPos()
@@ -464,7 +503,7 @@ public class Player : Unit
     {
         state = PlayerState.Idle;
         currentAbility = null;
-        ApplyGravity(gravity,api.engine.database.units);
+        ApplyGravity();
     }
     public void FallFinished()
     {
@@ -554,7 +593,7 @@ public class Player : Unit
             case AbilityType.Direction: return false;
             case AbilityType.Jump: return false;
             case AbilityType.Teleport:((Teleport)abilities[0]).Action(this,dir); return true;
-            case AbilityType.Gravity: return true;
+            case AbilityType.Gravity:((Gravity)abilities[0]).Action(this, dir); return true;
             case AbilityType.Rope: return true;
             default: return false;
         }
@@ -611,7 +650,7 @@ public class CloneablePlayer : CloneableUnit
         leandirection = player.leandirection;
         lean = player.lean;
         onramp = player.onramp;
-        gravity = player.gravity;
+        gravity = player.GetGravity();
         nextpos = new Vector2(player.nextpos.x, player.nextpos.y);
     }
 
@@ -634,7 +673,7 @@ public class CloneablePlayer : CloneableUnit
         original.leandirection = leandirection;
         original.lean = lean;
         original.onramp = onramp;
-        original.gravity = gravity;
+        original.SetGravity(gravity);
         original.nextpos = new Vector2(nextpos.x, nextpos.y);
         original.lean = false;
         original.api.engine.apigraphic.Absorb(original, null);

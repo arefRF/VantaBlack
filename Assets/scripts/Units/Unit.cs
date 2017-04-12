@@ -102,7 +102,7 @@ public class Unit : MonoBehaviour {
         }
     }
 
-    public virtual bool ApplyGravity(Direction gravitydirection, List<Unit>[,] units)
+    public virtual bool ApplyGravity()
     {
         return false;
     }

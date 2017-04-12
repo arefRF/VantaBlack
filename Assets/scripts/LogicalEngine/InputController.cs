@@ -101,7 +101,7 @@ public class InputController {
         if (!player.lean)
         {
             engine.pipecontroller.CheckPipes();
-            if(!Toolkit.IsInsideBranch(player) && !player.Can_Lean(direction) && database.gravity_direction == Toolkit.ReverseDirection(direction) && !Toolkit.HasBranch(Toolkit.VectorSum(player.position, direction)))
+            if(!Toolkit.IsInsideBranch(player) && !player.Can_Lean(direction) && player.GetGravity() == Toolkit.ReverseDirection(direction) && !Toolkit.HasBranch(Toolkit.VectorSum(player.position, direction)))
             {
                 player.isonejumping = true;
                 player.oneJump.Action(player, direction);
@@ -137,7 +137,7 @@ public class InputController {
             //Debug.Log("calling graphicals");
             if (player.movepercentage == 98)
             {
-                if (!player.ApplyGravity(engine.database.gravity_direction, engine.database.units)){
+                if (!player.ApplyGravity()){
                     if (!player.Move(direction))
                     {
                         /*Debug.Log("here");
@@ -257,7 +257,7 @@ public class InputController {
         {
             if (LeanUndo(database.player[i], direction, PlayerState.Idle) || FakeLeanUndo(database.player[i], direction))
             {
-                database.player[i].ApplyGravity(database.gravity_direction, database.units);
+                database.player[i].ApplyGravity();
             }
         }
         //Applygravity();
@@ -275,7 +275,7 @@ public class InputController {
                 engine.apiunit.AddToDatabase(player);
                 engine.apigraphic.LeanStickStop(player);
             }
-            player.ApplyGravity(database.gravity_direction, database.units);
+            player.ApplyGravity();
             return true;
         }
         return false;

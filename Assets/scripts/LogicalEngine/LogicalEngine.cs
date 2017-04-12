@@ -608,7 +608,7 @@ public class LogicalEngine {
     {
         for(int i=0; i<database.player.Count; i++)
         {
-            database.player[i].ApplyGravity(database.gravity_direction, database.units);
+            database.player[i].ApplyGravity();
         }
         //apiinput.PlayerMoveFinished();
     }
@@ -683,7 +683,7 @@ public class LogicalEngine {
     public void graphic_PlayerMoveAnimationFinished(Player player)
     {
         player.movepercentage = 0;
-        if(!player.ApplyGravity(database.gravity_direction, database.units))
+        if(!player.ApplyGravity())
             player.state = PlayerState.Idle;
     }
 

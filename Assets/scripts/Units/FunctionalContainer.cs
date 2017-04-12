@@ -30,6 +30,7 @@ public class FunctionalContainer : Container
             case AbilityType.Fuel: SetOnorOff(); firstmove = true; Action_Fuel(); break;
             case AbilityType.Jump: ((Jump)abilities[0]).Action(player, dir); break;
             case AbilityType.Teleport: ((Teleport)abilities[0]).Action_Container(player,dir,this);break;
+            case AbilityType.Gravity: ((Gravity)abilities[0]).Action_Container(this);break;
         }
     }
 

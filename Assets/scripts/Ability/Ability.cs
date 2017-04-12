@@ -18,6 +18,7 @@ public class Ability{
             case AbilityType.Jump: return new Jump();
             case AbilityType.Key: return new Key();
             case AbilityType.Teleport: return new Teleport();
+            case AbilityType.Gravity: return new Gravity();
             default: return null;
         }
     }
