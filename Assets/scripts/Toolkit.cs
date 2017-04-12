@@ -566,5 +566,34 @@ public sealed class Toolkit{
         }
         return To[result];
     }
+
+    public static List<Unit> SortByDirection(List<Unit> units, Direction direction)
+    {
+        List<Unit> result = new List<Unit>();
+        result.Add(units[0]);
+        for (int i=1; i<units.Count; i++)
+        {
+            bool keepgoing = true;
+
+            for(int j=0; j<result.Count && keepgoing; j++)
+            {
+                switch (direction)
+                {
+                    case Direction.Down: if (units[i].position.y < result[j].position.y) result.Insert(j - 1, units[i]); keepgoing = false; break;
+                    case Direction.Up: if (units[i].position.y > result[j].position.y) result.Insert(j - 1, units[i]); keepgoing = false; break;
+                    case Direction.Right: if (units[i].position.x > result[j].position.x) result.Insert(j - 1, units[i]); keepgoing = false; break;
+                    case Direction.Left: if (units[i].position.x < result[j].position.x) result.Insert(j - 1, units[i]); keepgoing = false; break;
+                }
+                if(j==result.Count - 1)
+                {
+                    result.Add(units[i]);
+                    break;
+                }
+            }
+        }
+        if (result.Count != units.Count)
+            throw new System.Exception();
+        return result;
+    }
 }
 
