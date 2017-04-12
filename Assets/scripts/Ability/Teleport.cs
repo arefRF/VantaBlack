@@ -81,7 +81,9 @@ public class Teleport : Ability {
             current++;
         else
             current--;
-        current = Mathf.Abs(current % portals.Count);
+        current = current % portals.Count;
+        if (current < 0)
+            current = portals.Count + current;
         api_graphic.ProtalHighlight(portals[current], portals[pre]);
     }
 
