@@ -34,7 +34,7 @@ public class Teleport : Ability {
     private void Action_player(Player player, Direction dir)
     {
         /*Vector2 destpos = Toolkit.VectorSum(player.position, 2 * Toolkit.DirectiontoVector(dir));
-        if (Toolkit.IsEmpty(destpos))
+        if (Toolkit.IsEmpty(destpos)) 
         {
             engine.apiunit.RemoveFromDatabase(player);
             player.position = 
@@ -43,7 +43,7 @@ public class Teleport : Ability {
 
     private void Action_Container(Player player, Direction dir, Container container)
     {
-
+        Debug.Log("Container portal");
     }
 
     public override Ability ConvertContainerAbilityToPlayer()
