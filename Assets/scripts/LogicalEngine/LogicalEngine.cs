@@ -12,6 +12,7 @@ public class LogicalEngine {
     int sizeX, sizeY;
     public List<Unit> stuckedunits;
     public SnapshotManager snpmanager;
+    public PipeController pipecontroller;
 
     public List<Unit> leanmove;
     public List<Unit> shouldmove;
@@ -27,6 +28,7 @@ public class LogicalEngine {
         leanmove = new List<Unit>();
         snpmanager = new SnapshotManager(this);
         initializer = new SubEngine_Initializer(x,y, this);
+        pipecontroller = new PipeController(this);
     }
 
     public void Run()

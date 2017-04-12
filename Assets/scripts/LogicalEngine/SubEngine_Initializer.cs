@@ -67,7 +67,7 @@ public class SubEngine_Initializer{
                     case "Ramp": units[(int)obj.transform.position.x, (int)obj.transform.position.y].Add(obj.GetComponent<Ramp>()); break;
                     case "Rock": units[(int)obj.transform.position.x, (int)obj.transform.position.y].Add(obj.GetComponent<Rock>()); break;
                     case "Vision": units[(int)obj.transform.position.x, (int)obj.transform.position.y].Add(obj.GetComponent<Vision>()); break;
-                    case "Pipe": units[(int)obj.transform.position.x, (int)obj.transform.position.y].Add(obj.GetComponent<Pipe>()); engine.database.pipes.Add(obj.GetComponent<Pipe>()); break;
+                    case "Pipe": units[(int)obj.transform.position.x, (int)obj.transform.position.y].Add(obj.GetComponent<Pipe>()); InitPipe(obj.GetComponent<Pipe>()); break;
                     default: Debug.Log(obj.tag + " Not supported"); break;
                 }
                 units[(int)obj.transform.position.x, (int)obj.transform.position.y][units[(int)obj.transform.position.x, (int)obj.transform.position.y].Count - 1].ConnectedUnits = new List<Unit>();
@@ -84,5 +84,10 @@ public class SubEngine_Initializer{
         }
 
         return units;
+    }
+
+    private void InitPipe(Pipe pipe)
+    {
+        engine.database.pipes.Add(pipe);
     }
 }

@@ -7,6 +7,7 @@ public class Database {
     public Database(long i)
     {
         snapshots = new List<Snapshot>();
+        pipes = new List<Pipe>();
         turn = i;
     }
     public List<Pipe> pipes;
