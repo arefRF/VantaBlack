@@ -7,11 +7,11 @@ public class Database {
     public Database(long i)
     {
         snapshots = new List<Snapshot>();
-        pipes = new List<Pipe>();
+        pipes = new List<Unit>();
         turn = i;
         functionalCon = new List<FunctionalContainer>();
     }
-    public List<Pipe> pipes;
+    public List<Unit> pipes;
     public List<Player> player;
     public readonly int numberOfSnapshot = 5;
     public int snapShotCount;

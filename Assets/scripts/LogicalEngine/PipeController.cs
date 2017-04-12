@@ -5,7 +5,7 @@ public class PipeController {
 
     LogicalEngine engine;
     Database database;
-    List<Pipe> pipes;
+    List<Unit> pipes;
     Direction Gravitydirection_Total;
     public PipeController(LogicalEngine engine)
     {
@@ -17,9 +17,10 @@ public class PipeController {
 
 	public void CheckPipes()
     {
+        pipes = Toolkit.SortByDirection(pipes,Gravitydirection_Total);
         for(int i=0; i<pipes.Count; i++)
         {
-            pipes[i].Action();
+            ((Pipe)pipes[i]).Action();
         }
     }
 }

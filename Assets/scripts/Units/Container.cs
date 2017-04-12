@@ -326,15 +326,29 @@ public class Container : ParentContainer {
 
     public void PipeAbsorb(Container othercontainer)
     {
+        int counter = 0;
         if (abilities.Count != 0 && othercontainer.abilities.Count == 0)
             return;
-        for (int i = 0; i < othercontainer.abilities.Count; i++)
-            abilities.Add(othercontainer.abilities[i]);
-        othercontainer.abilities.Clear();
+        for (int i = 0; i < othercontainer.abilities.Count && abilities.Count < capacity; i++)
+        {
+            abilities.Add(othercontainer.abilities[0]);
+            counter++;
+        }
+        for (int i = 0; othercontainer.abilities.Count > 0 && i < counter; i++)
+            othercontainer.abilities.RemoveAt(0);
+        //othercontainer.abilities.Clear();
         _setability(null);
         othercontainer._setability(null);
         api.engine.apigraphic.UnitChangeSprite(this);
         api.engine.apigraphic.UnitChangeSprite(othercontainer);
+        if(othercontainer is DynamicContainer)
+        {
+            if (((DynamicContainer)othercontainer).on && abilities.Count > 0 && abilities[0].abilitytype == AbilityType.Fuel)
+            {
+                ((DynamicContainer)othercontainer).SetOnorOff();
+                ((DynamicContainer)othercontainer).Action_Fuel();
+            }
+        }
     }
 }
 
