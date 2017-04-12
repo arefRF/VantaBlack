@@ -54,10 +54,14 @@ public class FunctionalContainer : Container
     {
         api.engine.Applygravity();
         if (currentState == nextState)
+        {
+            api.engine.pipecontroller.CheckPipes();
             return;
+        }
         if (!MoveContainer(GetMoveDirection()))
         {
             api.AddToStuckList(this);
+            api.engine.pipecontroller.CheckPipes();
             return;
         }
         api.CheckstuckedList();

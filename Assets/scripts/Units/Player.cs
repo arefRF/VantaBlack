@@ -255,6 +255,8 @@ public class Player : Unit
         players = new List<Unit>();
         for (int i = 0; i < units.Count; i++)
         {
+            if (units[i] is Pipe)
+                continue;
             if (units[i] is Player)
             {
                 players.Add(units[i]);

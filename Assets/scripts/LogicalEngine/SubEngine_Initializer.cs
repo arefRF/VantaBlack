@@ -88,6 +88,9 @@ public class SubEngine_Initializer{
 
     private void InitPipe(Pipe pipe)
     {
+        for (int i = 0; i < pipe.PipedTo.Count; i++)
+            if (!(pipe.PipedTo[i] is Pipe))
+                throw new System.Exception();
         engine.database.pipes.Add(pipe);
     }
 }

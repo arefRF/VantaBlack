@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public class Pipe : Unit {
 
-    public Pipe PipedTo;
+    public List<Unit> PipedTo;
 
 	// Use this for initialization
 	void Start () {
@@ -18,33 +18,37 @@ public class Pipe : Unit {
 
     public void Action()
     {
-        if (CheckGravitywise())
-            if(CheckAvailableContainer())
-                if (PipedTo.CheckPipeAction())
-                    Pomp();
+        Toolkit.SortByDirection(PipedTo, api.engine.database.gravity_direction);
+        for (int i = 0; i < PipedTo.Count; i++)
+        {
+            if (CheckGravitywise(PipedTo[i] as Pipe))
+                if (CheckAvailableContainer())
+                    if (((Pipe)PipedTo[i]).CheckPipeAction())
+                        Pomp(PipedTo[i] as Pipe);
+        }
     }
 
 
-    private bool CheckGravitywise()
+    private bool CheckGravitywise(Pipe pipe)
     {
         if (Starter.GetGravityDirection() == Direction.Up)
         {
-            if (PipedTo.position.y > position.y)
+            if (pipe.position.y > position.y)
                 return true;
         }
         else if (Starter.GetGravityDirection() == Direction.Down)
         {
-            if (PipedTo.position.y < position.y)
+            if (pipe.position.y < position.y)
                 return true;
         }
         else if (Starter.GetGravityDirection() == Direction.Right)
         {
-            if (PipedTo.position.x > position.x)
+            if (pipe.position.x > position.x)
                 return true;
         }
         else if (Starter.GetGravityDirection() == Direction.Left)
         {
-            if (PipedTo.position.x < position.x)
+            if (pipe.position.x < position.x)
                 return true;
         }
         return false;
@@ -80,7 +84,7 @@ public class Pipe : Unit {
 
     }
 
-    private void Pomp()
+    private void Pomp(Pipe pipe)
     {
         Container thiscontainer = null;
         foreach (Unit c in api.engine_GetUnits(position))
@@ -88,11 +92,12 @@ public class Pipe : Unit {
             {
                 thiscontainer = c as Container;
             }
-        foreach (Unit c in api.engine_GetUnits(PipedTo.position))
+        foreach (Unit c in api.engine_GetUnits(pipe.position))
             if (c is SimpleContainer || c is DynamicContainer)
             {
                 Debug.Log("pomping " + thiscontainer + " to " + c);
                 ((Container)c).PipeAbsorb(thiscontainer);
             }
+        //api.engine.pipecontroller.CheckPipes();
     }
 }
