@@ -18,13 +18,21 @@ public class Pipe : Unit {
 
     public void Action()
     {
-        Toolkit.SortByDirection(PipedTo, api.engine.database.gravity_direction);
+        PipedTo = Toolkit.SortByDirection(PipedTo, api.engine.database.gravity_direction);
         for (int i = 0; i < PipedTo.Count; i++)
         {
             if (CheckGravitywise(PipedTo[i] as Pipe))
-                if (CheckAvailableContainer())
-                    if (((Pipe)PipedTo[i]).CheckPipeAction())
-                        Pomp(PipedTo[i] as Pipe);
+            {
+                Container sink = ((Pipe)PipedTo[i]).CheckPipeAction();
+                Container source = CheckAvailableContainer();
+                if (sink != null && source != null) {
+                    if (source.abilities.Count < source.capacity && sink.abilities.Count != 0)
+                    {
+                        if(source.abilities.Count == 0 || source.abilities[0].abilitytype == sink.abilities[0].abilitytype)
+                            Pomp(PipedTo[i] as Pipe);
+                    }
+                }
+            }
         }
     }
 
@@ -33,54 +41,49 @@ public class Pipe : Unit {
     {
         if (Starter.GetGravityDirection() == Direction.Up)
         {
-            if (pipe.position.y > position.y)
+            if (pipe.position.y < position.y)
                 return true;
         }
         else if (Starter.GetGravityDirection() == Direction.Down)
         {
-            if (pipe.position.y < position.y)
+            if (pipe.position.y > position.y)
                 return true;
         }
         else if (Starter.GetGravityDirection() == Direction.Right)
         {
-            if (pipe.position.x > position.x)
+            if (pipe.position.x < position.x)
                 return true;
         }
         else if (Starter.GetGravityDirection() == Direction.Left)
         {
-            if (pipe.position.x < position.x)
+            if (pipe.position.x > position.x)
                 return true;
         }
         return false;
     }
 
-    private bool CheckAvailableContainer()
+    private Container CheckAvailableContainer()
     {
         foreach (Unit c in api.engine_GetUnits(position))
         {
             if (c is SimpleContainer || c is DynamicContainer)
-            {
-
-                if (((Container)c).abilities.Count != 0)
-                    return true;
-                return false;
-            }
+                return c as Container;
         }
-        return false;
+        return null;
     }
 
-    private bool CheckPipeAction()
+    private Container CheckPipeAction()
     {
         foreach (Unit c in api.engine_GetUnits(position))
         {
             if (c is SimpleContainer || c is DynamicContainer)
             {
-                if (((Container)c).abilities.Count == 0)
-                    return true;
-                return false;
+                if (((Container)c).abilities.Count != 0)
+                    return c as Container;
+                return null;
             }
         }
-        return false;
+        return null;
 
     }
 
@@ -95,9 +98,9 @@ public class Pipe : Unit {
         foreach (Unit c in api.engine_GetUnits(pipe.position))
             if (c is SimpleContainer || c is DynamicContainer)
             {
-                Debug.Log("pomping " + thiscontainer + " to " + c);
-                ((Container)c).PipeAbsorb(thiscontainer);
+                Debug.Log("pomping " + c + " to " + thiscontainer);
+                (thiscontainer).PipeAbsorb((Container)c);
             }
-        //api.engine.pipecontroller.CheckPipes();
+        api.engine.pipecontroller.CheckPipes();
     }
 }

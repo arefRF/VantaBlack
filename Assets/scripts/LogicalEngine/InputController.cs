@@ -100,7 +100,6 @@ public class InputController {
     {
         if (!player.lean)
         {
-            engine.pipecontroller.CheckPipes();
             if(!Toolkit.IsInsideBranch(player) && !player.Can_Lean(direction) && database.gravity_direction == Toolkit.ReverseDirection(direction) && !Toolkit.HasBranch(Toolkit.VectorSum(player.position, direction)))
             {
                 player.isonejumping = true;

@@ -326,11 +326,15 @@ public class Container : ParentContainer {
 
     public void PipeAbsorb(Container othercontainer)
     {
+        int counter = 0;
         if (abilities.Count != 0 && othercontainer.abilities.Count == 0)
             return;
-        for (int i = 0; i < othercontainer.abilities.Count /*&& abilities.Count > capacity*/; i++)
+        for (int i = 0; i < othercontainer.abilities.Count && abilities.Count < capacity; i++)
+        {
             abilities.Add(othercontainer.abilities[0]);
-        for (int i = 0; othercontainer.abilities.Count > 0 && i < abilities.Count; i++)
+            counter++;
+        }
+        for (int i = 0; othercontainer.abilities.Count > 0 && i < counter; i++)
             othercontainer.abilities.RemoveAt(0);
         //othercontainer.abilities.Clear();
         _setability(null);
