@@ -18,6 +18,7 @@ public class GetInput : MonoBehaviour {
     private bool ar_input = false;
     private bool action_lock = false;
     public bool joystick;
+    public bool getOnce = false;
     // Use this for initialization
     void Start()
     {
@@ -259,18 +260,29 @@ public class GetInput : MonoBehaviour {
     }
     private void Get_Move()
     {
-
-        //Take Arrows to move or lean
-        if (Input.GetKey(KeyCode.RightArrow))
-            api.MovePressed(Direction.Right);
-
-        if (Input.GetKey(KeyCode.LeftArrow))
-            api.MovePressed(Direction.Left);
-
-        if (Input.GetKey(KeyCode.DownArrow))
-            api.MovePressed(Direction.Down);
-        if (Input.GetKey(KeyCode.UpArrow))
-            api.MovePressed(Direction.Up);
+        if (getOnce)
+        {
+            if (Input.GetKeyDown(KeyCode.RightArrow))
+                api.MovePressed(Direction.Right);
+            if (Input.GetKeyDown(KeyCode.LeftArrow))
+                api.MovePressed(Direction.Left);
+            if (Input.GetKeyDown(KeyCode.DownArrow))
+                api.MovePressed(Direction.Down);
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+                api.MovePressed(Direction.Up);
+        }
+        else
+        {
+            //Take Arrows to move or lean
+            if (Input.GetKey(KeyCode.RightArrow))
+                api.MovePressed(Direction.Right);
+            if (Input.GetKey(KeyCode.LeftArrow))
+                api.MovePressed(Direction.Left);
+            if (Input.GetKey(KeyCode.DownArrow))
+                api.MovePressed(Direction.Down);
+            if (Input.GetKey(KeyCode.UpArrow))
+                api.MovePressed(Direction.Up);
+        }
     }
 
 

@@ -19,9 +19,6 @@ public class APIUnit {
             //engine.MoveUnit(unit, Toolkit.VectorSum(unit.position, Toolkit.DirectiontoVector(dir)));
         }
     }
-
-
-
     public List<Unit> engine_GetUnits(Unit unit, Direction dir)
     {
         return engine.GetUnits(Toolkit.VectorSum(unit.position, dir));

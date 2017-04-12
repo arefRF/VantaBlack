@@ -9,6 +9,7 @@ public class Database {
         snapshots = new List<Snapshot>();
         pipes = new List<Pipe>();
         turn = i;
+        functionalCon = new List<FunctionalContainer>();
     }
     public List<Pipe> pipes;
     public List<Player> player;
@@ -27,6 +28,8 @@ public class Database {
 
     public static Direction GravityDirection;
 
+    // List of all Dynamic and Static Containers for Portal ability
+    public List<FunctionalContainer> functionalCon;
     public List<Unit> GetUnits(Vector2 position)
     {
         return units[(int)position.x, (int)position.y];

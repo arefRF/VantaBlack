@@ -58,8 +58,8 @@ public class SubEngine_Initializer{
                 {
                     case "Box": units[(int)obj.transform.position.x, (int)obj.transform.position.y].Add(obj.GetComponent<Box>()); break;
                     case "Branch": units[(int)obj.transform.position.x, (int)obj.transform.position.y].Add(obj.GetComponent<Branch>()); break;
-                    case "Dynamic Container": units[(int)obj.transform.position.x, (int)obj.transform.position.y].Add(obj.GetComponent<DynamicContainer>()); break;
-                    case "Static Container": units[(int)obj.transform.position.x, (int)obj.transform.position.y].Add(obj.GetComponent<StaticContainer>()); break;
+                    case "Dynamic Container": units[(int)obj.transform.position.x, (int)obj.transform.position.y].Add(obj.GetComponent<DynamicContainer>());AddFuncList(obj); break;
+                    case "Static Container": units[(int)obj.transform.position.x, (int)obj.transform.position.y].Add(obj.GetComponent<StaticContainer>()); AddFuncList(obj); break;
                     case "Simple Container": units[(int)obj.transform.position.x, (int)obj.transform.position.y].Add(obj.GetComponent<SimpleContainer>()); break;
                     case "Gate": units[(int)obj.transform.position.x, (int)obj.transform.position.y].Add(obj.GetComponent<Gate>()); break;
                     case "Pointer": units[(int)obj.transform.position.x, (int)obj.transform.position.y].Add(obj.GetComponent<PointerContainer>()); break;
@@ -86,6 +86,11 @@ public class SubEngine_Initializer{
         return units;
     }
 
+    // function to add functional containers to list of database
+    private void AddFuncList(GameObject obj)
+    {
+        Starter.GetDataBase().functionalCon.Add(obj.GetComponent<FunctionalContainer>());
+    }
     private void InitPipe(Pipe pipe)
     {
         for (int i = 0; i < pipe.PipedTo.Count; i++)
