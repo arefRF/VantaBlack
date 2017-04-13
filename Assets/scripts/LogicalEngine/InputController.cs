@@ -43,16 +43,26 @@ public class InputController {
                     player.direction = direction;
                     engine.apigraphic.PlayerChangeDirection(player, olddir, player.direction);
                 }
-                else if (player.JumpingMove(direction))
+                else if (direction != player.jumpdirection && direction != Toolkit.ReverseDirection(player.jumpdirection) && player.JumpingMove(direction))
                 {
                     player.state = PlayerState.Moving;
                 }
                 else
                 {
-                    Unit nearest = Toolkit.GetNearestUnit(player, direction); 
+                    Unit nearest;
+                    bool tempbool = false;
+                    if(Toolkit.GetDeltaPositionAndTransformPosition(player, direction) > 0.9)
+                    {
+                        nearest = Toolkit.GetNearestUnitForJumpingPlayer(player, Toolkit.VectorSum(player.position, direction), direction);
+                        tempbool = true;
+                    }
+                    else
+                        nearest = Toolkit.GetNearestUnitForJumpingPlayer(player, player.position, direction);
                     if (nearest != null && player.Can_Lean(nearest.position))
                     {
                         engine.apiunit.RemoveFromDatabase(player);
+                        if(tempbool)
+                            player.position = Toolkit.VectorSum(player.position, direction);
                         engine.apiunit.AddToDatabase(player);
                         if (!player.isonejumping && player.abilities.Count > 0)
                             player.UseAbility(player.abilities[0]);
@@ -297,7 +307,7 @@ public class InputController {
             {
                 if (direction == Toolkit.ReverseDirection(player.jumpdirection))
                     return;
-                Unit nearest = Toolkit.GetNearestUnitForJumpingPlayer(player, direction);
+                Unit nearest = Toolkit.GetNearestUnitForJumpingPlayer(player,player.position, direction);
                 if (nearest == null)
                     return;
                 pos = nearest.position;
