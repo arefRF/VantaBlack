@@ -57,7 +57,10 @@ public class InputController {
                         if (!player.isonejumping && player.abilities.Count > 0)
                             player.UseAbility(player.abilities[0]);
                         else
+                        {
+                            Debug.Log("hohoho");
                             player.isonejumping = false;
+                        }
                         //player.currentAbility = null;
                         Lean(player, direction);
 
@@ -81,9 +84,13 @@ public class InputController {
                     player.position = pos;
                     engine.apiunit.AddToDatabase(player);
                     if (!player.isonejumping)
+                    {
                         player.UseAbility(player.abilities[0]);
+                    }
                     else
+                    {
                         player.isonejumping = false;
+                    }
                     player.currentAbility = null;
                     Lean(player, direction);
                 }
@@ -290,7 +297,7 @@ public class InputController {
             {
                 if (direction == Toolkit.ReverseDirection(player.jumpdirection))
                     return;
-                Unit nearest = Toolkit.GetNearestUnitForJumpingPlayer(player, direction);
+                Unit nearest = Toolkit.GetNearestUnitForJumpingPlayer(player, direction, player.GetGravity());
                 if (nearest == null)
                     return;
                 pos = nearest.position;

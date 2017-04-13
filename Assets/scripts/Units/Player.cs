@@ -24,11 +24,13 @@ public class Player : Unit
 
     public Jump oneJump { get; set; }
     public bool isonejumping { get; set; }
+    private bool onejump2;
 
     public Ability currentAbility { get; set; }
     private List<Unit>[,] units;
     private int x_bound;
     private int y_bound;
+
     public void Awake()
     {
         abilities = new List<Ability>();
@@ -74,11 +76,6 @@ public class Player : Unit
         units = Starter.GetDataBase().units;
         x_bound = GameObject.Find("Starter").GetComponent<Starter>().x;
         y_bound = GameObject.Find("Starter").GetComponent<Starter>().y;
-    }
-
-    public void Update()
-    {
-        //Debug.Log(state);
     }
 
     public bool Should_Change_Direction(Direction dir)
@@ -272,8 +269,11 @@ public class Player : Unit
         {
             UseAbility(abilities[0]);
         }
-        else
+        else if (isonejumping)
+        {
+            Debug.Log("hohoho");
             isonejumping = false;
+        }
         currentAbility = null;
         api.engine_Move(this, dir);
         return true;

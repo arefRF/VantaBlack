@@ -17,7 +17,10 @@ public class Gravity : Ability {
     public void Action(Player player,Direction direction)
     {
         player.state = PlayerState.Busy;
+        player.currentAbility = this;
         player.SetGravity(direction);
+        player.UseAbility(this);
+        player.currentAbility = null;
         player.state = PlayerState.Idle;
         player.ApplyGravity();
     }

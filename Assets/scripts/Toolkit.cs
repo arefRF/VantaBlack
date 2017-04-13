@@ -533,7 +533,7 @@ public sealed class Toolkit{
 
     }
 
-    public static Unit GetNearestUnitForJumpingPlayer(Player player, Direction dir)
+    public static Unit GetNearestUnitForJumpingPlayer(Player player, Direction dir, Direction gravitydirection)
     {
         List<Unit> to = new List<Unit>();
         Vector2 pos = VectorSum(player.position, dir);
@@ -542,7 +542,7 @@ public sealed class Toolkit{
         else if (((Jump)player.currentAbility).jumped != 0)
             if (GetDeltaPositionAndTransformPosition(player, player.GetGravity()) < 0.5)
                 to.AddRange(database.GetUnits(pos));
-        pos = VectorSum(pos, Direction.Up);
+        pos = VectorSum(pos, ReverseDirection(gravitydirection));
         to.AddRange(database.GetUnits(pos));
         pos = VectorSum(pos, 2 * DirectiontoVector(dir));
         to.AddRange(database.GetUnits(pos));
