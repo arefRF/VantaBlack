@@ -143,7 +143,7 @@ public class Player : Unit
             if (temp[i] is Ramp)
             {
                 ramp = (Ramp)temp[i];
-                if (ramp.IsOnRampSide(Toolkit.ReverseDirection(Starter.GetGravityDirection())))
+                if (ramp.IsOnRampSide(Toolkit.ReverseDirection(GetGravity())))
                 {
                     onramp = true;
                 }
@@ -151,7 +151,7 @@ public class Player : Unit
         }
         if (onramp)
         {
-            Direction gravitydirection = Starter.GetDataBase().gravity_direction;
+            Direction gravitydirection = GetGravity();
             switch (gravitydirection)
             {
                 case Direction.Down:
@@ -198,7 +198,7 @@ public class Player : Unit
     {
         Vector2 pos = position;
         if (Toolkit.GetDeltaPositionAndTransformPosition(this, GetGravity()) > 0.7)
-            pos = Toolkit.VectorSum(pos, Toolkit.ReverseDirection(Starter.GetGravityDirection()));
+            pos = Toolkit.VectorSum(pos, Toolkit.ReverseDirection(GetGravity()));
         else if (((Jump)currentAbility).jumped == 0)
             return false;
         Ramp ramp = null;
@@ -211,7 +211,7 @@ public class Player : Unit
             if (temp[i] is Ramp)
             {
                 ramp = (Ramp)temp[i];
-                if (ramp.IsOnRampSide(Toolkit.ReverseDirection(Starter.GetGravityDirection())))
+                if (ramp.IsOnRampSide(Toolkit.ReverseDirection(GetGravity())))
                 {
                     onramp = true;
                 }
@@ -219,7 +219,7 @@ public class Player : Unit
         }
         if (onramp)
         {
-            Direction gravitydirection = Starter.GetDataBase().gravity_direction;
+            Direction gravitydirection = GetGravity();
             switch (gravitydirection)
             {
                 case Direction.Down:
@@ -252,7 +252,7 @@ public class Player : Unit
                     break;
             }
             if (goingup)
-                units = api.engine_GetUnits(Toolkit.VectorSum(Toolkit.VectorSum(Toolkit.DirectiontoVector(Toolkit.ReverseDirection(gravitydirection)), Toolkit.DirectiontoVector(dir)), pos));
+                units = api.engine_GetUnits(Toolkit.VectorSum(Toolkit.VectorSum(Toolkit.DirectiontoVector(Toolkit.ReverseDirection(GetGravity())), Toolkit.DirectiontoVector(dir)), pos));
         }
         for (int i = 0; i < units.Count; i++)
         {

@@ -41,6 +41,7 @@ public class InputController {
                 {
                     Direction olddir = player.direction;
                     player.direction = direction;
+
                     engine.apigraphic.PlayerChangeDirection(player, olddir, player.direction);
                 }
                 else if (direction != player.jumpdirection && direction != Toolkit.ReverseDirection(player.jumpdirection) && player.JumpingMove(direction))
