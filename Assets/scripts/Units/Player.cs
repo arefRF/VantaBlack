@@ -410,13 +410,15 @@ public class Player : Unit
 
     private bool IsOnObject(Unit obj)
     {
-        if(obj is Ramp)
+        if (obj is Ramp)
         {
             if (Mathf.Abs(obj.transform.position.x - transform.position.x) < 0.5)
                 return !Stand_On_Ramp(position);
             else
                 return false;
         }
+        else if (obj is Pipe)
+            return false;
         else
         {
             if (gravity == Direction.Down || gravity == Direction.Up)
