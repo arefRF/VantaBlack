@@ -93,9 +93,6 @@ public class Teleport : Ability {
             player.position = portals[current].position + Toolkit.DirectiontoVector(dir);
             api_unit.AddToDatabase(player);
             api_graphic.Teleport(player, pos);
-            
-            //to come out of lean State
-            engine.inputcontroller.LeanUndo(player, player.leandirection, PlayerState.Idle);
             api_graphic.QuitPOrtalMode(portals);
             api_input.QuitPortalMode();
         }

@@ -14,7 +14,7 @@ public class PlayerGraphics : MonoBehaviour {
         unmoved_pos = transform.position;
         engine = Starter.GetEngine();
         api = engine.apigraphic;
-        animator = GetComponent<Animator>();
+        animator = transform.GetChild(0).GetComponent<Animator>();
         player = GetComponent<Player>();
             engine.apigraphic.Absorb(player, null);
     }
@@ -23,55 +23,54 @@ public class PlayerGraphics : MonoBehaviour {
     public void Lean_Right()
     {
         animator.SetInteger("Lean", 2);
-        animator.SetBool("isLean", true);
+
     }
 
     public void Lean_Left()
     {
         animator.SetInteger("Lean", 4);
-        animator.SetBool("isLean", true);
+
     }
 
     public void Lean_Up()
     {
         animator.SetInteger("Lean", 1);
-        animator.SetBool("isLean", true);
     }
 
     public void Lean_Down()
     {
         animator.SetInteger("Lean", 3);
-        animator.SetBool("isLean", true);
+  
     }
 
     public void FakeLean_Down()
     {
-        animator.SetInteger("Lean", 3);
-        animator.SetBool("isFakeLean", true);
+       // animator.SetInteger("Lean", 3);
+
     }
 
     public void FakeLean_Right()
     {
-        animator.SetInteger("Lean", 2);
-        animator.SetBool("isFakeLean", true);
+     //   animator.SetInteger("Lean", 2);
+
     }
     public void FakeLean_Left()
-    {
-        animator.SetInteger("Lean", 4);
-        animator.SetBool("isFakeLean", true);
+    { 
+      //  animator.SetInteger("Lean", 4); 
+
     }
     public void FakeLean_Up()
-    {
-        animator.SetInteger("Lean", 1);
-        animator.SetBool("isFakeLean", true);
+    { 
+       // animator.SetInteger("Lean", 1);
+
     }
 
     public void FakeLean_Finished()
-    {
+    {/*
         animator.SetInteger("Lean", 0);
         animator.SetBool("isFakeLean", false);
         transform.GetChild(0).localPosition = new Vector2(0, 0);
-        transform.GetChild(1).localPosition = new Vector2(0, 0);
+        transform.GetChild(1).localPosition = new Vector2(0, 0);*/
     }
     public void Shield_Color_Hide()
     {
@@ -86,14 +85,12 @@ public class PlayerGraphics : MonoBehaviour {
     }
     public void Lean_Finished()
     {
-        animator.SetBool("isLean", false);
         animator.SetInteger("Lean", 0);
-        transform.GetChild(0).localPosition = new Vector2(0, 0);
-        transform.GetChild(1).localPosition = new Vector2(0, 0);
     }
 
     public void MoveToBranch(Direction dir)
     {
+        /*
         if (dir == Direction.Up)
         {
             player.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 0);
@@ -108,9 +105,11 @@ public class PlayerGraphics : MonoBehaviour {
         }
         else
             player.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 270);
-        ResetStates();
-        animator.SetInteger("Branch", 1);
+            */
+        //ResetStates();
+        //animator.SetInteger("Branch", 1);
         StopAllCoroutines();
+
         StartCoroutine(Simple_Move(player.position, 0.65f));
     }
 
@@ -122,7 +121,7 @@ public class PlayerGraphics : MonoBehaviour {
         animator.SetInteger("Branch", 0); */
     }
     public void BranchExit(Direction dir,int ramp_type)
-    {
+    {/*
         if (dir == Direction.Up)
         {
             player.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 180);
@@ -138,7 +137,7 @@ public class PlayerGraphics : MonoBehaviour {
         else
             player.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 90);
         ResetStates();
-        animator.SetInteger("Branch", -1);
+        animator.SetInteger("Branch", -1); */
         StopAllCoroutines();
         Vector2 pos = On_Ramp_Pos(ramp_type) + player.position;
         StartCoroutine(Simple_Move(pos, 0.65f));
@@ -156,13 +155,13 @@ public class PlayerGraphics : MonoBehaviour {
     // animation calls this
     public void MoveToBranchAnimationFinished()
     {
-        animator.SetInteger("Branch", 0);
+       // animator.SetInteger("Branch", 0);
     }
 
     // animation calss this
     public void BranchExitAnimationFinished()
     {
-        animator.SetInteger("Branch", 0);
+       // animator.SetInteger("Branch", 0);
     }
 
     private IEnumerator Simple_Move(Vector2 end, float move_time)
@@ -176,17 +175,24 @@ public class PlayerGraphics : MonoBehaviour {
             yield return new WaitForSeconds(0.001f);
         }
         api.MovePlayerFinished(player.gameObject);
-        animator.SetInteger("Branch", 0);
+        //animator.SetInteger("Branch", 0);
     }
 
 
     public void Move_Animation(Direction dir)
     {
-        ResetStates();
+       // ResetStates();
         if (dir == Direction.Right)
+        {
+            transform.GetChild(0).rotation = Quaternion.Euler(0, 0, 0);
             animator.SetInteger("Walk", 1);
+        }
         else
-            animator.SetInteger("Walk", -1);
+        {
+            animator.SetInteger("Walk", 1);
+            transform.GetChild(0).rotation = Quaternion.Euler(0, 180, 0);
+
+        }
     }
 
     public void Move_Finished()
@@ -217,14 +223,14 @@ public class PlayerGraphics : MonoBehaviour {
         player.TeleportFinished();
     }
     public void ChangeColor()
-    {
+    {/*
         float[] color = Ability_Color(player.abilities);
         transform.GetChild(1).GetChild(0).GetComponent<SpriteRenderer>().color = new Color(color[0], color[1], color[2], color[3]);
-        ChangeBodyColor(); 
+        ChangeBodyColor(); */
     }
 
     private void ChangeBodyColor()
-    {
+    {/*
         string path = "Player\\";
         if (player.abilities.Count != 0)
         {
@@ -237,7 +243,7 @@ public class PlayerGraphics : MonoBehaviour {
         }
         else
             path += "player 1";
-        player.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load(path, typeof(Sprite));
+        player.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load(path, typeof(Sprite));*/
     }
 
     private float[] Ability_Color(List<Ability> ability)
