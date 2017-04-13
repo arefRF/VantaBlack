@@ -16,7 +16,7 @@ public class Player : Unit
     public bool lean { get; set; }
 
     public bool onramp { get; set; }
-    public Direction gravity { get; set; }
+    private Direction gravity { get; set; }
 
     public Vector2 nextpos { get; set; }
 
@@ -26,6 +26,10 @@ public class Player : Unit
     public bool isonejumping { get; set; }
 
     public Ability currentAbility { get; set; }
+    private List<Unit>[,] units;
+    private int x_bound;
+    private int y_bound;
+
     public void Awake()
     {
         abilities = new List<Ability>();
@@ -38,12 +42,39 @@ public class Player : Unit
         direction = move_direction[0];
         oneJump = new Jump(1);
         state = PlayerState.Idle;
-        gravity = Direction.Down;
+
+    }
+    public Direction GetGravity(){
+        return gravity;
     }
 
-    public void Update()
+    public void SetGravity(Direction dir)
     {
-        //Debug.Log(state);
+        gravity = dir;
+        Update_Move_Direction();
+    }
+
+    private void Update_Move_Direction()
+    {
+        if (gravity == Direction.Down || gravity == Direction.Up)
+        {
+            move_direction[0] = Direction.Right;
+            move_direction[1] = Direction.Left;
+        }
+        else
+        {
+            move_direction[0] = Direction.Up;
+            move_direction[1] = Direction.Down;
+        }
+            
+    }
+
+    void Start()
+    {
+        gravity = Starter.GetGravityDirection();
+        units = Starter.GetDataBase().units;
+        x_bound = GameObject.Find("Starter").GetComponent<Starter>().x;
+        y_bound = GameObject.Find("Starter").GetComponent<Starter>().y;
     }
 
     public bool Should_Change_Direction(Direction dir)
@@ -91,7 +122,7 @@ public class Player : Unit
     {
         if (Toolkit.HasBranch(position))
             return false;
-        List<Unit> units = api.engine_GetUnits(pos);
+        List<Unit> units = api.engine.database.GetUnits(pos);
         for (int i = 0; i < units.Count; i++)
         {
             if (units[i] is Container)
@@ -166,7 +197,7 @@ public class Player : Unit
     public bool JumpingMove(Direction dir)
     {
         Vector2 pos = position;
-        if (Toolkit.GetDeltaPositionAndTransformPosition(this) > 0.7)
+        if (Toolkit.GetDeltaPositionAndTransformPosition(this, GetGravity()) > 0.7)
             pos = Toolkit.VectorSum(pos, Toolkit.ReverseDirection(Starter.GetGravityDirection()));
         else if (((Jump)currentAbility).jumped == 0)
             return false;
@@ -226,18 +257,21 @@ public class Player : Unit
         for (int i = 0; i < units.Count; i++)
         {
             if (!units[i].PlayerMoveInto(Toolkit.ReverseDirection(dir)))
+            // Add Container Lean Code
                 return false;
         }
         api.RemoveFromDatabase(this);
         position = pos;
         api.AddToDatabase(this);
         api.engine.apigraphic.Player_Co_Stop(this);
-        if (!isonejumping && state == PlayerState.Jumping)
+        if (!isonejumping && state == PlayerState.Jumping && abilities.Count > 0)
         {
             UseAbility(abilities[0]);
         }
-        else
+        else if (isonejumping)
+        {
             isonejumping = false;
+        }
         currentAbility = null;
         api.engine_Move(this, dir);
         return true;
@@ -249,6 +283,8 @@ public class Player : Unit
         players = new List<Unit>();
         for (int i = 0; i < units.Count; i++)
         {
+            if (units[i] is Pipe)
+                continue;
             if (units[i] is Player)
             {
                 players.Add(units[i]);
@@ -315,7 +351,7 @@ public class Player : Unit
         return false;
     }
 
-    public override bool ApplyGravity(Direction gravitydirection, List<Unit>[,] units)
+    public override bool ApplyGravity()
     {
         isonejumping = false;
         // to avoid exception
@@ -331,7 +367,7 @@ public class Player : Unit
             return false;
         }
 
-        Vector2 pos = Toolkit.VectorSum(position, gravitydirection);
+        Vector2 pos = Toolkit.VectorSum(position, gravity);
         if (Toolkit.IsdoubleRamp(pos))
             return false;
         if (units[(int)pos.x, (int)pos.y].Count != 0)
@@ -343,16 +379,33 @@ public class Player : Unit
         if (!NewFall())
             return false;
         
-        while (position.x != 0 && position.y != 0 && NewFall())
+        while (IsInBound(position) && NewFall())
         {
             api.RemoveFromDatabase(this);
-            position = Toolkit.VectorSum(position, gravitydirection);
+            position = Toolkit.VectorSum(position,gravity);
             api.AddToDatabase(this);
         }
         state = PlayerState.Falling;
-        api.graphicalengine_Fall(this, position);
+        api.graphicalengine_Fall(this, FallPos());
         return true;
           
+    }
+
+    private bool IsInBound(Vector2 pos)
+    {
+        if (pos.x == 1 || pos.y == 1)
+            return false;
+        if (pos.x == x_bound-1 || pos.y == y_bound-1)
+            return false;
+        return true;
+    }
+
+    private Vector2 FallPos()
+    {
+        if (gravity == Direction.Down || gravity == Direction.Up)
+            return new Vector2(transform.position.x, position.y);
+        else
+            return new Vector2(position.x, transform.position.y);
     }
 
     private bool IsOnObject(Unit obj)
@@ -446,6 +499,12 @@ public class Player : Unit
         }
     }
 
+    public void TeleportFinished()
+    {
+        state = PlayerState.Idle;
+        currentAbility = null;
+        ApplyGravity();
+    }
     public void FallFinished()
     {
         if(position.x <= 0 || position.y <= 0)
@@ -498,9 +557,12 @@ public class Player : Unit
 
     public void UseAbility(Ability ability)
     {
-        abilities.Remove(ability);
-        abilitycount = abilities.Count;
-        api.engine.apigraphic.Absorb(this, null);
+        if (currentAbility == ability)
+        {
+            abilities.Remove(ability);
+            abilitycount = abilities.Count;
+            api.engine.apigraphic.Absorb(this, null);
+        }
     }
     public bool Action()
     {
@@ -510,23 +572,28 @@ public class Player : Unit
         {
             case AbilityType.Fuel: return false;
             case AbilityType.Direction: return true;
-            case AbilityType.Jump: ((Jump)abilities[0]).Action(this, Toolkit.ReverseDirection(api.engine.database.gravity_direction)); return true;
-            case AbilityType.Blink: return false;
+            case AbilityType.Jump:
+                if (!Toolkit.IsInsideBranch(this))
+                    ((Jump)abilities[0]).Action(this, Toolkit.ReverseDirection(api.engine.database.gravity_direction));
+                return true;
+            case AbilityType.Teleport: return false;
             case AbilityType.Gravity: return false;
-            case AbilityType.Rope: return false;
+            case AbilityType.Rope: ((Rope)abilities[0]).Action(this); return true;
             default: return false;
         }
     }
 
     public bool Action(Direction dir)
     {
+        if (abilities.Count == 0)
+            return false;
         switch (abilities[0].abilitytype)
         {
             case AbilityType.Fuel: return true;
             case AbilityType.Direction: return false;
             case AbilityType.Jump: return false;
-            case AbilityType.Blink: return true;
-            case AbilityType.Gravity: return true;
+            case AbilityType.Teleport:((Teleport)abilities[0]).Action(this,dir); return true;
+            case AbilityType.Gravity:((Gravity)abilities[0]).Action(this, dir); return true;
             case AbilityType.Rope: return true;
             default: return false;
         }
@@ -583,7 +650,7 @@ public class CloneablePlayer : CloneableUnit
         leandirection = player.leandirection;
         lean = player.lean;
         onramp = player.onramp;
-        gravity = player.gravity;
+        gravity = player.GetGravity();
         nextpos = new Vector2(player.nextpos.x, player.nextpos.y);
     }
 
@@ -606,7 +673,7 @@ public class CloneablePlayer : CloneableUnit
         original.leandirection = leandirection;
         original.lean = lean;
         original.onramp = onramp;
-        original.gravity = gravity;
+        original.SetGravity(gravity);
         original.nextpos = new Vector2(nextpos.x, nextpos.y);
         original.lean = false;
         original.api.engine.apigraphic.Absorb(original, null);

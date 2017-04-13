@@ -18,6 +18,7 @@ public class GetInput : MonoBehaviour {
     private bool ar_input = false;
     private bool action_lock = false;
     public bool joystick;
+    public bool getOnce = false;
     // Use this for initialization
     void Start()
     {
@@ -27,7 +28,6 @@ public class GetInput : MonoBehaviour {
         api = engine.apiinput;
         api.input = this;
     }
-
     // Update is called once per frame
     void Update()
     {
@@ -50,15 +50,18 @@ public class GetInput : MonoBehaviour {
                 GameObject.Find("UI").GetComponent<Get>().inMenu_Show();
                 
            Get_Lean_Undo();
-
             // Directional Abilities use
             if (Input.GetKeyUp(KeyCode.Space))
-                is_space = false; 
-            Get_Move();
+                is_space = false;
+            if (is_space)
+                Get_Space_Arrows();
+            else
+                Get_Move();
+
                   if (Input.GetKeyDown(KeyCode.Space))
                   {
-                      if (!api.Action_Key())
-                          is_space = true;
+                      api.Action_Key();
+                      is_space = true;
                   }
                   if (is_space)
                       Get_Space_Arrows();
@@ -80,10 +83,10 @@ public class GetInput : MonoBehaviour {
                       is_holding = false;
                   }
                   if(Input.GetKeyUp(KeyCode.A))
-            {
-                api.Absorb();
-                is_holding = false;
-            }
+                  {
+                      api.Absorb();
+                      is_holding = false;
+                  }
                   if (Input.GetKeyUp(KeyCode.R))
                   {
                       api.UndoPressed();
@@ -257,27 +260,36 @@ public class GetInput : MonoBehaviour {
     }
     private void Get_Move()
     {
-
-        //Take Arrows to move or lean
-        if (Input.GetKey(KeyCode.RightArrow))
-            api.MovePressed(Direction.Right);
-
-        if (Input.GetKey(KeyCode.LeftArrow))
-            api.MovePressed(Direction.Left);
-
-        if (Input.GetKey(KeyCode.DownArrow))
-            api.MovePressed(Direction.Down);
-        if (Input.GetKey(KeyCode.UpArrow))
-            api.MovePressed(Direction.Up);
+        if (getOnce)
+        {
+            if (Input.GetKeyDown(KeyCode.RightArrow))
+                api.MovePressed(Direction.Right);
+            if (Input.GetKeyDown(KeyCode.LeftArrow))
+                api.MovePressed(Direction.Left);
+            if (Input.GetKeyDown(KeyCode.DownArrow))
+                api.MovePressed(Direction.Down);
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+                api.MovePressed(Direction.Up);
+        }
+        else
+        {
+            //Take Arrows to move or lean
+            if (Input.GetKey(KeyCode.RightArrow))
+                api.MovePressed(Direction.Right);
+            if (Input.GetKey(KeyCode.LeftArrow))
+                api.MovePressed(Direction.Left);
+            if (Input.GetKey(KeyCode.DownArrow))
+                api.MovePressed(Direction.Down);
+            if (Input.GetKey(KeyCode.UpArrow))
+                api.MovePressed(Direction.Up);
+        }
     }
 
 
     private void Set_Camera(Vector3 pos)
     {
-
         pos = Toolkit.VectorSum(Camera.main.transform.position, pos);
         pos.z = -10;
         Camera.main.transform.position = pos;
-
     }
 }

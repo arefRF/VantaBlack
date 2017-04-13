@@ -17,6 +17,9 @@ public class Ability{
             case AbilityType.Fuel: return new Fuel();
             case AbilityType.Jump: return new Jump();
             case AbilityType.Key: return new Key();
+            case AbilityType.Teleport: return new Teleport();
+            case AbilityType.Gravity: return new Gravity();
+            case AbilityType.Rope: return new Rope();
             default: return null;
         }
     }

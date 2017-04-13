@@ -6,8 +6,8 @@ public class FunctionalContainer : Container
 {
     public Direction direction;
     public bool on;
-    public int currentState;
-    public int nextState;
+    public int currentState { get; set; }
+    public int nextState { get; set; }
     public bool firstmove { get; set; }
 
     public override bool PlayerMoveInto(Direction dir)
@@ -29,6 +29,8 @@ public class FunctionalContainer : Container
         {
             case AbilityType.Fuel: SetOnorOff(); firstmove = true; Action_Fuel(); break;
             case AbilityType.Jump: ((Jump)abilities[0]).Action(player, dir); break;
+            case AbilityType.Teleport: ((Teleport)abilities[0]).Action_Container(player,dir,this);break;
+            case AbilityType.Gravity: ((Gravity)abilities[0]).Action_Container(this);break;
         }
     }
 
@@ -54,12 +56,17 @@ public class FunctionalContainer : Container
     {
         api.engine.Applygravity();
         if (currentState == nextState)
+        {
+            api.engine.pipecontroller.CheckPipes();
             return;
+        }
         if (!MoveContainer(GetMoveDirection()))
         {
             api.AddToStuckList(this);
+            api.engine.pipecontroller.CheckPipes();
             return;
         }
+        api.CheckstuckedList();
         SetCurrentState();
         if (firstmove)
             firstmove = false;

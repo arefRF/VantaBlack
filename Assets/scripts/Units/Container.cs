@@ -66,7 +66,7 @@ public class Container : ParentContainer {
         _setability(player);
         api.engine.apigraphic.Absorb(player, this);
         SetNextState();
-        if (this is FunctionalContainer && player.abilities.Count != 0 && player.abilities[0].abilitytype == AbilityType.Fuel) { //shayad moshkel dashte bashe
+        if (this is FunctionalContainer && player.abilities.Count != 0 && player.abilities[0].abilitytype == AbilityType.Fuel && ((FunctionalContainer)this).on) { //shayad moshkel dashte bashe
             ((FunctionalContainer)this).SetOnorOff();
             ((FunctionalContainer)this).Action_Fuel();
         }
@@ -307,16 +307,48 @@ public class Container : ParentContainer {
         abilitycount = abilities.Count;
         for (int i = 0; i < sameContainer.Count; i++)
             sameContainer[i].abilitycount = abilitycount;
-        player.abilitycount = player.abilities.Count;
+        if(player != null)
+            player.abilitycount = player.abilities.Count;
         if (abilities.Count != 0)
         {
             abilitytype = abilities[0].abilitytype;
             for (int i = 0; i < sameContainer.Count; i++)
                 sameContainer[i].abilitytype = abilitytype;
         }
-        if (player.abilities.Count != 0)
-            player.abilitytype = player.abilities[0].abilitytype;
-        api.engine.apigraphic.Absorb(player, null);
+        if (player != null)
+        {
+            if (player.abilities.Count != 0)
+                player.abilitytype = player.abilities[0].abilitytype;
+            api.engine.apigraphic.Absorb(player, null);
+        }
     }
     
+
+    public void PipeAbsorb(Container othercontainer)
+    {
+        int counter = 0;
+        if (abilities.Count != 0 && othercontainer.abilities.Count == 0)
+            return;
+        for (int i = 0; i < othercontainer.abilities.Count && abilities.Count < capacity; i++)
+        {
+            abilities.Add(othercontainer.abilities[0]);
+            counter++;
+        }
+        for (int i = 0; othercontainer.abilities.Count > 0 && i < counter; i++)
+            othercontainer.abilities.RemoveAt(0);
+        //othercontainer.abilities.Clear();
+        _setability(null);
+        othercontainer._setability(null);
+        api.engine.apigraphic.UnitChangeSprite(this);
+        api.engine.apigraphic.UnitChangeSprite(othercontainer);
+        if(othercontainer is DynamicContainer)
+        {
+            if (((DynamicContainer)othercontainer).on && abilities.Count > 0 && abilities[0].abilitytype == AbilityType.Fuel)
+            {
+                ((DynamicContainer)othercontainer).SetOnorOff();
+                ((DynamicContainer)othercontainer).Action_Fuel();
+            }
+        }
+    }
 }
+

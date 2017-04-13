@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using System.Collections.Generic;
 public class APIGraphic{
 
     LogicalEngine logicalengine;
@@ -77,6 +77,7 @@ public class APIGraphic{
     // Block to Branch
     public void MovePlayer_Simple_2(Player player, Vector2 position,Direction direction)
     {
+        Debug.Log("Block to branch");
         player.GetComponent<PlayerGraphics>().StopAllCoroutines();
         player.gameObject.GetComponent<PlayerPhysics>().StopAllCoroutines();
         player.GetComponent<PlayerGraphics>().MoveToBranch(direction);
@@ -109,6 +110,7 @@ public class APIGraphic{
     // Branch to Block
     public void MovePlayer_Branch_1(Player player, Vector2 position,Direction dir)
     {
+        Debug.Log("Branch to block");
         player.GetComponent<PlayerGraphics>().StopAllCoroutines();
         player.GetComponent<PlayerPhysics>().StopAllCoroutines();
         player.GetComponent<PlayerGraphics>().BranchExit(dir,0);
@@ -119,6 +121,7 @@ public class APIGraphic{
     // Branch to fall
     public void MovePlayer_Branch_2(Player player, Vector2 position,Direction dir)
     {
+        Debug.Log("branch to fall");
         player.GetComponent<PlayerPhysics>().StopAllCoroutines();
         player.GetComponent<PlayerGraphics>().StopAllCoroutines();
         player.GetComponent<PlayerGraphics>().BranchExit(dir,0);
@@ -145,7 +148,7 @@ public class APIGraphic{
     public void Fall(Player player, Vector2 position)
     {   
         player.GetComponent<PlayerGraphics>().StopAllCoroutines();
-        player.GetComponent<Animator>().SetInteger("Walk", 0);
+       // player.GetComponent<Animator>().SetInteger("Walk", 0);
         player.GetComponent<PlayerPhysics>().Fall(position);
     }
 
@@ -225,7 +228,7 @@ public class APIGraphic{
     }
     public void Camera_AutoMove()
     {
-        Camera.main.GetComponent<CameraController>().AutoMove();
+       // Camera.main.GetComponent<CameraController>().AutoMove();
     }
 
     public void Fake_Lean(Player player,Direction dir)
@@ -312,6 +315,24 @@ public class APIGraphic{
             //unit.transform.GetChild(6).GetComponent<SpriteRenderer> = (Sprite)Resources.Load("")
         }
     }
+
+    public void EnterPortalMode(List<Unit> portals,Container container)
+    {
+        graphicalengine.EnterPortalMode(portals,container);
+    }
+
+    public void QuitPOrtalMode(List<Unit> portals)
+    {
+        graphicalengine.QuitPortalMode(portals);
+    }
+    public void ProtalHighlight(Unit current,Unit pre)
+    {
+        graphicalengine.PortalHighlighter(current, pre);
+    }
+    public void Teleport(Player player,Vector2 pos)
+    {
+        player.GetComponent<PlayerGraphics>().Teleport(pos);
+    }
     public void Undo_Objects()
     {
         graphicalengine.StopAllCoroutines();
@@ -343,6 +364,7 @@ public class APIGraphic{
         Debug.Log("crush player died");
     }
 
+    
     public void Fake_Lean_Undo(Player player)
     {
         PlayerGraphics gl = player.GetComponent<PlayerGraphics>();

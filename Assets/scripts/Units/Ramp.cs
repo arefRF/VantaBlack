@@ -91,6 +91,8 @@ public class Ramp : Unit {
         players = new List<Unit>();
         for (int i = 0; i < units.Count; i++)
         {
+            if (units[i] is Pipe)
+                continue;
             bool flag = false;
             for (int j = 0; j < ConnectedUnits.Count; j++)
             {

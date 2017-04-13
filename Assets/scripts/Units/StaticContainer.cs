@@ -15,6 +15,11 @@ public class StaticContainer : FunctionalContainer {
         api.ChangeSprite(this);
         base.Run();
     }
+
+    public override CloneableUnit Clone()
+    {
+        return new CloneableStaticContainer(this);
+    }
 }
 
 public class CloneableStaticContainer : CloneableUnit
@@ -30,7 +35,7 @@ public class CloneableStaticContainer : CloneableUnit
     public bool laston;
     public Direction stuckdirection;
     public int stuckstatus;
-    public CloneableStaticContainer(DynamicContainer container) : base(container.position)
+    public CloneableStaticContainer(StaticContainer container) : base(container.position)
     {
         original = container;
         reservedmovebool = new List<bool>();
@@ -41,7 +46,7 @@ public class CloneableStaticContainer : CloneableUnit
     public override void Undo()
     {
         base.Undo();
-        DynamicContainer original = (DynamicContainer)base.original;
+        StaticContainer original = (StaticContainer)base.original;
         original.gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = false;
         original.on = on;
 

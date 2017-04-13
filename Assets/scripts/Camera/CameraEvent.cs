@@ -20,7 +20,7 @@ public class CameraEvent : MonoBehaviour {
                 Camera.main.GetComponent<CameraController>().Camera_Rotation_Change(rotation, rotation_move_time);
             if (move_time != 0)
                 Camera.main.GetComponent<CameraController>().move_time = move_time;
-        }   
+        }  
     }
 
     void OnTriggerStay2D(Collider2D col)

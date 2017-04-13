@@ -55,6 +55,8 @@ public class Unit : MonoBehaviour {
         players = new List<Unit>();
         for(int i=0; i<units.Count; i++)
         {
+            if (units[i] is Pipe)
+                continue;
             if(units[i] is Player)
             {
                 players.Add(units[i]);
@@ -102,7 +104,7 @@ public class Unit : MonoBehaviour {
         }
     }
 
-    public virtual bool ApplyGravity(Direction gravitydirection, List<Unit>[,] units)
+    public virtual bool ApplyGravity()
     {
         return false;
     }

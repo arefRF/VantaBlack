@@ -55,6 +55,17 @@ public class Gate : Container {
         }
     }
 
+    public override void PlayerReleaseHold(Player player)
+    {
+        PlayerRelease(player);
+
+    }
+
+    public override void PlayerReleaseAbilitiesHold(Player player)
+    {
+        PlayerReleaseAbilities(player);
+    }
+
     public void Action()
     {
         if (gatetype == GateType.Internal)

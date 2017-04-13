@@ -21,6 +21,7 @@ public class GraphicalEngine : MonoBehaviour {
     private bool finish_lock;
     private Coroutine object_co;
     private string[] simple_objects_off = new string[] { "Direction","Glass","Switches","Border","Icon Holder","Glow"};
+    private List<MoveObject> move_objects;
     void Awake()
     {
         Application.targetFrameRate = 240;
@@ -30,15 +31,31 @@ public class GraphicalEngine : MonoBehaviour {
         engine = Starter.GetEngine();
         database = Starter.GetDataBase();
         api = engine.apigraphic;
+        move_objects = new List<MoveObject>();
        
        
     }
     public void Move_Object(GameObject obj,Unit unit, Vector2 pos)
     {
         finish_lock = true;
-        if(object_co != null)
-            StopCoroutine(object_co);
-        object_co =  StartCoroutine(Move_Object_Coroutine(obj,unit,pos));
+        StopSameCo(unit);
+        MoveObject move = new MoveObject();
+        move.code = unit.codeNumber;
+        move.co =  StartCoroutine(Move_Object_Coroutine(obj,unit,pos));
+        move_objects.Add(move);
+       
+    }
+
+    private void StopSameCo(Unit unit)
+    {
+
+        for(int i = 0; i < move_objects.Count; i++)
+        {
+            if (move_objects[i].code == unit.codeNumber)
+            {
+                StopCoroutine(move_objects[i].co);
+            }
+        }
     }
 
      
@@ -170,19 +187,16 @@ public class GraphicalEngine : MonoBehaviour {
     {
         if (ability.Count != 0)
         {
-            if (ability[0].abilitytype == AbilityType.Key)
+            switch (ability[0].abilitytype)
             {
-                return new Vector3(1, 1, 1);
-            }
-            else if (ability[0].abilitytype == AbilityType.Fuel)
-            {
-                if (compliment)
-                    return new Vector3(1, 1, 1);
-                else
-                    return new Vector3(0, 0.941f, 0.654f);
+                case AbilityType.Key: return new Vector3(1, 1, 1);
+                case AbilityType.Fuel: if (compliment) return new Vector3(1, 1, 1); else return new Vector3(0, 0.941f, 0.654f);
+                case AbilityType.Jump: return new Vector3(0.59f, 0.78f, 1);
+                case AbilityType.Teleport: return new Vector3(0.92f,0.36f,0.44f);
+                case AbilityType.Gravity: return new Vector3(0.81f,0.60f,0.96f);
+                case AbilityType.Rope: return new Vector3(1,0.60f,0.30f);
             }
         }
-
         // else white
         return new Vector3(1, 1, 1);
     }
@@ -248,6 +262,30 @@ public class GraphicalEngine : MonoBehaviour {
             Vector3 color = Ability_Color(container.abilities, false);
             GetObjectInChild(container.gameObject, "Glass").GetComponent<SpriteRenderer>().color = new Color(1,1, 1, 1);
         }
+    }
+
+    public void EnterPortalMode(List<Unit> containers,Container container)
+    {
+        for(int i = 0; i < containers.Count; i++)
+        {
+            containers[i].GetComponent<SpriteRenderer>().color = new Color(0.3f, 0.5f, 0.8f, 1);
+        }
+        container.GetComponent<SpriteRenderer>().color = new Color(0.6f, 0.1f, 0.8f, 1);
+    }
+
+    public void QuitPortalMode(List<Unit> containers)
+    {
+        for (int i = 0; i < containers.Count; i++)
+        {
+            containers[i].GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
+        }
+    }
+
+    // highlight current and make portal color the previous one
+    public void PortalHighlighter(Unit current,Unit pre)
+    {
+        current.GetComponent<SpriteRenderer>().color = new Color(0.6f, 0.1f, 0.8f, 1);
+        pre.GetComponent<SpriteRenderer>().color = new Color(0.3f, 0.5f, 0.8f, 1);
     }
 
     

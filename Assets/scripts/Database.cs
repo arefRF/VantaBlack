@@ -7,13 +7,15 @@ public class Database {
     public Database(long i)
     {
         snapshots = new List<Snapshot>();
+        pipes = new List<Unit>();
         turn = i;
+        functionalCon = new List<FunctionalContainer>();
     }
-
+    public List<Unit> pipes;
     public List<Player> player;
     public readonly int numberOfSnapshot = 5;
     public int snapShotCount;
-    public Direction gravity_direction;
+    public Direction gravity_direction { get; set; }
     public List<Unit>[,] units;
     public long turn;
     public List<TimeLaps> timeLaps;
@@ -25,6 +27,13 @@ public class Database {
     public List<Snapshot> snapshots;
 
     public static Direction GravityDirection;
+
+    // List of all Dynamic and Static Containers for Portal ability
+    public List<FunctionalContainer> functionalCon;
+    public List<Unit> GetUnits(Vector2 position)
+    {
+        return units[(int)position.x, (int)position.y];
+    }
 }
 
 
@@ -57,12 +66,12 @@ public enum Direction
 
 public enum AbilityType
 {
-     Fuel,Direction, Jump, Gravity, Blink, Rope, Key
+     Fuel,Direction, Jump, Gravity, Teleport, Rope, Key
 }
 
 public enum PlayerState
 {
-    Idle, Falling, Jumping, Moving, Fakelean
+    Idle, Falling, Jumping, Moving, Fakelean, Lean, Busy
 }
 
 public enum GateType

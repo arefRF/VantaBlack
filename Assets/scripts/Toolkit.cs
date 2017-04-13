@@ -294,6 +294,8 @@ public sealed class Toolkit{
         List<Unit>[,] units = Starter.GetDataBase().units;
         if (units[(int)position.x, (int)position.y].Count == 0)
             return true;
+        else if (units[(int)position.x, (int)position.y].Count == 1 && units[(int)position.x, (int)position.y][0] is Pipe)
+            return true;
         return false;
     }
     public static bool IsdoubleRamp(Vector2 position)
@@ -500,9 +502,9 @@ public sealed class Toolkit{
         return false;
     }
 
-    public static double GetDeltaPositionAndTransformPosition(Unit unit)
+    public static double GetDeltaPositionAndTransformPosition(Unit unit, Direction gravitydirection)
     {
-        if(database.gravity_direction == Direction.Up || database.gravity_direction == Direction.Down)
+        if(gravitydirection == Direction.Up || gravitydirection == Direction.Down)
         {
             return Mathf.Abs(unit.position.y - unit.transform.position.y);
         }
@@ -510,6 +512,98 @@ public sealed class Toolkit{
         {
             return Mathf.Abs(unit.position.x - unit.transform.position.x);
         }
+    }
+    
+
+    /// <summary>
+    /// fgt bara graity payin
+    /// </summary>
+    /// <param name="From"></param>
+    /// <param name="dir"></param>
+    /// <returns></returns>
+    public static Unit GetNearestUnit(Unit From, Direction dir)
+    {
+        List<Unit> to = new List<Unit>();
+        Vector2 pos = VectorSum(From.position, dir);
+        to.AddRange(database.GetUnits(pos));
+        Direction dirtemp;
+        if (dir == Direction.Down || dir == Direction.Up)
+            dirtemp = Direction.Right;
+        else
+            dirtemp = Direction.Up;
+        pos = VectorSum(pos, ReverseDirection(dirtemp));
+        to.AddRange(database.GetUnits(pos));
+        pos = VectorSum(pos, 2 * DirectiontoVector(dirtemp));
+        to.AddRange(database.GetUnits(pos));
+        return GetNearestUnit(From, to.ToArray());
+
+    }
+
+    public static Unit GetNearestUnitForJumpingPlayer(Player player, Direction dir)
+    {
+        List<Unit> to = new List<Unit>();
+        Vector2 pos = VectorSum(player.position, dir);
+        if (player.jumpdirection == dir)
+            to.AddRange(database.GetUnits(pos));
+        else if (((Jump)player.currentAbility).jumped != 0)
+            if (GetDeltaPositionAndTransformPosition(player, player.GetGravity()) < 0.5)
+                to.AddRange(database.GetUnits(pos));
+        Direction dirtemp;
+        if (dir == Direction.Down || dir == Direction.Up) {
+            dirtemp = Direction.Right;
+            if (player.position.x == player.transform.position.x)
+                return GetNearestUnit(player, to.ToArray());
+        }
+        else {
+            dirtemp = Direction.Up;
+            if (player.position.y == player.transform.position.y)
+                return GetNearestUnit(player, to.ToArray());
+        }
+        pos = VectorSum(pos, ReverseDirection(dirtemp));
+        to.AddRange(database.GetUnits(pos));
+        pos = VectorSum(pos, 2 * DirectiontoVector(dirtemp));
+        to.AddRange(database.GetUnits(pos));
+        return GetNearestUnit(player, to.ToArray());
+    }
+        
+    public static Unit GetNearestUnit(Unit From, Unit[] To)
+    {
+        if (To.Length == 0)
+            return null;
+        int result = 0;
+        double min = (From.position - To[0].position).sqrMagnitude;
+        for(int i=1; i < To.Length; i++)
+        {
+            double temp = (From.position - To[1].position).sqrMagnitude;
+            if (min > temp)
+            {
+                temp = min;
+                result++;
+            }
+        }
+        return To[result];
+    }
+
+    public static List<Unit> SortByDirection(List<Unit> units, Direction direction)
+    {
+        List<Unit> result = new List<Unit>();
+        result.AddRange(units);
+        for (int i=0; i<result.Count; i++)
+        {
+            for (int j = i+1; j < result.Count; j++)
+            {
+                switch (direction)
+                {
+                    case Direction.Down: if (result[i].position.y > result[j].position.y) { Unit temp = result[i]; result[i] = result[j];result[j] = temp;  } break;
+                    case Direction.Up: if (result[i].position.y < result[j].position.y) { Unit temp = result[i]; result[i] = result[j]; result[j] = temp; } break;
+                    case Direction.Right: if (result[i].position.x < result[j].position.x) { Unit temp = result[i]; result[i] = result[j]; result[j] = temp; } break;
+                    case Direction.Left:if (result[i].position.x > result[j].position.x) { Unit temp = result[i]; result[i] = result[j]; result[j] = temp; } break;
+                }
+            }
+        }
+        if (result.Count != units.Count)
+            throw new System.Exception();
+        return result;
     }
 }
 

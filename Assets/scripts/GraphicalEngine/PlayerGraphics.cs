@@ -22,29 +22,24 @@ public class PlayerGraphics : MonoBehaviour {
 
     public void Lean_Right()
     {
-        //transform.GetChild(0).localPosition +=  new Vector3(1f,0,0);
         animator.SetInteger("Lean", 2);
         animator.SetBool("isLean", true);
     }
 
     public void Lean_Left()
     {
-        //transform.GetChild(0).localPosition += new Vector3(-1f, 0,0);
         animator.SetInteger("Lean", 4);
         animator.SetBool("isLean", true);
     }
 
     public void Lean_Up()
     {
-        
-        // transform.GetChild(0).localPosition += new Vector3(0, 1f,0);
         animator.SetInteger("Lean", 1);
         animator.SetBool("isLean", true);
     }
 
     public void Lean_Down()
     {
-        //transform.GetChild(0).localPosition +=  new Vector3( 0, -1f,0);
         animator.SetInteger("Lean", 3);
         animator.SetBool("isLean", true);
     }
@@ -75,7 +70,6 @@ public class PlayerGraphics : MonoBehaviour {
     {
         animator.SetInteger("Lean", 0);
         animator.SetBool("isFakeLean", false);
-        
         transform.GetChild(0).localPosition = new Vector2(0, 0);
         transform.GetChild(1).localPosition = new Vector2(0, 0);
     }
@@ -84,9 +78,11 @@ public class PlayerGraphics : MonoBehaviour {
         
         transform.GetChild(1).GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0);
     }
+
     public void Shield_Color_Show()
     {
-        transform.GetChild(1).GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
+        float[] color = Ability_Color(player.abilities);
+        transform.GetChild(1).GetComponent<SpriteRenderer>().color = new Color(color[0],color[1],color[2],color[3]);
     }
     public void Lean_Finished()
     {
@@ -120,10 +116,10 @@ public class PlayerGraphics : MonoBehaviour {
 
     private void ResetStates()
     {
-        animator.SetBool("isFakeLean", false);
+       /* animator.SetBool("isFakeLean", false);
         animator.SetBool("isLean", false);
         animator.SetInteger("Walk", 0);
-        animator.SetInteger("Branch", 0);
+        animator.SetInteger("Branch", 0); */
     }
     public void BranchExit(Direction dir,int ramp_type)
     {
@@ -209,11 +205,22 @@ public class PlayerGraphics : MonoBehaviour {
         api.PlayerChangeDirectionFinished(gameObject.GetComponent<Player>());
     }
 
+    public void Teleport(Vector2 pos)
+    {
+        player.transform.position = pos;
+        StartCoroutine(TPFinish());
+    }
+
+    private IEnumerator TPFinish()
+    {
+        yield return new WaitForSeconds(0.1f);
+        player.TeleportFinished();
+    }
     public void ChangeColor()
     {
         float[] color = Ability_Color(player.abilities);
         transform.GetChild(1).GetChild(0).GetComponent<SpriteRenderer>().color = new Color(color[0], color[1], color[2], color[3]);
-        ChangeBodyColor();
+        ChangeBodyColor(); 
     }
 
     private void ChangeBodyColor()
@@ -232,19 +239,20 @@ public class PlayerGraphics : MonoBehaviour {
             path += "player 1";
         player.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load(path, typeof(Sprite));
     }
+
     private float[] Ability_Color(List<Ability> ability)
     {
         float[] color = new float[4];
         if (ability.Count != 0)
         {
-            if (ability[0].abilitytype == AbilityType.Key)
+            switch (ability[0].abilitytype)
             {
-                color = new float[] { 1, 1, 1, 1 };
-            }
-            else if (ability[0].abilitytype == AbilityType.Fuel)
-            {
-                color = new float[] { 0, 0.941f, 0.654f, 1 };
-
+                case AbilityType.Key: color = new float[] { 1, 1, 1, 1 };break;
+                case AbilityType.Fuel: color = new float[] { 0, 0.941f, 0.654f, 1 };break;
+                case AbilityType.Jump: color = new float[] { 0.59f, 0.78f, 1 ,1};break;
+                case AbilityType.Teleport: color = new float[] { 0.92f, 0.36f, 0.44f, 1 };break;
+                case AbilityType.Gravity: color = new float[] { 0.81f, 0.60f, 0.96f, 1 };break;
+                case AbilityType.Rope: color = new float[] { 1, 0.60f, 0.30f, 1 };break;
             }
         }
         else
