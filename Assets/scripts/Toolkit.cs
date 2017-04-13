@@ -294,6 +294,8 @@ public sealed class Toolkit{
         List<Unit>[,] units = Starter.GetDataBase().units;
         if (units[(int)position.x, (int)position.y].Count == 0)
             return true;
+        else if (units[(int)position.x, (int)position.y].Count == 1 && units[(int)position.x, (int)position.y][0] is Pipe)
+            return true;
         return false;
     }
     public static bool IsdoubleRamp(Vector2 position)
@@ -521,19 +523,23 @@ public sealed class Toolkit{
     /// <returns></returns>
     public static Unit GetNearestUnit(Unit From, Direction dir)
     {
-        
         List<Unit> to = new List<Unit>();
         Vector2 pos = VectorSum(From.position, dir);
         to.AddRange(database.GetUnits(pos));
-        pos = VectorSum(pos, Direction.Up);
+        Direction dirtemp;
+        if (dir == Direction.Down || dir == Direction.Up)
+            dirtemp = Direction.Right;
+        else
+            dirtemp = Direction.Up;
+        pos = VectorSum(pos, ReverseDirection(dirtemp));
         to.AddRange(database.GetUnits(pos));
-        pos = VectorSum(pos, 2 * DirectiontoVector(Direction.Down));
+        pos = VectorSum(pos, 2 * DirectiontoVector(dirtemp));
         to.AddRange(database.GetUnits(pos));
         return GetNearestUnit(From, to.ToArray());
 
     }
 
-    public static Unit GetNearestUnitForJumpingPlayer(Player player, Direction dir, Direction gravitydirection)
+    public static Unit GetNearestUnitForJumpingPlayer(Player player, Direction dir)
     {
         List<Unit> to = new List<Unit>();
         Vector2 pos = VectorSum(player.position, dir);
@@ -542,9 +548,14 @@ public sealed class Toolkit{
         else if (((Jump)player.currentAbility).jumped != 0)
             if (GetDeltaPositionAndTransformPosition(player, player.GetGravity()) < 0.5)
                 to.AddRange(database.GetUnits(pos));
-        pos = VectorSum(pos, ReverseDirection(gravitydirection));
+        Direction dirtemp;
+        if (dir == Direction.Down || dir == Direction.Up)
+            dirtemp = Direction.Right;
+        else
+            dirtemp = Direction.Up;
+        pos = VectorSum(pos, ReverseDirection(dirtemp));
         to.AddRange(database.GetUnits(pos));
-        pos = VectorSum(pos, 2 * DirectiontoVector(dir));
+        pos = VectorSum(pos, 2 * DirectiontoVector(dirtemp));
         to.AddRange(database.GetUnits(pos));
         return GetNearestUnit(player, to.ToArray());
     }

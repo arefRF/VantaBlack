@@ -24,7 +24,6 @@ public class Player : Unit
 
     public Jump oneJump { get; set; }
     public bool isonejumping { get; set; }
-    private bool onejump2;
 
     public Ability currentAbility { get; set; }
     private List<Unit>[,] units;
@@ -271,7 +270,6 @@ public class Player : Unit
         }
         else if (isonejumping)
         {
-            Debug.Log("hohoho");
             isonejumping = false;
         }
         currentAbility = null;
