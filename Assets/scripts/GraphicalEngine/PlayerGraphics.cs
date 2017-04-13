@@ -14,7 +14,7 @@ public class PlayerGraphics : MonoBehaviour {
         unmoved_pos = transform.position;
         engine = Starter.GetEngine();
         api = engine.apigraphic;
-        animator = GetComponent<Animator>();
+        animator = transform.GetChild(0).GetComponent<Animator>();
         player = GetComponent<Player>();
             engine.apigraphic.Absorb(player, null);
     }
@@ -184,9 +184,16 @@ public class PlayerGraphics : MonoBehaviour {
     {
         ResetStates();
         if (dir == Direction.Right)
+        {
+            transform.GetChild(0).rotation = Quaternion.Euler(0, 0, 0);
             animator.SetInteger("Walk", 1);
+        }
         else
-            animator.SetInteger("Walk", -1);
+        {
+            animator.SetInteger("Walk", 1);
+            transform.GetChild(0).rotation = Quaternion.Euler(0, 180, 0);
+
+        }
     }
 
     public void Move_Finished()
@@ -217,14 +224,14 @@ public class PlayerGraphics : MonoBehaviour {
         player.TeleportFinished();
     }
     public void ChangeColor()
-    {
+    {/*
         float[] color = Ability_Color(player.abilities);
         transform.GetChild(1).GetChild(0).GetComponent<SpriteRenderer>().color = new Color(color[0], color[1], color[2], color[3]);
-        ChangeBodyColor(); 
+        ChangeBodyColor(); */
     }
 
     private void ChangeBodyColor()
-    {
+    {/*
         string path = "Player\\";
         if (player.abilities.Count != 0)
         {
@@ -237,7 +244,7 @@ public class PlayerGraphics : MonoBehaviour {
         }
         else
             path += "player 1";
-        player.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load(path, typeof(Sprite));
+        player.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load(path, typeof(Sprite));*/
     }
 
     private float[] Ability_Color(List<Ability> ability)
