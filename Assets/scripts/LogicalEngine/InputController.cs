@@ -281,7 +281,8 @@ public class InputController {
                 engine.apiunit.AddToDatabase(player);
                 engine.apigraphic.LeanStickStop(player);
             }
-            player.ApplyGravity();
+            if(nextstate == PlayerState.Idle)
+                player.ApplyGravity();
             return true;
         }
         return false;

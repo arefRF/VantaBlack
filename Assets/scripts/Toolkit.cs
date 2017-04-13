@@ -543,16 +543,22 @@ public sealed class Toolkit{
     {
         List<Unit> to = new List<Unit>();
         Vector2 pos = VectorSum(player.position, dir);
-        if(player.jumpdirection == dir)
+        if (player.jumpdirection == dir)
             to.AddRange(database.GetUnits(pos));
         else if (((Jump)player.currentAbility).jumped != 0)
             if (GetDeltaPositionAndTransformPosition(player, player.GetGravity()) < 0.5)
                 to.AddRange(database.GetUnits(pos));
         Direction dirtemp;
-        if (dir == Direction.Down || dir == Direction.Up)
+        if (dir == Direction.Down || dir == Direction.Up) {
             dirtemp = Direction.Right;
-        else
+            if (player.position.x == player.transform.position.x)
+                return GetNearestUnit(player, to.ToArray());
+        }
+        else {
             dirtemp = Direction.Up;
+            if (player.position.y == player.transform.position.y)
+                return GetNearestUnit(player, to.ToArray());
+        }
         pos = VectorSum(pos, ReverseDirection(dirtemp));
         to.AddRange(database.GetUnits(pos));
         pos = VectorSum(pos, 2 * DirectiontoVector(dirtemp));
