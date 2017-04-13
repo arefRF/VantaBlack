@@ -58,10 +58,8 @@ public class InputController {
                     }
                     else
                         nearest = Toolkit.GetNearestUnitForJumpingPlayer(player, player.position, direction);
-                    Debug.Log(nearest);
                     if (nearest != null && player.Can_Lean(nearest.position))
                     {
-                        Debug.Log("herehereherehere");
                         engine.apiunit.RemoveFromDatabase(player);
                         if(tempbool)
                             player.position = Toolkit.VectorSum(player.position, direction);

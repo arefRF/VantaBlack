@@ -87,17 +87,19 @@ public class LogicalEngine {
                 bound = unit.ConnectedUnits[i].players.Count;
                 for (int j = 0; j < bound; j++)
                 {
-                    if (Toolkit.HasBranch(Toolkit.VectorSum(unit.ConnectedUnits[i].players[i].position, dir)))
+                    if (Toolkit.HasBranch(Toolkit.VectorSum(unit.ConnectedUnits[i].players[j].position, dir)))
                     {
-                        inputcontroller.LeanUndo(unit.ConnectedUnits[i].players[i] as Player, Toolkit.ReverseDirection(dir), PlayerState.Idle);
-                        inputcontroller.FakeLeanUndo(unit.ConnectedUnits[i].players[i] as Player, Toolkit.ReverseDirection(dir));
-                        MovePlayer(unit.ConnectedUnits[i].players[i] as Player, dir);
-                        unit.ConnectedUnits[i].players.RemoveAt(i);
+                        Debug.Log("here");
+                        inputcontroller.LeanUndo(unit.ConnectedUnits[i].players[j] as Player, Toolkit.ReverseDirection(dir), PlayerState.Idle);
+                        inputcontroller.FakeLeanUndo(unit.ConnectedUnits[i].players[j] as Player, Toolkit.ReverseDirection(dir));
+                        MovePlayer(unit.ConnectedUnits[i].players[j] as Player, dir);
+                        unit.ConnectedUnits[i].players.RemoveAt(j);
+                        j--;
+                        bound--;
                         continue;
                     }
                     if (!unit.ConnectedUnits[i].players[j].CanMove(dir, unit.ConnectedUnits[i].transform.parent.gameObject))
                     {
-                        Debug.Log(2);
                         apigraphic.Crush_Player_Died(unit.ConnectedUnits[i].players[j] as Player);
                         return false;
                     }
