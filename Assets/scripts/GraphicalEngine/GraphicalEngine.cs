@@ -187,19 +187,16 @@ public class GraphicalEngine : MonoBehaviour {
     {
         if (ability.Count != 0)
         {
-            if (ability[0].abilitytype == AbilityType.Key)
+            switch (ability[0].abilitytype)
             {
-                return new Vector3(1, 1, 1);
-            }
-            else if (ability[0].abilitytype == AbilityType.Fuel)
-            {
-                if (compliment)
-                    return new Vector3(1, 1, 1);
-                else
-                    return new Vector3(0, 0.941f, 0.654f);
+                case AbilityType.Key: return new Vector3(1, 1, 1);
+                case AbilityType.Fuel: if (compliment) return new Vector3(1, 1, 1); else return new Vector3(0, 0.941f, 0.654f);
+                case AbilityType.Jump: return new Vector3(0.59f, 0.78f, 1);
+                case AbilityType.Teleport: return new Vector3(0.92f,0.36f,0.44f);
+                case AbilityType.Gravity: return new Vector3(0.81f,0.60f,0.96f);
+                case AbilityType.Rope: return new Vector3(1,0.60f,0.30f);
             }
         }
-
         // else white
         return new Vector3(1, 1, 1);
     }
