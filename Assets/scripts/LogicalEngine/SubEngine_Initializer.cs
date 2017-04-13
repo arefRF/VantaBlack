@@ -68,6 +68,7 @@ public class SubEngine_Initializer{
                     case "Rock": units[(int)obj.transform.position.x, (int)obj.transform.position.y].Add(obj.GetComponent<Rock>()); break;
                     case "Vision": units[(int)obj.transform.position.x, (int)obj.transform.position.y].Add(obj.GetComponent<Vision>()); break;
                     case "Pipe": units[(int)obj.transform.position.x, (int)obj.transform.position.y].Add(obj.GetComponent<Pipe>()); InitPipe(obj.GetComponent<Pipe>()); break;
+                    case "Fountain": units[(int)obj.transform.position.x, (int)obj.transform.position.y].Add(obj.GetComponent<Fountain>()); break;
                     default: Debug.Log(obj.tag + " Not supported"); break;
                 }
                 units[(int)obj.transform.position.x, (int)obj.transform.position.y][units[(int)obj.transform.position.x, (int)obj.transform.position.y].Count - 1].ConnectedUnits = new List<Unit>();
@@ -78,6 +79,10 @@ public class SubEngine_Initializer{
                 units[(int)obj.transform.position.x, (int)obj.transform.position.y][units[(int)obj.transform.position.x, (int)obj.transform.position.y].Count - 1].position = units[(int)obj.transform.position.x, (int)obj.transform.position.y][units[(int)obj.transform.position.x, (int)obj.transform.position.y].Count - 1].transform.position;
 
                 Unit.Code++;
+                if(obj.tag == "Pipe")
+                {
+                    units[(int)obj.transform.position.x, (int)obj.transform.position.y].Remove(obj.GetComponent<Pipe>());
+                }
             }
             for (int j = 0; j < connectedunits.Count; j++)
                 connectedunits[j].SetConnectedUnits(connectedunits);

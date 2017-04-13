@@ -103,4 +103,9 @@ public class Pipe : Unit {
             }
         api.engine.pipecontroller.CheckPipes();
     }
+
+    public override bool PlayerMoveInto(Direction dir)
+    {
+        return true;
+    }
 }

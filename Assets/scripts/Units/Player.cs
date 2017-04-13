@@ -112,7 +112,7 @@ public class Player : Unit
         List<Unit> units = api.engine_GetUnits(Toolkit.VectorSum(position, dir));
         for (int i = 0; i < units.Count; i++)
         {
-            if (units[i] is Container)
+            if (units[i] is Container || units[i] is Fountain)
                 return true;
         }
         return false;
@@ -125,7 +125,7 @@ public class Player : Unit
         List<Unit> units = api.engine.database.GetUnits(pos);
         for (int i = 0; i < units.Count; i++)
         {
-            if (units[i] is Container)
+            if (units[i] is Container || units[i] is Fountain)
                 return true;
         }
         return false;
@@ -615,7 +615,16 @@ public class Player : Unit
         return false;
     }
 
-
+    public void _setability()
+    {
+        if (abilities.Count != 0)
+        {
+            abilitycount = abilities.Count;
+            abilitytype = abilities[0].abilitytype;
+        }
+        else
+            abilitycount = 0;
+    }
 
     public override CloneableUnit Clone()
     {

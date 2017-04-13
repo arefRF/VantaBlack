@@ -117,7 +117,7 @@ public class InputController {
     {
         if (!player.lean)
         {
-            if(!Toolkit.IsInsideBranch(player) && !player.Can_Lean(direction) && player.GetGravity() == Toolkit.ReverseDirection(direction) && !Toolkit.HasBranch(Toolkit.VectorSum(player.position, direction)))
+            if(!Toolkit.IsInsideBranch(player) && player.GetGravity() == Toolkit.ReverseDirection(direction) && Toolkit.IsEmpty(Toolkit.VectorSum(player.position, direction)))
 
             {
                 player.isonejumping = true;

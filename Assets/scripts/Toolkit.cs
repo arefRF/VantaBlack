@@ -571,12 +571,12 @@ public sealed class Toolkit{
         if (To.Length == 0)
             return null;
         int result = 0;
-        double min = (From.position - To[0].position).sqrMagnitude;
+        double min = (From.transform.position - To[0].transform.position).sqrMagnitude;
         for(int i=1; i < To.Length; i++)
         {
             if (To[i] is Pipe)
                 continue;
-            double temp = (From.position - To[1].position).sqrMagnitude;
+            double temp = (From.transform.position - To[1].transform.position).sqrMagnitude;
             if (min > temp)
             {
                 temp = min;
