@@ -420,12 +420,9 @@ public class PlayerPhysics : MonoBehaviour
 
     private void Check_Jump(Direction direction)
     {
-        Debug.Log(Distance((Vector2)player_transofrm.position, player.position));
         if (Distance((Vector2)player_transofrm.position , player.position) >= 1)
         {
             jump_ability.JumpedOnce(player, direction);
-            Debug.Log(player.position);
-
         }
     }
 
