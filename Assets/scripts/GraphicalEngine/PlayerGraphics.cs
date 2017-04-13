@@ -21,50 +21,48 @@ public class PlayerGraphics : MonoBehaviour {
 
 
     public void Lean_Right()
-    {/*
+    {
         animator.SetInteger("Lean", 2);
 
-        animator.SetBool("isLean", true);*/
     }
 
     public void Lean_Left()
-    {/*
+    {
         animator.SetInteger("Lean", 4);
-        animator.SetBool("isLean", true);*/
+
     }
 
     public void Lean_Up()
-    {/*
+    {
         animator.SetInteger("Lean", 1);
-        animator.SetBool("isLean", true);*/
     }
 
     public void Lean_Down()
-    {/*
+    {
         animator.SetInteger("Lean", 3);
-        animator.SetBool("isLean", true); */
+  
     }
 
     public void FakeLean_Down()
-    {/*
-        animator.SetInteger("Lean", 3);
-        animator.SetBool("isFakeLean", true);*/
+    {
+       // animator.SetInteger("Lean", 3);
+
     }
 
     public void FakeLean_Right()
-    {/*
-        animator.SetInteger("Lean", 2);
-        animator.SetBool("isFakeLean", true); */
+    {
+     //   animator.SetInteger("Lean", 2);
+
     }
     public void FakeLean_Left()
-    { /*
-        animator.SetInteger("Lean", 4);
-        animator.SetBool("isFakeLean", true); */
+    { 
+      //  animator.SetInteger("Lean", 4); 
+
     }
     public void FakeLean_Up()
-    { /*
-        animator.SetInteger("Lean", 1);
-        animator.SetBool("isFakeLean", true); */
+    { 
+       // animator.SetInteger("Lean", 1);
+
     }
 
     public void FakeLean_Finished()
@@ -86,11 +84,8 @@ public class PlayerGraphics : MonoBehaviour {
         transform.GetChild(1).GetComponent<SpriteRenderer>().color = new Color(color[0],color[1],color[2],color[3]);
     }
     public void Lean_Finished()
-    {/*
-        animator.SetBool("isLean", false);
+    {
         animator.SetInteger("Lean", 0);
-        transform.GetChild(0).localPosition = new Vector2(0, 0);
-        transform.GetChild(1).localPosition = new Vector2(0, 0);*/
     }
 
     public void MoveToBranch(Direction dir)
