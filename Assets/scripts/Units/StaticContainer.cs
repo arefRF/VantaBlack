@@ -16,6 +16,25 @@ public class StaticContainer : FunctionalContainer {
         base.Run();
     }
 
+    public override void PlayerAbsorb(Player player)
+    {
+        return;
+    }
+
+    public override void PlayerRelease(Player player)
+    {
+        return;
+    }
+    public override void PlayerAbsorbHold(Player player)
+    {
+        return;
+    }
+
+    public override void PlayerReleaseHold(Player player)
+    {
+        return;
+    }
+
     public override CloneableUnit Clone()
     {
         return new CloneableStaticContainer(this);

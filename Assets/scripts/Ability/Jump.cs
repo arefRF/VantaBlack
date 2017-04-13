@@ -58,11 +58,11 @@ public class Jump : Ability {
         {
             if (Toolkit.HasBranch(Toolkit.VectorSum(player.position, Toolkit.ReverseDirection(Starter.GetGravityDirection()))))
             {
-                //player.state = PlayerState.Idle;
+                player.state = PlayerState.Idle;
                 engine.MovePlayer(player, Toolkit.ReverseDirection(Starter.GetGravityDirection()));
             }
         }
-        //player.state = PlayerState.Idle;
+        player.state = PlayerState.Idle;
         engine.Applygravity();
     }
 
