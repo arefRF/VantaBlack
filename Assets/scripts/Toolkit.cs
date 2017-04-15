@@ -539,10 +539,10 @@ public sealed class Toolkit{
 
     }
 
-    public static Unit GetNearestUnitForJumpingPlayer(Player player, Direction dir)
+    public static Unit GetNearestUnitForJumpingPlayer(Player player, Vector2 playerposition, Direction dir)
     {
         List<Unit> to = new List<Unit>();
-        Vector2 pos = VectorSum(player.position, dir);
+        Vector2 pos = VectorSum(playerposition, dir);
         if (player.jumpdirection == dir)
             to.AddRange(database.GetUnits(pos));
         else if (((Jump)player.currentAbility).jumped != 0)
@@ -551,12 +551,12 @@ public sealed class Toolkit{
         Direction dirtemp;
         if (dir == Direction.Down || dir == Direction.Up) {
             dirtemp = Direction.Right;
-            if (player.position.x == player.transform.position.x)
+            if (playerposition.x == player.transform.position.x)
                 return GetNearestUnit(player, to.ToArray());
         }
         else {
             dirtemp = Direction.Up;
-            if (player.position.y == player.transform.position.y)
+            if (playerposition.y == player.transform.position.y)
                 return GetNearestUnit(player, to.ToArray());
         }
         pos = VectorSum(pos, ReverseDirection(dirtemp));
@@ -571,16 +571,20 @@ public sealed class Toolkit{
         if (To.Length == 0)
             return null;
         int result = 0;
-        double min = (From.position - To[0].position).sqrMagnitude;
+        double min = (From.transform.position - To[0].transform.position).sqrMagnitude;
         for(int i=1; i < To.Length; i++)
         {
-            double temp = (From.position - To[1].position).sqrMagnitude;
+            if (To[i] is Pipe)
+                continue;
+            double temp = (From.transform.position - To[1].transform.position).sqrMagnitude;
             if (min > temp)
             {
                 temp = min;
-                result++;
+                result = i;
             }
         }
+        if (To[result] is Pipe)
+            return null;
         return To[result];
     }
 

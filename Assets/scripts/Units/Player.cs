@@ -112,7 +112,7 @@ public class Player : Unit
         List<Unit> units = api.engine_GetUnits(Toolkit.VectorSum(position, dir));
         for (int i = 0; i < units.Count; i++)
         {
-            if (units[i] is Container)
+            if (units[i] is Container || units[i] is Fountain)
                 return true;
         }
         return false;
@@ -125,7 +125,7 @@ public class Player : Unit
         List<Unit> units = api.engine.database.GetUnits(pos);
         for (int i = 0; i < units.Count; i++)
         {
-            if (units[i] is Container)
+            if (units[i] is Container || units[i] is Fountain)
                 return true;
         }
         return false;
@@ -143,7 +143,7 @@ public class Player : Unit
             if (temp[i] is Ramp)
             {
                 ramp = (Ramp)temp[i];
-                if (ramp.IsOnRampSide(Toolkit.ReverseDirection(Starter.GetGravityDirection())))
+                if (ramp.IsOnRampSide(Toolkit.ReverseDirection(GetGravity())))
                 {
                     onramp = true;
                 }
@@ -151,7 +151,7 @@ public class Player : Unit
         }
         if (onramp)
         {
-            Direction gravitydirection = Starter.GetDataBase().gravity_direction;
+            Direction gravitydirection = GetGravity();
             switch (gravitydirection)
             {
                 case Direction.Down:
@@ -198,7 +198,7 @@ public class Player : Unit
     {
         Vector2 pos = position;
         if (Toolkit.GetDeltaPositionAndTransformPosition(this, GetGravity()) > 0.7)
-            pos = Toolkit.VectorSum(pos, Toolkit.ReverseDirection(Starter.GetGravityDirection()));
+            pos = Toolkit.VectorSum(pos, Toolkit.ReverseDirection(GetGravity()));
         else if (((Jump)currentAbility).jumped == 0)
             return false;
         Ramp ramp = null;
@@ -211,7 +211,7 @@ public class Player : Unit
             if (temp[i] is Ramp)
             {
                 ramp = (Ramp)temp[i];
-                if (ramp.IsOnRampSide(Toolkit.ReverseDirection(Starter.GetGravityDirection())))
+                if (ramp.IsOnRampSide(Toolkit.ReverseDirection(GetGravity())))
                 {
                     onramp = true;
                 }
@@ -219,7 +219,7 @@ public class Player : Unit
         }
         if (onramp)
         {
-            Direction gravitydirection = Starter.GetDataBase().gravity_direction;
+            Direction gravitydirection = GetGravity();
             switch (gravitydirection)
             {
                 case Direction.Down:
@@ -252,7 +252,7 @@ public class Player : Unit
                     break;
             }
             if (goingup)
-                units = api.engine_GetUnits(Toolkit.VectorSum(Toolkit.VectorSum(Toolkit.DirectiontoVector(Toolkit.ReverseDirection(gravitydirection)), Toolkit.DirectiontoVector(dir)), pos));
+                units = api.engine_GetUnits(Toolkit.VectorSum(Toolkit.VectorSum(Toolkit.DirectiontoVector(Toolkit.ReverseDirection(GetGravity())), Toolkit.DirectiontoVector(dir)), pos));
         }
         for (int i = 0; i < units.Count; i++)
         {
@@ -410,13 +410,15 @@ public class Player : Unit
 
     private bool IsOnObject(Unit obj)
     {
-        if(obj is Ramp)
+        if (obj is Ramp)
         {
             if (Mathf.Abs(obj.transform.position.x - transform.position.x) < 0.5)
                 return !Stand_On_Ramp(position);
             else
                 return false;
         }
+        else if (obj is Pipe)
+            return false;
         else
         {
             if (gravity == Direction.Down || gravity == Direction.Up)
@@ -615,7 +617,16 @@ public class Player : Unit
         return false;
     }
 
-
+    public void _setability()
+    {
+        if (abilities.Count != 0)
+        {
+            abilitycount = abilities.Count;
+            abilitytype = abilities[0].abilitytype;
+        }
+        else
+            abilitycount = 0;
+    }
 
     public override CloneableUnit Clone()
     {

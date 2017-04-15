@@ -420,9 +420,17 @@ public class PlayerPhysics : MonoBehaviour
 
     private void Check_Jump(Direction direction)
     {
-        if (((Vector2)player_transofrm.position - player.position).sqrMagnitude >= 1)
+        if (Distance((Vector2)player_transofrm.position , player.position) >= 1)
+        {
             jump_ability.JumpedOnce(player, direction);
+        }
     }
+
+    private float Distance(Vector2 pos1, Vector2 pos2)
+    {
+        return Mathf.Sqrt(Mathf.Pow(pos1.x - pos2.x,2) + Mathf.Pow(pos1.y - pos2.y,2));
+    }
+
     private Vector2 Ramp_To_Corner_Pos(Direction gravity,Vector2 target)
     {
         if(gravity == Direction.Down)

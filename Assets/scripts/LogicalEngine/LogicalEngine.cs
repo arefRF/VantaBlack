@@ -87,17 +87,19 @@ public class LogicalEngine {
                 bound = unit.ConnectedUnits[i].players.Count;
                 for (int j = 0; j < bound; j++)
                 {
-                    if (Toolkit.HasBranch(Toolkit.VectorSum(unit.ConnectedUnits[i].players[i].position, dir)))
+                    if (Toolkit.HasBranch(Toolkit.VectorSum(unit.ConnectedUnits[i].players[j].position, dir)))
                     {
-                        inputcontroller.LeanUndo(unit.ConnectedUnits[i].players[i] as Player, Toolkit.ReverseDirection(dir), PlayerState.Idle);
-                        inputcontroller.FakeLeanUndo(unit.ConnectedUnits[i].players[i] as Player, Toolkit.ReverseDirection(dir));
-                        MovePlayer(unit.ConnectedUnits[i].players[i] as Player, dir);
-                        unit.ConnectedUnits[i].players.RemoveAt(i);
+                        Debug.Log("here");
+                        inputcontroller.LeanUndo(unit.ConnectedUnits[i].players[j] as Player, Toolkit.ReverseDirection(dir), PlayerState.Idle);
+                        inputcontroller.FakeLeanUndo(unit.ConnectedUnits[i].players[j] as Player, Toolkit.ReverseDirection(dir));
+                        MovePlayer(unit.ConnectedUnits[i].players[j] as Player, dir);
+                        unit.ConnectedUnits[i].players.RemoveAt(j);
+                        j--;
+                        bound--;
                         continue;
                     }
                     if (!unit.ConnectedUnits[i].players[j].CanMove(dir, unit.ConnectedUnits[i].transform.parent.gameObject))
                     {
-                        Debug.Log(2);
                         apigraphic.Crush_Player_Died(unit.ConnectedUnits[i].players[j] as Player);
                         return false;
                     }
@@ -649,21 +651,28 @@ public class LogicalEngine {
         {
             if (database.player[i].state == PlayerState.Idle || database.player[i].state == PlayerState.Lean)
             {
-                if (database.player[i].lean && !Toolkit.IsInsideBranch(database.player[i]))
+                if (!Toolkit.IsInsideBranch(database.player[i]))
                 {
-                    Vector2 newpos = Toolkit.VectorSum(database.player[i].position, Toolkit.DirectiontoVector(database.player[i].leandirection));
-                    List<Unit> units = GetUnits(newpos);
-                    for (int j = 0; j < units.Count; j++)
+                    if (database.player[i].lean)
                     {
-                        if (units[i] is ParentContainer)
+                        Vector2 newpos = Toolkit.VectorSum(database.player[i].position, Toolkit.DirectiontoVector(database.player[i].leandirection));
+                        List<Unit> units = GetUnits(newpos);
+                        for (int j = 0; j < units.Count; j++)
                         {
-                            ((ParentContainer)units[i]).Action(database.player[i], Toolkit.ReverseDirection(database.player[i].leandirection));
+                            if (units[i] is ParentContainer)
+                            {
+                                ((ParentContainer)units[i]).Action(database.player[i], Toolkit.ReverseDirection(database.player[i].leandirection));
+                            }
+                            else if (units[i] is Fountain)
+                            {
+                                ((Fountain)units[i]).Action(database.player[i]);
+                            }
                         }
                     }
-                }
-                else
-                {
-                    database.player[i].Action();
+                    else
+                    {
+                        database.player[i].Action();
+                    }
                 }
             }
         }
