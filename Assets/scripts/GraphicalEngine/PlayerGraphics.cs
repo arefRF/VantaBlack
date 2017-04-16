@@ -22,12 +22,14 @@ public class PlayerGraphics : MonoBehaviour {
 
     public void Lean_Right()
     {
+        transform.rotation = Quaternion.Euler(0, 0, 0);
         animator.SetInteger("Lean", 2);
 
     }
 
     public void Lean_Left()
     {
+        transform.rotation = Quaternion.Euler(0, 180, 0);
         animator.SetInteger("Lean", 4);
 
     }
@@ -184,13 +186,13 @@ public class PlayerGraphics : MonoBehaviour {
        // ResetStates();
         if (dir == Direction.Right)
         {
-            transform.GetChild(0).rotation = Quaternion.Euler(0, 0, 0);
+            transform.rotation = Quaternion.Euler(0, 0, 0);
             animator.SetInteger("Walk", 1);
         }
         else
         {
             animator.SetInteger("Walk", 1);
-            transform.GetChild(0).rotation = Quaternion.Euler(0, 180, 0);
+            transform.rotation = Quaternion.Euler(0, 180, 0);
 
         }
     }
