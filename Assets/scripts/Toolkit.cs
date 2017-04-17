@@ -362,6 +362,17 @@ public sealed class Toolkit{
         }
         return false;
     }
+    public static bool HasPlayer(Vector2 position)
+    {
+        List<Unit>[,] units = Starter.GetDataBase().units;
+        for (int i = 0; i < units[(int)position.x, (int)position.y].Count; i++)
+        {
+            if (units[(int)position.x, (int)position.y][i] is Player)
+                return true;
+        }
+        return false;
+    }
+
 
     public static Unit GetUnit(Vector2 position)
     {
@@ -391,6 +402,17 @@ public sealed class Toolkit{
         {
             if (units[(int)position.x, (int)position.y][i] is Branch)
                 return (Branch)units[(int)position.x, (int)position.y][i];
+        }
+        return null;
+    }
+
+    public static Player GetPlayer(Vector2 position)
+    {
+        List<Unit>[,] units = Starter.GetDataBase().units;
+        for (int i = 0; i < units[(int)position.x, (int)position.y].Count; i++)
+        {
+            if (units[(int)position.x, (int)position.y][i] is Player)
+                return (Player)units[(int)position.x, (int)position.y][i];
         }
         return null;
     }

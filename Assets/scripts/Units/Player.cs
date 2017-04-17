@@ -379,6 +379,7 @@ public class Player : Unit
         if (!NewFall())
             return false;
         
+
         while (IsInBound(position) && NewFall())
         {
             api.RemoveFromDatabase(this);
