@@ -15,20 +15,8 @@ public class Drainer : Unit {
         base.Run();
     }
 
-    public void Check()
-    {
-        for(int i=0; i<position_drain.Count; i++)
-        {
-            if (Toolkit.HasPlayer(position_drain[i]))
-            {
-                Drain(Toolkit.GetPlayer(position_drain[i]));
-            }
-        }
-    }
-
     public void Check(Player player)
     {
-
         for (int i = 0; i < position_drain.Count; i++)
         {
             if (player.position == position_drain[i])

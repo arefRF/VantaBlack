@@ -13,6 +13,7 @@ public class LogicalEngine {
     public List<Unit> stuckedunits;
     public SnapshotManager snpmanager;
     public PipeController pipecontroller;
+    public DrainerController drainercontroller;
 
     public List<Unit> leanmove;
     public List<Unit> shouldmove;
@@ -29,6 +30,7 @@ public class LogicalEngine {
         snpmanager = new SnapshotManager(this);
         initializer = new SubEngine_Initializer(x,y, this);
         pipecontroller = new PipeController(this);
+        
     }
 
     public void Run()
@@ -43,6 +45,7 @@ public class LogicalEngine {
         for(int i=0; i<database.player.Count; i++)
             snpmanager.AddToSnapShot(database.player[i]);
         snpmanager.takesnapshot();
+        drainercontroller = new DrainerController(database.drainers);
         pipecontroller.CheckPipes();
         //Applygravity();
     }

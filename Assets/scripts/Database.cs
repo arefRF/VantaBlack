@@ -10,6 +10,7 @@ public class Database {
         pipes = new List<Unit>();
         turn = i;
         functionalCon = new List<FunctionalContainer>();
+        drainers = new List<Drainer>();
     }
     public List<Unit> pipes;
     public List<Player> player;
@@ -30,6 +31,7 @@ public class Database {
 
     // List of all Dynamic and Static Containers for Portal ability
     public List<FunctionalContainer> functionalCon;
+    public List<Drainer> drainers;
     public List<Unit> GetUnits(Vector2 position)
     {
         return units[(int)position.x, (int)position.y];
