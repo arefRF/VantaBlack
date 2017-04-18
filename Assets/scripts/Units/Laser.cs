@@ -37,12 +37,16 @@ public class Laser : Unit {
                 flag = true;
                 finalpos = Toolkit.VectorSum(finalpos, direction);
             }
-            DynamicContainer container = (DynamicContainer)Toolkit.GetContainer(finalpos);
-            if (container != null && !api.engine.lasercontroller.containers.Contains(container))
+            try
             {
-                api.engine.lasercontroller.containers.Add(container);
-                SetLaser(container.direction, container.position);
+                DynamicContainer container = (DynamicContainer)Toolkit.GetContainer(finalpos);
+                if (container != null && !api.engine.lasercontroller.containers.Contains(container))
+                {
+                    api.engine.lasercontroller.containers.Add(container);
+                    SetLaser(container.direction, container.position);
+                }
             }
+            catch { }
             if (flag)
                 beamPositions.Add(new Vector2[] { pos, finalpos });
         }
@@ -56,12 +60,16 @@ public class Laser : Unit {
                 flag = true;
                 finalpos = Toolkit.VectorSum(finalpos, direction);
             }
-            DynamicContainer container = (DynamicContainer)Toolkit.GetContainer(finalpos);
-            if (container != null && !api.engine.lasercontroller.containers.Contains(container))
+            try
             {
-                api.engine.lasercontroller.containers.Add(container);
-                SetLaser(container.direction, container.position);
+                DynamicContainer container = (DynamicContainer)Toolkit.GetContainer(finalpos);
+                if (container != null && !api.engine.lasercontroller.containers.Contains(container))
+                {
+                    api.engine.lasercontroller.containers.Add(container);
+                    SetLaser(container.direction, container.position);
+                }
             }
+            catch { }
             if (flag)
                 beamPositions.Add(new Vector2[] { pos, finalpos });
         }
@@ -75,12 +83,16 @@ public class Laser : Unit {
                 flag = true;
                 finalpos = Toolkit.VectorSum(finalpos, direction);
             }
-            DynamicContainer container = (DynamicContainer)Toolkit.GetContainer(finalpos);
-            if (container != null && !api.engine.lasercontroller.containers.Contains(container))
+            try
             {
-                api.engine.lasercontroller.containers.Add(container);
-                SetLaser(container.direction, container.position);
+                DynamicContainer container = (DynamicContainer)Toolkit.GetContainer(finalpos);
+                if (container != null && !api.engine.lasercontroller.containers.Contains(container))
+                {
+                    api.engine.lasercontroller.containers.Add(container);
+                    SetLaser(container.direction, container.position);
+                }
             }
+            catch { }
             if (flag)
                 beamPositions.Add(new Vector2[] { pos, finalpos });
         }
@@ -94,12 +106,16 @@ public class Laser : Unit {
                 flag = true;
                 finalpos = Toolkit.VectorSum(finalpos, direction);
             }
-            DynamicContainer container = (DynamicContainer)Toolkit.GetContainer(finalpos);
-            if (container != null && !api.engine.lasercontroller.containers.Contains(container))
+            try
             {
-                api.engine.lasercontroller.containers.Add(container);
-                SetLaser(container.direction, container.position);
+                DynamicContainer container = (DynamicContainer)Toolkit.GetContainer(finalpos);
+                if (container != null && !api.engine.lasercontroller.containers.Contains(container))
+                {
+                    api.engine.lasercontroller.containers.Add(container);
+                    SetLaser(container.direction, container.position);
+                }
             }
+            catch { }
             if (flag)
                 beamPositions.Add(new Vector2[] { pos, finalpos });
         }
