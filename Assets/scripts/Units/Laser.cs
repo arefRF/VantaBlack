@@ -21,6 +21,7 @@ public class Laser : Unit {
         Debug.Log(beamPositions.Count);
         for (int i = 0; i < beamPositions.Count; i++)
         {
+            api.engine.apigraphic.AddLaser(beamPositions[i][0], beamPositions[i][1]);
             Debug.Log(beamPositions[i][0] + " to " + beamPositions[i][1]);
         }
     }
