@@ -371,7 +371,7 @@ public class APIGraphic{
         gl.FakeLean_Finished();
     }
 
-    public void AddLaser(Vector2 pos1,Vector2 pos2)
+    public void AddLaser(Vector2 pos1,Vector2 pos2,Direction dir)
     {
         graphicalengine.AddLaser(pos1, pos2);
     }

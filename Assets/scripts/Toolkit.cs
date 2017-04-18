@@ -420,6 +420,7 @@ public sealed class Toolkit{
     public static Container GetContainer(Vector2 position)
     {
         List<Unit>[,] units = Starter.GetDataBase().units;
+        Debug.Log(position);
         for (int i = 0; i < units[(int)position.x, (int)position.y].Count; i++)
         {
             if (units[(int)position.x, (int)position.y][i] is Container)

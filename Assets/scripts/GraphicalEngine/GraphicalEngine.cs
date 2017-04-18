@@ -246,7 +246,7 @@ public class GraphicalEngine : MonoBehaviour {
         LineRenderer render = myLine.GetComponent<LineRenderer>();
         render.material = new Material(Shader.Find("Particles/Alpha Blended Premultiply"));
         render.SetColors(Color.red, Color.red);
-        render.SetWidth(0.5f, 0.5f);
+        render.SetWidth(0.01f, 0.01f);
         render.SetPosition(0, pos1);
         render.SetPosition(1, pos2);
 
