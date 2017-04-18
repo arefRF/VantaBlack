@@ -18,11 +18,6 @@ public class Laser : Unit {
         SetLaser(Direction.Down, position);
         SetLaser(Direction.Left, position);
         SetLaser(Direction.Up, position);
-        Debug.Log(beamPositions.Count);
-        for (int i = 0; i < beamPositions.Count; i++)
-        {
-            api.engine.apigraphic.AddLaser(beamPositions[i][0], beamPositions[i][1]);
-        }
     }
 
     public void SetLaser(Direction direction, Vector2 startingpos)
@@ -48,7 +43,10 @@ public class Laser : Unit {
             }
             catch { }
             if (flag)
+            {
                 beamPositions.Add(new Vector2[] { pos, finalpos });
+                api.engine.apigraphic.AddLaser(pos, finalpos, direction);
+            }
         }
         else if (direction == Direction.Down)
         {
@@ -71,7 +69,10 @@ public class Laser : Unit {
             }
             catch { }
             if (flag)
+            {
                 beamPositions.Add(new Vector2[] { pos, finalpos });
+                api.engine.apigraphic.AddLaser(pos, finalpos, direction);
+            }
         }
         else if (direction == Direction.Left)
         {
@@ -94,7 +95,10 @@ public class Laser : Unit {
             }
             catch { }
             if (flag)
+            {
                 beamPositions.Add(new Vector2[] { pos, finalpos });
+                api.engine.apigraphic.AddLaser(pos, finalpos, direction);
+            }
         }
         else if (direction == Direction.Up)
         {
@@ -117,7 +121,10 @@ public class Laser : Unit {
             }
             catch { }
             if (flag)
+            {
                 beamPositions.Add(new Vector2[] { pos, finalpos });
+                api.engine.apigraphic.AddLaser(pos, finalpos, direction);
+            }
         }
 
     }
