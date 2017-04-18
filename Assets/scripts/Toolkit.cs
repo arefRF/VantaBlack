@@ -417,6 +417,17 @@ public sealed class Toolkit{
         return null;
     }
 
+    public static Container GetContainer(Vector2 position)
+    {
+        List<Unit>[,] units = Starter.GetDataBase().units;
+        for (int i = 0; i < units[(int)position.x, (int)position.y].Count; i++)
+        {
+            if (units[(int)position.x, (int)position.y][i] is Container)
+                return (Container)units[(int)position.x, (int)position.y][i];
+        }
+        return null;
+    }
+
     public static bool[] GetConnectedSidesForContainer(Unit unit)
     {
         bool[] result = new bool[4];
