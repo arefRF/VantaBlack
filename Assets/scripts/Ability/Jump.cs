@@ -46,10 +46,18 @@ public class Jump : Ability {
             else
             {
                 //player.currentAbility = null;
-                player.state = PlayerState.Idle;
-                engine.Applygravity();
+
+
+                GameObject.Find("Mono").GetComponent<RopeMono>().StartCoroutine(JumpWait(0.6f,player));
             }
         }
+    }
+
+    private IEnumerator JumpWait(float f,Player player)
+    {
+        yield return new WaitForSeconds(f);
+        player.ApplyGravity();
+
     }
 
     public void JumpHitFinished(Player player)
