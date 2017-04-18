@@ -238,6 +238,25 @@ public class GraphicalEngine : MonoBehaviour {
 
     }
 
+    public void AddLaser(Vector2 pos1,Vector2 pos2)
+    {
+        GameObject myLine = new GameObject();
+        myLine.transform.position = pos1;
+        myLine.AddComponent<LineRenderer>();
+        LineRenderer render = myLine.GetComponent<LineRenderer>();
+        render.material = new Material(Shader.Find("Particles/Alpha Blended Premultiply"));
+        render.SetColors(Color.red, Color.red);
+        render.SetWidth(0.5f, 0.5f);
+        render.SetPosition(0, pos1);
+        render.SetPosition(1, pos2);
+
+    }
+
+    public void RemoveLaser(Vector2 pos1,Vector2 pos2)
+    {
+
+    }
+
     private void DynamicSwitch(DynamicContainer container)
     {
         if(container.on)
