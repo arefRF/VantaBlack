@@ -34,6 +34,18 @@ public class FunctionalContainer : Container
         }
     }
 
+    public void ActionKeyDown(Player player,Direction dir)
+    {
+        if (gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock)
+            return;
+        if (abilities.Count == 0)
+            return;
+        switch (abilities[0].abilitytype)
+        {
+            case AbilityType.Jump: ((Jump)abilities[0]).StartTimer(player); break;
+        }
+    }
+
     public void SetOnorOff()
     {
         if (abilities.Count == 0)

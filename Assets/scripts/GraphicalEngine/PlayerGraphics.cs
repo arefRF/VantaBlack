@@ -124,7 +124,7 @@ public class PlayerGraphics : MonoBehaviour {
         StartCoroutine(Simple_Move(player.position, 0.65f));
     }
 
-    private void ResetStates()
+    public void ResetStates()
     {
         animator.SetBool("Jump", false);
         animator.SetInteger("Walk", 0);
