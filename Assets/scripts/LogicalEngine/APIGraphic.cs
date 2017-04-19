@@ -370,4 +370,14 @@ public class APIGraphic{
         PlayerGraphics gl = player.GetComponent<PlayerGraphics>();
         gl.FakeLean_Finished();
     }
+
+    public void AddLaser(Vector2 pos1,Vector2 pos2,Direction dir)
+    {
+        graphicalengine.AddLaser(pos1, pos2,dir);
+    }
+
+    public void RemoveLaser(Vector2 pos1,Vector2 pos2)
+    {
+        graphicalengine.RemoveLaser(pos1, pos2);
+    }
 }

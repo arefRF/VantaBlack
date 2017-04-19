@@ -238,6 +238,32 @@ public class GraphicalEngine : MonoBehaviour {
 
     }
 
+    public void AddLaser(Vector2 pos1,Vector2 pos2,Direction dir)
+    {
+        GameObject myLine = new GameObject();
+        myLine.transform.position = pos1;
+        myLine.AddComponent<LineRenderer>();
+        LineRenderer render = myLine.GetComponent<LineRenderer>();
+        render.material = new Material(Shader.Find("Particles/Alpha Blended Premultiply"));
+        render.SetColors(Color.red, Color.red);
+        render.SetWidth(0.01f, 0.01f);
+        switch (dir)
+        {
+            case Direction.Up: pos1 = pos1 - new Vector2(0, 0.5f);  pos2 = pos2 - new Vector2(0, 0.5f); break;
+            case Direction.Down: pos1 = pos1 + new Vector2(0, 0.5f); pos2 = pos2 + new Vector2(0, 0.5f); break;
+            case Direction.Left: pos1 = pos1 + new Vector2(0.5f, 0); pos2 = pos2 + new Vector2(0.5f, 0); break;
+            case Direction.Right: pos1 = pos1 - new Vector2(0.5f, 0); pos2 = pos2 - new Vector2(0.5f, 0); break;
+        }
+        render.SetPosition(0, pos1);
+        render.SetPosition(1, pos2);
+
+    }
+
+    public void RemoveLaser(Vector2 pos1,Vector2 pos2)
+    {
+
+    }
+
     private void DynamicSwitch(DynamicContainer container)
     {
         if(container.on)

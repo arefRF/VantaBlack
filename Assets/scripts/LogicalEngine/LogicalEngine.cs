@@ -9,10 +9,12 @@ public class LogicalEngine {
     public Database database;
     public SubEngine_Initializer initializer;
     public InputController inputcontroller;
-    int sizeX, sizeY;
+    public int sizeX, sizeY;
     public List<Unit> stuckedunits;
     public SnapshotManager snpmanager;
     public PipeController pipecontroller;
+    public DrainerController drainercontroller;
+    public LaserController lasercontroller;
 
     public List<Unit> leanmove;
     public List<Unit> shouldmove;
@@ -29,6 +31,8 @@ public class LogicalEngine {
         snpmanager = new SnapshotManager(this);
         initializer = new SubEngine_Initializer(x,y, this);
         pipecontroller = new PipeController(this);
+        lasercontroller = new LaserController(database.lasers);
+        
     }
 
     public void Run()
@@ -43,7 +47,9 @@ public class LogicalEngine {
         for(int i=0; i<database.player.Count; i++)
             snpmanager.AddToSnapShot(database.player[i]);
         snpmanager.takesnapshot();
+        drainercontroller = new DrainerController(database.drainers);
         pipecontroller.CheckPipes();
+        lasercontroller.SetLasers();
         //Applygravity();
     }
 
@@ -687,6 +693,14 @@ public class LogicalEngine {
             if (database.player[i].lean)
                 continue;
             database.player[i].Action(dir);
+        }
+    }
+
+    public void JumpKeyprssed()
+    {
+        for (int i = 0; i < database.player.Count; i++)
+        {
+            inputcontroller.Jump(database.player[i]);
         }
     }
 

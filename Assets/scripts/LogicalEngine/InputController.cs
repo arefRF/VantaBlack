@@ -113,17 +113,31 @@ public class InputController {
         }
     }
 
+    public void Jump(Player player)
+    {
+        if(player.state == PlayerState.Idle || player.state == PlayerState.Lean)
+        {
+            if (player.lean)
+            {
+                // lean and directional jump
+            }
+            else
+            {
+                // Idle and simple jump
+                Direction direction = Toolkit.ReverseDirection(player.GetGravity());
+                if(!Toolkit.IsInsideBranch(player) && Toolkit.IsEmpty(Toolkit.VectorSum(player.position, direction)))
+                {
+                    player.isonejumping = true;
+                    player.oneJump.Action(player, direction);
+                }
+            }
+        }
+    }
     private void IdlePLayerMove(Player player, Direction direction)
     {
         if (!player.lean)
         {
-            if(!Toolkit.IsInsideBranch(player) && player.GetGravity() == Toolkit.ReverseDirection(direction) && Toolkit.IsEmpty(Toolkit.VectorSum(player.position, direction)))
-
-            {
-                player.isonejumping = true;
-                player.oneJump.Action(player, direction);
-            }
-            else if (player.Can_Move_Direction(direction))
+            if (player.Can_Move_Direction(direction))
             {
                 if (player.Should_Change_Direction(direction))
                 {

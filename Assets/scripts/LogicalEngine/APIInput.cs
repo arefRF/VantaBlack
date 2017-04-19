@@ -15,6 +15,10 @@ public class APIInput{
             portal.Port();
     }
 
+    public void Jump()
+    {
+        engine.JumpKeyprssed();
+    }
     public void Action_Key(Direction dir)
     {
         engine.ActionKeyPressed(dir);

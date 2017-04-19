@@ -354,6 +354,7 @@ public class Player : Unit
     public override bool ApplyGravity()
     {
         isonejumping = false;
+        api.engine.drainercontroller.Check(this);
         // to avoid exception
         if (position.x <= 0 || position.y <= 0)
             return false;
@@ -378,9 +379,11 @@ public class Player : Unit
 
         if (!NewFall())
             return false;
-        
+
+        api.engine.drainercontroller.Check(this);
         while (IsInBound(position) && NewFall())
         {
+            api.engine.drainercontroller.Check(this);
             api.RemoveFromDatabase(this);
             position = Toolkit.VectorSum(position,gravity);
             api.AddToDatabase(this);
