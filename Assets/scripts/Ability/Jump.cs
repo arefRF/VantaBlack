@@ -36,6 +36,7 @@ public class Jump : Ability {
     public void JumpedOnce(Player player, Direction direction)
     {
         Debug.Log("jumped once");
+        engine.lasercontroller.CollisionCheck(player.position);
         jumped++;
         engine.apiunit.RemoveFromDatabase(player);
         player.position += Toolkit.DirectiontoVector(direction);
