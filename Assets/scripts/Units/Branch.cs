@@ -139,7 +139,7 @@ public class Branch : Unit {
 
     public override bool PlayerMoveInto(Direction dir)
     {
-        return true;
+        return !islocked;
     }
 
     public override CloneableUnit Clone()
@@ -149,7 +149,17 @@ public class Branch : Unit {
 
     public void PlayerLeaned(Player player)
     {
-        if(player.abilities.Count != 0 && player.abilities[0] is Jump)
+        if (islocked)
+        {
+            if (player.abilities.Count != 0 && player.abilities[0] is Key)
+            {
+                Debug.Log("here");
+                islocked = false;
+                player.abilities.Clear();
+                player._setability();
+                api.engine.apigraphic.Absorb(player, null);
+            }
+        }
     }
 
 }
