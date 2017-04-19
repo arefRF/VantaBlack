@@ -29,6 +29,7 @@ public class Database {
     public List<Snapshot> snapshots;
 
     public static Direction GravityDirection;
+    public Coroutine timer;
 
     // List of all Dynamic and Static Containers for Portal ability
     public List<FunctionalContainer> functionalCon;
@@ -37,6 +38,12 @@ public class Database {
     public List<Unit> GetUnits(Vector2 position)
     {
         return units[(int)position.x, (int)position.y];
+    }
+
+    public void StopTimer()
+    {
+        if(timer!=null)
+            GameObject.Find("GetInput").GetComponent<GetInput>().StopCoroutine(timer);
     }
 }
 

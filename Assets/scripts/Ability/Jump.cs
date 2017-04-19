@@ -9,7 +9,8 @@ public class Jump : Ability {
     public Coroutine coroutine;
 	public Jump()
     {
-        abilitytype = AbilityType.Jump;
+       abilitytype = AbilityType.Jump;
+       
     }
 
     public Jump(int number)
@@ -20,6 +21,7 @@ public class Jump : Ability {
 
     public void Action(Player player, Direction direction)
     {
+        Starter.GetDataBase().StopTimer();
         player.state = PlayerState.Jumping;
         player.currentAbility = this;
         jumped = 0;
@@ -34,9 +36,24 @@ public class Jump : Ability {
         
     }
 
+    public void StartTimer(Player player)
+    {
+        number = 2;
+        Starter.GetDataBase().timer =  GameObject.Find("GetInput").GetComponent<GetInput>().StartCoroutine(Timer());
+    }
+    private IEnumerator Timer()
+    {
+        yield return new WaitForSeconds(0.75f);
+        number++;
+        number %= 5;
+        if (number == 0)
+            number = 2;
+        Debug.Log(number);
+        Starter.GetDataBase().timer = GameObject.Find("GetInput").GetComponent<GetInput>().StartCoroutine(Timer());
+
+    }
     public void JumpedOnce(Player player, Direction direction)
     {
-        Debug.Log("jumped once");
         engine.lasercontroller.CollisionCheck(player.position);
         jumped++;
         engine.apiunit.RemoveFromDatabase(player);

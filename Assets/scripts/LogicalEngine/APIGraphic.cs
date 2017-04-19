@@ -188,6 +188,7 @@ public class APIGraphic{
 
     public void Jump(Player player,Ability jump_ability, Vector2 position,Direction dir)
     {
+        player.GetComponent<PlayerGraphics>().Jump(dir);
         player.GetComponent<PlayerPhysics>().Jump(position, (Jump)jump_ability,dir);
     }
 

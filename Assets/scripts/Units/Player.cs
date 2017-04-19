@@ -359,6 +359,7 @@ public class Player : Unit
         isonejumping = false;
         api.engine.drainercontroller.Check(this);
         state = PlayerState.Idle;
+        this.GetComponent<PlayerGraphics>().ResetStates();
         api.engine.lasercontroller.CollisionCheck(position);
 
         // to avoid exception

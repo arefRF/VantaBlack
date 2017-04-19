@@ -71,6 +71,11 @@ public class PlayerGraphics : MonoBehaviour {
 
     }
 
+    public void Jump(Direction dir)
+    {
+        animator.SetBool("Jump", true);
+    }
+
     public void FakeLean_Finished()
     {/*
         animator.SetInteger("Lean", 0);
@@ -119,8 +124,9 @@ public class PlayerGraphics : MonoBehaviour {
         StartCoroutine(Simple_Move(player.position, 0.65f));
     }
 
-    private void ResetStates()
+    public void ResetStates()
     {
+        animator.SetBool("Jump", false);
         animator.SetInteger("Walk", 0);
     }
     public void BranchExit(Direction dir,int ramp_type)
