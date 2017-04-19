@@ -188,7 +188,9 @@ public class Player : Unit
         }
         for (int i = 0; i < units.Count; i++) {
             if (!units[i].PlayerMoveInto(Toolkit.ReverseDirection(dir)))
+            {
                 return false;
+            }
         }
         api.engine_Move(this, dir);
         return true;
