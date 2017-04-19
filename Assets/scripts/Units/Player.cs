@@ -355,6 +355,7 @@ public class Player : Unit
     {
         isonejumping = false;
         api.engine.drainercontroller.Check(this);
+        api.engine.lasercontroller.CollisionCheck(position);
         // to avoid exception
         if (position.x <= 0 || position.y <= 0)
             return false;
@@ -381,11 +382,13 @@ public class Player : Unit
             return false;
 
         api.engine.drainercontroller.Check(this);
+        api.engine.lasercontroller.CollisionCheck(position);
         while (IsInBound(position) && NewFall())
         {
             api.engine.drainercontroller.Check(this);
             api.RemoveFromDatabase(this);
             position = Toolkit.VectorSum(position,gravity);
+            api.engine.lasercontroller.CollisionCheck(position);
             api.AddToDatabase(this);
         }
         state = PlayerState.Falling;

@@ -137,7 +137,7 @@ public class Laser : Unit {
             {
                 if(pos.x == beamPositions[i][0].x)
                 {
-                    if(IsBetween(pos.y, beamPositions[i][0].y, beamPositions[i][1].y))
+                    if (IsBetween(pos.y, beamPositions[i][0].y, beamPositions[i][1].y))
                     {
                         Debug.Log("beam collision");
                         return true;
@@ -167,9 +167,9 @@ public class Laser : Unit {
 
     private bool IsBetween(float i, float s1, float s2)
     {
-        if (i < s1 && i > s2)
+        if (i <= s1 && i >= s2)
             return true;
-        if (i > s1 && i < s2)
+        if (i >= s1 && i <= s2)
             return true;
         return false;
     }
