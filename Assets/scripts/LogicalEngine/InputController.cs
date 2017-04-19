@@ -66,7 +66,9 @@ public class InputController {
                             player.position = Toolkit.VectorSum(player.position, direction);
                         engine.apiunit.AddToDatabase(player);
                         if (!player.isonejumping && player.abilities.Count > 0)
+                        {
                             player.UseAbility(player.abilities[0]);
+                        }
                         else
                         {
                             player.isonejumping = false;
@@ -135,6 +137,18 @@ public class InputController {
               
                 player.isonejumping = true;
                 player.oneJump.Action(player, direction);
+            }
+        }
+        else if (player.state == PlayerState.Jumping && player.isonejumping && player.abilities.Count != 0 && player.abilities[0].abilitytype == AbilityType.Jump)
+        {
+            player.isonejumping = false;
+            Direction direction = Toolkit.ReverseDirection(player.GetGravity());
+            if (!Toolkit.IsInsideBranch(player) && Toolkit.IsEmpty(Toolkit.VectorSum(player.position, direction)))
+            {
+                GameObject.Find("GetInput").GetComponent<GetInput>().StopCoroutine(player.oneJump.coroutine);
+                player.currentAbility = player.abilities[0];
+                ((Jump)player.currentAbility).number = 1;
+                ((Jump)player.currentAbility).Action(player, direction);
             }
         }
     }

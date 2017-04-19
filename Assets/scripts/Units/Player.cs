@@ -268,6 +268,7 @@ public class Player : Unit
         api.engine.apigraphic.Player_Co_Stop(this);
         if (!isonejumping && state == PlayerState.Jumping && abilities.Count > 0)
         {
+            Debug.Log("azsexdcfvgbhnjmko,l.sxdfcgbhjkm,");
             UseAbility(abilities[0]);
         }
         else if (isonejumping)

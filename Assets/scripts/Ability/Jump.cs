@@ -6,6 +6,7 @@ public class Jump : Ability {
     public int number;
     public int shouldjump, jumped;
     LogicalEngine engine;
+    public Coroutine coroutine;
 	public Jump()
     {
         abilitytype = AbilityType.Jump;
@@ -49,7 +50,7 @@ public class Jump : Ability {
                 //player.currentAbility = null;
 
 
-                GameObject.Find("GetInput").GetComponent<GetInput>().StartCoroutine(JumpWait(0.6f,player));
+               coroutine = GameObject.Find("GetInput").GetComponent<GetInput>().StartCoroutine(JumpWait(0.6f,player));
             }
         }
     }

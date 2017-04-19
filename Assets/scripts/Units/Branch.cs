@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Branch : Unit {
 
+    public bool islocked = false;
+
     public override void SetInitialSprite()
     {
         bool[] notconnected = Toolkit.GetConnectedSidesForBranch(this);
@@ -143,6 +145,11 @@ public class Branch : Unit {
     public override CloneableUnit Clone()
     {
         return new CloneableBranch(this);
+    }
+
+    public void PlayerLeaned(Player player)
+    {
+        if(player.abilities.Count != 0 && player.abilities[0] is Jump)
     }
 
 }
