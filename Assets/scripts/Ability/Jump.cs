@@ -48,7 +48,7 @@ public class Jump : Ability {
                 //player.currentAbility = null;
 
 
-                GameObject.Find("Interface").GetComponent<GetInput>().StartCoroutine(JumpWait(0.6f,player));
+                GameObject.Find("GetInput").GetComponent<GetInput>().StartCoroutine(JumpWait(0.6f,player));
             }
         }
     }
