@@ -121,7 +121,7 @@ public class InputController {
         {
                 // Idle and simple jump
                 Direction direction = Toolkit.ReverseDirection(player.GetGravity());
-                if(!Toolkit.IsInsideBranch(player) && (Toolkit.IsEmpty(Toolkit.VectorSum(player.position, direction)) || Toolkit.HasBranch(Toolkit.VectorSum(player.position, direction)))
+                if(!Toolkit.IsInsideBranch(player) && (Toolkit.IsEmpty(Toolkit.VectorSum(player.position, direction)) || Toolkit.HasBranch(Toolkit.VectorSum(player.position, direction))))
                 {
                     player.isonejumping = true;
                     player.oneJump.Action(player, direction);
