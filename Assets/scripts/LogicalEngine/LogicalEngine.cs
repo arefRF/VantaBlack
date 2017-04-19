@@ -696,6 +696,14 @@ public class LogicalEngine {
         }
     }
 
+    public void JumpKeyprssed()
+    {
+        for (int i = 0; i < database.player.Count; i++)
+        {
+            inputcontroller.Jump(database.player[i]);
+        }
+    }
+
     public void graphic_PlayerMoveAnimationFinished(Player player)
     {
         player.movepercentage = 0;
