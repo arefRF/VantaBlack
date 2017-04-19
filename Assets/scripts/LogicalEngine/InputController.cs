@@ -303,6 +303,7 @@ public class InputController {
     {
         if (player.lean && player.leandirection == direction)
         {
+            Starter.GetDataBase().StopTimer();
             player.state = nextstate;
             player.lean = false;
             engine.apigraphic.LeanFinished(player);
