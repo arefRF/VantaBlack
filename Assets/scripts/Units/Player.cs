@@ -112,7 +112,8 @@ public class Player : Unit
         List<Unit> units = api.engine_GetUnits(Toolkit.VectorSum(position, dir));
         for (int i = 0; i < units.Count; i++)
         {
-            if (units[i] is Container || units[i] is Fountain)
+            Debug.Log(units[i]);
+            if (units[i] is Container || units[i] is Fountain || (units[i] is Branch && ((Branch)units[i]).islocked))
                 return true;
         }
         return false;
@@ -125,7 +126,7 @@ public class Player : Unit
         List<Unit> units = api.engine.database.GetUnits(pos);
         for (int i = 0; i < units.Count; i++)
         {
-            if (units[i] is Container || units[i] is Fountain)
+            if (units[i] is Container || units[i] is Fountain || (units[i] is Branch && ((Branch)units[i]).islocked))
                 return true;
         }
         return false;
@@ -268,6 +269,7 @@ public class Player : Unit
         api.engine.apigraphic.Player_Co_Stop(this);
         if (!isonejumping && state == PlayerState.Jumping && abilities.Count > 0)
         {
+            Debug.Log("azsexdcfvgbhnjmko,l.sxdfcgbhjkm,");
             UseAbility(abilities[0]);
         }
         else if (isonejumping)
