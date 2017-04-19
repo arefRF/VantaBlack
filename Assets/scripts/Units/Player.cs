@@ -188,7 +188,9 @@ public class Player : Unit
         }
         for (int i = 0; i < units.Count; i++) {
             if (!units[i].PlayerMoveInto(Toolkit.ReverseDirection(dir)))
+            {
                 return false;
+            }
         }
         api.engine_Move(this, dir);
         return true;
@@ -356,6 +358,8 @@ public class Player : Unit
         isonejumping = false;
         api.engine.drainercontroller.Check(this);
         state = PlayerState.Idle;
+        api.engine.lasercontroller.CollisionCheck(position);
+
         // to avoid exception
         if (position.x <= 0 || position.y <= 0)
             return false;
@@ -382,11 +386,13 @@ public class Player : Unit
             return false;
 
         api.engine.drainercontroller.Check(this);
+        api.engine.lasercontroller.CollisionCheck(position);
         while (IsInBound(position) && NewFall())
         {
             api.engine.drainercontroller.Check(this);
             api.RemoveFromDatabase(this);
             position = Toolkit.VectorSum(position,gravity);
+            api.engine.lasercontroller.CollisionCheck(position);
             api.AddToDatabase(this);
         }
         state = PlayerState.Falling;

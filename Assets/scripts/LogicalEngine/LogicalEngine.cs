@@ -72,7 +72,7 @@ public class LogicalEngine {
             {
                 if (Toolkit.HasBranch(Toolkit.VectorSum(unit.players[i].position, dir)))
                 {
-                    inputcontroller.LeanUndo(unit.players[i] as Player, Toolkit.ReverseDirection(dir), PlayerState.Idle);
+                    inputcontroller.LeanUndo(unit.players[i] as Player, Toolkit.ReverseDirection(dir), PlayerState.Busy);
                     MovePlayer(unit.players[i] as Player, dir);
                     unit.players.RemoveAt(i);
                     continue;
@@ -95,7 +95,6 @@ public class LogicalEngine {
                 {
                     if (Toolkit.HasBranch(Toolkit.VectorSum(unit.ConnectedUnits[i].players[j].position, dir)))
                     {
-                        Debug.Log("here");
                         inputcontroller.LeanUndo(unit.ConnectedUnits[i].players[j] as Player, Toolkit.ReverseDirection(dir), PlayerState.Idle);
                         inputcontroller.FakeLeanUndo(unit.ConnectedUnits[i].players[j] as Player, Toolkit.ReverseDirection(dir));
                         MovePlayer(unit.ConnectedUnits[i].players[j] as Player, dir);
@@ -154,7 +153,8 @@ public class LogicalEngine {
                     }
                     else
                     {
-                        Player tempplayer = shouldmove[i] as Player;
+                        Debug.Log(leanmove[i]);
+                        Player tempplayer = leanmove[i] as Player;
                         inputcontroller.LeanUndo(tempplayer, tempplayer.leandirection, PlayerState.Idle);
                         inputcontroller.FakeLeanUndo(tempplayer, tempplayer.leandirection);
                     }
