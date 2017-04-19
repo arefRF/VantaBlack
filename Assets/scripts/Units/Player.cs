@@ -355,6 +355,7 @@ public class Player : Unit
     {
         isonejumping = false;
         api.engine.drainercontroller.Check(this);
+        state = PlayerState.Idle;
         // to avoid exception
         if (position.x <= 0 || position.y <= 0)
             return false;

@@ -115,14 +115,9 @@ public class InputController {
 
     public void Jump(Player player)
     {
-        if(player.state == PlayerState.Idle || player.state == PlayerState.Lean)
+        if(player.state == PlayerState.Idle)
         {
-            if (player.lean)
-            {
-                // lean and directional jump
-            }
-            else
-            {
+
                 // Idle and simple jump
                 Direction direction = Toolkit.ReverseDirection(player.GetGravity());
                 if(!Toolkit.IsInsideBranch(player) && Toolkit.IsEmpty(Toolkit.VectorSum(player.position, direction)))
@@ -130,6 +125,16 @@ public class InputController {
                     player.isonejumping = true;
                     player.oneJump.Action(player, direction);
                 }
+            
+        }
+        else if(player.state == PlayerState.Lean)
+        {
+            Direction direction = Toolkit.ReverseDirection(player.leandirection);
+            if (!Toolkit.IsInsideBranch(player) && Toolkit.IsEmpty(Toolkit.VectorSum(player.position, direction)))
+            {
+              
+                player.isonejumping = true;
+                player.oneJump.Action(player, direction);
             }
         }
     }

@@ -22,6 +22,7 @@ public class PlayerGraphics : MonoBehaviour {
 
     public void Lean_Right()
     {
+        ResetStates();
         transform.rotation = Quaternion.Euler(0, 0, 0);
         animator.SetInteger("Lean", 2);
 
@@ -29,6 +30,7 @@ public class PlayerGraphics : MonoBehaviour {
 
     public void Lean_Left()
     {
+        ResetStates();
         transform.rotation = Quaternion.Euler(0, 180, 0);
         animator.SetInteger("Lean", 4);
 
@@ -36,11 +38,13 @@ public class PlayerGraphics : MonoBehaviour {
 
     public void Lean_Up()
     {
+        ResetStates();
         animator.SetInteger("Lean", 1);
     }
 
     public void Lean_Down()
     {
+        ResetStates();
         animator.SetInteger("Lean", 3);
   
     }
@@ -117,10 +121,7 @@ public class PlayerGraphics : MonoBehaviour {
 
     private void ResetStates()
     {
-       /* animator.SetBool("isFakeLean", false);
-        animator.SetBool("isLean", false);
         animator.SetInteger("Walk", 0);
-        animator.SetInteger("Branch", 0); */
     }
     public void BranchExit(Direction dir,int ramp_type)
     {/*
