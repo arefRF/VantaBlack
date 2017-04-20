@@ -26,15 +26,19 @@ public class Jump : Ability {
         if (engine == null)
             engine = Starter.GetEngine();
         Vector2 finalpos = player.position + number * Toolkit.DirectiontoVector(direction);
-        maxJump = GetShouldJump(finalpos, direction);
+        maxJump = GetShouldJump(player.position, direction);
         engine.apiunit.AddToSnapshot(player);
         engine.inputcontroller.LeanUndo(player, player.leandirection, PlayerState.Jumping);
         player.jumpdirection = direction;
-
         if (number <= maxJump)
             engine.apigraphic.Jump(player, this, finalpos, direction);
         else
-            engine.apigraphic.Jump_Hit(player, direction, this, finalpos);
+        {
+            Debug.Log("jump hit");
+            // calculate where to hit and call graphic hit
+            Vector2 hitPos = player.position + maxJump * Toolkit.DirectiontoVector(direction);
+            engine.apigraphic.Jump_Hit(player, direction, this, hitPos);
+        }
         
     }
 
@@ -46,10 +50,19 @@ public class Jump : Ability {
         GameObject.Find("GetInput").GetComponent<GetInput>().StartCoroutine(JumpWait(0.5f,player));
     }
 
+    public void JumpHitFinished(Player player,Vector2 finalpos)
+    {
+        engine.apiunit.RemoveFromDatabase(player);
+        player.position = finalpos;
+        engine.apiunit.AddToDatabase(player);
+        Debug.Log("Jump Hit Finished");
+        player.state = PlayerState.Idle;
+        player.ApplyGravity();
+    }
     public void StartTimer(Player player,Direction direction)
     {
         Vector2 maxPosition = player.position + 4 * Toolkit.DirectiontoVector(direction);
-        maxJump = GetShouldJump(maxPosition,direction);
+        maxJump = GetShouldJump(player.position,direction);
         number = 2;
         Starter.GetDataBase().timer =  GameObject.Find("GetInput").GetComponent<GetInput>().StartCoroutine(Timer());
     }
