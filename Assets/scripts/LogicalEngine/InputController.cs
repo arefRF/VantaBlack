@@ -123,6 +123,7 @@ public class InputController {
             Direction direction = Toolkit.ReverseDirection(player.GetGravity());
             if (!Toolkit.IsInsideBranch(player) && Toolkit.IsEmpty(Toolkit.VectorSum(player.position, direction)))
             {
+                Debug.Log(player.oneJump.coroutine);
                 GameObject.Find("GetInput").GetComponent<GetInput>().StopCoroutine(player.oneJump.coroutine);
                 player.currentAbility = player.abilities[0];
                 ((Jump)player.currentAbility).number = 1;
