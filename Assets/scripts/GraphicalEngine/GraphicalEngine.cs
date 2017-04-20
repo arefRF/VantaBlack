@@ -263,10 +263,16 @@ public class GraphicalEngine : MonoBehaviour {
 
     public void RemoveLasers()
     {
-        GameObject[] lasers= GameObject.FindGameObjectsWithTag("LaserUI");
-        for(int i = 0; i < lasers.Length; i++)
+        try {
+            GameObject[] lasers = GameObject.FindGameObjectsWithTag("LaserUI");
+            for (int i = 0; i < lasers.Length; i++)
+            {
+                Destroy(lasers[i]);
+            }
+        }
+        catch
         {
-            Destroy(lasers[i]);
+
         }
     }
 

@@ -373,8 +373,8 @@ public class APIGraphic{
         graphicalengine.AddLaser(pos1, pos2,dir);
     }
 
-    public void RemoveLaser(Vector2 pos1,Vector2 pos2)
+    public void RemoveLaser()
     {
-        graphicalengine.RemoveLaser(pos1, pos2);
+        graphicalengine.RemoveLasers();
     }
 }

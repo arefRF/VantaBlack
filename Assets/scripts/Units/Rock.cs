@@ -4,6 +4,8 @@ using System;
 
 public class Rock : Unit
 {
+    public bool isleanable = false;
+
     public override void SetInitialSprite()
     {
         bool[] notconnected = Toolkit.GetConnectedSides(this);
