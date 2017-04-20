@@ -411,20 +411,12 @@ public class PlayerPhysics : MonoBehaviour
         {
             remain_distance = ((Vector2)player_transofrm.position - pos).sqrMagnitude;
             player_transofrm.position = Vector3.MoveTowards(player_transofrm.position, pos, Time.deltaTime / move_time);
-            Check_Jump(direction);
             api.Camera_AutoMove();
             yield return null;
         }
         api.Jump_Finish(player);
     }
 
-    private void Check_Jump(Direction direction)
-    {
-        if (Distance((Vector2)player_transofrm.position , player.position) >= 1)
-        {
-            jump_ability.JumpedOnce(player, direction);
-        }
-    }
 
     private float Distance(Vector2 pos1, Vector2 pos2)
     {

@@ -196,19 +196,15 @@ public class APIGraphic{
     {
         
     }
-    public void Jumped_One(Ability abil)
-    {
-        
-    }
 
-    public void Jump_Hit(Player player,Direction dir,Jump ability)
+    public void Jump_Hit(Player player,Direction dir,Jump ability,Vector2 pos)
     {
         Jump_Hit_Finish(player,ability);
     }
 
     public void Jump_Hit_Finish(Player player,Jump ability)
     {
-        ability.JumpHitFinished(player);
+       // ability.JumpHitFinished(player);
     }
 
     public void MovePlayerOnPlatform(Player player,Vector2 pos)

@@ -4,7 +4,7 @@ using System.Collections;
 public class Jump : Ability {
 
     public int number;
-    public int shouldjump, jumped;
+    private int maxJump;
     LogicalEngine engine;
     public Coroutine coroutine;
 	public Jump()
@@ -23,28 +23,25 @@ public class Jump : Ability {
         Starter.GetDataBase().StopTimer();
         player.state = PlayerState.Jumping;
         player.currentAbility = this;
-        jumped = 0;
         if (engine == null)
             engine = Starter.GetEngine();
-        shouldjump = GetShouldJump(player.position, direction);
-        Vector2 finalpos = player.position + shouldjump * Toolkit.DirectiontoVector(direction);
-        Debug.Log(shouldjump);
-        if (shouldjump == 0)
-        {
-            JumpHitFinished(player);
-        }
-        else
-        {
-            engine.apiunit.AddToSnapshot(player);
-            engine.inputcontroller.LeanUndo(player, player.leandirection, PlayerState.Jumping);
-            player.jumpdirection = direction;
+        Vector2 finalpos = player.position + number * Toolkit.DirectiontoVector(direction);
+        maxJump = GetShouldJump(finalpos, direction);
+        engine.apiunit.AddToSnapshot(player);
+        engine.inputcontroller.LeanUndo(player, player.leandirection, PlayerState.Jumping);
+        player.jumpdirection = direction;
+
+        if (number <= maxJump)
             engine.apigraphic.Jump(player, this, finalpos, direction);
-        }
+        else
+            engine.apigraphic.Jump_Hit(player, direction, this, finalpos);
         
     }
 
-    public void StartTimer(Player player)
+    public void StartTimer(Player player,Direction direction)
     {
+        Vector2 maxPosition = player.position + 4 * Toolkit.DirectiontoVector(direction);
+        maxJump = GetShouldJump(maxPosition,direction);
         number = 2;
         Starter.GetDataBase().timer =  GameObject.Find("GetInput").GetComponent<GetInput>().StartCoroutine(Timer());
     }
@@ -59,10 +56,6 @@ public class Jump : Ability {
         Starter.GetDataBase().timer = GameObject.Find("GetInput").GetComponent<GetInput>().StartCoroutine(Timer());
 
     }
-    public void JumpedOnce(Player player, Direction direction)
-    {
-
-    }
 
     private IEnumerator JumpWait(float f,Player player)
     {
@@ -71,19 +64,7 @@ public class Jump : Ability {
 
     }
 
-    public void JumpHitFinished(Player player)
-    {
-        if(shouldjump != number)
-        {
-            if (Toolkit.HasBranch(Toolkit.VectorSum(player.position, Toolkit.ReverseDirection(Starter.GetGravityDirection()))))
-            {
-                player.state = PlayerState.Idle;
-                engine.MovePlayer(player, Toolkit.ReverseDirection(Starter.GetGravityDirection()));
-            }
-        }
-        player.state = PlayerState.Idle;
-        engine.Applygravity();
-    }
+
 
     private int GetShouldJump(Vector2 position, Direction direction)
     {
