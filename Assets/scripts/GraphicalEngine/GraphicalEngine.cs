@@ -240,7 +240,6 @@ public class GraphicalEngine : MonoBehaviour {
 
     public void AddLaser(Vector2 pos1,Vector2 pos2,Direction dir)
     {
-        RemoveLasers();
         GameObject myLine = new GameObject();
         myLine.tag = "LaserUI";
         myLine.transform.position = pos1;
