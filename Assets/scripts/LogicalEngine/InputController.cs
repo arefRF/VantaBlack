@@ -299,6 +299,12 @@ public class InputController {
     {
         if (player.lean && player.leandirection == direction)
         {
+            FunctionalContainer container = Toolkit.GetContainer(Toolkit.VectorSum(player.position, direction)) as FunctionalContainer;
+            /*if (container != null && container.abilities.Count != 0 && container.abilities[0] is Jump)
+            {
+                container.Action(player, Toolkit.ReverseDirection(direction));
+                return true;
+            }*/
             Starter.GetDataBase().StopTimer();
             player.state = nextstate;
             player.lean = false;
