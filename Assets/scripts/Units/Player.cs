@@ -266,7 +266,6 @@ public class Player : Unit
         {
             isonejumping = false;
         }
-        currentAbility = null;
         api.engine_Move(this, dir);
         return true;
     }
