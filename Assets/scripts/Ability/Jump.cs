@@ -4,7 +4,7 @@ using System.Collections;
 public class Jump : Ability {
 
     public int number;
-    public int shouldjump, jumped;
+    private int maxJump;
     LogicalEngine engine;
     public Coroutine coroutine;
 	public Jump()
@@ -21,30 +21,49 @@ public class Jump : Ability {
     public void Action(Player player, Direction direction)
     {
         Starter.GetDataBase().StopTimer();
-        player.state = PlayerState.Jumping;
+        player.state = PlayerState.Busy;
         player.currentAbility = this;
-        jumped = 0;
         if (engine == null)
             engine = Starter.GetEngine();
-        shouldjump = GetShouldJump(player.position, direction);
-        Vector2 finalpos = player.position + shouldjump * Toolkit.DirectiontoVector(direction);
-        Debug.Log(shouldjump);
-        if (shouldjump == 0)
-        {
-            JumpHitFinished(player);
-        }
+        Vector2 finalpos = player.position + number * Toolkit.DirectiontoVector(direction);
+        maxJump = GetShouldJump(player.position, direction);
+        engine.apiunit.AddToSnapshot(player);
+        engine.inputcontroller.LeanUndo(player, player.leandirection, PlayerState.Busy);
+        player.jumpdirection = direction;
+        if (number <= maxJump)
+            engine.apigraphic.Jump(player, this, finalpos, direction);
         else
         {
-            engine.apiunit.AddToSnapshot(player);
-            engine.inputcontroller.LeanUndo(player, player.leandirection, PlayerState.Jumping);
-            player.jumpdirection = direction;
-            engine.apigraphic.Jump(player, this, finalpos, direction);
+            Debug.Log("jump hit");
+            // calculate where to hit and call graphic hit
+            Vector2 hitPos = player.position + maxJump * Toolkit.DirectiontoVector(direction);
+            engine.apigraphic.Jump_Hit(player, direction, this, hitPos);
         }
         
     }
 
-    public void StartTimer(Player player)
+    public void JumpFinished(Player player, Vector2 finalpos)
     {
+        player.state = PlayerState.Jumping;
+        engine.apiunit.RemoveFromDatabase(player);
+        player.position = finalpos;
+        engine.apiunit.AddToDatabase(player);
+        coroutine = GameObject.Find("GetInput").GetComponent<GetInput>().StartCoroutine(JumpWait(0.5f,player));
+    }
+
+    public void JumpHitFinished(Player player,Vector2 finalpos)
+    {
+        engine.apiunit.RemoveFromDatabase(player);
+        player.position = finalpos;
+        engine.apiunit.AddToDatabase(player);
+        Debug.Log("Jump Hit Finished");
+        player.state = PlayerState.Idle;
+        player.ApplyGravity();
+    }
+    public void StartTimer(Player player,Direction direction)
+    {
+        Vector2 maxPosition = player.position + 4 * Toolkit.DirectiontoVector(direction);
+        maxJump = GetShouldJump(player.position,direction);
         number = 2;
         Starter.GetDataBase().timer =  GameObject.Find("GetInput").GetComponent<GetInput>().StartCoroutine(Timer());
     }
@@ -59,25 +78,6 @@ public class Jump : Ability {
         Starter.GetDataBase().timer = GameObject.Find("GetInput").GetComponent<GetInput>().StartCoroutine(Timer());
 
     }
-    public void JumpedOnce(Player player, Direction direction)
-    {
-        engine.lasercontroller.CollisionCheck(player.position);
-        jumped++;
-        engine.apiunit.RemoveFromDatabase(player);
-        player.position += Toolkit.DirectiontoVector(direction);
-        engine.apiunit.AddToDatabase(player);
-        if (shouldjump == jumped) {
-            if (number != shouldjump)
-                engine.apigraphic.Jump_Hit(player, direction, this);
-            else
-            {
-                //player.currentAbility = null;
-
-
-               coroutine = GameObject.Find("GetInput").GetComponent<GetInput>().StartCoroutine(JumpWait(0.6f,player));
-            }
-        }
-    }
 
     private IEnumerator JumpWait(float f,Player player)
     {
@@ -86,19 +86,7 @@ public class Jump : Ability {
 
     }
 
-    public void JumpHitFinished(Player player)
-    {
-        if(shouldjump != number)
-        {
-            if (Toolkit.HasBranch(Toolkit.VectorSum(player.position, Toolkit.ReverseDirection(Starter.GetGravityDirection()))))
-            {
-                player.state = PlayerState.Idle;
-                engine.MovePlayer(player, Toolkit.ReverseDirection(Starter.GetGravityDirection()));
-            }
-        }
-        player.state = PlayerState.Idle;
-        engine.Applygravity();
-    }
+
 
     private int GetShouldJump(Vector2 position, Direction direction)
     {

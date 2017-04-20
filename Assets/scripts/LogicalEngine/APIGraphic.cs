@@ -189,26 +189,22 @@ public class APIGraphic{
     public void Jump(Player player,Ability jump_ability, Vector2 position,Direction dir)
     {
         player.GetComponent<PlayerGraphics>().Jump(dir);
-        player.GetComponent<PlayerPhysics>().Jump(position, (Jump)jump_ability,dir);
+        player.GetComponent<PlayerPhysics>().Jump(position, (Jump)jump_ability,dir,false);
     }
 
-    public void Jump_Finish(Player player)
+    public void Jump_Finish(Player player, Vector2 finalpos, Jump jump)
     {
-        
-    }
-    public void Jumped_One(Ability abil)
-    {
-        
+        jump.JumpFinished(player, finalpos);
     }
 
-    public void Jump_Hit(Player player,Direction dir,Jump ability)
+    public void Jump_Hit(Player player,Direction dir,Jump ability,Vector2 pos)
     {
-        Jump_Hit_Finish(player,ability);
+        player.GetComponent<PlayerPhysics>().Jump(pos, ability, dir,true);
     }
 
-    public void Jump_Hit_Finish(Player player,Jump ability)
+    public void Jump_Hit_Finish(Player player,Jump ability,Vector2 finalpos)
     {
-        ability.JumpHitFinished(player);
+        ability.JumpHitFinished(player,finalpos);
     }
 
     public void MovePlayerOnPlatform(Player player,Vector2 pos)

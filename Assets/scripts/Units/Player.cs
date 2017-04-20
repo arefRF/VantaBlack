@@ -112,7 +112,6 @@ public class Player : Unit
         List<Unit> units = api.engine_GetUnits(Toolkit.VectorSum(position, dir));
         for (int i = 0; i < units.Count; i++)
         {
-            Debug.Log(units[i]);
             if (units[i] is Container || units[i] is Fountain || (units[i] is Branch && ((Branch)units[i]).islocked))
                 return true;
         }
@@ -199,15 +198,10 @@ public class Player : Unit
 
     public bool JumpingMove(Direction dir)
     {
-        Vector2 pos = position;
-        if (Toolkit.GetDeltaPositionAndTransformPosition(this, GetGravity()) > 0.7)
-            pos = Toolkit.VectorSum(pos, Toolkit.ReverseDirection(GetGravity()));
-        else if (((Jump)currentAbility).jumped == 0)
-            return false;
         Ramp ramp = null;
-        List<Unit> units = api.engine_GetUnits(Toolkit.VectorSum(pos, dir));
+        List<Unit> units = api.engine_GetUnits(Toolkit.VectorSum(position, dir));
         onramp = false;
-        List<Unit> temp = api.engine_GetUnits(pos);
+        List<Unit> temp = api.engine_GetUnits(position);
         bool goingup = true;
         for (int i = 0; i < temp.Count; i++)
         {
@@ -255,7 +249,7 @@ public class Player : Unit
                     break;
             }
             if (goingup)
-                units = api.engine_GetUnits(Toolkit.VectorSum(Toolkit.VectorSum(Toolkit.DirectiontoVector(Toolkit.ReverseDirection(GetGravity())), Toolkit.DirectiontoVector(dir)), pos));
+                units = api.engine_GetUnits(Toolkit.VectorSum(Toolkit.VectorSum(Toolkit.DirectiontoVector(Toolkit.ReverseDirection(GetGravity())), Toolkit.DirectiontoVector(dir)), position));
         }
         for (int i = 0; i < units.Count; i++)
         {
@@ -263,20 +257,15 @@ public class Player : Unit
             // Add Container Lean Code
                 return false;
         }
-        api.RemoveFromDatabase(this);
-        position = pos;
-        api.AddToDatabase(this);
         api.engine.apigraphic.Player_Co_Stop(this);
         if (!isonejumping && state == PlayerState.Jumping && abilities.Count > 0)
         {
-            Debug.Log("azsexdcfvgbhnjmko,l.sxdfcgbhjkm,");
             UseAbility(abilities[0]);
         }
         else if (isonejumping)
         {
             isonejumping = false;
         }
-        currentAbility = null;
         api.engine_Move(this, dir);
         return true;
     }
