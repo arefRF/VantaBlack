@@ -22,23 +22,29 @@ public class PlayerGraphics : MonoBehaviour {
 
     public void Lean_Right()
     {
+        ResetStates();
+        transform.rotation = Quaternion.Euler(0, 0, 0);
         animator.SetInteger("Lean", 2);
 
     }
 
     public void Lean_Left()
     {
+        ResetStates();
+        transform.rotation = Quaternion.Euler(0, 180, 0);
         animator.SetInteger("Lean", 4);
 
     }
 
     public void Lean_Up()
     {
+        ResetStates();
         animator.SetInteger("Lean", 1);
     }
 
     public void Lean_Down()
     {
+        ResetStates();
         animator.SetInteger("Lean", 3);
   
     }
@@ -63,6 +69,11 @@ public class PlayerGraphics : MonoBehaviour {
     { 
        // animator.SetInteger("Lean", 1);
 
+    }
+
+    public void Jump(Direction dir)
+    {
+        animator.SetBool("Jump", true);
     }
 
     public void FakeLean_Finished()
@@ -113,12 +124,10 @@ public class PlayerGraphics : MonoBehaviour {
         StartCoroutine(Simple_Move(player.position, 0.65f));
     }
 
-    private void ResetStates()
+    public void ResetStates()
     {
-       /* animator.SetBool("isFakeLean", false);
-        animator.SetBool("isLean", false);
+        animator.SetBool("Jump", false);
         animator.SetInteger("Walk", 0);
-        animator.SetInteger("Branch", 0); */
     }
     public void BranchExit(Direction dir,int ramp_type)
     {/*
@@ -184,13 +193,13 @@ public class PlayerGraphics : MonoBehaviour {
        // ResetStates();
         if (dir == Direction.Right)
         {
-            transform.GetChild(0).rotation = Quaternion.Euler(0, 0, 0);
+            transform.rotation = Quaternion.Euler(0, 0, 0);
             animator.SetInteger("Walk", 1);
         }
         else
         {
             animator.SetInteger("Walk", 1);
-            transform.GetChild(0).rotation = Quaternion.Euler(0, 180, 0);
+            transform.rotation = Quaternion.Euler(0, 180, 0);
 
         }
     }

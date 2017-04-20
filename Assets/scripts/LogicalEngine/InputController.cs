@@ -66,7 +66,9 @@ public class InputController {
                             player.position = Toolkit.VectorSum(player.position, direction);
                         engine.apiunit.AddToDatabase(player);
                         if (!player.isonejumping && player.abilities.Count > 0)
+                        {
                             player.UseAbility(player.abilities[0]);
+                        }
                         else
                         {
                             player.isonejumping = false;
@@ -113,17 +115,47 @@ public class InputController {
         }
     }
 
+    public void Jump(Player player)
+    {
+        if(player.state == PlayerState.Idle)
+        {
+                // Idle and simple jump
+                Direction direction = Toolkit.ReverseDirection(player.GetGravity());
+                if(!Toolkit.IsInsideBranch(player) && (Toolkit.IsEmpty(Toolkit.VectorSum(player.position, direction)) || Toolkit.HasBranch(Toolkit.VectorSum(player.position, direction))))
+                {
+                    player.isonejumping = true;
+                    player.oneJump.Action(player, direction);
+                }
+            
+        }
+        else if(player.state == PlayerState.Lean)
+        {
+            Direction direction = Toolkit.ReverseDirection(player.leandirection);
+            if (!Toolkit.IsInsideBranch(player) && Toolkit.IsEmpty(Toolkit.VectorSum(player.position, direction)))
+            {
+              
+                player.isonejumping = true;
+                player.oneJump.Action(player, direction);
+            }
+        }
+        else if (player.state == PlayerState.Jumping && player.isonejumping && player.abilities.Count != 0 && player.abilities[0].abilitytype == AbilityType.Jump)
+        {
+            player.isonejumping = false;
+            Direction direction = Toolkit.ReverseDirection(player.GetGravity());
+            if (!Toolkit.IsInsideBranch(player) && Toolkit.IsEmpty(Toolkit.VectorSum(player.position, direction)))
+            {
+                GameObject.Find("GetInput").GetComponent<GetInput>().StopCoroutine(player.oneJump.coroutine);
+                player.currentAbility = player.abilities[0];
+                ((Jump)player.currentAbility).number = 1;
+                ((Jump)player.currentAbility).Action(player, direction);
+            }
+        }
+    }
     private void IdlePLayerMove(Player player, Direction direction)
     {
         if (!player.lean)
         {
-            if(!Toolkit.IsInsideBranch(player) && player.GetGravity() == Toolkit.ReverseDirection(direction) && Toolkit.IsEmpty(Toolkit.VectorSum(player.position, direction)))
-
-            {
-                player.isonejumping = true;
-                player.oneJump.Action(player, direction);
-            }
-            else if (player.Can_Move_Direction(direction))
+            if (player.Can_Move_Direction(direction))
             {
                 if (player.Should_Change_Direction(direction))
                 {
@@ -313,8 +345,13 @@ public class InputController {
                     return;
                 pos = nearest.position;
             }
+            Debug.Log("here hereh");
             if (player.Can_Lean(pos))
             {
+                if (Toolkit.HasBranch(pos))
+                {
+                    Toolkit.GetBranch(pos).PlayerLeaned(player);
+                }
                 player.api.RemoveFromDatabase(player);
                 player.position = Toolkit.VectorSum(pos, Toolkit.ReverseDirection(direction));
                 player.api.AddToDatabase(player);

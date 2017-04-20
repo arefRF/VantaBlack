@@ -51,18 +51,25 @@ public class GetInput : MonoBehaviour {
                 
            Get_Lean_Undo();
             // Directional Abilities use
-            if (Input.GetKeyUp(KeyCode.Space))
+            if (Input.GetKeyUp(KeyCode.F))
+            {
+                api.Action_Key(true);
                 is_space = false;
+            }
             if (is_space)
                 Get_Space_Arrows();
             else
                 Get_Move();
 
-                  if (Input.GetKeyDown(KeyCode.Space))
+                  if (Input.GetKeyDown(KeyCode.F))
                   {
-                      api.Action_Key();
+                      api.Action_Key(false);
                       is_space = true;
                   }
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                api.Jump();
+            }
                   if (is_space)
                       Get_Space_Arrows();
                   if (Input.GetKeyDown(KeyCode.A))
@@ -104,7 +111,7 @@ public class GetInput : MonoBehaviour {
             if (!action_lock)
             {
                 action_lock = true;
-                api.Action_Key();
+                api.Action_Key(true);
             }
         }
         else if (Input.GetAxis("Action") == 0)
@@ -260,6 +267,7 @@ public class GetInput : MonoBehaviour {
     }
     private void Get_Move()
     {
+        
         if (getOnce)
         {
             if (Input.GetKeyDown(KeyCode.RightArrow))

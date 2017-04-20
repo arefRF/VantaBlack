@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Branch : Unit {
 
+    public bool islocked = false;
+
     public override void SetInitialSprite()
     {
         bool[] notconnected = Toolkit.GetConnectedSidesForBranch(this);
@@ -137,12 +139,27 @@ public class Branch : Unit {
 
     public override bool PlayerMoveInto(Direction dir)
     {
-        return true;
+        return !islocked;
     }
 
     public override CloneableUnit Clone()
     {
         return new CloneableBranch(this);
+    }
+
+    public void PlayerLeaned(Player player)
+    {
+        if (islocked)
+        {
+            if (player.abilities.Count != 0 && player.abilities[0] is Key)
+            {
+                Debug.Log("here");
+                islocked = false;
+                player.abilities.Clear();
+                player._setability();
+                api.engine.apigraphic.Absorb(player, null);
+            }
+        }
     }
 
 }

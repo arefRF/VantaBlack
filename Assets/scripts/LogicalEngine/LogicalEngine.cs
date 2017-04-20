@@ -9,10 +9,12 @@ public class LogicalEngine {
     public Database database;
     public SubEngine_Initializer initializer;
     public InputController inputcontroller;
-    int sizeX, sizeY;
+    public int sizeX, sizeY;
     public List<Unit> stuckedunits;
     public SnapshotManager snpmanager;
     public PipeController pipecontroller;
+    public DrainerController drainercontroller;
+    public LaserController lasercontroller;
 
     public List<Unit> leanmove;
     public List<Unit> shouldmove;
@@ -29,6 +31,8 @@ public class LogicalEngine {
         snpmanager = new SnapshotManager(this);
         initializer = new SubEngine_Initializer(x,y, this);
         pipecontroller = new PipeController(this);
+        lasercontroller = new LaserController(database.lasers);
+        
     }
 
     public void Run()
@@ -43,7 +47,9 @@ public class LogicalEngine {
         for(int i=0; i<database.player.Count; i++)
             snpmanager.AddToSnapShot(database.player[i]);
         snpmanager.takesnapshot();
+        drainercontroller = new DrainerController(database.drainers);
         pipecontroller.CheckPipes();
+        lasercontroller.SetLasers();
         //Applygravity();
     }
 
@@ -66,7 +72,7 @@ public class LogicalEngine {
             {
                 if (Toolkit.HasBranch(Toolkit.VectorSum(unit.players[i].position, dir)))
                 {
-                    inputcontroller.LeanUndo(unit.players[i] as Player, Toolkit.ReverseDirection(dir), PlayerState.Idle);
+                    inputcontroller.LeanUndo(unit.players[i] as Player, Toolkit.ReverseDirection(dir), PlayerState.Busy);
                     MovePlayer(unit.players[i] as Player, dir);
                     unit.players.RemoveAt(i);
                     continue;
@@ -89,7 +95,6 @@ public class LogicalEngine {
                 {
                     if (Toolkit.HasBranch(Toolkit.VectorSum(unit.ConnectedUnits[i].players[j].position, dir)))
                     {
-                        Debug.Log("here");
                         inputcontroller.LeanUndo(unit.ConnectedUnits[i].players[j] as Player, Toolkit.ReverseDirection(dir), PlayerState.Idle);
                         inputcontroller.FakeLeanUndo(unit.ConnectedUnits[i].players[j] as Player, Toolkit.ReverseDirection(dir));
                         MovePlayer(unit.ConnectedUnits[i].players[j] as Player, dir);
@@ -148,7 +153,8 @@ public class LogicalEngine {
                     }
                     else
                     {
-                        Player tempplayer = shouldmove[i] as Player;
+                        Debug.Log(leanmove[i]);
+                        Player tempplayer = leanmove[i] as Player;
                         inputcontroller.LeanUndo(tempplayer, tempplayer.leandirection, PlayerState.Idle);
                         inputcontroller.FakeLeanUndo(tempplayer, tempplayer.leandirection);
                     }
@@ -645,7 +651,7 @@ public class LogicalEngine {
 
     
 
-    public void ActionKeyPressed()
+    public void ActionKeyPressed(bool KeyUp)
     {
         for(int i=0; i<database.player.Count; i++)
         {
@@ -661,7 +667,10 @@ public class LogicalEngine {
                         {
                             if (units[i] is ParentContainer)
                             {
-                                ((ParentContainer)units[i]).Action(database.player[i], Toolkit.ReverseDirection(database.player[i].leandirection));
+                                if(KeyUp)
+                                    ((ParentContainer)units[i]).Action(database.player[i], Toolkit.ReverseDirection(database.player[i].leandirection));
+                                else
+                                    ((FunctionalContainer)units[i]).ActionKeyDown(database.player[i], Toolkit.ReverseDirection(database.player[i].leandirection));
                             }
                             else if (units[i] is Fountain)
                             {
@@ -687,6 +696,14 @@ public class LogicalEngine {
             if (database.player[i].lean)
                 continue;
             database.player[i].Action(dir);
+        }
+    }
+
+    public void JumpKeyprssed()
+    {
+        for (int i = 0; i < database.player.Count; i++)
+        {
+            inputcontroller.Jump(database.player[i]);
         }
     }
 

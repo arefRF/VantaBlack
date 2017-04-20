@@ -112,7 +112,8 @@ public class Player : Unit
         List<Unit> units = api.engine_GetUnits(Toolkit.VectorSum(position, dir));
         for (int i = 0; i < units.Count; i++)
         {
-            if (units[i] is Container || units[i] is Fountain)
+            Debug.Log(units[i]);
+            if (units[i] is Container || units[i] is Fountain || (units[i] is Branch && ((Branch)units[i]).islocked))
                 return true;
         }
         return false;
@@ -125,7 +126,7 @@ public class Player : Unit
         List<Unit> units = api.engine.database.GetUnits(pos);
         for (int i = 0; i < units.Count; i++)
         {
-            if (units[i] is Container || units[i] is Fountain)
+            if (units[i] is Container || units[i] is Fountain || (units[i] is Branch && ((Branch)units[i]).islocked))
                 return true;
         }
         return false;
@@ -188,7 +189,9 @@ public class Player : Unit
         }
         for (int i = 0; i < units.Count; i++) {
             if (!units[i].PlayerMoveInto(Toolkit.ReverseDirection(dir)))
+            {
                 return false;
+            }
         }
         api.engine_Move(this, dir);
         return true;
@@ -266,6 +269,7 @@ public class Player : Unit
         api.engine.apigraphic.Player_Co_Stop(this);
         if (!isonejumping && state == PlayerState.Jumping && abilities.Count > 0)
         {
+            Debug.Log("azsexdcfvgbhnjmko,l.sxdfcgbhjkm,");
             UseAbility(abilities[0]);
         }
         else if (isonejumping)
@@ -354,6 +358,11 @@ public class Player : Unit
     public override bool ApplyGravity()
     {
         isonejumping = false;
+        api.engine.drainercontroller.Check(this);
+        state = PlayerState.Idle;
+        this.GetComponent<PlayerGraphics>().ResetStates();
+        api.engine.lasercontroller.CollisionCheck(position);
+
         // to avoid exception
         if (position.x <= 0 || position.y <= 0)
             return false;
@@ -378,11 +387,15 @@ public class Player : Unit
 
         if (!NewFall())
             return false;
-        
+
+        api.engine.drainercontroller.Check(this);
+        api.engine.lasercontroller.CollisionCheck(position);
         while (IsInBound(position) && NewFall())
         {
+            api.engine.drainercontroller.Check(this);
             api.RemoveFromDatabase(this);
             position = Toolkit.VectorSum(position,gravity);
+            api.engine.lasercontroller.CollisionCheck(position);
             api.AddToDatabase(this);
         }
         state = PlayerState.Falling;
