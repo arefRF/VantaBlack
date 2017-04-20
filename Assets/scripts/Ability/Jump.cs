@@ -28,7 +28,6 @@ public class Jump : Ability {
             engine = Starter.GetEngine();
         shouldjump = GetShouldJump(player.position, direction);
         Vector2 finalpos = player.position + shouldjump * Toolkit.DirectiontoVector(direction);
-        Debug.Log(shouldjump);
         if (shouldjump == 0)
         {
             JumpHitFinished(player);

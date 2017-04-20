@@ -50,21 +50,8 @@ public class InputController {
                 }
                 else
                 {
-                    Unit nearest;
-                    bool tempbool = false;
-                    if(Toolkit.GetDeltaPositionAndTransformPosition(player, direction) > 0.9)
+                    if (player.Can_Lean(Toolkit.VectorSum(player.position, direction)))
                     {
-                        nearest = Toolkit.GetNearestUnitForJumpingPlayer(player, Toolkit.VectorSum(player.position, direction), direction);
-                        tempbool = true;
-                    }
-                    else
-                        nearest = Toolkit.GetNearestUnitForJumpingPlayer(player, player.position, direction);
-                    if (nearest != null && player.Can_Lean(nearest.position))
-                    {
-                        engine.apiunit.RemoveFromDatabase(player);
-                        if(tempbool)
-                            player.position = Toolkit.VectorSum(player.position, direction);
-                        engine.apiunit.AddToDatabase(player);
                         if (!player.isonejumping && player.abilities.Count > 0)
                         {
                             player.UseAbility(player.abilities[0]);
@@ -85,16 +72,8 @@ public class InputController {
             }
             else
             {
-                Vector2 pos = player.position;
-                if (Toolkit.GetDeltaPositionAndTransformPosition(player, player.GetGravity()) > 0.9)
+                if (player.Can_Lean(Toolkit.VectorSum(player.position, direction)))
                 {
-                    pos = Toolkit.VectorSum(pos, direction);
-                }
-                if (player.Can_Lean(Toolkit.VectorSum(pos, direction)))
-                {
-                    engine.apiunit.RemoveFromDatabase(player);
-                    player.position = pos;
-                    engine.apiunit.AddToDatabase(player);
                     if (!player.isonejumping)
                     {
                         player.UseAbility(player.abilities[0]);
@@ -106,7 +85,7 @@ public class InputController {
                     Lean(player, direction);
                     //player.currentAbility = null;
                 }
-                else if (Toolkit.HasBranch(Toolkit.VectorSum(pos, direction)))
+                else if (Toolkit.HasBranch(Toolkit.VectorSum(player.position, direction)))
                 {
                     player.state = PlayerState.Falling;
                     engine.MovePlayer(player, direction);
@@ -337,16 +316,6 @@ public class InputController {
         if (!player.lean)
         {
             Vector2 pos = Toolkit.VectorSum(player.position, direction);
-            if (player.state == PlayerState.Jumping)
-            {
-                if (direction == Toolkit.ReverseDirection(player.jumpdirection))
-                    return;
-                Unit nearest = Toolkit.GetNearestUnitForJumpingPlayer(player,player.position, direction);
-                if (nearest == null)
-                    return;
-                pos = nearest.position;
-            }
-            Debug.Log("here hereh");
             if (player.Can_Lean(pos))
             {
                 if (Toolkit.HasBranch(pos))
