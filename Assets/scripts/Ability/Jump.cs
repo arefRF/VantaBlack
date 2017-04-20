@@ -6,9 +6,11 @@ public class Jump : Ability {
     public int number;
     public int shouldjump, jumped;
     LogicalEngine engine;
+    public Coroutine coroutine;
 	public Jump()
     {
-        abilitytype = AbilityType.Jump;
+       abilitytype = AbilityType.Jump;
+       
     }
 
     public Jump(int number)
@@ -19,6 +21,7 @@ public class Jump : Ability {
 
     public void Action(Player player, Direction direction)
     {
+        Starter.GetDataBase().StopTimer();
         player.state = PlayerState.Jumping;
         player.currentAbility = this;
         jumped = 0;
@@ -26,16 +29,40 @@ public class Jump : Ability {
             engine = Starter.GetEngine();
         shouldjump = GetShouldJump(player.position, direction);
         Vector2 finalpos = player.position + shouldjump * Toolkit.DirectiontoVector(direction);
-        engine.apiunit.AddToSnapshot(player);
-        engine.inputcontroller.LeanUndo(player, player.leandirection, PlayerState.Jumping);
-        player.jumpdirection = direction;
-        engine.apigraphic.Jump(player, this, finalpos, direction);
+        Debug.Log(shouldjump);
+        if (shouldjump == 0)
+        {
+            JumpHitFinished(player);
+        }
+        else
+        {
+            engine.apiunit.AddToSnapshot(player);
+            engine.inputcontroller.LeanUndo(player, player.leandirection, PlayerState.Jumping);
+            player.jumpdirection = direction;
+            engine.apigraphic.Jump(player, this, finalpos, direction);
+        }
         
     }
 
+    public void StartTimer(Player player)
+    {
+        number = 2;
+        Starter.GetDataBase().timer =  GameObject.Find("GetInput").GetComponent<GetInput>().StartCoroutine(Timer());
+    }
+    private IEnumerator Timer()
+    {
+        yield return new WaitForSeconds(0.75f);
+        number++;
+        number %= 5;
+        if (number == 0)
+            number = 2;
+        Debug.Log(number);
+        Starter.GetDataBase().timer = GameObject.Find("GetInput").GetComponent<GetInput>().StartCoroutine(Timer());
+
+    }
     public void JumpedOnce(Player player, Direction direction)
     {
-        Debug.Log("jumped once");
+        engine.lasercontroller.CollisionCheck(player.position);
         jumped++;
         engine.apiunit.RemoveFromDatabase(player);
         player.position += Toolkit.DirectiontoVector(direction);
@@ -48,7 +75,7 @@ public class Jump : Ability {
                 //player.currentAbility = null;
 
 
-                GameObject.Find("GetInput").GetComponent<GetInput>().StartCoroutine(JumpWait(0.6f,player));
+               coroutine = GameObject.Find("GetInput").GetComponent<GetInput>().StartCoroutine(JumpWait(0.6f,player));
             }
         }
     }

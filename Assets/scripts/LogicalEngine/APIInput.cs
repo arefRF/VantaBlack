@@ -7,10 +7,10 @@ public class APIInput{
     public GetInput input { get; set; }
     private GameMode mode = GameMode.Play;
     private Teleport portal;
-    public void Action_Key()
+    public void Action_Key(bool KeyUp)
     {
         if (mode == GameMode.Play)
-            engine.ActionKeyPressed();
+            engine.ActionKeyPressed(KeyUp);
         else if (mode == GameMode.Portal)
             portal.Port();
     }

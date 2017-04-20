@@ -651,7 +651,7 @@ public class LogicalEngine {
 
     
 
-    public void ActionKeyPressed()
+    public void ActionKeyPressed(bool KeyUp)
     {
         for(int i=0; i<database.player.Count; i++)
         {
@@ -667,7 +667,10 @@ public class LogicalEngine {
                         {
                             if (units[i] is ParentContainer)
                             {
-                                ((ParentContainer)units[i]).Action(database.player[i], Toolkit.ReverseDirection(database.player[i].leandirection));
+                                if(KeyUp)
+                                    ((ParentContainer)units[i]).Action(database.player[i], Toolkit.ReverseDirection(database.player[i].leandirection));
+                                else
+                                    ((FunctionalContainer)units[i]).ActionKeyDown(database.player[i], Toolkit.ReverseDirection(database.player[i].leandirection));
                             }
                             else if (units[i] is Fountain)
                             {
