@@ -300,4 +300,9 @@ public class GetInput : MonoBehaviour {
         pos.z = -10;
         Camera.main.transform.position = pos;
     }
+
+    public bool isFunctionKeyDown()
+    {
+        return Input.GetKey(KeyCode.F);
+    }
 }

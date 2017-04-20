@@ -287,7 +287,15 @@ public class InputController {
     {
         for (int i = 0; i < database.player.Count; i++)
         {
-            if (LeanUndo(database.player[i], direction, PlayerState.Idle) || FakeLeanUndo(database.player[i], direction))
+            if(database.player[i].state == PlayerState.Lean && engine.apiinput.isFunctionKeyDown())
+            {
+                FunctionalContainer container = Toolkit.GetContainer(Toolkit.VectorSum(database.player[i].position, direction)) as FunctionalContainer;
+                if (container != null && container.abilities.Count != 0 && container.abilities[0] is Jump)
+                {
+                    container.Action(database.player[i], Toolkit.ReverseDirection(direction));
+                }
+            }
+            else if (LeanUndo(database.player[i], direction, PlayerState.Idle) || FakeLeanUndo(database.player[i], direction))
             {
                 database.player[i].ApplyGravity();
             }
@@ -299,12 +307,6 @@ public class InputController {
     {
         if (player.lean && player.leandirection == direction)
         {
-            FunctionalContainer container = Toolkit.GetContainer(Toolkit.VectorSum(player.position, direction)) as FunctionalContainer;
-            /*if (container != null && container.abilities.Count != 0 && container.abilities[0] is Jump)
-            {
-                container.Action(player, Toolkit.ReverseDirection(direction));
-                return true;
-            }*/
             Starter.GetDataBase().StopTimer();
             player.state = nextstate;
             player.lean = false;
