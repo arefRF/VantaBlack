@@ -17,7 +17,7 @@ public class LaserController{
     {
         if (engine == null)
             engine = Starter.GetEngine();
-        //engine.apigraphic.RemoveLaser();
+        engine.apigraphic.RemoveLaser();
         containers.Clear();
         for (int i = 0; i < lasers.Count; i++)
         {
