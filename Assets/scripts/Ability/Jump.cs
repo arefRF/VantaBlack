@@ -21,14 +21,14 @@ public class Jump : Ability {
     public void Action(Player player, Direction direction)
     {
         Starter.GetDataBase().StopTimer();
-        player.state = PlayerState.Jumping;
+        player.state = PlayerState.Busy;
         player.currentAbility = this;
         if (engine == null)
             engine = Starter.GetEngine();
         Vector2 finalpos = player.position + number * Toolkit.DirectiontoVector(direction);
         maxJump = GetShouldJump(player.position, direction);
         engine.apiunit.AddToSnapshot(player);
-        engine.inputcontroller.LeanUndo(player, player.leandirection, PlayerState.Jumping);
+        engine.inputcontroller.LeanUndo(player, player.leandirection, PlayerState.Busy);
         player.jumpdirection = direction;
         if (number <= maxJump)
             engine.apigraphic.Jump(player, this, finalpos, direction);
@@ -44,10 +44,11 @@ public class Jump : Ability {
 
     public void JumpFinished(Player player, Vector2 finalpos)
     {
+        player.state = PlayerState.Jumping;
         engine.apiunit.RemoveFromDatabase(player);
         player.position = finalpos;
         engine.apiunit.AddToDatabase(player);
-        GameObject.Find("GetInput").GetComponent<GetInput>().StartCoroutine(JumpWait(0.5f,player));
+        coroutine = GameObject.Find("GetInput").GetComponent<GetInput>().StartCoroutine(JumpWait(0.5f,player));
     }
 
     public void JumpHitFinished(Player player,Vector2 finalpos)

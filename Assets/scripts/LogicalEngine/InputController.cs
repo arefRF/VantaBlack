@@ -46,12 +46,15 @@ public class InputController {
                 }
                 else if (direction != player.jumpdirection && direction != Toolkit.ReverseDirection(player.jumpdirection) && player.JumpingMove(direction))
                 {
+                    GameObject.Find("GetInput").GetComponent<GetInput>().StopCoroutine(((Jump)player.currentAbility).coroutine);
+                    player.currentAbility = null;
                     player.state = PlayerState.Moving;
                 }
                 else
                 {
                     if (player.Can_Lean(Toolkit.VectorSum(player.position, direction)))
                     {
+                        GameObject.Find("GetInput").GetComponent<GetInput>().StopCoroutine(((Jump)player.currentAbility).coroutine);
                         if (!player.isonejumping && player.abilities.Count > 0)
                         {
                             player.UseAbility(player.abilities[0]);
@@ -74,6 +77,7 @@ public class InputController {
             {
                 if (player.Can_Lean(Toolkit.VectorSum(player.position, direction)))
                 {
+                    GameObject.Find("GetInput").GetComponent<GetInput>().StopCoroutine(((Jump)player.currentAbility).coroutine);
                     if (!player.isonejumping)
                     {
                         player.UseAbility(player.abilities[0]);
