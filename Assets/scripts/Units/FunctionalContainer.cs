@@ -42,7 +42,7 @@ public class FunctionalContainer : Container
             return;
         switch (abilities[0].abilitytype)
         {
-            case AbilityType.Jump: ((Jump)abilities[0]).StartTimer(player); break;
+            case AbilityType.Jump: ((Jump)abilities[0]).StartTimer(player, dir); break;
         }
     }
 

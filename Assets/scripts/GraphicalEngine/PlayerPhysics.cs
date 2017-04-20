@@ -229,7 +229,7 @@ public class PlayerPhysics : MonoBehaviour
         jump_ability = ability;
         if (last_co != null)
             StopCoroutine(last_co);
-        last_co = StartCoroutine(Jump_couroutine(pos, 2, dir));
+        last_co = StartCoroutine(Jump_couroutine(pos, 2, dir, ability));
 
     }
 
@@ -404,27 +404,19 @@ public class PlayerPhysics : MonoBehaviour
         }
     }
 
-    private IEnumerator Jump_couroutine(Vector2 pos,float jump_time,Direction direction)
+    private IEnumerator Jump_couroutine(Vector2 pos,float jump_time,Direction direction, Jump jump)
     {
         float remain_distance = ((Vector2)player_transofrm.position - pos).sqrMagnitude;
         while(remain_distance > float.Epsilon)
         {
             remain_distance = ((Vector2)player_transofrm.position - pos).sqrMagnitude;
             player_transofrm.position = Vector3.MoveTowards(player_transofrm.position, pos, Time.deltaTime / move_time);
-            Check_Jump(direction);
             api.Camera_AutoMove();
             yield return null;
         }
-        api.Jump_Finish(player);
+        api.Jump_Finish(player, pos, jump);
     }
 
-    private void Check_Jump(Direction direction)
-    {
-        if (Distance((Vector2)player_transofrm.position , player.position) >= 1)
-        {
-            jump_ability.JumpedOnce(player, direction);
-        }
-    }
 
     private float Distance(Vector2 pos1, Vector2 pos2)
     {
