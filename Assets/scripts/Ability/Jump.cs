@@ -20,6 +20,7 @@ public class Jump : Ability {
 
     public void Action(Player player, Direction direction)
     {
+        Debug.Log("here");
         Starter.GetDataBase().StopTimer();
         player.state = PlayerState.Busy;
         player.currentAbility = this;
