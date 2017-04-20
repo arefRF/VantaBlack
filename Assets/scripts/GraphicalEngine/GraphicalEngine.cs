@@ -240,7 +240,9 @@ public class GraphicalEngine : MonoBehaviour {
 
     public void AddLaser(Vector2 pos1,Vector2 pos2,Direction dir)
     {
+        RemoveLasers();
         GameObject myLine = new GameObject();
+        myLine.tag = "LaserUI";
         myLine.transform.position = pos1;
         myLine.AddComponent<LineRenderer>();
         LineRenderer render = myLine.GetComponent<LineRenderer>();
@@ -259,9 +261,13 @@ public class GraphicalEngine : MonoBehaviour {
 
     }
 
-    public void RemoveLaser(Vector2 pos1,Vector2 pos2)
+    public void RemoveLasers()
     {
-
+        GameObject[] lasers= GameObject.FindGameObjectsWithTag("LaserUI");
+        for(int i = 0; i < lasers.Length; i++)
+        {
+            Destroy(lasers[i]);
+        }
     }
 
     private void DynamicSwitch(DynamicContainer container)
