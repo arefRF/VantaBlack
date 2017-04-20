@@ -10,7 +10,6 @@ public class Jump : Ability {
 	public Jump()
     {
        abilitytype = AbilityType.Jump;
-       
     }
 
     public Jump(int number)
