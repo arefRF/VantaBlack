@@ -7,14 +7,27 @@ public class UnityPhysics : MonoBehaviour {
     private float hoverForce = 50;
     private float powerInput;
     private float speed = 50;
+    private Player player;
+    private LogicalEngine engine;
     // Use this for initialization
     void Start () {
         rb = GetComponent<Rigidbody2D>();
+        player = GetComponent<Player>();
+        engine = Starter.GetEngine();
     }
 	
 	// Update is called once per frame
 	void Update () {
         powerInput = Input.GetAxis("Horizontal");
+        if (powerInput == 0)
+            rb.drag = 100;
+        else
+            rb.drag = 2;
+        
+        if((player.position - (Vector2)transform.position).sqrMagnitude > 0.5)
+        {
+            engine.MoveDone(player);
+        }
     }
 
 
@@ -39,7 +52,7 @@ public class UnityPhysics : MonoBehaviour {
                 transform.rotation = Quaternion.Euler(0, 0, 0);
             else if(powerInput <= -0.4f)
                 transform.rotation = Quaternion.Euler(0, 180, 0);
-
+            Debug.Log(rb.velocity);
             rb.AddRelativeForce(input);
 
         }
