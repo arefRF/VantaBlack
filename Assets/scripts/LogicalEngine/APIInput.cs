@@ -16,7 +16,7 @@ public class APIInput{
     }
 
     public void Jump()
-    {
+    { 
         engine.JumpKeyprssed();
     }
     public void Action_Key(Direction dir)
