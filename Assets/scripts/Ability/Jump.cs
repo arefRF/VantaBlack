@@ -44,7 +44,7 @@ public class Jump : Ability {
 
     public void JumpFinished(Player player, Vector2 finalpos)
     {
-        player.state = PlayerState.Jumping;
+        player.state = PlayerState.Transition;
         engine.apiunit.RemoveFromDatabase(player);
         player.position = finalpos;
         engine.apiunit.AddToDatabase(player);
