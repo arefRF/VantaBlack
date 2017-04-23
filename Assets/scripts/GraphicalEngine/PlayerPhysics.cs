@@ -18,10 +18,12 @@ public class PlayerPhysics : MonoBehaviour
    // private Coroutine lean_stick_co;
     //private Coroutine on_Platform_co;
     private Coroutine last_co;
+
     void Start()
     {
         Init();
     }
+
 
     private void Init()
     {

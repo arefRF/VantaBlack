@@ -120,6 +120,6 @@ public class APIInput{
 
     enum GameMode
     {
-        Play,Portal,Menu
+        Play,Portal,Menu,Real
     }
 }
