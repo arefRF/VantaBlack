@@ -271,7 +271,7 @@ public class GraphicalEngine : MonoBehaviour {
         }
         catch
         {
-
+            
         }
     }
 
@@ -279,7 +279,6 @@ public class GraphicalEngine : MonoBehaviour {
     {
         if(container.on)
         {
-
             container.GetComponent<Animator>().speed = 4;
             GetObjectInChild(container.gameObject, "Switches").GetComponent<Animator>().SetBool("On", true);
             GetObjectInChild(container.gameObject, "Glass").GetComponent<SpriteRenderer>().sprite =
