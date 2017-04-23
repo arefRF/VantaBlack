@@ -41,7 +41,6 @@ public class InputController {
         {
             if(Toolkit.HasBranch(Toolkit.VectorSum(player.position, direction)))
             {
-                Debug.Log("here");
                 if (player.JumpingMove(direction))
                 {
                     GameObject.Find("GetInput").GetComponent<GetInput>().StopCoroutine(((Jump)player.currentAbility).coroutine);
