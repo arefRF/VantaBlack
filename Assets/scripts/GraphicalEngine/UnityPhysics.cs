@@ -24,7 +24,7 @@ public class UnityPhysics : MonoBehaviour {
         else
             rb.drag = 2;
         
-        if((player.position - (Vector2)transform.position).sqrMagnitude > 0.5)
+        if(Distance(player.position,transform.position) > 0.5)
         {
             Direction dir;
             if (powerInput > 0)
@@ -35,6 +35,11 @@ public class UnityPhysics : MonoBehaviour {
         }
     }
 
+    
+    float Distance(Vector2 p1,Vector2 p2)
+    {
+        return Mathf.Sqrt((Mathf.Pow((p1.x - p2.x), 2) + Mathf.Pow(p1.y - p2.y, 2)));
+    }
 
     void FixedUpdate()
     {
