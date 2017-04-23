@@ -26,7 +26,12 @@ public class UnityPhysics : MonoBehaviour {
         
         if((player.position - (Vector2)transform.position).sqrMagnitude > 0.5)
         {
-            engine.MoveDone(player);
+            Direction dir;
+            if (powerInput > 0)
+                dir = Direction.Right;
+            else
+                dir = Direction.Left;
+            engine.MoveDone(player,dir);
         }
     }
 
