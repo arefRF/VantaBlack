@@ -112,6 +112,12 @@ public class APIInput{
         input.getOnce = false;
         mode = GameMode.Play;
     }
+
+    public bool isFunctionKeyDown()
+    {
+        return input.isFunctionKeyDown();
+    }
+
     enum GameMode
     {
         Play,Portal,Menu

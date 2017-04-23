@@ -5,6 +5,7 @@ public class LaserController{
 
     public List<Laser> lasers;
     public List<DynamicContainer> containers;
+    LogicalEngine engine;
 
     public LaserController(List<Laser> lasers)
     {
@@ -14,9 +15,14 @@ public class LaserController{
     
     public void SetLasers()
     {
+        if (engine == null)
+            engine = Starter.GetEngine();
+        engine.apigraphic.RemoveLaser();
         containers.Clear();
         for (int i = 0; i < lasers.Count; i++)
+        {
             lasers[i].SetLaser();
+        }
     }
 
     public bool CollisionCheck(Vector2 pos)

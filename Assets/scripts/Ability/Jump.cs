@@ -20,7 +20,6 @@ public class Jump : Ability {
 
     public void Action(Player player, Direction direction)
     {
-        Debug.Log("here");
         Starter.GetDataBase().StopTimer();
         player.state = PlayerState.Busy;
         player.currentAbility = this;
@@ -45,7 +44,7 @@ public class Jump : Ability {
 
     public void JumpFinished(Player player, Vector2 finalpos)
     {
-        player.state = PlayerState.Jumping;
+        player.state = PlayerState.Transition;
         engine.apiunit.RemoveFromDatabase(player);
         player.position = finalpos;
         engine.apiunit.AddToDatabase(player);

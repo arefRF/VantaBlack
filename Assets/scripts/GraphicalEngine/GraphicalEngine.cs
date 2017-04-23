@@ -241,6 +241,7 @@ public class GraphicalEngine : MonoBehaviour {
     public void AddLaser(Vector2 pos1,Vector2 pos2,Direction dir)
     {
         GameObject myLine = new GameObject();
+        myLine.tag = "LaserUI";
         myLine.transform.position = pos1;
         myLine.AddComponent<LineRenderer>();
         LineRenderer render = myLine.GetComponent<LineRenderer>();
@@ -259,16 +260,25 @@ public class GraphicalEngine : MonoBehaviour {
 
     }
 
-    public void RemoveLaser(Vector2 pos1,Vector2 pos2)
+    public void RemoveLasers()
     {
-
+        try {
+            GameObject[] lasers = GameObject.FindGameObjectsWithTag("LaserUI");
+            for (int i = 0; i < lasers.Length; i++)
+            {
+                Destroy(lasers[i]);
+            }
+        }
+        catch
+        {
+            
+        }
     }
 
     private void DynamicSwitch(DynamicContainer container)
     {
         if(container.on)
         {
-
             container.GetComponent<Animator>().speed = 4;
             GetObjectInChild(container.gameObject, "Switches").GetComponent<Animator>().SetBool("On", true);
             GetObjectInChild(container.gameObject, "Glass").GetComponent<SpriteRenderer>().sprite =

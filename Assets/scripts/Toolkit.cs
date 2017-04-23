@@ -85,19 +85,6 @@ public sealed class Toolkit{
         return null;
     }
 
-    public static bool IsHigherThan(Vector2 position1, Vector2 position2)
-    {
-        Direction gravity_direction = database.gravity_direction;
-        switch (gravity_direction)
-        {
-            case Direction.Down: if (position1.y > position2.y) return true; return false;
-            case Direction.Left: if (position1.x > position2.x) return true; return false;
-            case Direction.Up: if (position1.y < position2.y) return true; return false;
-            case Direction.Right: if (position1.x < position2.x) return true; return false;
-            default: return false;
-        }
-    }
-
     public static bool CanplayerGoOnRampSideFromFromNoneRamp(Ramp ramp, Direction gravitydirection, Direction comingfromdirection)
     {
         switch (ramp.type)
