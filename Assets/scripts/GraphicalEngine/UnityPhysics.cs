@@ -52,8 +52,8 @@ public class UnityPhysics : MonoBehaviour {
                 transform.rotation = Quaternion.Euler(0, 0, 0);
             else if(powerInput <= -0.4f)
                 transform.rotation = Quaternion.Euler(0, 180, 0);
-            Debug.Log(rb.velocity);
-            rb.AddRelativeForce(input);
+            if(rb.velocity.x < 3)
+                rb.AddRelativeForce(input);
 
         }
     }
