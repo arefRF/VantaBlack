@@ -53,6 +53,11 @@ public class LogicalEngine {
         //Applygravity();
     }
 
+    public void MoveDone(Player player, Direction direction)
+    {
+
+    }
+
     public bool MoveUnit(Unit unit, Direction dir)
     {
         shouldmove = new List<Unit>();
