@@ -5,7 +5,7 @@ public class APIInput{
 
     LogicalEngine engine;
     public GetInput input { get; set; }
-    private GameMode mode = GameMode.Play;
+    private GameMode mode = GameMode.Real;
     private Teleport portal;
     public void Action_Key(bool KeyUp)
     {
