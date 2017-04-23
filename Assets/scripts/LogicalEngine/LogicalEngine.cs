@@ -53,12 +53,9 @@ public class LogicalEngine {
         //Applygravity();
     }
 
-    public void MoveDone(Player player)
+    public void MoveDone(Player player, Direction direction)
     {
-        /*switch (direction)
-        {
-            case Direction.Right: 
-        }*/
+        
     }
 
     public bool MoveUnit(Unit unit, Direction dir)
