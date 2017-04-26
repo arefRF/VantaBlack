@@ -83,7 +83,8 @@ public class Jump : Ability {
     private IEnumerator JumpWait(float f,Player player)
     {
         yield return new WaitForSeconds(f);
-        player.GetComponent<Rigidbody2D>().isKinematic = false;
+        if(player.mode == GameMode.Real)
+            player.GetComponent<Rigidbody2D>().isKinematic = false;
         player.ApplyGravity();
 
     }
