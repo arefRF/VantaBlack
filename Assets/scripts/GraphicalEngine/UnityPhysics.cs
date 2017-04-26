@@ -24,7 +24,7 @@ public class UnityPhysics : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (player.mode == GameMode.Real)
+        if (player.mode == GameMode.Real && player.state == PlayerState.Idle)
         {
             powerInput = Input.GetAxis("Horizontal");
             if (powerInput > 0)
