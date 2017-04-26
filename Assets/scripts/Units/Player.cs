@@ -77,6 +77,8 @@ public class Player : Unit
         y_bound = GameObject.Find("Starter").GetComponent<Starter>().y;
     }
 
+
+
     public bool Should_Change_Direction(Direction dir)
     {
         for (int i = 0; i < move_direction.Count; i++)
@@ -550,7 +552,7 @@ public class Player : Unit
 
     public bool IsRelatedLean(GameObject parent)
     {
-        List<Unit> units = api.engine_GetUnits(this, leandirection);    
+        List<Unit> units = api.engine_GetUnits(this, leandirection);
         for(int i=0; i<units.Count; i++)
         {
             if (parent == units[i].gameObject.transform.parent.gameObject)
