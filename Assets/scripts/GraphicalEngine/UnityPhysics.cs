@@ -12,6 +12,7 @@ public class UnityPhysics : MonoBehaviour {
     public float move_time = 0.5f;
     private float remain = 0 ;
     private Coroutine co;
+    private Direction move_dir = Direction.Up;
     // Use this for initialization
     void Start () {
         rb = GetComponent<Rigidbody2D>();
@@ -23,15 +24,37 @@ public class UnityPhysics : MonoBehaviour {
 	void Update () {
         if (player.mode == GameMode.Real)
         {
-            Debug.Log("update");
             powerInput = Input.GetAxis("Horizontal");
+            if (powerInput > 0)
+                move_dir = Direction.Right;
+            else if (powerInput < 0)
+                move_dir = Direction.Left;
+            if (powerInput == 0)
+            {
+                Vector2 pos = (Vector2)transform.position;
+                if (move_dir == Direction.Right)
+                    pos = new Vector2(Mathf.Ceil(transform.position.x), transform.position.y);
+                else if (move_dir == Direction.Left)
+                    pos = new Vector2(Mathf.Floor(transform.position.x), transform.position.y);
+
+                if ((Vector2)transform.position != pos)
+                {
+                    rb.AddRelativeForce(new Vector2((Mathf.Abs(pos.x) / pos.x * speed, 0));
+                }
+                move_dir = Direction.Up;
+                if (transform.position.x - pos.x < 0.1f)
+                {
+                    transform.position = new Vector2(pos.x, transform.position.y);
+                    rb.velocity = new Vector2(0, 0);
+                }
+            }
 
             if (rb.velocity.x < 3)
                 rb.AddRelativeForce(new Vector2(powerInput * speed, 0));
-            if (powerInput == 0)
-            {
 
-            }
+            
+
+
         }
     }
 
