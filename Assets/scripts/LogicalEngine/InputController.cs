@@ -429,8 +429,7 @@ public class InputController {
 
     public void RealModePlayerTransitionMove(Player player, Direction direction)
     {
-        player.transform.position = Toolkit.VectorSum(player.transform.position, direction);
-        RealModePlayerTransitionMoveDone(player);
+        player.GetComponent<UnityPhysics>().Move(Toolkit.VectorSum(player.transform.position, direction));
     }
 
     public void RealModePlayerTransitionMoveDone(Player player)
