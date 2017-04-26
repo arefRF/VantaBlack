@@ -13,6 +13,8 @@ public class UnityPhysics : MonoBehaviour {
     private float remain = 0 ;
     private Coroutine co;
     private Direction move_dir = Direction.Up;
+    private PhysicState state = PhysicState.Idle;
+    private Vector2 adj_pos;
     // Use this for initialization
     void Start () {
         rb = GetComponent<Rigidbody2D>();
@@ -26,31 +28,54 @@ public class UnityPhysics : MonoBehaviour {
         {
             powerInput = Input.GetAxis("Horizontal");
             if (powerInput > 0)
+            {
                 move_dir = Direction.Right;
+                state = PhysicState.Idle;
+            }
             else if (powerInput < 0)
+            {
                 move_dir = Direction.Left;
+                state = PhysicState.Idle;
+            }
             if (powerInput == 0)
             {
-                Vector2 pos = (Vector2)transform.position;
-                if (move_dir == Direction.Right)
-                    pos = new Vector2(Mathf.Ceil(transform.position.x), transform.position.y);
-                else if (move_dir == Direction.Left)
-                    pos = new Vector2(Mathf.Floor(transform.position.x), transform.position.y);
+                if (state != PhysicState.Adjust)
+                {
+                    adj_pos = (Vector2)transform.position;
+                    if (move_dir == Direction.Right)
+                        adj_pos = new Vector2(Mathf.Ceil(transform.position.x), transform.position.y);
+                    else if (move_dir == Direction.Left)
+                        adj_pos = new Vector2(Mathf.Floor(transform.position.x), transform.position.y);
+                    if (transform.position.x != adj_pos.x)
+                    {
+                        state = PhysicState.Adjust;
+                        rb.velocity = new Vector2( adj_pos.x- transform.position.x , 0);
+                    }
 
-                if ((Vector2)transform.position != pos)
-                {
-                    rb.AddRelativeForce(new Vector2((Mathf.Abs(pos.x) / pos.x * speed), 0));
                 }
-                move_dir = Direction.Up;
-                if (transform.position.x - pos.x < 0.01f)
+                // Adjust phase
+                else
                 {
-                    transform.position = new Vector2(pos.x, transform.position.y);
-                    rb.velocity = new Vector2(0, 0);
+                    if (move_dir == Direction.Right)
+                        rb.velocity = new Vector2(2, 0);
+                    else if (move_dir == Direction.Left)
+                        rb.velocity = new Vector2(-2, 0);
+                    if (Mathf.Abs(transform.position.x - adj_pos.x) < 0.05f)
+                    {
+                        transform.position = new Vector2(adj_pos.x, transform.position.y);
+                        rb.velocity = new Vector2(0, 0);
+                        state = PhysicState.Idle;
+                        player.api.RemoveFromDatabase(player);
+                        player.position = new Vector2((int)transform.position.x,(int)transform.position.y);
+                        player.api.AddToDatabase(player);
+                    }
                 }
             }
-
-            if (rb.velocity.x < 3)
-                rb.AddRelativeForce(new Vector2(powerInput * speed, 0));
+            if (state != PhysicState.Adjust)
+                if (rb.velocity.x < 3)
+                {
+                    rb.AddRelativeForce(new Vector2(powerInput * speed, 0));
+                }
 
             
 
@@ -104,4 +129,9 @@ public class UnityPhysics : MonoBehaviour {
         // if it needs Call Finished Move of API
     }
 
+}
+
+public enum PhysicState
+{
+    Adjust,Idle
 }

@@ -349,6 +349,8 @@ public class Player : Unit
 
     public override bool ApplyGravity()
     {
+        if (mode == GameMode.Real)
+            return false;
         isonejumping = false;
         api.engine.drainercontroller.Check(this);
         state = PlayerState.Idle;
