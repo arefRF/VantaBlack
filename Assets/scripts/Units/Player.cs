@@ -44,6 +44,7 @@ public class Player : Unit
         oneJump = new Jump(1);
         state = PlayerState.Idle;
 
+
     }
     public Direction GetGravity(){
         return gravity;
@@ -76,6 +77,7 @@ public class Player : Unit
         units = Starter.GetDataBase().units;
         x_bound = GameObject.Find("Starter").GetComponent<Starter>().x;
         y_bound = GameObject.Find("Starter").GetComponent<Starter>().y;
+        api.engine.apiinput.SetMode(mode);
     }
 
     public bool Should_Change_Direction(Direction dir)

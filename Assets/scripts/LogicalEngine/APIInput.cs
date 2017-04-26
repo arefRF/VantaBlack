@@ -35,6 +35,14 @@ public class APIInput{
             engine.Input_Move(dir);
         else if (mode == GameMode.Portal)
             portal.ArrowKeyPressed(dir);
+        else if (mode == GameMode.Real)
+        {
+            for (int i = 0; i < engine.database.player.Count; i++)
+            {
+                engine.database.player[i].GetComponent<UnityPhysics>().Move(dir);
+                engine.database.player[i].GetComponent<PlayerGraphics>().Move_Animation(dir);
+            }
+        }
     }
 
     public void UndoPressed()
@@ -111,6 +119,15 @@ public class APIInput{
     {
         input.getOnce = false;
         mode = GameMode.Play;
+    }
+
+    public void SetMode(GameMode newMode)
+    {
+        if (newMode == GameMode.Portal)
+            throw new System.Exception("Do not change to protal mode with this function");
+        else if (mode == GameMode.Portal)
+            throw new System.Exception("Portal mode should not change from here");
+        mode = newMode;
     }
 
     public bool isFunctionKeyDown()
