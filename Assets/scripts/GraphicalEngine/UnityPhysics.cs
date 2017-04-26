@@ -21,7 +21,9 @@ public class UnityPhysics : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        
+        powerInput = Input.GetAxis("Horizontal");
+        if (rb.velocity.x < 3)
+            rb.AddRelativeForce(powerInput);
     }
 
 
