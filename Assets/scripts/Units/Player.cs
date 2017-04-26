@@ -380,7 +380,6 @@ public class Player : Unit
 
         if (!NewFall())
             return false;
-
         api.engine.drainercontroller.Check(this);
         api.engine.lasercontroller.CollisionCheck(position);
         state = PlayerState.Falling;
