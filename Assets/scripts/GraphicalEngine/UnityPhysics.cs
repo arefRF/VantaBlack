@@ -6,7 +6,7 @@ public class UnityPhysics : MonoBehaviour {
     private float hoverHeight =1;
     private float hoverForce = 50;
     private float powerInput;
-    private float speed = 50;
+    private float speed =100;
     private Player player;
     private Transform player_transform;
     public float move_time = 0.5f;
@@ -75,8 +75,7 @@ public class UnityPhysics : MonoBehaviour {
                     }
                 }
             }
-            if (state != PhysicState.Adjust)
-                if (rb.velocity.x < 3)
+                if (rb.velocity.x < 8)
                 {
                     rb.AddRelativeForce(new Vector2(powerInput * speed, 0));
                 }
