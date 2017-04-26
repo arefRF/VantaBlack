@@ -41,16 +41,19 @@ public class UnityPhysics : MonoBehaviour {
             {
                 if (state != PhysicState.Adjust)
                 {
-                    adj_pos = (Vector2)transform.position;
-                    if (move_dir == Direction.Right)
-                        adj_pos = new Vector2(Mathf.Ceil(transform.position.x), transform.position.y);
-                    else if (move_dir == Direction.Left)
-                        adj_pos = new Vector2(Mathf.Floor(transform.position.x), transform.position.y);
-                    if (transform.position.x != adj_pos.x)
-                    {
-                        state = PhysicState.Adjust;
-                        rb.velocity = new Vector2( adj_pos.x- transform.position.x , 0);
-                    }
+                    /* adj_pos = (Vector2)transform.position;
+                     if (move_dir == Direction.Right)
+                         adj_pos = new Vector2(Mathf.Ceil(transform.position.x), transform.position.y);
+                     else if (move_dir == Direction.Left)
+                         adj_pos = new Vector2(Mathf.Floor(transform.position.x), transform.position.y);
+                     if (Mathf.Abs(transform.position.x - adj_pos.x) > 0.05f)
+                     {
+                         Debug.Log(transform.position.x);
+                         Debug.Log(adj_pos.x);
+                         Debug.Log("Adjust");
+                         state = PhysicState.Adjust;
+                         rb.velocity = new Vector2( adj_pos.x- transform.position.x , 0);
+                     }*/
 
                 }
                 // Adjust phase
@@ -60,10 +63,11 @@ public class UnityPhysics : MonoBehaviour {
                         rb.velocity = new Vector2(2, 0);
                     else if (move_dir == Direction.Left)
                         rb.velocity = new Vector2(-2, 0);
-                    if (Mathf.Abs(transform.position.x - adj_pos.x) < 0.05f)
+                    if (Mathf.Abs(transform.position.x - adj_pos.x) < 0.1f)
                     {
-                        transform.position = new Vector2(adj_pos.x, transform.position.y);
+                        Debug.Log("Adjust Finished");
                         rb.velocity = new Vector2(0, 0);
+                        transform.position = new Vector2(adj_pos.x, transform.position.y);
                         state = PhysicState.Idle;
                         player.api.RemoveFromDatabase(player);
                         player.position = new Vector2((int)transform.position.x,(int)transform.position.y);
@@ -76,10 +80,6 @@ public class UnityPhysics : MonoBehaviour {
                 {
                     rb.AddRelativeForce(new Vector2(powerInput * speed, 0));
                 }
-
-            
-
-
         }
     }
 
@@ -101,16 +101,9 @@ public class UnityPhysics : MonoBehaviour {
         }
     }
 
-    public void Move(Direction dir)
+    public void Move(Vector2 pos)
     {
-      /*  if (remain == 0)
-        {
-            if (co != null)
-                StopCoroutine(co);
-            Vector2 end = Toolkit.VectorSum(player.transform.position, dir);
-            co = StartCoroutine(Constant_Move(end, move_time));
-        }*/
-
+            co = StartCoroutine(Constant_Move(pos, move_time));
     }
 
     private IEnumerator Constant_Move(Vector2 end, float move_time)
@@ -120,12 +113,12 @@ public class UnityPhysics : MonoBehaviour {
         while (remain_distance > float.Epsilon)
         {
             remain_distance = Mathf.Abs(transform.position.x - end.x);
-            remain = remain_distance;
             transform.position = new Vector2(Mathf.MoveTowards(transform.position.x, end.x, Time.smoothDeltaTime / move_time),transform.position.y);
             yield return new WaitForSeconds(0.001f);
         }
 
-        remain = 0;
+        player.api.engine.inputcontroller.RealModePlayerTransitionMoveDone(player);
+        
         // if it needs Call Finished Move of API
     }
 
