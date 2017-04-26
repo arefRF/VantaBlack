@@ -30,7 +30,6 @@ public class Player : Unit
     private int x_bound;
     private int y_bound;
     public GameMode mode;
-
     public void Awake()
     {
         abilities = new List<Ability>();
@@ -43,7 +42,6 @@ public class Player : Unit
         direction = move_direction[0];
         oneJump = new Jump(1);
         state = PlayerState.Idle;
-
 
     }
     public Direction GetGravity(){
@@ -347,7 +345,6 @@ public class Player : Unit
         return false;
     }
 
-
     public override bool ApplyGravity()
     {
         isonejumping = false;
@@ -383,12 +380,19 @@ public class Player : Unit
 
         api.engine.drainercontroller.Check(this);
         api.engine.lasercontroller.CollisionCheck(position);
+        while (IsInBound(position) && NewFall())
+        {
+            api.engine.drainercontroller.Check(this);
+            api.RemoveFromDatabase(this);
+            position = Toolkit.VectorSum(position,gravity);
+            api.engine.lasercontroller.CollisionCheck(position);
+            api.AddToDatabase(this);
+        }
         state = PlayerState.Falling;
         api.graphicalengine_Fall(this, FallPos());
         return true;
           
     }
-
 
     private bool IsInBound(Vector2 pos)
     {
@@ -558,7 +562,6 @@ public class Player : Unit
 
     public void UseAbility(Ability ability)
     {
-        Debug.Log(currentAbility);
         if (currentAbility == ability)
         {
             abilities.Remove(ability);
