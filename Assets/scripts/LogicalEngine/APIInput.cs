@@ -39,8 +39,17 @@ public class APIInput{
         {
             for (int i = 0; i < engine.database.player.Count; i++)
             {
-                engine.database.player[i].GetComponent<UnityPhysics>().Move(dir);
-                engine.database.player[i].GetComponent<PlayerGraphics>().Move_Animation(dir);
+                if (engine.database.player[i].state == PlayerState.Transition)
+                {
+                    engine.database.player[i].transform.position = Toolkit.VectorSum(engine.database.player[i].transform.position, dir);
+                    engine.database.player[i].state = PlayerState.Idle;
+                    engine.database.player[i].GetComponent<Rigidbody2D>().isKinematic = false;
+                }
+                else
+                {
+                    engine.database.player[i].GetComponent<UnityPhysics>().Move(dir);
+                    engine.database.player[i].GetComponent<PlayerGraphics>().Move_Animation(dir);
+                }
             }
         }
     }

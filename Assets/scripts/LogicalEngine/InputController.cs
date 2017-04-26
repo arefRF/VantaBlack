@@ -37,6 +37,7 @@ public class InputController {
 
     private void TransitionPlayerMove(Player player, Direction direction)
     {
+        Debug.Log("here");
         if(player.jumpdirection == direction || player.jumpdirection == Toolkit.ReverseDirection(direction))
         {
             if(Toolkit.HasBranch(Toolkit.VectorSum(player.position, direction)))
