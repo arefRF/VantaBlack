@@ -29,6 +29,7 @@ public class Player : Unit
     private List<Unit>[,] units;
     private int x_bound;
     private int y_bound;
+    public GameMode mode;
 
     public void Awake()
     {
@@ -346,6 +347,7 @@ public class Player : Unit
         return false;
     }
 
+
     public override bool ApplyGravity()
     {
         isonejumping = false;
@@ -381,19 +383,12 @@ public class Player : Unit
 
         api.engine.drainercontroller.Check(this);
         api.engine.lasercontroller.CollisionCheck(position);
-        while (IsInBound(position) && NewFall())
-        {
-            api.engine.drainercontroller.Check(this);
-            api.RemoveFromDatabase(this);
-            position = Toolkit.VectorSum(position,gravity);
-            api.engine.lasercontroller.CollisionCheck(position);
-            api.AddToDatabase(this);
-        }
         state = PlayerState.Falling;
         api.graphicalengine_Fall(this, FallPos());
         return true;
           
     }
+
 
     private bool IsInBound(Vector2 pos)
     {

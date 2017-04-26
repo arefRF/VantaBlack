@@ -117,9 +117,4 @@ public class APIInput{
     {
         return input.isFunctionKeyDown();
     }
-
-    enum GameMode
-    {
-        Play,Portal,Menu
-    }
 }

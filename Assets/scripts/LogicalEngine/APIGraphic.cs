@@ -15,22 +15,22 @@ public class APIGraphic{
     //Ramp to Ramp
     public void MovePlayer_Ramp_1(Player player, Vector2 position,int ramptype)
     {
-        player.GetComponent<PlayerGraphics>().StopAllCoroutines();
-        player.GetComponent<PlayerPhysics>().Ramp_To_Ramp_Move(position,ramptype);
+            player.GetComponent<PlayerGraphics>().StopAllCoroutines();
+            player.GetComponent<PlayerPhysics>().Ramp_To_Ramp_Move(position, ramptype);
     }
     
     // Ramp to Block
     public void MovePlayer_Ramp_2(Player player, Vector2 position,int type)
     {
-        player.GetComponent<PlayerGraphics>().StopAllCoroutines();
-        player.GetComponent<PlayerPhysics>().Ramp_To_Block_Move(position,type);
+            player.GetComponent<PlayerGraphics>().StopAllCoroutines();
+            player.GetComponent<PlayerPhysics>().Ramp_To_Block_Move(position, type);
     }
 
     //Ramp to fall
     public void MovePlayer_Ramp_3(Player player, Vector2 position,int type)
     {
-        player.GetComponent<PlayerGraphics>().StopAllCoroutines();
-        player.gameObject.GetComponent<PlayerPhysics>().Ramp_To_Fall(position,type);
+            player.GetComponent<PlayerGraphics>().StopAllCoroutines();
+            player.gameObject.GetComponent<PlayerPhysics>().Ramp_To_Fall(position, type);
     }
 
   
