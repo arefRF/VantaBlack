@@ -39,10 +39,10 @@ public class UnityPhysics : MonoBehaviour {
 
                 if ((Vector2)transform.position != pos)
                 {
-                    rb.AddRelativeForce(new Vector2((Mathf.Abs(pos.x) / pos.x * speed, 0));
+                    rb.AddRelativeForce(new Vector2((Mathf.Abs(pos.x) / pos.x * speed), 0));
                 }
                 move_dir = Direction.Up;
-                if (transform.position.x - pos.x < 0.1f)
+                if (transform.position.x - pos.x < 0.01f)
                 {
                     transform.position = new Vector2(pos.x, transform.position.y);
                     rb.velocity = new Vector2(0, 0);
