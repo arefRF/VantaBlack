@@ -184,10 +184,6 @@ public class InputController {
         }
     }
 
-    public void Jump_RealMode(Player player)
-    {
-
-    }
     private void IdlePLayerMove(Player player, Direction direction)
     {
         if (!player.lean)
@@ -429,5 +425,21 @@ public class InputController {
             return true;
         }
         return false;
+    }
+
+    public void RealModePlayerTransitionMove(Player player, Direction direction)
+    {
+        player.transform.position = Toolkit.VectorSum(player.transform.position, direction);
+        RealModePlayerTransitionMoveDone(player);
+    }
+
+    public void RealModePlayerTransitionMoveDone(Player player)
+    {
+        if (player.mode == GameMode.Real)
+        {
+            GameObject.Find("GetInput").GetComponent<GetInput>().StopCoroutine(((Jump)player.currentAbility).coroutine);
+            player.state = PlayerState.Idle;
+            player.GetComponent<Rigidbody2D>().isKinematic = false;
+        }
     }
 }

@@ -41,9 +41,7 @@ public class APIInput{
             {
                 if (engine.database.player[i].state == PlayerState.Transition)
                 {
-                    engine.database.player[i].transform.position = Toolkit.VectorSum(engine.database.player[i].transform.position, dir);
-                    engine.database.player[i].state = PlayerState.Idle;
-                    engine.database.player[i].GetComponent<Rigidbody2D>().isKinematic = false;
+                    engine.inputcontroller.RealModePlayerTransitionMove(engine.database.player[i], dir);
                 }
                 else
                 {
