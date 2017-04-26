@@ -82,7 +82,7 @@ public enum AbilityType
 
 public enum PlayerState
 {
-    Idle, Falling, Jumping, Moving, Fakelean, Lean, Busy , Transition
+    Idle, Falling, Jumping, Moving, Fakelean, Lean, Busy , Transition, LeanTransition
 }
 
 public enum GateType
