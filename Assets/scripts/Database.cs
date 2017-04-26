@@ -89,3 +89,8 @@ public enum GateType
 {
     Internal, InternalChangeScene, External
 }
+
+public enum GameMode
+{
+    Play, Portal, Menu, Real
+}
