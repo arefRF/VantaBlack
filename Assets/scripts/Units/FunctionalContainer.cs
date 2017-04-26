@@ -78,7 +78,7 @@ public class FunctionalContainer : Container
             api.engine.pipecontroller.CheckPipes();
             return;
         }
-        api.CheckstuckedList();
+        api.CheckstuckedList(this);
         SetCurrentState();
         if (firstmove)
             firstmove = false;
@@ -114,7 +114,7 @@ public class FunctionalContainer : Container
 
     public bool MoveContainer(Direction dir)
     {
-            return api.MoveUnit(this, dir);
+        return api.MoveUnit(this, dir);
     }
 
     public override void SetNextState()

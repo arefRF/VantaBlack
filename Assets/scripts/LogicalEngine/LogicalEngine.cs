@@ -153,7 +153,6 @@ public class LogicalEngine {
                     }
                     else
                     {
-                        Debug.Log(leanmove[i]);
                         Player tempplayer = leanmove[i] as Player;
                         inputcontroller.LeanUndo(tempplayer, tempplayer.leandirection, PlayerState.Idle);
                         inputcontroller.FakeLeanUndo(tempplayer, tempplayer.leandirection);
@@ -720,7 +719,10 @@ public class LogicalEngine {
         player.position = player.nextpos;
         apiunit.AddToDatabase(player);
         Applygravity();
-        player.state = PlayerState.Idle;
+        if (player.lean)
+            player.state = PlayerState.Lean;
+        else
+            player.state = PlayerState.Idle;
     }
 
     public void graphic_GameObjectMoveAnimationFinished(GameObject gameobject, Unit unit)
