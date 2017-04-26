@@ -45,7 +45,6 @@ public class APIInput{
                 }
                 else
                 {
-                    engine.database.player[i].GetComponent<UnityPhysics>().Move(dir);
                     engine.database.player[i].GetComponent<PlayerGraphics>().Move_Animation(dir);
                 }
             }
