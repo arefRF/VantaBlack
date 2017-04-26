@@ -3,7 +3,7 @@ using System.Collections;
 
 public class UnityPhysics : MonoBehaviour {
     private Rigidbody2D rb;
-    private float hoverHeight = 0.5f;
+    private float hoverHeight =0.8f;
     private float hoverForce = 50;
     private float powerInput;
     private float speed = 50;
@@ -29,24 +29,27 @@ public class UnityPhysics : MonoBehaviour {
     {
         if(player.mode == GameMode.Real)
         {
-            RaycastHit2D ray = Physics2D.Raycast(transform.position + new Vector3(0, 0.5f, 0), -transform.up);
-            if (ray)
-            {
-                if (ray.distance > 1)
-                    transform.position = transform.position - new Vector3(0, 0.1f, 0);   
-            }
+            RaycastHit2D hit = Physics2D.Raycast(transform.position + new Vector3(0, 0.5f, 0), -transform.up);
+              if (hit)
+               {
+                       float proportionalHeight = (hoverHeight - hit.distance) / hoverHeight;
+                       Vector2 force = hit.normal;
+                       Vector3 appliedHoverForce = force * proportionalHeight * hoverForce;
+                       rb.AddForce(appliedHoverForce, ForceMode2D.Force);
+              }
+
         }
     }
 
     public void Move(Direction dir)
     {
-        if (remain == 0)
+      /*  if (remain == 0)
         {
             if (co != null)
                 StopCoroutine(co);
             Vector2 end = Toolkit.VectorSum(player.transform.position, dir);
             co = StartCoroutine(Constant_Move(end, move_time));
-        }
+        }*/
 
     }
 
