@@ -556,6 +556,7 @@ public class Player : Unit
 
     public void UseAbility(Ability ability)
     {
+        Debug.Log(currentAbility);
         if (currentAbility == ability)
         {
             abilities.Remove(ability);
