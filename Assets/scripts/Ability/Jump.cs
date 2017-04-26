@@ -25,18 +25,19 @@ public class Jump : Ability {
         player.currentAbility = this;
         if (engine == null)
             engine = Starter.GetEngine();
-        Vector2 finalpos = player.position + number * Toolkit.DirectiontoVector(direction);
+        Vector2 finalpos = (Vector2)player.transform.position + number * Toolkit.DirectiontoVector(direction);
         maxJump = GetShouldJump(player.position, direction);
         engine.apiunit.AddToSnapshot(player);
         engine.inputcontroller.LeanUndo(player, player.leandirection, PlayerState.Busy);
         player.jumpdirection = direction;
+        player.GetComponent<Rigidbody2D>().isKinematic = true;
         if (number <= maxJump)
             engine.apigraphic.Jump(player, this, finalpos, direction);
         else
         {
             Debug.Log("jump hit");
             // calculate where to hit and call graphic hit
-            Vector2 hitPos = player.position + maxJump * Toolkit.DirectiontoVector(direction);
+            Vector2 hitPos = (Vector2)player.transform.position + maxJump * Toolkit.DirectiontoVector(direction);
             engine.apigraphic.Jump_Hit(player, direction, this, hitPos);
         }
         
@@ -82,6 +83,7 @@ public class Jump : Ability {
     private IEnumerator JumpWait(float f,Player player)
     {
         yield return new WaitForSeconds(f);
+        player.GetComponent<Rigidbody2D>().isKinematic = false;
         player.ApplyGravity();
 
     }

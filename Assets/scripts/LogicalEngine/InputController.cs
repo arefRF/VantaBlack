@@ -182,6 +182,11 @@ public class InputController {
             }
         }
     }
+
+    public void Jump_RealMode(Player player)
+    {
+
+    }
     private void IdlePLayerMove(Player player, Direction direction)
     {
         if (!player.lean)
