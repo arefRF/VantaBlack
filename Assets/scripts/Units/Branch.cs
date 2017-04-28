@@ -161,7 +161,10 @@ public class Branch : Unit {
             }
             else
             {
-                GameObject.Find("GetInput").GetComponent<GetInput>().StopCoroutine(((Jump)player.currentAbility).coroutine);
+                if (player.currentAbility is Jump)
+                {
+                    GameObject.Find("GetInput").GetComponent<GetInput>().StopCoroutine(((Jump)player.currentAbility).coroutine);
+                }
                 player.state = PlayerState.Lean;
                 //player.transform.position = player.position;
                 player.isonejumping = false;
