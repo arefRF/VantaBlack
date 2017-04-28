@@ -75,7 +75,8 @@ public class UnityPhysics : MonoBehaviour {
                     }
                 }
             }
-                if (Mathf.Abs(rb.velocity.x) < 3)
+
+            if (Mathf.Abs(rb.velocity.x) < 3)
                 {
                     rb.AddRelativeForce(new Vector2(powerInput * speed, 0));
                 }
@@ -87,26 +88,26 @@ public class UnityPhysics : MonoBehaviour {
     {
         if(player.mode == GameMode.Real)
         {
-             RaycastHit2D hit = Physics2D.Raycast(transform.position + new Vector3(0, 0.5f, 0), -transform.up);
-               if (hit)
-                {
-                        float proportionalHeight = (hoverHeight - hit.distance) / hoverHeight;
-                        Vector2 force = hit.normal;
-                        Vector3 appliedHoverForce = force * proportionalHeight * hoverForce;
-                        rb.AddForce(appliedHoverForce, ForceMode2D.Force);
-               }
-
-
+            RaycastHit2D hit = Physics2D.Raycast(transform.position + new Vector3(0, 0.5f, 0), -transform.up);
+            if (hit)
+            {
+                float proportionalHeight = (hoverHeight - hit.distance) / hoverHeight;
+                Vector2 force = hit.normal;
+                Vector3 appliedHoverForce = force * proportionalHeight * hoverForce;
+                rb.AddForce(appliedHoverForce, ForceMode2D.Force);
+            }
+      
         }
     }
 
     public void Move(Vector2 pos)
     {
-       co = StartCoroutine(Constant_Move(pos, move_time));
+       co = StartCoroutine(Move(pos, move_time));
     }
 
-    private IEnumerator Constant_Move(Vector2 end, float move_time)
+    private IEnumerator Move(Vector2 end, float move_time)
     {
+        state = PhysicState.JumpMove;
         float remain_distance = Mathf.Abs( transform.position.x - end.x);
         
         while (remain_distance > float.Epsilon)
@@ -115,15 +116,25 @@ public class UnityPhysics : MonoBehaviour {
             transform.position = new Vector2(Mathf.MoveTowards(transform.position.x, end.x, Time.smoothDeltaTime / move_time),transform.position.y);
             yield return new WaitForSeconds(0.001f);
         }
-
+        state = PhysicState.Falling;
+        StartCoroutine(gravityNormal());
+        rb.gravityScale = 10;
         player.api.engine.inputcontroller.RealModePlayerTransitionMoveDone(player);
         
         // if it needs Call Finished Move of API
     }
 
+    private IEnumerator gravityNormal()
+    {
+        yield return new WaitForSeconds(0.2f);
+        rb.gravityScale = 2;
+        state = PhysicState.Idle;
+    }
+
 }
+
 
 public enum PhysicState
 {
-    Adjust,Idle
+    Adjust,Idle,JumpMove,Falling
 }
