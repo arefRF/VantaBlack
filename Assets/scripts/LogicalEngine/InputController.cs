@@ -83,7 +83,7 @@ public class InputController {
             {
                 player.direction = direction;
                 GameObject.Find("GetInput").GetComponent<GetInput>().StopCoroutine(((Jump)player.currentAbility).coroutine);
-                if (!player.isonejumping)
+                if (!player.isonejumping && player.abilities.Count != 0)
                     player.UseAbility(player.abilities[0]);
                 player.currentAbility = null;
                 player.state = PlayerState.Moving;
@@ -91,7 +91,7 @@ public class InputController {
             else if (player.Can_Lean(direction))
             {
                 GameObject.Find("GetInput").GetComponent<GetInput>().StopCoroutine(((Jump)player.currentAbility).coroutine);
-                if (!player.isonejumping)
+                if (!player.isonejumping && player.abilities.Count != 0)
                     player.UseAbility(player.abilities[0]);
                 Lean(player, direction);
             }
