@@ -147,17 +147,17 @@ public class Branch : Unit {
         return new CloneableBranch(this);
     }
 
-    public void PlayerLeaned(Player player)
+    public void PlayerLeaned(Player player, Direction direction)
     {
         if (islocked)
         {
             if (player.abilities.Count != 0 && player.abilities[0] is Key)
             {
-                Debug.Log("here");
                 islocked = false;
                 player.abilities.Clear();
                 player._setability();
                 api.engine.apigraphic.Absorb(player, null);
+                api.engine.inputcontroller.PlayerMoveAction(player, direction);
             }
         }
     }
