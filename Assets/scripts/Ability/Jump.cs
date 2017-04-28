@@ -22,7 +22,10 @@ public class Jump : Ability {
     {
         Vector2 playerpos = player.position;
         if (player.mode == GameMode.Real)
+        {
             playerpos = player.transform.position;
+            player.GetComponent<Rigidbody2D>().isKinematic = true;
+        }
         Starter.GetDataBase().StopTimer();
         player.state = PlayerState.Busy;
         player.currentAbility = this;
@@ -33,7 +36,6 @@ public class Jump : Ability {
         engine.apiunit.AddToSnapshot(player);
         engine.inputcontroller.LeanUndo(player, player.leandirection, PlayerState.Busy);
         player.jumpdirection = direction;
-        player.GetComponent<Rigidbody2D>().isKinematic = true;
         if (number <= maxJump)
             engine.apigraphic.Jump(player, this, finalpos, direction);
         else

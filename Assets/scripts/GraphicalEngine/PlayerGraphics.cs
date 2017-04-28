@@ -194,13 +194,11 @@ public class PlayerGraphics : MonoBehaviour {
        // ResetStates();
         if (dir == Direction.Right)
         {
-            Debug.Log("Right");
             transform.GetChild(0).rotation = Quaternion.Euler(0, 0, 0);
             animator.SetInteger("Walk", 1);
         }
         else
         {
-            Debug.Log("Left");
             animator.SetInteger("Walk", 1);
             transform.GetChild(0).rotation = Quaternion.Euler(0, 180, 0);
 
