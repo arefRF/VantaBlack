@@ -159,6 +159,18 @@ public class Branch : Unit {
                 api.engine.apigraphic.Absorb(player, null);
                 api.engine.inputcontroller.PlayerMoveAction(player, direction);
             }
+            else
+            {
+                GameObject.Find("GetInput").GetComponent<GetInput>().StopCoroutine(((Jump)player.currentAbility).coroutine);
+                player.state = PlayerState.Lean;
+                //player.transform.position = player.position;
+                player.isonejumping = false;
+                api.engine.apigraphic.Player_Co_Stop(player);
+                player.lean = true;
+                player.leandirection = direction;
+                player.currentAbility = null;
+                api.engine.apigraphic.Lean(player);
+            }
         }
     }
 
