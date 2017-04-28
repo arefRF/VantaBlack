@@ -75,7 +75,7 @@ public class UnityPhysics : MonoBehaviour {
                     }
                 }
             }
-                if (rb.velocity.x < 3)
+                if (Mathf.Abs(rb.velocity.x) < 3)
                 {
                     rb.AddRelativeForce(new Vector2(powerInput * speed, 0));
                 }
