@@ -13,7 +13,7 @@ public class UnityPhysics : MonoBehaviour {
     private float remain = 0 ;
     private Coroutine co;
     private Direction move_dir = Direction.Up;
-    private PhysicState state = PhysicState.Idle;
+    public PhysicState state = PhysicState.Idle;
     private Vector2 adj_pos;
     // Use this for initialization
     void Start () {
@@ -96,7 +96,6 @@ public class UnityPhysics : MonoBehaviour {
                 Vector3 appliedHoverForce = force * proportionalHeight * hoverForce;
                 rb.AddForce(appliedHoverForce, ForceMode2D.Force);
             }
-      
         }
     }
 
