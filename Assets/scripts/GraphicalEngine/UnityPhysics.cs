@@ -102,7 +102,7 @@ public class UnityPhysics : MonoBehaviour {
 
     public void Move(Vector2 pos)
     {
-            co = StartCoroutine(Constant_Move(pos, move_time));
+       co = StartCoroutine(Constant_Move(pos, move_time));
     }
 
     private IEnumerator Constant_Move(Vector2 end, float move_time)

@@ -14,7 +14,7 @@ public class PlayerGraphics : MonoBehaviour {
         unmoved_pos = transform.position;
         engine = Starter.GetEngine();
         api = engine.apigraphic;
-        animator = transform.GetChild(0).GetComponent<Animator>();
+        animator = transform.GetChild(0).GetChild(0).GetComponent<Animator>();
         player = GetComponent<Player>();
             engine.apigraphic.Absorb(player, null);
     }
@@ -23,15 +23,16 @@ public class PlayerGraphics : MonoBehaviour {
     public void Lean_Right()
     {
         ResetStates();
-        transform.rotation = Quaternion.Euler(0, 0, 0);
+        transform.GetChild(0).rotation = Quaternion.Euler(0, 0, 0);
         animator.SetInteger("Lean", 2);
 
     }
 
     public void Lean_Left()
     {
+        Debug.Log("lean left");
         ResetStates();
-        transform.rotation = Quaternion.Euler(0, 180, 0);
+        transform.GetChild(0).rotation = Quaternion.Euler(0, 180, 0);
         animator.SetInteger("Lean", 4);
 
     }
@@ -193,13 +194,15 @@ public class PlayerGraphics : MonoBehaviour {
        // ResetStates();
         if (dir == Direction.Right)
         {
-            transform.rotation = Quaternion.Euler(0, 0, 0);
+            Debug.Log("Right");
+            transform.GetChild(0).rotation = Quaternion.Euler(0, 0, 0);
             animator.SetInteger("Walk", 1);
         }
         else
         {
+            Debug.Log("Left");
             animator.SetInteger("Walk", 1);
-            transform.rotation = Quaternion.Euler(0, 180, 0);
+            transform.GetChild(0).rotation = Quaternion.Euler(0, 180, 0);
 
         }
     }
