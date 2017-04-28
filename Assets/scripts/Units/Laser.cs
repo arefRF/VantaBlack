@@ -22,6 +22,7 @@ public class Laser : Unit {
 
     public void SetLaser(Direction direction, Vector2 startingpos)
     {
+        beamPositions.Clear();
         if(direction == Direction.Right)
         {
             Vector2 finalpos = Toolkit.VectorSum(startingpos, direction);

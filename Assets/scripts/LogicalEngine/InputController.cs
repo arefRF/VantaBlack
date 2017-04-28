@@ -36,7 +36,7 @@ public class InputController {
         }
         else if(player.state == PlayerState.LeanTransition)
         {
-
+            LeanTransitionPlayerMove(player, direction);
         }
     }
 
@@ -76,8 +76,8 @@ public class InputController {
             if (player.JumpingMove(direction))
             {
                 GameObject.Find("GetInput").GetComponent<GetInput>().StopCoroutine(((Jump)player.currentAbility).coroutine);
-                if (!player.isonejumping)
-                    player.UseAbility(player.abilities[0]);
+                    if (!player.isonejumping)
+                        player.UseAbility(player.abilities[0]);
                 player.currentAbility = null;
                 player.state = PlayerState.Moving;
             }
@@ -390,7 +390,10 @@ public class InputController {
                 player.ApplyGravity();
             else if(nextstate == PlayerState.LeanTransition)
             {
-                player.leancoroutine = GameObject.Find("GetInput").GetComponent<GetInput>().StartCoroutine(LeanWait(0.5f, player));
+                if (Toolkit.IsEmpty(Toolkit.VectorSum(player.position, database.gravity_direction)))
+                    player.leancoroutine = GameObject.Find("GetInput").GetComponent<GetInput>().StartCoroutine(LeanWait(0.5f, player));
+                else
+                    player.ApplyGravity();
             }
             return true;
         }
