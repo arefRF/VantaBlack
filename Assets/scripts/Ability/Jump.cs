@@ -23,6 +23,8 @@ public class Jump : Ability {
         Vector2 playerpos = player.position;
         if (player.mode == GameMode.Real)
         {
+            if (player.GetComponent<UnityPhysics>().state == PhysicState.Falling)
+                return;
             playerpos = player.transform.position;
             player.GetComponent<Rigidbody2D>().isKinematic = true;
         }
