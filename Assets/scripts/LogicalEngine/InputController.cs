@@ -54,7 +54,12 @@ public class InputController {
         {
             if (Toolkit.HasBranch(Toolkit.VectorSum(player.position, direction)))
             {
-                if (player.JumpingMove(direction))
+                Branch branch = Toolkit.GetBranch(Toolkit.VectorSum(player.position, direction));
+                if (branch.islocked)
+                {
+                    Lean(player, direction);
+                }
+                else if (player.JumpingMove(direction))
                 {
                     player.direction = direction;
                     GameObject.Find("GetInput").GetComponent<GetInput>().StopCoroutine(((Jump)player.currentAbility).coroutine);
@@ -415,7 +420,8 @@ public class InputController {
                 }
                 if (Toolkit.HasBranch(pos))
                 {
-                    Toolkit.GetBranch(pos).PlayerLeaned(player);
+                    Toolkit.GetBranch(pos).PlayerLeaned(player, direction);
+                    return;
                 }
                 player.api.RemoveFromDatabase(player);
                 player.position = Toolkit.VectorSum(pos, Toolkit.ReverseDirection(direction));
