@@ -20,12 +20,15 @@ public class Jump : Ability {
 
     public void Action(Player player, Direction direction)
     {
+        Vector2 playerpos = player.position;
+        if (player.mode == GameMode.Real)
+            playerpos = player.transform.position;
         Starter.GetDataBase().StopTimer();
         player.state = PlayerState.Busy;
         player.currentAbility = this;
         if (engine == null)
             engine = Starter.GetEngine();
-        Vector2 finalpos = (Vector2)player.transform.position + number * Toolkit.DirectiontoVector(direction);
+        Vector2 finalpos = playerpos + number * Toolkit.DirectiontoVector(direction);
         maxJump = GetShouldJump(player.position, direction);
         engine.apiunit.AddToSnapshot(player);
         engine.inputcontroller.LeanUndo(player, player.leandirection, PlayerState.Busy);
@@ -37,7 +40,7 @@ public class Jump : Ability {
         {
             Debug.Log("jump hit");
             // calculate where to hit and call graphic hit
-            Vector2 hitPos = (Vector2)player.transform.position + maxJump * Toolkit.DirectiontoVector(direction);
+            Vector2 hitPos = playerpos + maxJump * Toolkit.DirectiontoVector(direction);
             engine.apigraphic.Jump_Hit(player, direction, this, hitPos);
         }
         

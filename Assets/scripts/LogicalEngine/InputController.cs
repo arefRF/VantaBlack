@@ -56,6 +56,7 @@ public class InputController {
             {
                 if (player.JumpingMove(direction))
                 {
+                    player.direction = direction;
                     GameObject.Find("GetInput").GetComponent<GetInput>().StopCoroutine(((Jump)player.currentAbility).coroutine);
                     if (!player.isonejumping)
                         player.UseAbility(player.abilities[0]);
@@ -75,6 +76,7 @@ public class InputController {
         {
             if (player.JumpingMove(direction))
             {
+                player.direction = direction;
                 GameObject.Find("GetInput").GetComponent<GetInput>().StopCoroutine(((Jump)player.currentAbility).coroutine);
                     if (!player.isonejumping)
                         player.UseAbility(player.abilities[0]);
