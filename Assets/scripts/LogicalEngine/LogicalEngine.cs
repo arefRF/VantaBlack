@@ -668,7 +668,7 @@ public class LogicalEngine {
                             {
                                 if(KeyUp)
                                     ((ParentContainer)units[i]).Action(database.player[i], Toolkit.ReverseDirection(database.player[i].leandirection));
-                                else
+                                else if(units[i] is FunctionalContainer)
                                     ((FunctionalContainer)units[i]).ActionKeyDown(database.player[i], Toolkit.ReverseDirection(database.player[i].leandirection));
                             }
                             else if (units[i] is Fountain)
