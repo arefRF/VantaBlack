@@ -13,7 +13,7 @@ public class UnityPhysics : MonoBehaviour {
     private float remain = 0 ;
     private Coroutine co;
     private Direction move_dir = Direction.Up;
-    private PhysicState state = PhysicState.Idle;
+    public PhysicState state = PhysicState.Idle;
     private Vector2 adj_pos;
     // Use this for initialization
     void Start () {
@@ -21,65 +21,23 @@ public class UnityPhysics : MonoBehaviour {
         player = GetComponent<Player>();
         player_transform = transform;
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update() {
         if (player.mode == GameMode.Real && player.state == PlayerState.Idle)
         {
             powerInput = Input.GetAxis("Horizontal");
             if (powerInput > 0)
-            {
                 move_dir = Direction.Right;
-                state = PhysicState.Idle;
-            }
             else if (powerInput < 0)
-            {
                 move_dir = Direction.Left;
-                state = PhysicState.Idle;
-            }
-            if (powerInput == 0)
-            {
-                if (state != PhysicState.Adjust)
-                {
-                    /* adj_pos = (Vector2)transform.position;
-                     if (move_dir == Direction.Right)
-                         adj_pos = new Vector2(Mathf.Ceil(transform.position.x), transform.position.y);
-                     else if (move_dir == Direction.Left)
-                         adj_pos = new Vector2(Mathf.Floor(transform.position.x), transform.position.y);
-                     if (Mathf.Abs(transform.position.x - adj_pos.x) > 0.05f)
-                     {
-                         Debug.Log(transform.position.x);
-                         Debug.Log(adj_pos.x);
-                         Debug.Log("Adjust");
-                         state = PhysicState.Adjust;
-                         rb.velocity = new Vector2( adj_pos.x- transform.position.x , 0);
-                     }*/
+        }
 
-                }
-                // Adjust phase
-                else
-                {
-                    if (move_dir == Direction.Right)
-                        rb.velocity = new Vector2(2, 0);
-                    else if (move_dir == Direction.Left)
-                        rb.velocity = new Vector2(-2, 0);
-                    if (Mathf.Abs(transform.position.x - adj_pos.x) < 0.1f)
-                    {
-                        Debug.Log("Adjust Finished");
-                        rb.velocity = new Vector2(0, 0);
-                        transform.position = new Vector2(adj_pos.x, transform.position.y);
-                        state = PhysicState.Idle;
-                        player.api.RemoveFromDatabase(player);
-                        player.position = new Vector2((int)transform.position.x,(int)transform.position.y);
-                        player.api.AddToDatabase(player);
-                    }
-                }
-            }
-                if (rb.velocity.x < 3)
+            if (Mathf.Abs(rb.velocity.x) < 3)
                 {
                     rb.AddRelativeForce(new Vector2(powerInput * speed, 0));
                 }
-        }
+        
     }
 
 
@@ -87,26 +45,29 @@ public class UnityPhysics : MonoBehaviour {
     {
         if(player.mode == GameMode.Real)
         {
-             RaycastHit2D hit = Physics2D.Raycast(transform.position + new Vector3(0, 0.5f, 0), -transform.up);
-               if (hit)
+            if(state != PhysicState.Falling)
+            {
+                RaycastHit2D hit = Physics2D.Raycast(transform.position + new Vector3(0, 0.5f, 0), -transform.up);
+                if (hit)
                 {
-                        float proportionalHeight = (hoverHeight - hit.distance) / hoverHeight;
-                        Vector2 force = hit.normal;
-                        Vector3 appliedHoverForce = force * proportionalHeight * hoverForce;
-                        rb.AddForce(appliedHoverForce, ForceMode2D.Force);
-               }
-
+                    float proportionalHeight = (hoverHeight - hit.distance) / hoverHeight;
+                    Vector2 force = hit.normal;
+                    Vector3 appliedHoverForce = force * proportionalHeight * hoverForce;
+                    rb.AddForce(appliedHoverForce, ForceMode2D.Force);
+                }
+            }
 
         }
     }
 
     public void Move(Vector2 pos)
     {
-            co = StartCoroutine(Constant_Move(pos, move_time));
+       co = StartCoroutine(Move(pos, move_time));
     }
 
-    private IEnumerator Constant_Move(Vector2 end, float move_time)
+    private IEnumerator Move(Vector2 end, float move_time)
     {
+        state = PhysicState.Falling;
         float remain_distance = Mathf.Abs( transform.position.x - end.x);
         
         while (remain_distance > float.Epsilon)
@@ -115,15 +76,24 @@ public class UnityPhysics : MonoBehaviour {
             transform.position = new Vector2(Mathf.MoveTowards(transform.position.x, end.x, Time.smoothDeltaTime / move_time),transform.position.y);
             yield return new WaitForSeconds(0.001f);
         }
-
+        state = PhysicState.Falling;
+        rb.gravityScale = 10;
         player.api.engine.inputcontroller.RealModePlayerTransitionMoveDone(player);
         
         // if it needs Call Finished Move of API
     }
-
+    void OnCollisionStay2D()
+    {
+        if(state == PhysicState.Falling)
+        {
+            rb.gravityScale = 2;
+            state = PhysicState.Idle;
+        }
+    }
 }
+
 
 public enum PhysicState
 {
-    Adjust,Idle
+    Adjust,Idle,JumpMove,Falling
 }

@@ -147,17 +147,32 @@ public class Branch : Unit {
         return new CloneableBranch(this);
     }
 
-    public void PlayerLeaned(Player player)
+    public void PlayerLeaned(Player player, Direction direction)
     {
         if (islocked)
         {
             if (player.abilities.Count != 0 && player.abilities[0] is Key)
             {
-                Debug.Log("here");
                 islocked = false;
                 player.abilities.Clear();
                 player._setability();
                 api.engine.apigraphic.Absorb(player, null);
+                api.engine.inputcontroller.PlayerMoveAction(player, direction);
+            }
+            else
+            {
+                if (player.currentAbility is Jump)
+                {
+                    GameObject.Find("GetInput").GetComponent<GetInput>().StopCoroutine(((Jump)player.currentAbility).coroutine);
+                }
+                player.state = PlayerState.Lean;
+                //player.transform.position = player.position;
+                player.isonejumping = false;
+                api.engine.apigraphic.Player_Co_Stop(player);
+                player.lean = true;
+                player.leandirection = direction;
+                player.currentAbility = null;
+                api.engine.apigraphic.Lean(player);
             }
         }
     }

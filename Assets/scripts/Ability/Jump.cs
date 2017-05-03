@@ -20,24 +20,31 @@ public class Jump : Ability {
 
     public void Action(Player player, Direction direction)
     {
+        Vector2 playerpos = player.position;
+        if (player.mode == GameMode.Real)
+        {
+            if (player.GetComponent<UnityPhysics>().state == PhysicState.Falling)
+                return;
+            playerpos = player.transform.position;
+            player.GetComponent<Rigidbody2D>().isKinematic = true;
+        }
         Starter.GetDataBase().StopTimer();
         player.state = PlayerState.Busy;
         player.currentAbility = this;
         if (engine == null)
             engine = Starter.GetEngine();
-        Vector2 finalpos = (Vector2)player.transform.position + number * Toolkit.DirectiontoVector(direction);
+        Vector2 finalpos = playerpos + number * Toolkit.DirectiontoVector(direction);
         maxJump = GetShouldJump(player.position, direction);
         engine.apiunit.AddToSnapshot(player);
         engine.inputcontroller.LeanUndo(player, player.leandirection, PlayerState.Busy);
         player.jumpdirection = direction;
-        player.GetComponent<Rigidbody2D>().isKinematic = true;
         if (number <= maxJump)
             engine.apigraphic.Jump(player, this, finalpos, direction);
         else
         {
             Debug.Log("jump hit");
             // calculate where to hit and call graphic hit
-            Vector2 hitPos = (Vector2)player.transform.position + maxJump * Toolkit.DirectiontoVector(direction);
+            Vector2 hitPos = playerpos + maxJump * Toolkit.DirectiontoVector(direction);
             engine.apigraphic.Jump_Hit(player, direction, this, hitPos);
         }
         

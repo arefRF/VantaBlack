@@ -267,10 +267,6 @@ public class Player : Unit
         {
             UseAbility(abilities[0]);
         }
-        else if (isonejumping)
-        {
-            isonejumping = false;
-        }
         api.engine_Move(this, dir);
         return true;
     }
