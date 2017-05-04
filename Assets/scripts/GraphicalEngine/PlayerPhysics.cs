@@ -253,15 +253,6 @@ public class PlayerPhysics : MonoBehaviour
     {
         set_percent = true;
         float remain_distance = ((Vector2)player_transofrm.position - end1).sqrMagnitude;
-       while (remain_distance > float.Epsilon)
-        {
-            remain_distance = ((Vector2)player_transofrm.position - end1).sqrMagnitude;
-            player_transofrm.position = Vector3.MoveTowards(player_transofrm.position, end1, Time.deltaTime * 1 /move_time);
-            api.Camera_AutoMove();
-            yield return null;
-        }
-        remain_distance = ((Vector2)player_transofrm.position - end2).sqrMagnitude;
-        Rotate_On_Ramp(type);
         while (remain_distance > float.Epsilon)
         {
             remain_distance = ((Vector2)player_transofrm.position - end2).sqrMagnitude;
@@ -443,9 +434,9 @@ public class PlayerPhysics : MonoBehaviour
     private Vector2 On_Ramp_Pos(int type)
     {
         if (type == 4)
-            return new Vector2(-0.22f, 0.2f);
+            return new Vector2(-0.4f, 0.6f);
         else if (type == 1)
-            return new Vector2(0.19f,0.25f);
+            return new Vector2(0.6f,0.4f);
 
         return new Vector2(0, 0);
     }
