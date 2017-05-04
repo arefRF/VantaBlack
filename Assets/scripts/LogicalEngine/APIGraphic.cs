@@ -345,6 +345,8 @@ public class APIGraphic{
             graphicalengine.Simple_Container((SimpleContainer)unit);
         else if (unit is DynamicContainer)
             graphicalengine.Dynamic_Container((DynamicContainer)unit);
+        else if (unit is StaticContainer)
+            graphicalengine.StaticContainer((StaticContainer)unit);
         else if (unit is Gate)
             graphicalengine.Gate((Gate)unit);
     }
