@@ -216,20 +216,20 @@ public class GraphicalEngine : MonoBehaviour {
     private void DynamicRotation(DynamicContainer container)
     {
         //Rotation for Abilities with Direction
-
+        string arrow = "Containers\\Version 2\\";
         int rot = 0;
         switch (container.direction)
         {
-            case Direction.Right: rot = 0; break;
-            case Direction.Left: rot = 180; break;
-            case Direction.Up: rot = 90; break;
-            case Direction.Down: rot = 270; break;
+            case Direction.Right: rot = 0; arrow+="Arrow Right"; break;
+            case Direction.Left: rot = 180;arrow += "Arrow Left"; break;
+            case Direction.Up: rot = 90; arrow += "Arrow Up"; break;
+            case Direction.Down: rot =270; arrow += "Arrow Down"; break;
         }
-        GetObjectInChild(container.gameObject,"Icon Holder").transform.rotation = Quaternion.Euler(new Vector3(0, 0, rot));
-        GameObject direction = GetObjectInChild(container.gameObject, "Direction");
-        direction.transform.rotation = Quaternion.Euler(0, 0, rot-90);
+        GetObjectInChild(container.gameObject,"Light Holder").transform.rotation = Quaternion.Euler(new Vector3(0, 0, rot));
+
+        GetObjectInChild(container.gameObject, "Arrow").GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(arrow);
         Vector3 color = Ability_Color(container.abilities,false);
-        direction.GetComponent<SpriteRenderer>().color = new Color(color.x, color.y, color.z, 1);
+   
     }
     private bool ComplimentColor(Container container)
     {
@@ -242,6 +242,7 @@ public class GraphicalEngine : MonoBehaviour {
     // Dynamic Container Color
     public void Dynamic_Container(DynamicContainer container)
     {
+        container.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Containers\\Version 2\\Body");
         Set_Icon(container);
         Set_Dynamic_Special_Icon(container);
         Container_Change_Number(container);
