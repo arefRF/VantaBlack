@@ -92,14 +92,6 @@ public class GraphicalEngine : MonoBehaviour {
 
     public void Simple_Container(SimpleContainer container)
     {
-       /* for(int i = 0; i < container.transform.childCount; i++)
-        {
-            GameObject obj = container.transform.GetChild(i).gameObject;
-            bool off = System.Array.Exists(simple_objects_off,delegate (string s) { return s == obj.name; });
-            if (off)
-                obj.SetActive(false);
-        } */
-       // Set_Icon(container);
         Container_Change_Number(container);
 
     }
@@ -197,7 +189,7 @@ public class GraphicalEngine : MonoBehaviour {
             switch (ability[0].abilitytype)
             {
                 case AbilityType.Key: return new Vector3(1, 1, 1);
-                case AbilityType.Fuel: if (compliment) return new Vector3(1, 1, 1); else return new Vector3(0, 0.941f, 0.654f);
+                case AbilityType.Fuel: if (compliment) return new Vector3(1, 1, 1); else return new Vector3(1, 0.674f, 0.211f);
                 case AbilityType.Jump: return new Vector3(0.59f, 0.78f, 1);
                 case AbilityType.Teleport: return new Vector3(0.92f,0.36f,0.44f);
                 case AbilityType.Gravity: return new Vector3(0.81f,0.60f,0.96f);
@@ -282,6 +274,11 @@ public class GraphicalEngine : MonoBehaviour {
         {
             
         }
+    }
+
+    public void StaticContainer(StaticContainer container)
+    {
+       
     }
 
     private void DynamicSwitch(DynamicContainer container)
