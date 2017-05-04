@@ -21,6 +21,8 @@ public class GraphicalEngine : MonoBehaviour {
     private bool finish_lock;
     private Coroutine object_co;
     private string[] simple_objects_off = new string[] { "Direction","Glass","Switches","Border","Icon Holder","Glow"};
+    public GameObject beam;
+    GameObject beamParent;
     private List<MoveObject> move_objects;
     void Awake()
     {
@@ -32,9 +34,19 @@ public class GraphicalEngine : MonoBehaviour {
         database = Starter.GetDataBase();
         api = engine.apigraphic;
         move_objects = new List<MoveObject>();
-       
-       
+
     }
+
+    private void makeBeam()
+    {
+        if (beamParent == null)
+            beamParent = new GameObject();
+        GameObject beam1 = Instantiate(beam);
+        beam1.transform.parent = beamParent.transform;
+        beam1.transform.localScale = new Vector3(7, 5, 1);
+        beam1.transform.position = new Vector3(15, 5, 0);
+    }
+
     public void Move_Object(GameObject obj,Unit unit, Vector2 pos)
     {
         finish_lock = true;
@@ -240,6 +252,7 @@ public class GraphicalEngine : MonoBehaviour {
 
     public void AddLaser(Vector2 pos1,Vector2 pos2,Direction dir)
     {
+        makeBeam();
         GameObject myLine = new GameObject();
         myLine.tag = "LaserUI";
         myLine.transform.position = pos1;
