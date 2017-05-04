@@ -92,14 +92,14 @@ public class GraphicalEngine : MonoBehaviour {
 
     public void Simple_Container(SimpleContainer container)
     {
-        for(int i = 0; i < container.transform.childCount; i++)
+       /* for(int i = 0; i < container.transform.childCount; i++)
         {
             GameObject obj = container.transform.GetChild(i).gameObject;
             bool off = System.Array.Exists(simple_objects_off,delegate (string s) { return s == obj.name; });
             if (off)
                 obj.SetActive(false);
-        }
-        Set_Icon(container);
+        } */
+       // Set_Icon(container);
         Container_Change_Number(container);
 
     }
