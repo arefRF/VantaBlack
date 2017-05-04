@@ -129,6 +129,7 @@ public class PlayerGraphics : MonoBehaviour {
     {
         animator.SetBool("Jump", false);
         animator.SetInteger("Walk", 0);
+       
     }
     public void BranchExit(Direction dir,int ramp_type)
     {/*
@@ -188,10 +189,31 @@ public class PlayerGraphics : MonoBehaviour {
         //animator.SetInteger("Branch", 0);
     }
 
+    public void Ramp_Animation(Direction dir,int type)
+    {
+        if (dir == Direction.Right)
+            transform.GetChild(0).rotation = Quaternion.Euler(0, 0, 0);
+        else
+            transform.GetChild(0).rotation = Quaternion.Euler(0, 180, 0);
+        animator.SetInteger("Walk", 2);
+        if (dir == Direction.Right)
+            animator.SetInteger("Ramp", type);
+        else
+        {
+            if (type == 1)
+                animator.SetInteger("Ramp", 4);
+            else
+                animator.SetInteger("Ramp", 1);
+        }
+    }
 
+    public void Ramp_Exit()
+    {
+        animator.SetInteger("Ramp", 0);
+    }
     public void Move_Animation(Direction dir)
     {
-       // ResetStates();
+        animator.SetInteger("Ramp", 0);
         if (dir == Direction.Right)
         {
             transform.GetChild(0).rotation = Quaternion.Euler(0, 0, 0);
