@@ -165,6 +165,7 @@ public class GraphicalEngine : MonoBehaviour {
     public void Container_Change_Number(Container container)
     {
         Vector3 color = Ability_Color(container.abilities, false);
+        print(container.name);
         for (int i = 1; i < 4 + 1; i++)
         {
             GetObjectInChild(container.gameObject, "Light Holder").transform.GetChild(i).gameObject.SetActive(false);
