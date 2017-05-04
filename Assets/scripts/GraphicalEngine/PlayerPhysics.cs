@@ -6,6 +6,8 @@ public class PlayerPhysics : MonoBehaviour
     public float move_time = 0.5f;
     public float fall_acceleration = 3;
     public float fall_velocity = 1;
+    public float Jump_Acceleration = -0.01f;
+    public float Jump_Velocity = 10;
     private float platform_move_time = 1;
     private APIGraphic api;
     private LogicalEngine engine;
@@ -399,11 +401,13 @@ public class PlayerPhysics : MonoBehaviour
 
     private IEnumerator Jump_couroutine(Vector2 pos,float jump_time,Direction direction, Jump jump,bool hit)
     {
+        float j_velocity = Jump_Velocity;
         float remain_distance = ((Vector2)player_transofrm.position - pos).sqrMagnitude;
         while(remain_distance > float.Epsilon)
         {
             remain_distance = ((Vector2)player_transofrm.position - pos).sqrMagnitude;
-            player_transofrm.position = Vector3.MoveTowards(player_transofrm.position, pos, Time.deltaTime / move_time);
+            player_transofrm.position = Vector3.MoveTowards(player_transofrm.position, pos, Time.deltaTime * j_velocity);
+            j_velocity += Jump_Acceleration;
             api.Camera_AutoMove();
             yield return null;
         }
