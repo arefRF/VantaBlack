@@ -236,7 +236,7 @@ public class GraphicalEngine : MonoBehaviour {
     // Dynamic Container Color
     public void Dynamic_Container(DynamicContainer container)
     {
-        container.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Containers\\Version 2\\Body");
+        //container.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Containers\\Version 2\\Body");
        // Set_Icon(container);
        // Set_Dynamic_Special_Icon(container);
        Container_Change_Number(container);
