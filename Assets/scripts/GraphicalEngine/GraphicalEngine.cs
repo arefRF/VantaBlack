@@ -164,22 +164,16 @@ public class GraphicalEngine : MonoBehaviour {
     }
     public void Container_Change_Number(Container container)
     {
-        string lights = @"Containers\Numbers\";
-        switch (container.abilities.Count)
+        Vector3 color = Ability_Color(container.abilities, false);
+        for (int i = 1; i < 4 + 1; i++)
         {
-            case 0: lights += ""; break;
-            case 1: lights += "Lights 1"; break;
-            case 2: lights += "Lights 2"; break;
-            case 3: lights += "Lights 3"; break;
-            case 4: lights += "Lights 4"; break;
-            default: lights += "Lights Infinite"; break;
+            GetObjectInChild(container.gameObject, "Light Holder").transform.GetChild(i).gameObject.SetActive(false);
         }
-        if ( container.abilities.Count != 0 && container.abilities[0].abilitytype == AbilityType.Key)
-            lights = @"Containers\Lights Infinite";
-        SpriteRenderer number = GetObjectInChild(container.gameObject, "Number").GetComponent<SpriteRenderer>();
-        number.sprite = (Sprite)Resources.Load(lights, typeof(Sprite));
-        Vector3 color = Ability_Color(container.abilities, ComplimentColor(container));
-        number.color = new Color(color.x, color.y, color.z, 1);
+        for (int i = 1; i < container.abilities.Count + 1; i++)
+        {
+            GetObjectInChild(container.gameObject, "Light Holder").transform.GetChild(i).gameObject.SetActive(true);
+            GetObjectInChild(container.gameObject, "Light Holder").transform.GetChild(i).GetComponent<SpriteRenderer>().color = new Color(color.x, color.y, color.z, 1);
+        }
     }
 
     public void Gate(Gate gate)
@@ -220,13 +214,12 @@ public class GraphicalEngine : MonoBehaviour {
         int rot = 0;
         switch (container.direction)
         {
-            case Direction.Right: rot = 0; arrow+="Arrow Right"; break;
-            case Direction.Left: rot = 180;arrow += "Arrow Left"; break;
-            case Direction.Up: rot = 90; arrow += "Arrow Up"; break;
-            case Direction.Down: rot =270; arrow += "Arrow Down"; break;
+            case Direction.Right: rot = 270; arrow+="Arrow Right"; break;
+            case Direction.Left: rot = 90;arrow += "Arrow Left"; break;
+            case Direction.Up: rot = 0; arrow += "Arrow Up"; break;
+            case Direction.Down: rot =180; arrow += "Arrow Down"; break;
         }
-        GetObjectInChild(container.gameObject,"Light Holder").transform.rotation = Quaternion.Euler(new Vector3(0, 0, rot));
-
+        GetObjectInChild(container.gameObject, "Light Holder").transform.rotation = Quaternion.Euler(new Vector3(0, 0, rot));
         GetObjectInChild(container.gameObject, "Arrow").GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(arrow);
         Vector3 color = Ability_Color(container.abilities,false);
    
@@ -239,13 +232,14 @@ public class GraphicalEngine : MonoBehaviour {
             return false;
     }
 
+
     // Dynamic Container Color
     public void Dynamic_Container(DynamicContainer container)
     {
         container.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Containers\\Version 2\\Body");
-        Set_Icon(container);
-        Set_Dynamic_Special_Icon(container);
-        Container_Change_Number(container);
+       // Set_Icon(container);
+       // Set_Dynamic_Special_Icon(container);
+       Container_Change_Number(container);
         DynamicRotation(container);
         DynamicSwitch(container);
 
@@ -291,26 +285,21 @@ public class GraphicalEngine : MonoBehaviour {
 
     private void DynamicSwitch(DynamicContainer container)
     {
-        if(container.on)
-        {
-            container.GetComponent<Animator>().speed = 4;
-            GetObjectInChild(container.gameObject, "Switches").GetComponent<Animator>().SetBool("On", true);
-            GetObjectInChild(container.gameObject, "Glass").GetComponent<SpriteRenderer>().sprite =
-                (Sprite)Resources.Load("Containers\\Active\\Glass On", typeof(Sprite));
-            Vector3 color = Ability_Color(container.abilities, false);
-            GetObjectInChild(container.gameObject, "Glass").GetComponent<SpriteRenderer>().color = new Color(color.x, color.y, color.z,1);
 
+  
+        if (container.on)
+        {
+            GetObjectInChild(container.gameObject, "Light Holder").transform.GetChild(0).gameObject.SetActive(true);
+            Vector3 color = Ability_Color(container.abilities, false);
+            GetObjectInChild(container.gameObject, "Light Holder").transform.GetChild(0).GetComponent<SpriteRenderer>().color = new Color(color.x, color.y, color.z,1);
+  
 
         }
         else
         {
-
-            container.GetComponent<Animator>().speed = 1;
-            GetObjectInChild(container.gameObject, "Switches").GetComponent<Animator>().SetBool("On", false);
-            GetObjectInChild(container.gameObject, "Glass").GetComponent<SpriteRenderer>().sprite =
-    (Sprite)Resources.Load("Containers\\Active\\Glass Off", typeof(Sprite));
+            GetObjectInChild(container.gameObject, "Light Holder").transform.GetChild(0).gameObject.SetActive(false);
             Vector3 color = Ability_Color(container.abilities, false);
-            GetObjectInChild(container.gameObject, "Glass").GetComponent<SpriteRenderer>().color = new Color(1,1, 1, 1);
+            GetObjectInChild(container.gameObject, "Light Holder").transform.GetChild(0).GetComponent<SpriteRenderer>().color = new Color(1,1, 1, 1);
         }
     }
 

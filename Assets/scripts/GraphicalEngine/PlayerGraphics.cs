@@ -14,7 +14,7 @@ public class PlayerGraphics : MonoBehaviour {
         unmoved_pos = transform.position;
         engine = Starter.GetEngine();
         api = engine.apigraphic;
-        animator = transform.GetChild(0).GetChild(0).GetComponent<Animator>();
+        animator = transform.GetChild(0).GetComponent<Animator>();
         player = GetComponent<Player>();
             engine.apigraphic.Absorb(player, null);
     }
