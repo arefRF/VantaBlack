@@ -46,6 +46,7 @@ public class Player : Unit
         state = PlayerState.Idle;
 
     }
+
     public Direction GetGravity(){
         return gravity;
     }
@@ -640,6 +641,11 @@ public class Player : Unit
         else
             abilitycount = 0;
         api.engine.apigraphic.Absorb(this, null);
+    }
+
+    public void LandOnRampFinished(Ramp ramp)
+    {
+
     }
 
     public override CloneableUnit Clone()
