@@ -32,7 +32,7 @@ public class Teleport : Ability {
         {
             player.currentAbility = this;
             player.UseAbility(this);
-            player.state = PlayerState.Busy;
+            player.SetState(PlayerState.Busy);
             engine.apiunit.RemoveFromDatabase(player);
             player.position = pos;
             engine.apiunit.AddToDatabase(player);

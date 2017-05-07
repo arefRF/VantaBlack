@@ -29,7 +29,7 @@ public class Jump : Ability {
             player.GetComponent<Rigidbody2D>().isKinematic = true;
         }
         Starter.GetDataBase().StopTimer();
-        player.state = PlayerState.Busy;
+        player.SetState(PlayerState.Busy);
         player.currentAbility = this;
         if (engine == null)
             engine = Starter.GetEngine();
@@ -52,7 +52,7 @@ public class Jump : Ability {
 
     public void JumpFinished(Player player, Vector2 finalpos)
     {
-        player.state = PlayerState.Transition;
+        player.SetState(PlayerState.Transition);
         engine.apiunit.RemoveFromDatabase(player);
         player.position = finalpos;
         engine.apiunit.AddToDatabase(player);
@@ -68,7 +68,7 @@ public class Jump : Ability {
         player.position = finalpos;
         engine.apiunit.AddToDatabase(player);
         Debug.Log("Jump Hit Finished");
-        player.state = PlayerState.Idle;
+        player.SetState(PlayerState.Idle);
         player.ApplyGravity();
     }
     public void StartTimer(Player player,Direction direction)
