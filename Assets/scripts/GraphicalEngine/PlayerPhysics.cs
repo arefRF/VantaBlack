@@ -102,6 +102,7 @@ public class PlayerPhysics : MonoBehaviour
     }
     public void Land_On_Ramp(Vector2 position,int type)
     {
+        Debug.Log("Land on Ramp");
         move_type = MoveType.Land;
         Vector2 pos  = position + On_Ramp_Pos(type);
         StartCoroutine(Constant_Move(pos,0.2f,true)); 
@@ -346,7 +347,11 @@ public class PlayerPhysics : MonoBehaviour
         if (call_finish)
         {
             if (move_type != MoveType.Land)
-                player.LandOnRampFinished();
+                api.MovePlayerFinished(gameObject);
+            else
+            {
+                
+            }
         }
 
         //cuz it messed with falling
