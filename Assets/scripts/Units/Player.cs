@@ -643,9 +643,53 @@ public class Player : Unit
         api.engine.apigraphic.Absorb(this, null);
     }
 
-    public void LandOnRampFinished(Ramp ramp)
+    public void LandOnRampFinished(int ramptype)
     {
-
+        int x = (int)ramp.position.x, y = (int)ramp.position.y;
+        while (true)
+        {
+            switch (api.engine.database.gravity_direction)
+            {
+                case Direction.Down:
+                    y--;
+                    if (ramp.type == 1) x++;
+                    else if (ramp.type == 4) x--;
+                    else return;
+                    break;
+                case Direction.Left:
+                    x--;
+                    if (ramp.type == 1) y++;
+                    else if (ramp.type == 2) y--;
+                    else return;
+                    break;
+                case Direction.Up:
+                    y++;
+                    if (ramp.type == 2) x++;
+                    else if (ramp.type == 3) x--;
+                    else return;
+                    break;
+                case Direction.Right:
+                    x++;
+                    if (ramp.type == 3) y--;
+                    else if (ramp.type == 4) y++;
+                    else return;
+                    break;
+            }
+            Vector2 temppos = new Vector2(x, y);
+            if (Toolkit.HasRamp(temppos) && !Toolkit.IsdoubleRamp(temppos))
+                if (Toolkit.GetRamp(temppos).type == ramp.type)
+                    continue;
+            break;
+        }
+        Debug.Log(x + " , " + y);
+        if (ramp.position.x != x || ramp.position.y != y)
+        {
+            Vector2 temppos = new Vector2(x, y);
+            api.RemoveFromDatabase(this);
+            position = temppos;
+            api.AddToDatabase(this);
+            api.engine.apigraphic.MovePlayerOnPlatform(this, temppos);
+        }
     }
 
     public override CloneableUnit Clone()
