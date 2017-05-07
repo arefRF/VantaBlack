@@ -6,6 +6,7 @@ public class InputController {
 
     LogicalEngine engine;
     Database database;
+    bool idlemovelock;
     public InputController(LogicalEngine engine)
     {
         this.engine = engine;
@@ -219,7 +220,7 @@ public class InputController {
                     player.direction = direction;
                     engine.apigraphic.PlayerChangeDirection(player, olddir, player.direction);
                 }
-                else if (!player.Move(direction))
+                if (!player.Move(direction))
                 {
                     Lean(player, direction);
                 }
@@ -240,6 +241,7 @@ public class InputController {
         if (player.direction == direction)
         {
             //Debug.Log("calling graphicals");
+
             if (player.movepercentage == 98)
             {
                 if (!player.ApplyGravity()){
@@ -391,7 +393,9 @@ public class InputController {
                 if (Toolkit.IsEmpty(Toolkit.VectorSum(player.position, database.gravity_direction)))
                     player.leancoroutine = GameObject.Find("GetInput").GetComponent<GetInput>().StartCoroutine(LeanWait(0.5f, player));
                 else
+                {
                     player.ApplyGravity();
+                }
             }
             return true;
         }
@@ -414,6 +418,7 @@ public class InputController {
                     Toolkit.GetBranch(pos).PlayerLeaned(player, direction);
                     return;
                 }
+                player.movepercentage = 0;
                 player.LeanedTo = Toolkit.GetUnit(pos);
                 player.api.RemoveFromDatabase(player);
                 player.position = Toolkit.VectorSum(pos, Toolkit.ReverseDirection(direction));
