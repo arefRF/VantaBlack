@@ -350,7 +350,7 @@ public class PlayerPhysics : MonoBehaviour
                 api.MovePlayerFinished(gameObject);
             else
             {
-                
+                player.LandOnRampFinished();   
             }
         }
 
