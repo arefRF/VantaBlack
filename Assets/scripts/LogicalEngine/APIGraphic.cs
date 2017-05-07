@@ -184,6 +184,7 @@ public class APIGraphic{
     }
     public void LandOnRamp(Player player, Vector2 position, Unit fallonunit, int ramptype)
     {
+        Debug.Log("sxdcfvgbhjkm");
         player.GetComponent<PlayerGraphics>().StopAllCoroutines();
         player.GetComponent<PlayerPhysics>().Land_On_Ramp(position, ramptype);
         
