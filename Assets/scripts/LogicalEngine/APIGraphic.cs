@@ -274,6 +274,10 @@ public class APIGraphic{
         
     }
 
+    public void Transition(Player player)
+    {
+
+    }
 
     // for stoping courtines of moving container and objects
 
