@@ -634,6 +634,11 @@ public class Player : Unit
         api.engine.apigraphic.Absorb(this, null);
     }
 
+    public void LandOnRampFinished(Ramp ramp)
+    {
+
+    }
+
     public override CloneableUnit Clone()
     {
         return new CloneablePlayer(this);
