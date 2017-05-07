@@ -23,7 +23,7 @@ public class FunctionalContainer : Container
             return;
         api.AddToSnapshot(this);
         api.AddToSnapshot(ConnectedUnits);
-        api.AddToSnapshot(player);
+        //api.AddToSnapshot(player);
         //api.TakeSnapshot();
         switch (abilities[0].abilitytype)
         {

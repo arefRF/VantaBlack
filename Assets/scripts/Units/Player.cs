@@ -14,7 +14,7 @@ public class Player : Unit
     public PlayerState state { get; set; }
     public Direction leandirection { get; set; }
     public bool lean { get; set; }
-
+    public Unit LeanedTo { get; set; }
     public bool onramp { get; set; }
     private Direction gravity { get; set; }
 
@@ -630,6 +630,7 @@ public class Player : Unit
         }
         else
             abilitycount = 0;
+        api.engine.apigraphic.Absorb(this, null);
     }
 
     public override CloneableUnit Clone()

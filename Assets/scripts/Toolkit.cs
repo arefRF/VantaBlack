@@ -555,5 +555,80 @@ public sealed class Toolkit{
             throw new System.Exception();
         return result;
     }
+
+    public static Vector2 GetNearestUnit(Vector2 position, Direction direction)
+    {
+        Vector2 pos1 = VectorSum(new Vector2((int)position.x, (int)position.y), direction);
+        Vector2 pos2 = new Vector2();
+        Vector2 pos3 = new Vector3();
+        List<Vector2> listpos = new List<Vector2>();
+        switch (direction)
+        {
+            case Direction.Up: pos2 = new Vector2((int)pos1.x + 1, (int)pos1.y); pos3 = new Vector2((int)pos1.x - 1, (int)pos1.y); break;
+            case Direction.Right: pos2 = new Vector2((int)pos1.x, (int)pos1.y - 1); pos3 = new Vector2((int)pos1.x, (int)pos1.y - 1); break;
+            case Direction.Down: pos2 = new Vector2((int)pos1.x + 1, (int)pos1.y); pos3 = new Vector2((int)pos1.x - 1, (int)pos1.y); break;
+            case Direction.Left: pos2 = new Vector2((int)pos1.x , (int)pos1.y + 1); pos3 = new Vector2((int)pos1.x, (int)pos1.y - 1); break;
+        }
+        double d1, d2, d3;
+        d1 = GetDistance(position, pos1);
+        d2 = GetDistance(position, pos2);
+        d3 = GetDistance(position, pos3);
+        if(d3 < d2)
+        {
+            if(d3 < d1)
+            {
+                listpos.Add(pos3);
+                if (d2 < d1) {
+                    listpos.Add(pos2);
+                    listpos.Add(pos1);
+                }
+                else {
+                    listpos.Add(pos1);
+                    listpos.Add(pos2);
+                }
+            }
+            else
+            {
+                listpos.Add(pos1);
+                listpos.Add(pos3);
+                listpos.Add(pos2);
+            }
+        }
+        else if(d2 <= d3)
+        {
+            if(d2 < d1)
+            {
+                listpos.Add(pos2);
+                if(d3 < d1)
+                {
+                    listpos.Add(pos3);
+                    listpos.Add(pos1);
+                }
+                else
+                {
+                    listpos.Add(pos1);
+                    listpos.Add(pos1);
+                }
+            }
+            else
+            {
+                listpos.Add(pos1);
+                listpos.Add(pos2);
+                listpos.Add(pos3);
+            }
+        }
+        for(int i=0; i<listpos.Count; i++)
+        {
+            if (!IsEmpty(listpos[i]))
+                return listpos[i];
+        }
+        return listpos[0];
+    }
+
+
+    public static double GetDistance(Vector2 pos1, Vector2 pos2)
+    {
+        return Mathf.Sqrt(Mathf.Pow(Mathf.Abs(pos1.x - pos1.x), 2) + Mathf.Pow(Mathf.Abs(pos1.y - pos2.y), 2));
+    }
 }
 

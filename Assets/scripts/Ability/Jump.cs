@@ -56,7 +56,10 @@ public class Jump : Ability {
         engine.apiunit.RemoveFromDatabase(player);
         player.position = finalpos;
         engine.apiunit.AddToDatabase(player);
-        coroutine = GameObject.Find("GetInput").GetComponent<GetInput>().StartCoroutine(JumpWait(0.5f,player));
+        if (Toolkit.IsEmpty(Toolkit.VectorSum(player.position, engine.database.gravity_direction)))
+            coroutine = GameObject.Find("GetInput").GetComponent<GetInput>().StartCoroutine(JumpWait(0.5f, player));
+        else
+            player.ApplyGravity();
     }
 
     public void JumpHitFinished(Player player,Vector2 finalpos)
@@ -123,15 +126,17 @@ public class Jump : Ability {
         return num;
     }
 
-    public override Ability ConvertContainerAbilityToPlayer()
+    public override Ability ConvertContainerAbilityToPlayer(Player player)
     {
         number = 2;
+        owner = player;
         return this;
     }
 
-    public override Ability ConvertPlayerAbilityToContainer()
+    public override Ability ConvertPlayerAbilityToContainer(Container container)
     {
         number = 4;
+        owner = container;
         return this;
     }
 }
