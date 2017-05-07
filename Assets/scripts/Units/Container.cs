@@ -57,10 +57,10 @@ public class Container : ParentContainer {
             return;
         List<Ability> temp = new List<Ability>();
         for (int i = 0; i < abilities.Count; i++)
-            temp.Add(abilities[i].ConvertContainerAbilityToPlayer());
+            temp.Add(abilities[i].ConvertContainerAbilityToPlayer(player));
         abilities.Clear();
         for (int i = 0; i < player.abilities.Count; i++)
-            abilities.Add(player.abilities[i].ConvertPlayerAbilityToContainer());
+            abilities.Add(player.abilities[i].ConvertPlayerAbilityToContainer(this));
         player.abilities = temp;
         api.ChangeSprite(this);
         _setability(player);
@@ -76,7 +76,7 @@ public class Container : ParentContainer {
     {
         if(player.abilities.Count<4)
         {
-            player.abilities.Add(abilities[0].ConvertContainerAbilityToPlayer());
+            player.abilities.Add(abilities[0].ConvertContainerAbilityToPlayer(player));
             abilities.RemoveAt(0);
             for(int i=0; i<sameContainer.Count; i++)
             {
@@ -108,7 +108,7 @@ public class Container : ParentContainer {
     {
         if(abilities.Count<capacity)
         {
-            abilities.Add(player.abilities[0].ConvertPlayerAbilityToContainer());
+            abilities.Add(player.abilities[0].ConvertPlayerAbilityToContainer(this));
             for(int i=0; i<sameContainer.Count; i++)
             {
                 sameContainer[i].abilities.Add(abilities[abilities.Count - 1]);
@@ -264,7 +264,7 @@ public class Container : ParentContainer {
     {
         if (abilities.Count < capacity)
         {
-            abilities.Add(player.abilities[0].ConvertPlayerAbilityToContainer());
+            abilities.Add(player.abilities[0].ConvertPlayerAbilityToContainer(this));
             for (int i = 0; i < sameContainer.Count; i++)
             {
                 sameContainer[i].abilities.Add(abilities[abilities.Count - 1]);
@@ -277,7 +277,7 @@ public class Container : ParentContainer {
     {
         if (player.abilities.Count < 4)
         {
-            player.abilities.Add(abilities[0].ConvertContainerAbilityToPlayer());
+            player.abilities.Add(abilities[0].ConvertContainerAbilityToPlayer(player));
             abilities.RemoveAt(0);
             for (int i = 0; i < sameContainer.Count; i++)
             {
@@ -302,7 +302,7 @@ public class Container : ParentContainer {
         return;
     }
 
-    protected void _setability(Player player)
+    public void _setability(Player player)
     {
         abilitycount = abilities.Count;
         for (int i = 0; i < sameContainer.Count; i++)

@@ -98,15 +98,17 @@ public class Teleport : Ability {
         }
     }
 
-    public override Ability ConvertContainerAbilityToPlayer()
+    public override Ability ConvertContainerAbilityToPlayer(Player player)
     {
         teleporttype = 1;
+        owner = player;
         return this;
     }
 
-    public override Ability ConvertPlayerAbilityToContainer()
+    public override Ability ConvertPlayerAbilityToContainer(Container container)
     {
         teleporttype = 2;
+        owner = container;
         return this;
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 public class Unit : MonoBehaviour {
     public Vector2 position { get; set; }
+    public Vector2 next_pos { get; set; }
     public long codeNumber { get; set; }
     public APIUnit api { get; set; }
 

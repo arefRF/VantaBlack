@@ -123,15 +123,17 @@ public class Jump : Ability {
         return num;
     }
 
-    public override Ability ConvertContainerAbilityToPlayer()
+    public override Ability ConvertContainerAbilityToPlayer(Player player)
     {
         number = 2;
+        owner = player;
         return this;
     }
 
-    public override Ability ConvertPlayerAbilityToContainer()
+    public override Ability ConvertPlayerAbilityToContainer(Container container)
     {
         number = 4;
+        owner = container;
         return this;
     }
 }

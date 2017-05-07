@@ -630,6 +630,7 @@ public class Player : Unit
         }
         else
             abilitycount = 0;
+        api.engine.apigraphic.Absorb(this, null);
     }
 
     public override CloneableUnit Clone()
