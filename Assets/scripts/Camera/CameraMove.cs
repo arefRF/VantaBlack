@@ -72,8 +72,6 @@ public class CameraMove : MonoBehaviour {
 
 
             Camera.main.transform.position =newPostion;
-
-
             yield return null;
         }
         is_moving = false;
