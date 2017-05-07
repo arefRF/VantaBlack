@@ -149,9 +149,12 @@ public class LogicalEngine {
                     {
                         if (((FunctionalContainer)unit).firstmove)
                             snpmanager.AddToSnapShot(leanmove[i]);
-                        ((Player)leanmove[i]).nextpos = Toolkit.VectorSum(leanmove[i].position, Toolkit.DirectiontoVector(dir));
+                        apiunit.RemoveFromDatabase(leanmove[i]);
+                        leanmove[i].position = Toolkit.VectorSum(leanmove[i].position, Toolkit.DirectiontoVector(dir));
+                        apiunit.AddToDatabase(leanmove[i]);
+                        //((Player)leanmove[i]).nextpos = Toolkit.VectorSum(leanmove[i].position, Toolkit.DirectiontoVector(dir));
                         apigraphic.Player_Co_Stop(((Player)leanmove[i]));
-                        apigraphic.LeanStickMove((Player)leanmove[i], ((Player)leanmove[i]).nextpos);
+                        apigraphic.LeanStickMove((Player)leanmove[i], ((Player)leanmove[i]).position);
                     }
                     else
                     {
@@ -733,9 +736,9 @@ public class LogicalEngine {
 
     public void graphic_LeanStickMoveFinished(Player player)
     {
-        apiunit.RemoveFromDatabase(player);
+        /*apiunit.RemoveFromDatabase(player);
         player.position = player.nextpos;
-        apiunit.AddToDatabase(player);
+        apiunit.AddToDatabase(player);*/
         Applygravity();
         if (player.lean)
             player.state = PlayerState.Lean;
@@ -835,6 +838,4 @@ public class LogicalEngine {
             }
         }
     }
-
-    
 }

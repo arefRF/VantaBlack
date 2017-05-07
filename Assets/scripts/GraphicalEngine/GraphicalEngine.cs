@@ -60,13 +60,18 @@ public class GraphicalEngine : MonoBehaviour {
 
     private void StopSameCo(Unit unit)
     {
-
-        for(int i = 0; i < move_objects.Count; i++)
-        {
-            if (move_objects[i].code == unit.codeNumber)
+        try {
+            for (int i = 0; i < move_objects.Count; i++)
             {
-                StopCoroutine(move_objects[i].co);
+                if (move_objects[i].code == unit.codeNumber)
+                {
+                    StopCoroutine(move_objects[i].co);
+                }
             }
+        }
+        catch
+        {
+            Debug.Log("catching exception tu tabe khafane");
         }
     }
 

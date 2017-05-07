@@ -636,6 +636,8 @@ public class Player : Unit
 
     public void LandOnRampFinished()
     {
+        Debug.Log("here");
+        int ramptype = Toolkit.GetRamp(position).type;
         int x = (int)position.x, y = (int)position.y;
         while (true)
         {
