@@ -56,7 +56,10 @@ public class Jump : Ability {
         engine.apiunit.RemoveFromDatabase(player);
         player.position = finalpos;
         engine.apiunit.AddToDatabase(player);
-        coroutine = GameObject.Find("GetInput").GetComponent<GetInput>().StartCoroutine(JumpWait(0.5f,player));
+        if (Toolkit.IsEmpty(Toolkit.VectorSum(player.position, engine.database.gravity_direction)))
+            coroutine = GameObject.Find("GetInput").GetComponent<GetInput>().StartCoroutine(JumpWait(0.5f, player));
+        else
+            player.ApplyGravity();
     }
 
     public void JumpHitFinished(Player player,Vector2 finalpos)

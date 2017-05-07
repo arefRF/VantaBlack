@@ -286,14 +286,9 @@ public class InputController {
         {
             if (engine.database.player[i].lean) //for release
             {
-                List<Unit> units = engine.GetUnits(Toolkit.VectorSum(engine.database.player[i].position, Toolkit.DirectiontoVector(engine.database.player[i].leandirection)));
-                for (int j = 0; j < units.Count; j++)
+                if (database.player[i].LeanedTo is Container)
                 {
-                    if (units[j] is Container)
-                    {
-                        engine.database.player[i].Absorb((Container)units[j]);
-                        break;
-                    }
+                    engine.database.player[i].Absorb((Container)database.player[i].LeanedTo);
                 }
             }
         }
@@ -305,15 +300,11 @@ public class InputController {
         {
             if (engine.database.player[i].lean) //for release
             {
-                List<Unit> units = engine.GetUnits(Toolkit.VectorSum(engine.database.player[i].position, Toolkit.DirectiontoVector(engine.database.player[i].leandirection)));
-                for (int j = 0; j < units.Count; j++)
-                {
-                    if (units[j] is Container)
+                    if (database.player[i].LeanedTo is Container)
                     {
-                        engine.database.player[i].Release((Container)units[j]);
+                        engine.database.player[i].Release((Container)database.player[i].LeanedTo);
                         break;
                     }
-                }
             }
         }
     }
@@ -423,6 +414,7 @@ public class InputController {
                     Toolkit.GetBranch(pos).PlayerLeaned(player, direction);
                     return;
                 }
+                player.LeanedTo = Toolkit.GetUnit(pos);
                 player.api.RemoveFromDatabase(player);
                 player.position = Toolkit.VectorSum(pos, Toolkit.ReverseDirection(direction));
                 player.api.AddToDatabase(player);

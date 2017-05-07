@@ -116,7 +116,6 @@ public class Container : ParentContainer {
             player.abilities.RemoveAt(0);
             api.ChangeSprite(this);
             _setability(player);
-            SetNextState();
             if (this is FunctionalContainer)
             {
                 if (((FunctionalContainer)this).on)
