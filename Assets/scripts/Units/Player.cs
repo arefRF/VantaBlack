@@ -634,46 +634,46 @@ public class Player : Unit
         api.engine.apigraphic.Absorb(this, null);
     }
 
-    public void LandOnRampFinished(int ramptype)
+    public void LandOnRampFinished()
     {
-        int x = (int)ramp.position.x, y = (int)ramp.position.y;
+        int x = (int)position.x, y = (int)position.y;
         while (true)
         {
             switch (api.engine.database.gravity_direction)
             {
                 case Direction.Down:
                     y--;
-                    if (ramp.type == 1) x++;
-                    else if (ramp.type == 4) x--;
+                    if (ramptype == 1) x++;
+                    else if (ramptype == 4) x--;
                     else return;
                     break;
                 case Direction.Left:
                     x--;
-                    if (ramp.type == 1) y++;
-                    else if (ramp.type == 2) y--;
+                    if (ramptype == 1) y++;
+                    else if (ramptype == 2) y--;
                     else return;
                     break;
                 case Direction.Up:
                     y++;
-                    if (ramp.type == 2) x++;
-                    else if (ramp.type == 3) x--;
+                    if (ramptype == 2) x++;
+                    else if (ramptype == 3) x--;
                     else return;
                     break;
                 case Direction.Right:
                     x++;
-                    if (ramp.type == 3) y--;
-                    else if (ramp.type == 4) y++;
+                    if (ramptype == 3) y--;
+                    else if (ramptype == 4) y++;
                     else return;
                     break;
             }
             Vector2 temppos = new Vector2(x, y);
             if (Toolkit.HasRamp(temppos) && !Toolkit.IsdoubleRamp(temppos))
-                if (Toolkit.GetRamp(temppos).type == ramp.type)
+                if (Toolkit.GetRamp(temppos).type == ramptype)
                     continue;
             break;
         }
         Debug.Log(x + " , " + y);
-        if (ramp.position.x != x || ramp.position.y != y)
+        if ((int)position.x != x || (int)position.y != y)
         {
             Vector2 temppos = new Vector2(x, y);
             api.RemoveFromDatabase(this);
