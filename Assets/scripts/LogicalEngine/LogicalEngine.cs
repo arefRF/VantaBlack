@@ -627,7 +627,7 @@ public class LogicalEngine {
     public void graphic_LandFinished(Player player)
     {
         player.movepercentage = 0;
-        player.state = PlayerState.Idle;
+        player.SetState(PlayerState.Idle);
     }
 
     
@@ -727,8 +727,8 @@ public class LogicalEngine {
         player.position = player.nextpos;
         apiunit.AddToDatabase(player);*/
         player.movepercentage = 0;
-        if(!player.ApplyGravity())
-            player.state = PlayerState.Idle;
+        if (!player.ApplyGravity())
+            player.SetState(PlayerState.Idle);
     }
 
     public void graphic_LeanStickMoveFinished(Player player)
@@ -738,9 +738,9 @@ public class LogicalEngine {
         apiunit.AddToDatabase(player);
         Applygravity();
         if (player.lean)
-            player.state = PlayerState.Lean;
+            player.SetState(PlayerState.Lean);
         else
-            player.state = PlayerState.Idle;
+            player.SetState(PlayerState.Idle);
     }
 
     public void graphic_GameObjectMoveAnimationFinished(GameObject gameobject, Unit unit)

@@ -414,7 +414,10 @@ public class PlayerPhysics : MonoBehaviour
         if (!hit)
             api.Jump_Finish(player, pos, jump);
         else
-            api.Jump_Hit_Finish(player, jump,pos);
+        {
+            GetComponent<PlayerGraphics>().Hit();
+            api.Jump_Hit_Finish(player, jump, pos);
+        }
     }
 
     

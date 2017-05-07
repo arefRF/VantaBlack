@@ -11,7 +11,7 @@ public class Player : Unit
     public List<Direction> move_direction;
     public Direction direction { get; set; }
     public int movepercentage { get; set; }
-    public PlayerState state { get; set; }
+    public PlayerState state { get; private set; }
     public Direction leandirection { get; set; }
     public bool lean { get; set; }
     public Unit LeanedTo { get; set; }
@@ -80,7 +80,14 @@ public class Player : Unit
         api.engine.apiinput.SetMode(mode);
     }
 
-
+    public void SetState(PlayerState state)
+    {
+        this.state = state;
+        if(state == PlayerState.Transition)
+        {
+            GetComponent<PlayerGraphics>().TransitionAnimation();
+        }
+    }
 
     public bool Should_Change_Direction(Direction dir)
     {
@@ -122,6 +129,8 @@ public class Player : Unit
         }
         return false;
     }
+
+    
 
     public bool Can_Lean(Vector2 pos)
     {
@@ -685,7 +694,7 @@ public class CloneablePlayer : CloneableUnit
             move_direction.Add(move_direction[i]);
         original.direction = direction;
         original.movepercentage = movepercentage;
-        original.state = state;
+        original.SetState(state);
         original.leandirection = leandirection;
         original.lean = lean;
         original.onramp = onramp;
@@ -705,7 +714,7 @@ public class CloneablePlayer : CloneableUnit
             Debug.Log(original.transform.GetChild(1).name);
             original.transform.GetChild(1).GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
         }
-        original.state = PlayerState.Idle;
+        original.SetState(PlayerState.Idle);
     }
 }
 

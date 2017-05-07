@@ -212,6 +212,7 @@ public class APIGraphic{
 
     public void Jump_Hit(Player player,Direction dir,Jump ability,Vector2 pos)
     {
+        // uses a boolean to detemine jump hit
         player.GetComponent<PlayerPhysics>().Jump(pos, ability, dir,true);
     }
 
