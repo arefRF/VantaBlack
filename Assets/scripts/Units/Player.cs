@@ -645,7 +645,7 @@ public class Player : Unit
 
     public void LandOnRampFinished()
     {
-        Debug.Log("here");
+        /*Debug.Log("here");
         int ramptype = Toolkit.GetRamp(position).type;
         int x = (int)position.x, y = (int)position.y;
         while (true)
@@ -691,7 +691,7 @@ public class Player : Unit
             position = temppos;
             api.AddToDatabase(this);
             api.engine.apigraphic.MovePlayerOnPlatform(this, temppos);
-        }
+        }*/
     }
 
     public override CloneableUnit Clone()
