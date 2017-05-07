@@ -102,10 +102,11 @@ public class PlayerPhysics : MonoBehaviour
     }
     public void Land_On_Ramp(Vector2 position,int type)
     {
-        Debug.Log("Land on Ramp");
+        Debug.Log("la la land");
         move_type = MoveType.Land;
         Vector2 pos  = position + On_Ramp_Pos(type);
-        StartCoroutine(Constant_Move(pos,0.2f,true)); 
+        transform.position = pos;
+        player.LandOnRampFinished();
     }
 
     private Vector2 Block_To_Ramp_Pos(int type)
@@ -346,10 +347,12 @@ public class PlayerPhysics : MonoBehaviour
        
         if (call_finish)
         {
+            Debug.Log(move_type);
             if (move_type != MoveType.Land)
                 api.MovePlayerFinished(gameObject);
             else
             {
+                Debug.Log("Land on ramp finish call");
                 player.LandOnRampFinished();   
             }
         }
