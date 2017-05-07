@@ -345,8 +345,8 @@ public class PlayerPhysics : MonoBehaviour
        
         if (call_finish)
         {
-            if(move_type!=MoveType.Land)
-                api.MovePlayerFinished(gameObject);
+            if (move_type != MoveType.Land)
+                player.LandOnRampFinished();
         }
 
         //cuz it messed with falling
