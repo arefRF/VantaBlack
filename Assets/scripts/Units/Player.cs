@@ -46,6 +46,7 @@ public class Player : Unit
         state = PlayerState.Idle;
 
     }
+
     public Direction GetGravity(){
         return gravity;
     }
@@ -640,6 +641,56 @@ public class Player : Unit
         else
             abilitycount = 0;
         api.engine.apigraphic.Absorb(this, null);
+    }
+
+    public void LandOnRampFinished()
+    {
+        int ramptype = Toolkit.GetRamp(position).type;
+        int x = (int)position.x, y = (int)position.y;
+        while (true)
+        {
+            switch (api.engine.database.gravity_direction)
+            {
+                case Direction.Down:
+                    y--;
+                    if (ramptype == 1) x++;
+                    else if (ramptype == 4) x--;
+                    else return;
+                    break;
+                case Direction.Left:
+                    x--;
+                    if (ramptype == 1) y++;
+                    else if (ramptype == 2) y--;
+                    else return;
+                    break;
+                case Direction.Up:
+                    y++;
+                    if (ramptype == 2) x++;
+                    else if (ramptype == 3) x--;
+                    else return;
+                    break;
+                case Direction.Right:
+                    x++;
+                    if (ramptype == 3) y--;
+                    else if (ramptype == 4) y++;
+                    else return;
+                    break;
+            }
+            Vector2 temppos = new Vector2(x, y);
+            if (Toolkit.HasRamp(temppos) && !Toolkit.IsdoubleRamp(temppos))
+                if (Toolkit.GetRamp(temppos).type == ramptype)
+                    continue;
+            break;
+        }
+        Debug.Log(x + " , " + y);
+        if ((int)position.x != x || (int)position.y != y)
+        {
+            Vector2 temppos = new Vector2(x, y);
+            api.RemoveFromDatabase(this);
+            position = temppos;
+            api.AddToDatabase(this);
+            api.engine.apigraphic.MovePlayerOnPlatform(this, temppos);
+        }
     }
 
     public override CloneableUnit Clone()
