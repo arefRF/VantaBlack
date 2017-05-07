@@ -11,9 +11,7 @@ public class CameraEvent : MonoBehaviour {
     {
         if (col.tag == "Player")
         {
-            if (move_time != 0)
-                Camera.main.GetComponent<CameraController>().move_time = move_time;
-            Camera.main.GetComponent<CameraController>().Camera_Offset_Change(left, right, lower, upper);
+            Camera.main.GetComponent<SmoothCamera>().ChangeOffset(left, right, lower, upper);
             if (zoom != 0)
                 Camera.main.GetComponent<CameraController>().Camera_Size_Change(zoom, zoomtime);
             if (rotation != 360)
