@@ -29,7 +29,7 @@ public class HUD : MonoBehaviour {
         if (player.abilities.Count != 0)
         {
             if (player.abilities[0].abilitytype == AbilityType.Fuel)
-                color = new float[] { 0, 0.941f, 0.654f, 1 };
+                color = new float[] { 1, 0.674f, 0.211f, 1 };
             else if (player.abilities[0].abilitytype == AbilityType.Jump)
                 color = new float[] { 0, 0.941f, 0.654f, 1 };
             else if (player.abilities[0].abilitytype == AbilityType.Key)

@@ -12,6 +12,13 @@ public class Laser : Unit {
         base.Run();
     }
 
+
+    public override void SetInitialSprite()
+    {
+
+
+
+    }
     public void SetLaser()
     {
         SetLaser(Direction.Right, position);
