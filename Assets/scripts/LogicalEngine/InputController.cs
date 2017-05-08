@@ -6,6 +6,7 @@ public class InputController {
 
     LogicalEngine engine;
     Database database;
+    bool idlemovelock;
     public InputController(LogicalEngine engine)
     {
         this.engine = engine;
@@ -66,7 +67,7 @@ public class InputController {
                     if (!player.isonejumping)
                         player.UseAbility(player.abilities[0]);
                     player.currentAbility = null;
-                    player.state = PlayerState.Moving;
+                    player.SetState(PlayerState.Moving);
                 }
             }
             else if (player.Can_Lean(direction))
@@ -86,7 +87,7 @@ public class InputController {
                 if (!player.isonejumping && player.abilities.Count != 0)
                     player.UseAbility(player.abilities[0]);
                 player.currentAbility = null;
-                player.state = PlayerState.Moving;
+                player.SetState(PlayerState.Moving);
             }
             else if (player.Can_Lean(direction))
             {
@@ -116,7 +117,7 @@ public class InputController {
                 {
                     GameObject.Find("GetInput").GetComponent<GetInput>().StopCoroutine(((Jump)player.currentAbility).coroutine);
                     player.currentAbility = null;
-                    player.state = PlayerState.Moving;
+                    player.SetState(PlayerState.Moving);
                 }
                 else
                 {
@@ -159,7 +160,7 @@ public class InputController {
                 }
                 else if (Toolkit.HasBranch(Toolkit.VectorSum(player.position, direction)))
                 {
-                    player.state = PlayerState.Falling;
+                    player.SetState(PlayerState.Falling);
                     engine.MovePlayer(player, direction);
                 }
             }
@@ -176,7 +177,7 @@ public class InputController {
                 direction = Toolkit.ReverseDirection(player.leandirection);
             else
                 direction = Toolkit.ReverseDirection(player.GetGravity());
-            if(!Toolkit.IsInsideBranch(player) && (Toolkit.IsEmpty(Toolkit.VectorSum(player.position, direction)) || Toolkit.HasBranch(Toolkit.VectorSum(player.position, direction))))
+            if(!Toolkit.IsInsideBranch(player) || Toolkit.HasBranch(Toolkit.VectorSum(player.position, direction)))
             {
                 player.isonejumping = true;
                 player.oneJump.Action(player, direction);
@@ -219,13 +220,13 @@ public class InputController {
                     player.direction = direction;
                     engine.apigraphic.PlayerChangeDirection(player, olddir, player.direction);
                 }
-                else if (!player.Move(direction))
+                if (!player.Move(direction))
                 {
                     Lean(player, direction);
                 }
                 else
                 {
-                    player.state = PlayerState.Moving;
+                    player.SetState(PlayerState.Moving);
                 }
             }
             else
@@ -240,6 +241,7 @@ public class InputController {
         if (player.direction == direction)
         {
             //Debug.Log("calling graphicals");
+
             if (player.movepercentage == 98)
             {
                 if (!player.ApplyGravity()){
@@ -251,7 +253,7 @@ public class InputController {
                     else
                     {
                         player.movepercentage = 99;
-                        player.state = PlayerState.Moving;
+                        player.SetState(PlayerState.Moving);
                         /*engine.apiunit.RemoveFromDatabase(player);
                         player.position += Toolkit.DirectiontoVector(direction);
                         engine.apiunit.AddToDatabase(player);
@@ -275,7 +277,7 @@ public class InputController {
             }
             else
             {
-                player.state = PlayerState.Moving;
+                player.SetState(PlayerState.Moving);
             }
         }
     }
@@ -286,14 +288,9 @@ public class InputController {
         {
             if (engine.database.player[i].lean) //for release
             {
-                List<Unit> units = engine.GetUnits(Toolkit.VectorSum(engine.database.player[i].position, Toolkit.DirectiontoVector(engine.database.player[i].leandirection)));
-                for (int j = 0; j < units.Count; j++)
+                if (database.player[i].LeanedTo is Container)
                 {
-                    if (units[j] is Container)
-                    {
-                        engine.database.player[i].Absorb((Container)units[j]);
-                        break;
-                    }
+                    engine.database.player[i].Absorb((Container)database.player[i].LeanedTo);
                 }
             }
         }
@@ -305,15 +302,11 @@ public class InputController {
         {
             if (engine.database.player[i].lean) //for release
             {
-                List<Unit> units = engine.GetUnits(Toolkit.VectorSum(engine.database.player[i].position, Toolkit.DirectiontoVector(engine.database.player[i].leandirection)));
-                for (int j = 0; j < units.Count; j++)
-                {
-                    if (units[j] is Container)
+                    if (database.player[i].LeanedTo is Container)
                     {
-                        engine.database.player[i].Release((Container)units[j]);
+                        engine.database.player[i].Release((Container)database.player[i].LeanedTo);
                         break;
                     }
-                }
             }
         }
     }
@@ -385,7 +378,7 @@ public class InputController {
         if (player.lean && player.leandirection == direction)
         {
             Starter.GetDataBase().StopTimer();
-            player.state = nextstate;
+            player.SetState(nextstate);
             player.lean = false;
             engine.apigraphic.LeanFinished(player);
             if (engine.leanmove.Contains(player) && !engine.shouldmove.Contains(player))
@@ -400,7 +393,9 @@ public class InputController {
                 if (Toolkit.IsEmpty(Toolkit.VectorSum(player.position, database.gravity_direction)))
                     player.leancoroutine = GameObject.Find("GetInput").GetComponent<GetInput>().StartCoroutine(LeanWait(0.5f, player));
                 else
+                {
                     player.ApplyGravity();
+                }
             }
             return true;
         }
@@ -423,10 +418,12 @@ public class InputController {
                     Toolkit.GetBranch(pos).PlayerLeaned(player, direction);
                     return;
                 }
+                player.movepercentage = 0;
+                player.LeanedTo = Toolkit.GetUnit(pos);
                 player.api.RemoveFromDatabase(player);
                 player.position = Toolkit.VectorSum(pos, Toolkit.ReverseDirection(direction));
                 player.api.AddToDatabase(player);
-                player.state = PlayerState.Lean;
+                player.SetState(PlayerState.Lean);
                 player.transform.position = player.position;
                 player.isonejumping = false;
                 engine.apigraphic.Player_Co_Stop(player);
@@ -448,7 +445,7 @@ public class InputController {
         {
             if (!Toolkit.HasBranch(player.position))
             {
-                player.state = PlayerState.Fakelean;
+                player.SetState(PlayerState.Fakelean);
                 player.leandirection = direction;
                 engine.apigraphic.Fake_Lean(player, direction);
             }
@@ -459,7 +456,7 @@ public class InputController {
     {
         if (player.state == PlayerState.Fakelean && player.leandirection == direction)
         {
-            player.state = PlayerState.Idle;
+            player.SetState(PlayerState.Idle);
             engine.apigraphic.Fake_Lean_Undo(player);
             return true;
         }
@@ -468,7 +465,7 @@ public class InputController {
 
     public void RealModePlayerTransitionMove(Player player, Direction direction)
     {
-        player.state = PlayerState.Busy;
+        player.SetState(PlayerState.Busy);
         player.GetComponent<UnityPhysics>().Move(Toolkit.VectorSum(player.transform.position, direction));
     }
 
@@ -477,7 +474,7 @@ public class InputController {
         if (player.mode == GameMode.Real)
         {
             GameObject.Find("GetInput").GetComponent<GetInput>().StopCoroutine(((Jump)player.currentAbility).coroutine);
-            player.state = PlayerState.Idle;
+            player.SetState(PlayerState.Idle);
             player.GetComponent<Rigidbody2D>().isKinematic = false;
         }
     }

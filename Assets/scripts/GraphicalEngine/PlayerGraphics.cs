@@ -8,6 +8,7 @@ public class PlayerGraphics : MonoBehaviour {
     private LogicalEngine engine;
     private Vector2 unmoved_pos;
     private Animator animator;
+    private Animator eyeAnimator;
     private Player player;
     void Start()
     {
@@ -15,6 +16,7 @@ public class PlayerGraphics : MonoBehaviour {
         engine = Starter.GetEngine();
         api = engine.apigraphic;
         animator = transform.GetChild(0).GetChild(0).GetComponent<Animator>();
+        eyeAnimator = transform.GetChild(0).GetChild(0).GetChild(3).GetComponent<Animator>();
         player = GetComponent<Player>();
             engine.apigraphic.Absorb(player, null);
     }
@@ -129,6 +131,8 @@ public class PlayerGraphics : MonoBehaviour {
     {
         animator.SetBool("Jump", false);
         animator.SetInteger("Walk", 0);
+        animator.SetBool("Transition", false);
+       
     }
     public void BranchExit(Direction dir,int ramp_type)
     {/*
@@ -174,6 +178,11 @@ public class PlayerGraphics : MonoBehaviour {
        // animator.SetInteger("Branch", 0);
     }
 
+    public void Hit()
+    {
+        animator.SetTrigger("Hit");
+        eyeAnimator.SetTrigger("Hit");
+    }
     private IEnumerator Simple_Move(Vector2 end, float move_time)
     {
         float remain_distance = ((Vector2)transform.position - end).sqrMagnitude;
@@ -188,10 +197,36 @@ public class PlayerGraphics : MonoBehaviour {
         //animator.SetInteger("Branch", 0);
     }
 
+    public void Ramp_Animation(Direction dir,int type)
+    {
+        if (dir == Direction.Right)
+            transform.GetChild(0).rotation = Quaternion.Euler(0, 0, 0);
+        else
+            transform.GetChild(0).rotation = Quaternion.Euler(0, 180, 0);
+        animator.SetInteger("Walk", 2);
+        if (dir == Direction.Right)
+            animator.SetInteger("Ramp", type);
+        else
+        {
+            if (type == 1)
+                animator.SetInteger("Ramp", 4);
+            else
+                animator.SetInteger("Ramp", 1);
+        }
+    }
 
+    public void TransitionAnimation()
+    {
+        animator.SetBool("Transition", true);
+    }
+    public void Ramp_Exit()
+    {
+        animator.SetInteger("Ramp", 0);
+    }
     public void Move_Animation(Direction dir)
     {
-       // ResetStates();
+        animator.SetInteger("Ramp", 0);
+        animator.SetBool("Transition", false);
         if (dir == Direction.Right)
         {
             transform.GetChild(0).rotation = Quaternion.Euler(0, 0, 0);

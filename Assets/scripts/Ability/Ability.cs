@@ -5,6 +5,7 @@ public class Ability{
 
     public AbilityType abilitytype;
     public bool used;
+    public Unit owner;
     public Ability()
     {
         used = false;
@@ -25,13 +26,15 @@ public class Ability{
     }
 
 
-    public virtual Ability ConvertPlayerAbilityToContainer()
+    public virtual Ability ConvertPlayerAbilityToContainer(Container container)
     {
+        owner = container;
         return this;
     }
 
-    public virtual Ability ConvertContainerAbilityToPlayer()
+    public virtual Ability ConvertContainerAbilityToPlayer(Player player)
     {
+        owner = player;
         return this;
     }
 }

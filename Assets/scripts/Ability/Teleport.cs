@@ -32,7 +32,7 @@ public class Teleport : Ability {
         {
             player.currentAbility = this;
             player.UseAbility(this);
-            player.state = PlayerState.Busy;
+            player.SetState(PlayerState.Busy);
             engine.apiunit.RemoveFromDatabase(player);
             player.position = pos;
             engine.apiunit.AddToDatabase(player);
@@ -98,15 +98,17 @@ public class Teleport : Ability {
         }
     }
 
-    public override Ability ConvertContainerAbilityToPlayer()
+    public override Ability ConvertContainerAbilityToPlayer(Player player)
     {
         teleporttype = 1;
+        owner = player;
         return this;
     }
 
-    public override Ability ConvertPlayerAbilityToContainer()
+    public override Ability ConvertPlayerAbilityToContainer(Container container)
     {
         teleporttype = 2;
+        owner = container;
         return this;
     }
 }

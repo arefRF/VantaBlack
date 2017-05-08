@@ -11,7 +11,7 @@ public class Container : ParentContainer {
     public List<Container> sameContainer;
 
     public override void SetInitialSprite()
-    {
+    {/*
         bool[] notconnected = Toolkit.GetConnectedSidesForContainer(this);
         if (notconnected[0] && notconnected[1] && notconnected[2] && notconnected[3])
             gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Container[1];
@@ -43,7 +43,7 @@ public class Container : ParentContainer {
             gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Container[14];
         else if (notconnected[3])
             gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Container[15];
-        api.ChangeSprite(this);
+        api.ChangeSprite(this); */
     }
 
     void Start()
@@ -57,10 +57,10 @@ public class Container : ParentContainer {
             return;
         List<Ability> temp = new List<Ability>();
         for (int i = 0; i < abilities.Count; i++)
-            temp.Add(abilities[i].ConvertContainerAbilityToPlayer());
+            temp.Add(abilities[i].ConvertContainerAbilityToPlayer(player));
         abilities.Clear();
         for (int i = 0; i < player.abilities.Count; i++)
-            abilities.Add(player.abilities[i].ConvertPlayerAbilityToContainer());
+            abilities.Add(player.abilities[i].ConvertPlayerAbilityToContainer(this));
         player.abilities = temp;
         api.ChangeSprite(this);
         _setability(player);
@@ -76,7 +76,7 @@ public class Container : ParentContainer {
     {
         if(player.abilities.Count<4)
         {
-            player.abilities.Add(abilities[0].ConvertContainerAbilityToPlayer());
+            player.abilities.Add(abilities[0].ConvertContainerAbilityToPlayer(player));
             abilities.RemoveAt(0);
             for(int i=0; i<sameContainer.Count; i++)
             {
@@ -108,7 +108,7 @@ public class Container : ParentContainer {
     {
         if(abilities.Count<capacity)
         {
-            abilities.Add(player.abilities[0].ConvertPlayerAbilityToContainer());
+            abilities.Add(player.abilities[0].ConvertPlayerAbilityToContainer(this));
             for(int i=0; i<sameContainer.Count; i++)
             {
                 sameContainer[i].abilities.Add(abilities[abilities.Count - 1]);
@@ -116,7 +116,6 @@ public class Container : ParentContainer {
             player.abilities.RemoveAt(0);
             api.ChangeSprite(this);
             _setability(player);
-            SetNextState();
             if (this is FunctionalContainer)
             {
                 if (((FunctionalContainer)this).on)
@@ -264,7 +263,7 @@ public class Container : ParentContainer {
     {
         if (abilities.Count < capacity)
         {
-            abilities.Add(player.abilities[0].ConvertPlayerAbilityToContainer());
+            abilities.Add(player.abilities[0].ConvertPlayerAbilityToContainer(this));
             for (int i = 0; i < sameContainer.Count; i++)
             {
                 sameContainer[i].abilities.Add(abilities[abilities.Count - 1]);
@@ -277,7 +276,7 @@ public class Container : ParentContainer {
     {
         if (player.abilities.Count < 4)
         {
-            player.abilities.Add(abilities[0].ConvertContainerAbilityToPlayer());
+            player.abilities.Add(abilities[0].ConvertContainerAbilityToPlayer(player));
             abilities.RemoveAt(0);
             for (int i = 0; i < sameContainer.Count; i++)
             {
@@ -302,7 +301,7 @@ public class Container : ParentContainer {
         return;
     }
 
-    protected void _setability(Player player)
+    public void _setability(Player player)
     {
         abilitycount = abilities.Count;
         for (int i = 0; i < sameContainer.Count; i++)

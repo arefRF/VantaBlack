@@ -29,7 +29,7 @@ public class Jump : Ability {
             player.GetComponent<Rigidbody2D>().isKinematic = true;
         }
         Starter.GetDataBase().StopTimer();
-        player.state = PlayerState.Busy;
+        player.SetState(PlayerState.Busy);
         player.currentAbility = this;
         if (engine == null)
             engine = Starter.GetEngine();
@@ -52,11 +52,14 @@ public class Jump : Ability {
 
     public void JumpFinished(Player player, Vector2 finalpos)
     {
-        player.state = PlayerState.Transition;
+        player.SetState(PlayerState.Transition);
         engine.apiunit.RemoveFromDatabase(player);
         player.position = finalpos;
         engine.apiunit.AddToDatabase(player);
-        coroutine = GameObject.Find("GetInput").GetComponent<GetInput>().StartCoroutine(JumpWait(0.5f,player));
+        if (Toolkit.IsEmpty(Toolkit.VectorSum(player.position, engine.database.gravity_direction)))
+            coroutine = GameObject.Find("GetInput").GetComponent<GetInput>().StartCoroutine(JumpWait(0.5f, player));
+        else
+            player.ApplyGravity();
     }
 
     public void JumpHitFinished(Player player,Vector2 finalpos)
@@ -65,7 +68,7 @@ public class Jump : Ability {
         player.position = finalpos;
         engine.apiunit.AddToDatabase(player);
         Debug.Log("Jump Hit Finished");
-        player.state = PlayerState.Idle;
+        player.SetState(PlayerState.Idle);
         player.ApplyGravity();
     }
     public void StartTimer(Player player,Direction direction)
@@ -123,15 +126,17 @@ public class Jump : Ability {
         return num;
     }
 
-    public override Ability ConvertContainerAbilityToPlayer()
+    public override Ability ConvertContainerAbilityToPlayer(Player player)
     {
         number = 2;
+        owner = player;
         return this;
     }
 
-    public override Ability ConvertPlayerAbilityToContainer()
+    public override Ability ConvertPlayerAbilityToContainer(Container container)
     {
         number = 4;
+        owner = container;
         return this;
     }
 }

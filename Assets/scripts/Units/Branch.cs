@@ -165,7 +165,7 @@ public class Branch : Unit {
                 {
                     GameObject.Find("GetInput").GetComponent<GetInput>().StopCoroutine(((Jump)player.currentAbility).coroutine);
                 }
-                player.state = PlayerState.Lean;
+                player.SetState(PlayerState.Lean);
                 //player.transform.position = player.position;
                 player.isonejumping = false;
                 api.engine.apigraphic.Player_Co_Stop(player);
