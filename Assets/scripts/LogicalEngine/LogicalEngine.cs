@@ -784,12 +784,12 @@ public class LogicalEngine {
         apigraphic.Land((Player)unit, landingposition, landingunit);
     }
 
-    public void UnitToGraphic_LandOnRamp(Unit unit, Ramp landingunit, Vector2 landingposition, int landingtype)
+    public void UnitToGraphic_LandOnRamp(Unit unit, Ramp landingunit, Vector2 landingposition, int landingtype, bool isonsameramp)
     {
         database.units[(int)landingposition.x, (int)landingposition.y].Remove(landingunit);
         landingunit.position = landingposition;
         database.units[(int)landingposition.x, (int)landingposition.y].Add(landingunit);
-        apigraphic.LandOnRamp((Player)unit, landingposition, landingunit, landingtype);
+        apigraphic.LandOnRamp((Player)unit, landingposition, landingunit, landingtype, isonsameramp);
     }
 
     public void CheckStuckedUnit()

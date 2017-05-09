@@ -377,7 +377,6 @@ public class Player : Unit
         {
             return false;
         }
-        Debug.Log("azsexdrcfygbhunjimko,lzsxdcfvgbhnjmkazsxdcfgbhnjkmazsexdrcygbhunjimkazsexdrcfygbhunjimk,l");
         Vector2 pos = Toolkit.VectorSum(position, gravity);
         if (Toolkit.IsdoubleRamp(pos))
             return false;
@@ -386,7 +385,6 @@ public class Player : Unit
             if (!Stand_On_Ramp(pos))
                 return false;
         }
-
         if (!NewFall())
             return false;
         api.engine.drainercontroller.Check(this);
@@ -482,6 +480,10 @@ public class Player : Unit
         List<Unit> under = GetUnderUnits();
         for (int i = 0; i < under.Count; i++)
         {
+            if(under[i] is Ramp && ((Ramp)under[i]).IsOnRampSide(Toolkit.ReverseDirection(api.engine.database.gravity_direction)))
+            {
+                api.engine.apigraphic.LandOnRamp(this, position, under[i], ((Ramp)under[i]).type);
+            }
             if (IsOnObject(under[i]))
             {
                 return false;
@@ -643,7 +645,7 @@ public class Player : Unit
         api.engine.apigraphic.Absorb(this, null);
     }
 
-    public void LandOnRampFinished()
+    public void LandOnRampFinished(bool onthesameramp)
     {
         Vector2 newpos = Toolkit.VectorSum(position, api.engine.database.gravity_direction);
         Ramp ramp = Toolkit.GetRamp(newpos);
