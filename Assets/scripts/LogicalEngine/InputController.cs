@@ -171,6 +171,7 @@ public class InputController {
     {
         if(player.state == PlayerState.Idle)
         {
+
             // Idle and simple jump
             Direction direction;
             if (player.lean)

@@ -651,6 +651,7 @@ public class Player : Unit
     {
         if (!onthesameramp)
         {
+            state = PlayerState.Idle;
             return;
         }
         Vector2 newpos = Toolkit.VectorSum(position, api.engine.database.gravity_direction);
@@ -696,10 +697,14 @@ public class Player : Unit
             Vector2 temppos1 = new Vector2(x, y);
             temppos = temppos1;
             if (Toolkit.HasRamp(temppos1) && !Toolkit.IsdoubleRamp(temppos1))
+            {
                 if (Toolkit.GetRamp(temppos1).type == ramptype)
                 {
                     continue;
                 }
+            }
+            else
+                state = PlayerState.Idle;
             break;
         }
         

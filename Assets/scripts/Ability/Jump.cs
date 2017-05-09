@@ -56,7 +56,9 @@ public class Jump : Ability {
         engine.apiunit.RemoveFromDatabase(player);
         player.position = finalpos;
         engine.apiunit.AddToDatabase(player);
-        if (Toolkit.IsEmpty(Toolkit.VectorSum(player.position, engine.database.gravity_direction)))
+        Vector2 temppos = Toolkit.VectorSum(player.position, engine.database.gravity_direction);
+        Ramp ramp = Toolkit.GetRamp(temppos);
+        if (Toolkit.IsEmpty(Toolkit.VectorSum(player.position, engine.database.gravity_direction)) || (ramp != null && !Toolkit.IsdoubleRamp(temppos) && ramp.IsOnRampSide(Toolkit.ReverseDirection(engine.database.gravity_direction))))
             coroutine = GameObject.Find("GetInput").GetComponent<GetInput>().StartCoroutine(JumpWait(0.5f, player));
         else
             player.ApplyGravity();
