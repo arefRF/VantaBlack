@@ -77,5 +77,6 @@ public class Fountain : Unit {
                         ((FunctionalContainer)abilities[i].owner).Action_Fuel();
                     }
         }
+        abilities.Clear();
     }
 }

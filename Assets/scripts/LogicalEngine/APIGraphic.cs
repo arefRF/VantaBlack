@@ -182,11 +182,10 @@ public class APIGraphic{
     {
         logicalengine.graphic_LandFinished(player);
     }
-    public void LandOnRamp(Player player, Vector2 position, Unit fallonunit, int ramptype)
+    public void LandOnRamp(Player player, Vector2 position, Unit fallonunit, int ramptype,bool roll)
     {
-        Debug.Log("sxdcfvgbhjkm");
         player.GetComponent<PlayerGraphics>().StopAllCoroutines();
-        player.GetComponent<PlayerPhysics>().Land_On_Ramp(position, ramptype);
+        player.GetComponent<PlayerPhysics>().Land_On_Ramp(position, ramptype,roll);
         
     }
 
@@ -332,6 +331,10 @@ public class APIGraphic{
         }
     }
 
+    public void Roll(Player player,Vector2 pos)
+    {
+        player.GetComponent<PlayerPhysics>().Roll(pos);
+    } 
     public void EnterPortalMode(List<Unit> portals,Container container)
     {
         graphicalengine.EnterPortalMode(portals,container);

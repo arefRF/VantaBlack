@@ -171,6 +171,7 @@ public class InputController {
     {
         if(player.state == PlayerState.Idle)
         {
+
             // Idle and simple jump
             Direction direction;
             if (player.lean)
@@ -291,6 +292,10 @@ public class InputController {
                 if (database.player[i].LeanedTo is Container)
                 {
                     engine.database.player[i].Absorb((Container)database.player[i].LeanedTo);
+                }
+                else if (database.player[i].LeanedTo is Fountain)
+                {
+                    ((Fountain)database.player[i].LeanedTo).Action(database.player[i]);
                 }
             }
         }

@@ -362,7 +362,7 @@ public class Player : Unit
         isonejumping = false;
         api.engine.drainercontroller.Check(this);
         state = PlayerState.Idle;
-        this.GetComponent<PlayerGraphics>().ResetStates();
+        GetComponent<PlayerGraphics>().ResetStates();
         api.engine.lasercontroller.CollisionCheck(position);
 
         // to avoid exception
@@ -372,13 +372,18 @@ public class Player : Unit
             return false;
         if (lean)
             return false;
-
-        if (Stand_On_Ramp(position) || Toolkit.HasBranch(position))
+        if (Toolkit.HasBranch(position) || Toolkit.HasRamp(position))
+            return false;
+        
+        Vector2 pos = Toolkit.VectorSum(position, gravity);
+        if (Stand_On_Ramp(pos))
         {
+            api.RemoveFromDatabase(this);
+            position = pos;
+            api.AddToDatabase(this);
+            api.engine.apigraphic.LandOnRamp(this, pos, Toolkit.GetRamp(pos), Toolkit.GetRamp(pos).type, false);
             return false;
         }
-
-        Vector2 pos = Toolkit.VectorSum(position, gravity);
         if (Toolkit.IsdoubleRamp(pos))
             return false;
         if (units[(int)pos.x, (int)pos.y].Count != 0)
@@ -386,7 +391,6 @@ public class Player : Unit
             if (!Stand_On_Ramp(pos))
                 return false;
         }
-
         if (!NewFall())
             return false;
         api.engine.drainercontroller.Check(this);
@@ -540,7 +544,7 @@ public class Player : Unit
             else
             {
                 Vector2 temp = Toolkit.GetRamp(pos).fallOn(this, Toolkit.ReverseDirection(Starter.GetGravityDirection()));
-                if (temp == position)
+                /*if (temp == position)
                 {
                     api.graphicalengine_Land(this, position);
                 }
@@ -551,7 +555,7 @@ public class Player : Unit
                     api.AddToDatabase(this);
                     api.graphicalengine_LandOnRamp(this, position);
                     onramp = true;
-                }
+                }*/
             }
         }
         else //Block
@@ -643,10 +647,23 @@ public class Player : Unit
         api.engine.apigraphic.Absorb(this, null);
     }
 
-    public void LandOnRampFinished()
+    public void LandOnRampFinished(bool onthesameramp)
     {
-        int ramptype = Toolkit.GetRamp(position).type;
-        int x = (int)position.x, y = (int)position.y;
+        if (!onthesameramp)
+        {
+            state = PlayerState.Idle;
+            return;
+        }
+        Vector2 newpos = Toolkit.VectorSum(position, api.engine.database.gravity_direction);
+        Ramp ramp = Toolkit.GetRamp(newpos);
+        if (ramp == null)
+        {
+            ApplyGravity();
+            return;
+        }
+        int ramptype = ramp.type;
+        int x = (int)newpos.x, y = (int)newpos.y;
+        Vector2 temppos = new Vector2(x, y);
         while (true)
         {
             switch (api.engine.database.gravity_direction)
@@ -676,21 +693,38 @@ public class Player : Unit
                     else return;
                     break;
             }
-            Vector2 temppos = new Vector2(x, y);
-            if (Toolkit.HasRamp(temppos) && !Toolkit.IsdoubleRamp(temppos))
-                if (Toolkit.GetRamp(temppos).type == ramptype)
+
+            Vector2 temppos1 = new Vector2(x, y);
+            temppos = temppos1;
+            if (Toolkit.HasRamp(temppos1) && !Toolkit.IsdoubleRamp(temppos1))
+            {
+                if (Toolkit.GetRamp(temppos1).type == ramptype)
+                {
                     continue;
+                }
+            }
+            else
+                state = PlayerState.Idle;
             break;
         }
-        Debug.Log(x + " , " + y);
-        if ((int)position.x != x || (int)position.y != y)
+        
+        if(!Toolkit.IsEmpty(temppos))
+            temppos = Toolkit.VectorSum(temppos, Toolkit.ReverseDirection(api.engine.database.gravity_direction));
+        if (newpos.x != temppos.x || newpos.y != temppos.y)
         {
-            Vector2 temppos = new Vector2(x, y);
             api.RemoveFromDatabase(this);
             position = temppos;
             api.AddToDatabase(this);
-            api.engine.apigraphic.MovePlayerOnPlatform(this, temppos);
+            //api.engine.apigraphic.MovePlayerOnPlatform(this, temppos);
+            Debug.Log(position);
+            api.engine.apigraphic.Roll(this, position);
+            //ApplyGravity();
         }
+    }
+
+    public void RollingFinished()
+    {
+        ApplyGravity();
     }
 
     public override CloneableUnit Clone()

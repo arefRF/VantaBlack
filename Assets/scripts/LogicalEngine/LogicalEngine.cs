@@ -690,10 +690,6 @@ public class LogicalEngine {
                             else if (database.player[i].LeanedTo is FunctionalContainer)
                                 ((FunctionalContainer)database.player[i].LeanedTo).ActionKeyDown(database.player[i], Toolkit.ReverseDirection(database.player[i].leandirection));
                         }
-                        else if (database.player[i].LeanedTo is Fountain)
-                        {
-                            ((Fountain)database.player[i].LeanedTo).Action(database.player[i]);
-                        }
                     }
                     else
                     {
@@ -788,12 +784,13 @@ public class LogicalEngine {
         apigraphic.Land((Player)unit, landingposition, landingunit);
     }
 
-    public void UnitToGraphic_LandOnRamp(Unit unit, Ramp landingunit, Vector2 landingposition, int landingtype)
+    public void UnitToGraphic_LandOnRamp(Unit unit, Ramp landingunit, Vector2 landingposition, int landingtype, bool isonsameramp)
     {
         database.units[(int)landingposition.x, (int)landingposition.y].Remove(landingunit);
         landingunit.position = landingposition;
         database.units[(int)landingposition.x, (int)landingposition.y].Add(landingunit);
-        apigraphic.LandOnRamp((Player)unit, landingposition, landingunit, landingtype);
+        Debug.Log("herehereher");
+        apigraphic.LandOnRamp((Player)unit, landingposition, landingunit, landingtype, isonsameramp);
     }
 
     public void CheckStuckedUnit()
