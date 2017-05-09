@@ -377,7 +377,7 @@ public class Player : Unit
         {
             return false;
         }
-
+        Debug.Log("azsexdrcfygbhunjimko,lzsxdcfvgbhnjmkazsxdcfgbhnjkmazsexdrcygbhunjimkazsexdrcfygbhunjimk,l");
         Vector2 pos = Toolkit.VectorSum(position, gravity);
         if (Toolkit.IsdoubleRamp(pos))
             return false;
@@ -706,6 +706,11 @@ public class Player : Unit
             transform.position = position;
             ApplyGravity();
         }
+    }
+
+    public void RollingFinished()
+    {
+        ApplyGravity();
     }
 
     public override CloneableUnit Clone()
