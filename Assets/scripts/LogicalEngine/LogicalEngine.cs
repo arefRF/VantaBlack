@@ -789,6 +789,7 @@ public class LogicalEngine {
         database.units[(int)landingposition.x, (int)landingposition.y].Remove(landingunit);
         landingunit.position = landingposition;
         database.units[(int)landingposition.x, (int)landingposition.y].Add(landingunit);
+        Debug.Log("herehereher");
         apigraphic.LandOnRamp((Player)unit, landingposition, landingunit, landingtype, isonsameramp);
     }
 

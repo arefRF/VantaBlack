@@ -362,7 +362,7 @@ public class Player : Unit
         isonejumping = false;
         api.engine.drainercontroller.Check(this);
         state = PlayerState.Idle;
-        this.GetComponent<PlayerGraphics>().ResetStates();
+        GetComponent<PlayerGraphics>().ResetStates();
         api.engine.lasercontroller.CollisionCheck(position);
 
         // to avoid exception
@@ -374,11 +374,16 @@ public class Player : Unit
             return false;
         if (Toolkit.HasBranch(position))
             return false;
-        if (Stand_On_Ramp(position) )
-        {
-            api.engine.apigraphic.LandOnRamp(this, position, Toolkit.GetRamp(position), Toolkit.GetRamp(position).type, false);
-        }
+        
         Vector2 pos = Toolkit.VectorSum(position, gravity);
+        if (Stand_On_Ramp(pos))
+        {
+            api.RemoveFromDatabase(this);
+            position = pos;
+            api.AddToDatabase(this);
+            api.engine.apigraphic.LandOnRamp(this, pos, Toolkit.GetRamp(pos), Toolkit.GetRamp(pos).type, false);
+            return false;
+        }
         if (Toolkit.IsdoubleRamp(pos))
             return false;
         if (units[(int)pos.x, (int)pos.y].Count != 0)
@@ -644,9 +649,8 @@ public class Player : Unit
 
     public void LandOnRampFinished(bool onthesameramp)
     {
-        if (onthesameramp)
+        if (!onthesameramp)
         {
-            ApplyGravity();
             return;
         }
         Vector2 newpos = Toolkit.VectorSum(position, api.engine.database.gravity_direction);
@@ -707,11 +711,10 @@ public class Player : Unit
             position = temppos;
             api.AddToDatabase(this);
             //api.engine.apigraphic.MovePlayerOnPlatform(this, temppos);
+            Debug.Log(position);
             api.engine.apigraphic.Roll(this, position);
-            ApplyGravity();
+            //ApplyGravity();
         }
-        else
-            ApplyGravity();
     }
 
     public void RollingFinished()

@@ -186,7 +186,7 @@ public class Ramp : Unit {
                 }
                 else
                 {
-                    api.engine_LandOnRamp(this, fallingunit, type);
+                    api.engine_LandOnRamp(this, fallingunit, type, true);
                     return position;
                 }
             case Direction.Right:
@@ -197,7 +197,7 @@ public class Ramp : Unit {
                 }
                 else
                 {
-                    api.engine_LandOnRamp(this, fallingunit, type);
+                    api.engine_LandOnRamp(this, fallingunit, type, true);
                     return position;
                 }
             case Direction.Down:
@@ -208,7 +208,7 @@ public class Ramp : Unit {
                 }
                 else
                 {
-                    api.engine_LandOnRamp(this, fallingunit, type);
+                    api.engine_LandOnRamp(this, fallingunit, type, true);
                     return position;
                 }
             case Direction.Left:
@@ -219,7 +219,7 @@ public class Ramp : Unit {
                 }
                 else
                 {
-                    api.engine_LandOnRamp(this, fallingunit, type);
+                    api.engine_LandOnRamp(this, fallingunit, type, true);
                     return position;
                 }
             default: return position;

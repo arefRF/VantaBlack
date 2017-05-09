@@ -102,7 +102,6 @@ public class PlayerPhysics : MonoBehaviour
     }
     public void Land_On_Ramp(Vector2 position,int type,bool roll)
     {
-        Debug.Log("la la land");
         move_type = MoveType.Land;
         Vector2 pos  = position + On_Ramp_Pos(type);
         transform.position = pos;
