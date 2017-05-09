@@ -372,10 +372,11 @@ public class Player : Unit
             return false;
         if (lean)
             return false;
-
-        if (Stand_On_Ramp(position) || Toolkit.HasBranch(position))
-        {
+        if (Toolkit.HasBranch(position))
             return false;
+        if (Stand_On_Ramp(position) )
+        {
+            api.engine.apigraphic.LandOnRamp(this, position, Toolkit.GetRamp(position), Toolkit.GetRamp(position).type, false);
         }
         Vector2 pos = Toolkit.VectorSum(position, gravity);
         if (Toolkit.IsdoubleRamp(pos))
@@ -480,10 +481,6 @@ public class Player : Unit
         List<Unit> under = GetUnderUnits();
         for (int i = 0; i < under.Count; i++)
         {
-            if(under[i] is Ramp && ((Ramp)under[i]).IsOnRampSide(Toolkit.ReverseDirection(api.engine.database.gravity_direction)))
-            {
-                api.engine.apigraphic.LandOnRamp(this, position, under[i], ((Ramp)under[i]).type);
-            }
             if (IsOnObject(under[i]))
             {
                 return false;
@@ -647,6 +644,11 @@ public class Player : Unit
 
     public void LandOnRampFinished(bool onthesameramp)
     {
+        if (onthesameramp)
+        {
+            ApplyGravity();
+            return;
+        }
         Vector2 newpos = Toolkit.VectorSum(position, api.engine.database.gravity_direction);
         Ramp ramp = Toolkit.GetRamp(newpos);
         if (ramp == null)
@@ -708,6 +710,8 @@ public class Player : Unit
             transform.position = position;
             ApplyGravity();
         }
+        else
+            ApplyGravity();
     }
 
     public void RollingFinished()
