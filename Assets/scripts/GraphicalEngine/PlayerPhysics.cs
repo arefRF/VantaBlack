@@ -41,7 +41,7 @@ public class PlayerPhysics : MonoBehaviour
         move_type = MoveType.RampToFall;
         StopAllCoroutines();
         Rotate_On_Ramp(type);
-        last_co =  StartCoroutine(Constant_Move(pos, move_time, true));
+        last_co =  StartCoroutine(Constant_Move(pos, move_time, true,false));
     }
 
     // when platform is moving move the player
@@ -50,7 +50,7 @@ public class PlayerPhysics : MonoBehaviour
         if (last_co != null)
             StopCoroutine(last_co);
         move_type = MoveType.OnPlatform;
-        last_co =  StartCoroutine(Constant_Move(pos, platform_move_time, false));
+        last_co =  StartCoroutine(Constant_Move(pos, platform_move_time, false,false));
 
     }
 
@@ -100,13 +100,13 @@ public class PlayerPhysics : MonoBehaviour
         Rotate_On_Block();
 
     }
-    public void Land_On_Ramp(Vector2 position,int type)
+    public void Land_On_Ramp(Vector2 position,int type,bool roll)
     {
         Debug.Log("la la land");
         move_type = MoveType.Land;
         Vector2 pos  = position + On_Ramp_Pos(type);
         transform.position = pos;
-        player.LandOnRampFinished();
+        player.LandOnRampFinished(roll);
     }
 
     private Vector2 Block_To_Ramp_Pos(int type)
@@ -172,7 +172,7 @@ public class PlayerPhysics : MonoBehaviour
         if (last_co != null)
             StopCoroutine(last_co);
         move_type = MoveType.LeanStick;
-        last_co =  StartCoroutine(Constant_Move(pos,platform_move_time,true));
+        last_co =  StartCoroutine(Constant_Move(pos,platform_move_time,true,false));
     }
 
     public void Lean_Stick_Stop()
@@ -189,7 +189,7 @@ public class PlayerPhysics : MonoBehaviour
             StopCoroutine(last_co);
         Vector2 on_ramp_pos = On_Ramp_Pos(type);
         pos = (Vector2)pos + on_ramp_pos;
-        last_co = StartCoroutine(Constant_Move(pos, move_time, true));
+        last_co = StartCoroutine(Constant_Move(pos, move_time, true,false));
         Rotate_On_Ramp(type);
     }
    
@@ -225,7 +225,7 @@ public class PlayerPhysics : MonoBehaviour
             StopCoroutine(last_co);
             Rotate_On_Block();
             move_type = MoveType.BlockToBlock;
-            last_co = StartCoroutine(Constant_Move(pos, move_time, true));
+            last_co = StartCoroutine(Constant_Move(pos, move_time, true,false));
 
     }
 
@@ -248,7 +248,7 @@ public class PlayerPhysics : MonoBehaviour
         move_type = MoveType.RampToCorner;
         Rotate_On_Ramp(type);
         pos += Ramp_To_Corner_Pos(Direction.Down, pos);
-        last_co = StartCoroutine(Constant_Move(pos, move_time, true));
+        last_co = StartCoroutine(Constant_Move(pos, move_time, true,false));
     }
 
 
@@ -332,7 +332,7 @@ public class PlayerPhysics : MonoBehaviour
     }
 
     // For Simple Constant Velocity Moves
-    private IEnumerator Constant_Move(Vector2 end,float move_time,bool call_finish)
+    private IEnumerator Constant_Move(Vector2 end,float move_time,bool call_finish,bool roll)
     {
         set_percent = true;
         float remain_distance = ((Vector2)player_transofrm.position - end).sqrMagnitude;
@@ -352,7 +352,7 @@ public class PlayerPhysics : MonoBehaviour
             else
             {
                 Debug.Log("Land on ramp finish call");
-                player.LandOnRampFinished();   
+                player.LandOnRampFinished(roll);   
             }
         }
 
