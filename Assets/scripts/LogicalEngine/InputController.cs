@@ -292,6 +292,10 @@ public class InputController {
                 {
                     engine.database.player[i].Absorb((Container)database.player[i].LeanedTo);
                 }
+                else if (database.player[i].LeanedTo is Fountain)
+                {
+                    ((Fountain)database.player[i].LeanedTo).Action(database.player[i]);
+                }
             }
         }
     }
