@@ -51,6 +51,7 @@ public class Fountain : Unit {
     {
         for (int i = 0; i < abilities.Count; i++)
         {
+            Debug.Log(abilities[i].owner);
             if (abilities[i].owner is Player)
             {
                 ((Player)abilities[i].owner).abilities.Remove(abilities[i]);

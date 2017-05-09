@@ -690,10 +690,6 @@ public class LogicalEngine {
                             else if (database.player[i].LeanedTo is FunctionalContainer)
                                 ((FunctionalContainer)database.player[i].LeanedTo).ActionKeyDown(database.player[i], Toolkit.ReverseDirection(database.player[i].leandirection));
                         }
-                        else if (database.player[i].LeanedTo is Fountain)
-                        {
-                            ((Fountain)database.player[i].LeanedTo).Action(database.player[i]);
-                        }
                     }
                     else
                     {

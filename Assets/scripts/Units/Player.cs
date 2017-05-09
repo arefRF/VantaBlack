@@ -540,7 +540,7 @@ public class Player : Unit
             else
             {
                 Vector2 temp = Toolkit.GetRamp(pos).fallOn(this, Toolkit.ReverseDirection(Starter.GetGravityDirection()));
-                if (temp == position)
+                /*if (temp == position)
                 {
                     api.graphicalengine_Land(this, position);
                 }
@@ -551,7 +551,7 @@ public class Player : Unit
                     api.AddToDatabase(this);
                     api.graphicalengine_LandOnRamp(this, position);
                     onramp = true;
-                }
+                }*/
             }
         }
         else //Block
@@ -645,8 +645,16 @@ public class Player : Unit
 
     public void LandOnRampFinished()
     {
-        int ramptype = Toolkit.GetRamp(position).type;
-        int x = (int)position.x, y = (int)position.y;
+        Vector2 newpos = Toolkit.VectorSum(position, api.engine.database.gravity_direction);
+        Ramp ramp = Toolkit.GetRamp(newpos);
+        if (ramp == null)
+        {
+            ApplyGravity();
+            return;
+        }
+        int ramptype = ramp.type;
+        int x = (int)newpos.x, y = (int)newpos.y;
+        Vector2 temppos = new Vector2(x, y);
         while (true)
         {
             switch (api.engine.database.gravity_direction)
@@ -676,20 +684,27 @@ public class Player : Unit
                     else return;
                     break;
             }
-            Vector2 temppos = new Vector2(x, y);
-            if (Toolkit.HasRamp(temppos) && !Toolkit.IsdoubleRamp(temppos))
-                if (Toolkit.GetRamp(temppos).type == ramptype)
+
+            Vector2 temppos1 = new Vector2(x, y);
+            temppos = temppos1;
+            if (Toolkit.HasRamp(temppos1) && !Toolkit.IsdoubleRamp(temppos1))
+                if (Toolkit.GetRamp(temppos1).type == ramptype)
+                {
                     continue;
+                }
             break;
         }
-        Debug.Log(x + " , " + y);
-        if ((int)position.x != x || (int)position.y != y)
+        
+        if(!Toolkit.IsEmpty(temppos))
+            temppos = Toolkit.VectorSum(temppos, Toolkit.ReverseDirection(api.engine.database.gravity_direction));
+        if (newpos.x != temppos.x || newpos.y != temppos.y)
         {
-            Vector2 temppos = new Vector2(x, y);
             api.RemoveFromDatabase(this);
             position = temppos;
             api.AddToDatabase(this);
-            api.engine.apigraphic.MovePlayerOnPlatform(this, temppos);
+            //api.engine.apigraphic.MovePlayerOnPlatform(this, temppos);
+            transform.position = position;
+            ApplyGravity();
         }
     }
 
