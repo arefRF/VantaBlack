@@ -34,9 +34,9 @@ public class APIUnit {
         engine.UnitToGraphic_Land(laningunit, unit, unit.position);
     }
 
-    public void engine_LandOnRamp(Ramp ramp, Unit landingunit, int ramptype)
+    public void engine_LandOnRamp(Ramp ramp, Unit landingunit, int ramptype, bool isonsameramp)
     {
-        engine.UnitToGraphic_LandOnRamp(landingunit, ramp, ramp.position, ramptype);
+        engine.UnitToGraphic_LandOnRamp(landingunit, ramp, ramp.position, ramptype, isonsameramp);
         
     }
 
@@ -49,12 +49,6 @@ public class APIUnit {
     public void graphicalengine_Fall(Unit unit, Vector2 fallposition)
     {
         engine.apigraphic.Fall((Player)unit, fallposition);
-    }
-
-    public void graphicalengine_LandOnRamp(Unit unit, Vector2 landposition)
-    {
-        Ramp ramp = Toolkit.GetRamp(landposition);
-        engine.apigraphic.LandOnRamp((Player)unit, landposition, ramp, ramp.type);
     }
     public void unit_Move(Unit unit, Direction dir)
     {
