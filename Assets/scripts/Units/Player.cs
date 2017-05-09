@@ -372,7 +372,7 @@ public class Player : Unit
             return false;
         if (lean)
             return false;
-        if (Toolkit.HasBranch(position))
+        if (Toolkit.HasBranch(position) || Toolkit.HasRamp(position))
             return false;
         
         Vector2 pos = Toolkit.VectorSum(position, gravity);
