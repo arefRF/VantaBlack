@@ -331,6 +331,10 @@ public class APIGraphic{
         }
     }
 
+    public void Roll(Player player,Vector2 pos)
+    {
+        player.GetComponent<PlayerPhysics>().Roll(pos);
+    } 
     public void EnterPortalMode(List<Unit> portals,Container container)
     {
         graphicalengine.EnterPortalMode(portals,container);

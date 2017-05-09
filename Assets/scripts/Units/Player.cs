@@ -703,7 +703,7 @@ public class Player : Unit
             position = temppos;
             api.AddToDatabase(this);
             //api.engine.apigraphic.MovePlayerOnPlatform(this, temppos);
-            transform.position = position;
+            api.engine.apigraphic.Roll(this, position);
             ApplyGravity();
         }
     }

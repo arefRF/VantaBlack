@@ -347,7 +347,6 @@ public class PlayerPhysics : MonoBehaviour
        
         if (call_finish)
         {
-            Debug.Log(move_type);
             if (move_type != MoveType.Land)
                 api.MovePlayerFinished(gameObject);
             else
@@ -427,7 +426,25 @@ public class PlayerPhysics : MonoBehaviour
             api.Jump_Hit_Finish(player, jump, pos);
         }
     }
+    public void Roll(Vector2 pos)
+    {
+        StartCoroutine(RollCouroutine(pos));
+    }
 
+    public IEnumerator RollCouroutine(Vector2 pos)
+    {
+        float velocity =2;
+        float remain_distance = ((Vector2)player_transofrm.position - pos).sqrMagnitude;
+
+        while (remain_distance > float.Epsilon)
+        {
+            remain_distance = ((Vector2)player_transofrm.position - pos).sqrMagnitude;
+            player_transofrm.position = Vector3.MoveTowards(player_transofrm.position, pos, Time.deltaTime * velocity);
+            yield return null;
+        }
+        player.RollingFinished();
+
+    }
     
     private float Distance(Vector2 pos1, Vector2 pos2)
     {
@@ -449,9 +466,9 @@ public class PlayerPhysics : MonoBehaviour
     private Vector2 On_Ramp_Pos(int type)
     {
         if (type == 4)
-            return new Vector2(-0.4f, 0.6f);
+            return new Vector2(-0.35f, 0.4f);
         else if (type == 1)
-            return new Vector2(0.6f,0.4f);
+            return new Vector2(0.35f,0.4f);
 
         return new Vector2(0, 0);
     }
