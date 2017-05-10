@@ -71,8 +71,8 @@ public class APIInput{
     {
         if (mode == GameMode.Play)
         {
-            //engine.inputcontroller.Absorb();
-            //engine.pipecontroller.CheckPipes();
+            engine.inputcontroller.Absorb();
+            engine.pipecontroller.CheckPipes();
         }
     }
 
