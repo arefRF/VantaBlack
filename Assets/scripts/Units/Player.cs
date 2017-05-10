@@ -85,7 +85,7 @@ public class Player : Unit
     public void SetState(PlayerState state)
     {
         this.state = state;
-        if(state == PlayerState.Transition)
+        if(state == PlayerState.Transition || state == PlayerState.LeanTransition)
         {
             GetComponent<PlayerGraphics>().TransitionAnimation();
         }
