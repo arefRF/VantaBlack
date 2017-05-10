@@ -86,12 +86,13 @@ public class PlayerPhysics : MonoBehaviour
     }
     public void Block_To_Ramp_Move(Vector2 pos, int type)
     {
+        Debug.Log("Block to ramp");
         move_type = MoveType.BlockToRamp;
         if(last_co != null)
             StopCoroutine(last_co);
         Vector2 end1 = pos + Block_To_Ramp_Pos(type);
         Vector2 end2 = (Vector2)pos + On_Ramp_Pos(type);
-        last_co = StartCoroutine(Block_To_Ramp_Coroutine(end1,end2,move_time,true,type));
+        last_co = StartCoroutine(Ramp_To_Block_Coroutine(end1,end2,move_time,true));
         
     }
     
@@ -104,6 +105,8 @@ public class PlayerPhysics : MonoBehaviour
     {
         move_type = MoveType.Land;
         Vector2 pos  = position + On_Ramp_Pos(type);
+        if (last_co != null)
+            StopCoroutine(last_co);
         last_co =  StartCoroutine(LandOnRamp(pos, 0.1f));
     }
 
@@ -112,16 +115,16 @@ public class PlayerPhysics : MonoBehaviour
         if (type == 4)
         {
             if (player.direction == Direction.Left)
-                return new Vector2(0.2f, 0.7f);
+                return new Vector2(0f, 0.8f);
             else if (player.direction == Direction.Right)
-                return new Vector2(-0.4f, 0);
+                return new Vector2(-0.5f, 0.2f);
         }
         else if(type == 1)
         {
             if (player.direction == Direction.Left)
                 return new Vector2(0.5f, 0);
             else if (player.direction == Direction.Right)
-                return new Vector2(-0.2f, 0.9f);
+                return new Vector2(-0.3f, 0.9f);
         }
         return new Vector2(0, 0);
     }
@@ -277,19 +280,17 @@ public class PlayerPhysics : MonoBehaviour
         {
             remain_distance = ((Vector2)player_transofrm.position - end1).sqrMagnitude;
             player_transofrm.position = Vector3.MoveTowards(player_transofrm.position, end1, Time.deltaTime * 1 / move_time);
-            api.Camera_AutoMove();
             yield return null;
         }
         remain_distance = ((Vector2)player_transofrm.position - end2).sqrMagnitude;
-        Rotate_On_Block();
         while (remain_distance > float.Epsilon)
         {
             remain_distance = ((Vector2)player_transofrm.position - end2).sqrMagnitude;
             player_transofrm.position = Vector3.MoveTowards(player.transform.position, end2, Time.deltaTime * 1 / move_time);
             Set_Player_Move_Percent(remain_distance);
-            api.Camera_AutoMove();
             yield return null;
         }
+
         if (call_finish)
             api.MovePlayerFinished(gameObject);
         player.movepercentage = 0;
