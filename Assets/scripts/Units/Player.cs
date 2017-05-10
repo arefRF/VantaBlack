@@ -277,6 +277,7 @@ public class Player : Unit
         {
             UseAbility(abilities[0]);
         }
+        direction = dir;
         api.engine_Move(this, dir);
         return true;
     }
@@ -717,6 +718,7 @@ public class Player : Unit
             api.AddToDatabase(this);
             //api.engine.apigraphic.MovePlayerOnPlatform(this, temppos);
             Debug.Log(position);
+            state = PlayerState.Busy;
             api.engine.apigraphic.Roll(this, position);
             //ApplyGravity();
         }
