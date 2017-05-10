@@ -78,7 +78,6 @@ public class APIGraphic{
         player.GetComponent<PlayerGraphics>().StopAllCoroutines();
         player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(pos);
         player.gameObject.GetComponent<PlayerGraphics>().Move_Animation(player.direction);
-        player.gameObject.GetComponent<PlayerGraphics>().Move_Animation(player.direction);
     }
     // Block to Branch
     public void MovePlayer_Simple_2(Player player, Vector2 position,Direction direction)
@@ -182,10 +181,10 @@ public class APIGraphic{
     {
         logicalengine.graphic_LandFinished(player);
     }
-    public void LandOnRamp(Player player, Vector2 position, Unit fallonunit, int ramptype,bool roll)
+    public void LandOnRamp(Player player, Vector2 position, Unit fallonunit, int ramptype)
     {
         player.GetComponent<PlayerGraphics>().StopAllCoroutines();
-        player.GetComponent<PlayerPhysics>().Land_On_Ramp(position, ramptype,roll);
+        player.GetComponent<PlayerPhysics>().Land_On_Ramp(position, ramptype);
         
     }
 
