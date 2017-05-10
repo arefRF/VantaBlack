@@ -207,7 +207,7 @@ public class APIGraphic{
 
     public void Jump_Finish(Player player, Vector2 finalpos, Jump jump)
     {
-        jump.JumpFinished(player, finalpos);
+        jump.JumpFinished(player);
     }
 
     public void Jump_Hit(Player player,Direction dir,Jump ability,Vector2 pos)
@@ -218,7 +218,7 @@ public class APIGraphic{
 
     public void Jump_Hit_Finish(Player player,Jump ability,Vector2 finalpos)
     {
-        ability.JumpHitFinished(player,finalpos);
+        ability.JumpHitFinished(player);
     }
 
     public void MovePlayerOnPlatform(Player player,Vector2 pos)

@@ -31,7 +31,7 @@ public class Player : Unit
     private int y_bound;
     public GameMode mode;
 
-    public Coroutine leancoroutine;
+    public Coroutine leancoroutine {get; set;}
     public void Awake()
     {
         abilities = new List<Ability>();
