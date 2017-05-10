@@ -416,7 +416,6 @@ public class InputController {
             {
                 if(player.leancoroutine != null)
                 {
-                    Debug.Log("herererere");
                     GameObject.Find("GetInput").GetComponent<GetInput>().StopCoroutine(player.leancoroutine);
                 }
                 if (Toolkit.HasBranch(pos))
@@ -487,9 +486,7 @@ public class InputController {
 
     private IEnumerator LeanWait(float f, Player player)
     {
-        Debug.Log("wait");
         yield return new WaitForSeconds(f);
-        Debug.Log("appling gravity");
         player.ApplyGravity();
 
     }

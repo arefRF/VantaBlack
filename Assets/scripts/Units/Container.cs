@@ -150,6 +150,13 @@ public class Container : ParentContainer {
             else
                 Swap(player);
         }
+        for(int i=0; i<graphicalactions.Count; i++)
+        {
+            if(graphicalactions[i] is ActionUponAbsorb)
+            {
+                graphicalactions[i].Action();
+            }
+        }
 
     }
 
@@ -172,7 +179,13 @@ public class Container : ParentContainer {
             else
                 Swap(player);
         }
-        
+        for (int i = 0; i < graphicalactions.Count; i++)
+        {
+            if (graphicalactions[i] is ActionUponRelease)
+            {
+                graphicalactions[i].Action();
+            }
+        }
     }
 
     public virtual void PlayerAbsorbHold(Player player)

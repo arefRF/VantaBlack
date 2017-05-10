@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System;
 
-public abstract class ActionUponAbsorb : GraphicalActions{
+public abstract class GraphicalActions : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
@@ -14,4 +13,5 @@ public abstract class ActionUponAbsorb : GraphicalActions{
 	
 	}
 
+    public abstract void Action();
 }
