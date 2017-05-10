@@ -17,6 +17,8 @@ public class EyeMove : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        if (!transform.parent.parent.GetComponent<ParentScript>().movelock)
+            return;
         constant = Mathf.Sqrt(Mathf.Pow(Mathf.Abs(player.transform.position.x - center_position.x), 2) + Mathf.Pow(Mathf.Abs(player.transform.position.y - center_position.y), 2));
         cos = (player.transform.position.x - center_position.x)/constant;
         sin = (player.transform.position.y - center_position.y)/constant;
