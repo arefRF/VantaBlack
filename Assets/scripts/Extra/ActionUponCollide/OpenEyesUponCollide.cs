@@ -20,7 +20,7 @@ public class OpenEyesUponCollide : MonoBehaviour{
         if (!opened && col.tag == "Player")
         {
             opened = true;
-            for(int i=0; i<eyepart.Count;i++)
+            for (int i = 0; i < eyepart.Count; i++)
                 eyepart[i].GetComponent<SpriteRenderer>().enabled = false;
         }
     }
