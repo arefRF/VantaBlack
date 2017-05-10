@@ -19,6 +19,7 @@ public class GetInput : MonoBehaviour {
     private bool action_lock = false;
     public bool joystick;
     public bool getOnce = false;
+    private Coroutine last_co;
     // Use this for initialization
     void Start()
     {
@@ -72,16 +73,19 @@ public class GetInput : MonoBehaviour {
             }
                   if (is_space)
                       Get_Space_Arrows();
+
                   if (Input.GetKeyDown(KeyCode.A))
                   {
                       is_holding = true;
-                      StopAllCoroutines();
-                      StartCoroutine(Wait_For_Absorb_Hold());
+                       if(last_co!=null)
+                            StopCoroutine(last_co);
+                      last_co = StartCoroutine(Wait_For_Absorb_Hold());
                   }
                   if (Input.GetKeyDown(KeyCode.D))
                   {
                       is_holding = true;
-                      StopAllCoroutines();
+                if (last_co != null)
+                    StopCoroutine(last_co);
                       StartCoroutine(Wait_For_Release_Hold());
                   }
                   if (Input.GetKeyUp(KeyCode.D)  )
