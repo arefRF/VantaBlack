@@ -29,6 +29,7 @@ public class Player : Unit
     private List<Unit>[,] units;
     private int x_bound;
     private int y_bound;
+    private bool onthesameramp;
     public GameMode mode;
 
     public Coroutine leancoroutine;
@@ -377,12 +378,15 @@ public class Player : Unit
             return false;
         
         Vector2 pos = Toolkit.VectorSum(position, gravity);
+        onthesameramp = false;
+
         if (Stand_On_Ramp(pos))
         {
             api.RemoveFromDatabase(this);
             position = pos;
             api.AddToDatabase(this);
-            api.engine.apigraphic.LandOnRamp(this, pos, Toolkit.GetRamp(pos), Toolkit.GetRamp(pos).type, false);
+            onthesameramp = true;
+            api.engine.apigraphic.LandOnRamp(this, pos, Toolkit.GetRamp(pos), Toolkit.GetRamp(pos).type);
             return false;
         }
         if (Toolkit.IsdoubleRamp(pos))
@@ -648,13 +652,15 @@ public class Player : Unit
         api.engine.apigraphic.Absorb(this, null);
     }
 
-    public void LandOnRampFinished(bool onthesameramp)
+    public void LandOnRampFinished()
     {
-        if (!onthesameramp)
+        if (onthesameramp)
         {
             state = PlayerState.Idle;
+            onthesameramp = false;
             return;
         }
+        
         Vector2 newpos = Toolkit.VectorSum(position, api.engine.database.gravity_direction);
         Ramp ramp = Toolkit.GetRamp(newpos);
         if (ramp == null)
