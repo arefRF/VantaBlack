@@ -121,7 +121,8 @@ public class PlayerGraphics : MonoBehaviour {
             player.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 270);
             */
         //ResetStates();
-        //animator.SetInteger("Branch", 1);
+        animator.SetInteger("Walk", 0);
+        animator.SetInteger("Branch", 1);
         StopAllCoroutines();
 
         StartCoroutine(Simple_Move(player.position, 0.65f));
@@ -153,6 +154,7 @@ public class PlayerGraphics : MonoBehaviour {
         ResetStates();
         animator.SetInteger("Branch", -1); */
         StopAllCoroutines();
+        animator.SetInteger("Branch", 0);
         Vector2 pos = On_Ramp_Pos(ramp_type) + player.position;
         StartCoroutine(Simple_Move(pos, 0.65f));
     }

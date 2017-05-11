@@ -73,10 +73,12 @@ public class APIGraphic{
         player.gameObject.GetComponent<PlayerGraphics>().Move_Animation(player.direction);
     }
 
+
+    // Branch to Branch
     public void MovePlayer_Branch_Branch(Player player,Vector2 pos)
     {
         player.GetComponent<PlayerGraphics>().StopAllCoroutines();
-        player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(pos);
+        player.gameObject.GetComponent<PlayerPhysics>().Branch_Branch(pos);
         player.gameObject.GetComponent<PlayerGraphics>().Move_Animation(player.direction);
     }
     // Block to Branch
@@ -86,7 +88,7 @@ public class APIGraphic{
         player.GetComponent<PlayerGraphics>().StopAllCoroutines();
         player.gameObject.GetComponent<PlayerPhysics>().StopAllCoroutines();
         player.GetComponent<PlayerGraphics>().MoveToBranch(direction);
-        player.gameObject.GetComponent<PlayerGraphics>().Move_Animation(player.direction);
+       // player.gameObject.GetComponent<PlayerGraphics>().Move_Animation(player.direction);
     }
 
     // Block to Ramp
@@ -128,7 +130,7 @@ public class APIGraphic{
         player.GetComponent<PlayerGraphics>().StopAllCoroutines();
         player.GetComponent<PlayerPhysics>().StopAllCoroutines();
         player.GetComponent<PlayerGraphics>().BranchExit(dir,0);
-        player.gameObject.GetComponent<PlayerGraphics>().Move_Animation(player.direction);
+        //player.gameObject.GetComponent<PlayerGraphics>().Move_Animation(player.direction);
    
 
     }
