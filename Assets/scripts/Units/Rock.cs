@@ -43,6 +43,13 @@ public class Rock : Unit
             gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Rock[0];
        
     }
+
+    delegate string mydegligate(string s);
+    public void test(mydegligate method)
+    {
+        method(this);
+    }
+
     public override CloneableUnit Clone()
     {
         return new CloneableRock(this);

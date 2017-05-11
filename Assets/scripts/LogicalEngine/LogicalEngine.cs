@@ -835,4 +835,35 @@ public class LogicalEngine {
             }
         }
     }
+    
+    public void AdjustPlayer(Player player, PlayerState nextstate, Direction leandirection)
+    {
+        if (player.transform.position.x == player.position.x && player.transform.position.y == player.position.y)
+            return;
+        player.SetState(PlayerState.Adjust);
+        player.transform.position = player.position;
+        AdjustPlayerFinshed(player, nextstate, leandirection);
+    }
+
+    public void AdjustPlayerFinshed(Player player, PlayerState nextstate, Direction leandireciton)
+    {
+        if(nextstate == PlayerState.Lean)
+        {
+            player.SetState(PlayerState.Idle);
+            player.ApplyGravity();
+            inputcontroller.Lean(player, leandireciton);
+        }
+        else if(nextstate == PlayerState.Moving)
+        {
+
+        }
+        else if(nextstate == PlayerState.Jumping)
+        {
+            player.SetState(PlayerState.Idle);
+            player.ApplyGravity();
+            inputcontroller.Jump(player);
+        }
+    }
+
+    
 }
