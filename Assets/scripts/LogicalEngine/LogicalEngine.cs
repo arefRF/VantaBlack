@@ -836,13 +836,13 @@ public class LogicalEngine {
             }
         }
     }
-    public void AdjustPlayer(Player player,Direction direction , Action<Player, Direction> passingmethod)
+    public bool AdjustPlayer(Player player,Direction direction , Action<Player, Direction> passingmethod)
     {
         if (player.transform.position.x == player.position.x && player.transform.position.y == player.position.y)
-            return;
+            return false;
         player.SetState(PlayerState.Adjust);
-        player.transform.position = player.position;
-        player.AdjustPlayerFinshed(direction, passingmethod);
+        apigraphic.AdjustPlayer(player, player.position, direction, passingmethod);
+        return true;
     }
 
     public void JumpToDirection(Player player, Direction direction)

@@ -169,6 +169,7 @@ public class Branch : Unit {
                 }
                 player.SetState(PlayerState.Lean);
                 //player.transform.position = player.position;
+                player.LeanedTo = this;
                 player.isonejumping = false;
                 api.engine.apigraphic.Player_Co_Stop(player);
                 player.lean = true;

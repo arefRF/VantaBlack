@@ -169,10 +169,10 @@ public class InputController {
 
     public void Jump(Player player)
     {
-        engine.AdjustPlayer(player, database.gravity_direction, engine.JumpToDirection);
         if(player.state == PlayerState.Idle)
         {
-
+            if (engine.AdjustPlayer(player, database.gravity_direction, engine.JumpToDirection))
+                return;
             // Idle and simple jump
             Direction direction;
             if (player.lean)
@@ -188,6 +188,8 @@ public class InputController {
         }
         else if(player.state == PlayerState.Lean)
         {
+            if (engine.AdjustPlayer(player, database.gravity_direction, engine.JumpToDirection))
+                return;
             Direction direction = Toolkit.ReverseDirection(player.leandirection);
             if (!Toolkit.IsInsideBranch(player) && Toolkit.IsEmpty(Toolkit.VectorSum(player.position, direction)))
             {
@@ -198,6 +200,8 @@ public class InputController {
         }
         else if (player.state == PlayerState.Transition && player.isonejumping && player.abilities.Count != 0 && player.abilities[0].abilitytype == AbilityType.Jump)
         {
+            if (engine.AdjustPlayer(player, database.gravity_direction, engine.JumpToDirection))
+                return;
             player.isonejumping = false;
             Direction direction = Toolkit.ReverseDirection(Toolkit.ReverseDirection(player.jumpdirection));
             if (!Toolkit.IsInsideBranch(player) && Toolkit.IsEmpty(Toolkit.VectorSum(player.position, direction)))
@@ -424,14 +428,15 @@ public class InputController {
                     Toolkit.GetBranch(pos).PlayerLeaned(player, direction);
                     return;
                 }
-                engine.AdjustPlayer(player, direction, Lean);
+                if (engine.AdjustPlayer(player, direction, Lean))
+                    return;
                 player.movepercentage = 0;
                 player.LeanedTo = Toolkit.GetUnit(pos);
                 player.api.RemoveFromDatabase(player);
                 player.position = Toolkit.VectorSum(pos, Toolkit.ReverseDirection(direction));
                 player.api.AddToDatabase(player);
                 player.SetState(PlayerState.Lean);
-                player.transform.position = player.position;
+                //player.transform.position = player.position;
                 player.isonejumping = false;
                 engine.apigraphic.Player_Co_Stop(player);
                 player.lean = true;

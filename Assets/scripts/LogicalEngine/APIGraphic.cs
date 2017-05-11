@@ -409,4 +409,9 @@ public class APIGraphic{
     {
         graphicalengine.RemoveLasers();
     }
+
+    public void AdjustPlayer(Player player, Vector2 pos, Direction direction, System.Action<Player, Direction> passingmethod)
+    {
+        player.GetComponent<PlayerPhysics>().Adjust(pos, direction, passingmethod);
+    }
 }
