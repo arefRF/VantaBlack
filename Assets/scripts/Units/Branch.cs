@@ -7,7 +7,7 @@ public class Branch : Unit {
 
     public override void SetInitialSprite()
     {
-        bool[] notconnected = Toolkit.GetConnectedSidesForBranch(this);
+        /*bool[] notconnected = Toolkit.GetConnectedSidesForBranch(this);
 
         if (notconnected[0] && notconnected[1] && notconnected[2] && notconnected[3])
         {
@@ -87,11 +87,12 @@ public class Branch : Unit {
         else
         {
             transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Branch[3];
-        }
+        }*/
         SetJointOrEntrance(Direction.Up);
         SetJointOrEntrance(Direction.Right);
         SetJointOrEntrance(Direction.Down);
         SetJointOrEntrance(Direction.Left);
+        api.engine.apigraphic.UnitChangeSprite(this);
     }
 
     private void SetJointOrEntrance(Direction direction)
@@ -103,35 +104,37 @@ public class Branch : Unit {
                 switch (direction)
                 {
                     case Direction.Up:
-                        transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_BranchJoint;
+                        transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_BranchHolder;
                         transform.GetChild(1).GetComponent<SpriteRenderer>().flipX = false; return;
                     case Direction.Right:
-                        transform.GetChild(2).GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_BranchJoint;
+                        transform.GetChild(2).GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_BranchHolder;
                         transform.GetChild(2).GetComponent<SpriteRenderer>().flipX = true; return;
                     case Direction.Down:
-                        transform.GetChild(3).GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_BranchJoint;
+                        transform.GetChild(3).GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_BranchHolder;
                         transform.GetChild(3).GetComponent<SpriteRenderer>().flipX = true; return;
                     case Direction.Left:
-                        transform.GetChild(4).GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_BranchJoint;
+                        transform.GetChild(4).GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_BranchHolder;
                         transform.GetChild(4).GetComponent<SpriteRenderer>().flipX = true; return;
                 }
             }
         }
-        if(Toolkit.IsConnectedFromPositionToBranch(this, direction))
+        else
         {
+            Debug.Log(direction);
+            Debug.Log(api.engine.initializer.sprite_BranchEntrance);
             switch (direction)
             {
                 case Direction.Up:
-                    transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = null;
+                    transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_BranchEntrance;
                     return;
                 case Direction.Right:
-                    transform.GetChild(2).GetComponent<SpriteRenderer>().sprite = null;
+                    transform.GetChild(2).GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_BranchEntrance;
                     return;
                 case Direction.Down:
-                    transform.GetChild(3).GetComponent<SpriteRenderer>().sprite = null;
+                    transform.GetChild(3).GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_BranchEntrance;
                     return;
                 case Direction.Left:
-                    transform.GetChild(4).GetComponent<SpriteRenderer>().sprite = null;
+                    transform.GetChild(4).GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_BranchEntrance;
                     return;
             }
         }
@@ -157,6 +160,7 @@ public class Branch : Unit {
                 player.abilities.Clear();
                 player._setability();
                 api.engine.apigraphic.Absorb(player, null);
+                api.engine.apigraphic.UnitChangeSprite(this);
                 api.engine.inputcontroller.PlayerMoveAction(player, direction);
             }
             else
