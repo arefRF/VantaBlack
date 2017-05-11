@@ -169,6 +169,7 @@ public class InputController {
 
     public void Jump(Player player)
     {
+        engine.AdjustPlayer(player, database.gravity_direction, engine.JumpToDirection);
         if(player.state == PlayerState.Idle)
         {
 
@@ -423,6 +424,7 @@ public class InputController {
                     Toolkit.GetBranch(pos).PlayerLeaned(player, direction);
                     return;
                 }
+                engine.AdjustPlayer(player, direction, Lean);
                 player.movepercentage = 0;
                 player.LeanedTo = Toolkit.GetUnit(pos);
                 player.api.RemoveFromDatabase(player);

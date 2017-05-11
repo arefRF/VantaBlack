@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 public class LogicalEngine {
 
@@ -835,35 +836,25 @@ public class LogicalEngine {
             }
         }
     }
-    
-    /*public void AdjustPlayer(Player player, Func)
+    public void AdjustPlayer(Player player,Direction direction , Action<Player, Direction> passingmethod)
     {
         if (player.transform.position.x == player.position.x && player.transform.position.y == player.position.y)
             return;
         player.SetState(PlayerState.Adjust);
         player.transform.position = player.position;
-        AdjustPlayerFinshed(player, nextstate, leandirection);
-    }*/
-
-    public void AdjustPlayerFinshed(Player player, PlayerState nextstate, Direction leandireciton)
-    {
-        if(nextstate == PlayerState.Lean)
-        {
-            player.SetState(PlayerState.Idle);
-            player.ApplyGravity();
-            inputcontroller.Lean(player, leandireciton);
-        }
-        else if(nextstate == PlayerState.Moving)
-        {
-
-        }
-        else if(nextstate == PlayerState.Jumping)
-        {
-            player.SetState(PlayerState.Idle);
-            player.ApplyGravity();
-            inputcontroller.Jump(player);
-        }
+        AdjustPlayerFinshed(player, direction, passingmethod);
     }
 
+    public void AdjustPlayerFinshed(Player player, Direction direction, Action<Player, Direction> passingmethod)
+    {
+        player.SetState(PlayerState.Idle);
+        player.ApplyGravity();
+        passingmethod(player, direction);
+    }
+
+    public void JumpToDirection(Player player, Direction direction)
+    {
+        inputcontroller.Jump(player);
+    }
     
 }
