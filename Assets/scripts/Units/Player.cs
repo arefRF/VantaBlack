@@ -85,7 +85,7 @@ public class Player : Unit
     public void SetState(PlayerState state)
     {
         this.state = state;
-        if(state == PlayerState.Transition || state == PlayerState.LeanTransition)
+        if(state == PlayerState.Transition)
         {
             GetComponent<PlayerGraphics>().TransitionAnimation();
         }
@@ -733,6 +733,14 @@ public class Player : Unit
     public void RollingFinished()
     {
         ApplyGravity();
+    }
+
+    public void DrainFinished()
+    {
+        abilities.Clear();
+        _setability();
+        api.engine.apigraphic.Absorb(this, null);
+        state = PlayerState.Idle;
     }
 
     public override CloneableUnit Clone()
