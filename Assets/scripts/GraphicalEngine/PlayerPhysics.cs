@@ -219,6 +219,16 @@ public class PlayerPhysics : MonoBehaviour
         StopAllCoroutines();
         StartCoroutine(Accelerated_Move(pos, fall_velocity, fall_acceleration, false));
     }
+    public void Branch_Branch(Vector2 pos)
+    {
+        set_percent = true;
+        if (last_co != null)
+            StopCoroutine(last_co);
+        Rotate_On_Block();
+        move_type = MoveType.BlockToBlock;
+        last_co = StartCoroutine(Constant_Move(pos, 0.1f, true));
+
+    }
     public void Simple_Move(Vector2 pos)
     {
         set_percent = true;
