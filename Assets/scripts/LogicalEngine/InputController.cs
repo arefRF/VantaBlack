@@ -221,7 +221,6 @@ public class InputController {
                     player.direction = direction;
                     engine.apigraphic.PlayerChangeDirection(player, olddir, player.direction);
                 }
-                Debug.Log("idle " + player.position);
                 if (!player.Move(direction))
                 {
                     Lean(player, direction);

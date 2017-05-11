@@ -120,8 +120,6 @@ public class Branch : Unit {
         }
         else
         {
-            Debug.Log(direction);
-            Debug.Log(api.engine.initializer.sprite_BranchEntrance);
             switch (direction)
             {
                 case Direction.Up:
