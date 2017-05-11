@@ -17,7 +17,7 @@ public class Fountain : Unit {
         
         if(player.abilities.Count == 0)
         {
-            UndoAbilities(player);
+            
             for (int i = 0; i < count; i++)
             {
                 Ability temp = Ability.GetAbilityInstance(ability).ConvertContainerAbilityToPlayer(player);
@@ -33,7 +33,6 @@ public class Fountain : Unit {
             {
                 if(player.abilities.Count < count)
                 {
-                    UndoAbilities(player);
                     while(player.abilities.Count < count)
                     {
                         Ability temp = Ability.GetAbilityInstance(ability).ConvertContainerAbilityToPlayer(player);
@@ -78,5 +77,10 @@ public class Fountain : Unit {
                     }
         }
         abilities.Clear();
+    }
+
+    public void PlayerLeaned(Player player)
+    {
+        UndoAbilities(player);
     }
 }
