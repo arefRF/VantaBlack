@@ -737,6 +737,9 @@ public class Player : Unit
 
     public void DrainFinished()
     {
+        abilities.Clear();
+        _setability();
+        api.engine.apigraphic.Absorb(this, null);
         state = PlayerState.Idle;
     }
 
