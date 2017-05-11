@@ -244,10 +244,8 @@ public class InputController {
         {
             //Debug.Log("calling graphicals");
 
-            Debug.Log("moving");
             if (player.movepercentage == 98)
             {
-                Debug.Log("moving " + player.position);
                 if (!player.ApplyGravity()){
                     if (!player.Move(direction))
                     {

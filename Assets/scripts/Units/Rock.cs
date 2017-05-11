@@ -45,11 +45,7 @@ public class Rock : Unit
 
     }
 
-    /*public delegate string mydegligate(string s);
-    public void test(mydegligate method)
-    {
-        method("hello");
-    }*/
+    
 
     public override CloneableUnit Clone()
     {
