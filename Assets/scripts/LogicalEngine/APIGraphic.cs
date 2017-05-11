@@ -99,6 +99,11 @@ public class APIGraphic{
 
     }
 
+    public void Drain(Player player,Drainer drainer)
+    {
+
+    }
+
     // Block to fall
     public void MovePlayer_Simple_4(Player player, Vector2 position)
     {
