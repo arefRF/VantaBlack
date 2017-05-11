@@ -304,6 +304,7 @@ public class PlayerPhysics : MonoBehaviour
         while (remain_distance > float.Epsilon)
         {
             remain_distance = ((Vector2)player_transofrm.position -end1).sqrMagnitude;
+            
             player_transofrm.position = Vector3.MoveTowards(player_transofrm.position, end1, Time.deltaTime * 1 /  move_time);
             api.Camera_AutoMove();
             yield return null;
@@ -334,10 +335,10 @@ public class PlayerPhysics : MonoBehaviour
     private IEnumerator Constant_Move(Vector2 end,float move_time,bool call_finish)
     {
         set_percent = true;
-        float remain_distance = ((Vector2)player_transofrm.position - end).sqrMagnitude;
-        while(remain_distance > float.Epsilon)
+        float remain_distance = Distance((Vector2)transform.position, end);
+        while (remain_distance > float.Epsilon)
         {
-            remain_distance = ((Vector2)transform.position - end).sqrMagnitude;
+            remain_distance = Distance((Vector2)transform.position, end);
             transform.position = Vector2.MoveTowards(transform.position, end, Time.smoothDeltaTime  / move_time );
             Set_Player_Move_Percent(remain_distance);
             api.Camera_AutoMove();
