@@ -743,6 +743,13 @@ public class Player : Unit
         state = PlayerState.Idle;
     }
 
+    public void AdjustPlayerFinshed(Direction direction, Action<Player, Direction> passingmethod)
+    {
+        SetState(PlayerState.Idle);
+        ApplyGravity();
+        passingmethod(this, direction);
+    }
+
     public override CloneableUnit Clone()
     {
         return new CloneablePlayer(this);

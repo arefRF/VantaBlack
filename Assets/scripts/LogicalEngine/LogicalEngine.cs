@@ -842,14 +842,7 @@ public class LogicalEngine {
             return;
         player.SetState(PlayerState.Adjust);
         player.transform.position = player.position;
-        AdjustPlayerFinshed(player, direction, passingmethod);
-    }
-
-    public void AdjustPlayerFinshed(Player player, Direction direction, Action<Player, Direction> passingmethod)
-    {
-        player.SetState(PlayerState.Idle);
-        player.ApplyGravity();
-        passingmethod(player, direction);
+        player.AdjustPlayerFinshed(direction, passingmethod);
     }
 
     public void JumpToDirection(Player player, Direction direction)

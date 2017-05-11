@@ -140,7 +140,27 @@ public class PlayerPhysics : MonoBehaviour
         sharp_type = type;
     }
 
+    public void Adjust(Vector2 pos,Direction dir, System.Action<Player, Direction> passingmethod)
+    {
+        StartCoroutine(AdjustCo(pos,dir,passingmethod));
+    }
 
+
+    private IEnumerator AdjustCo(Vector2 end,Direction dir, System.Action<Player, Direction> passingmethod)
+    {
+        set_percent = true;
+        float remain_distance = Distance((Vector2)transform.position, end);
+        while (remain_distance > float.Epsilon)
+        {
+            remain_distance = Distance((Vector2)transform.position, end);
+            transform.position = Vector2.MoveTowards(transform.position, end, Time.smoothDeltaTime / move_time);
+            api.Camera_AutoMove();
+            yield return new WaitForSeconds(0.001f);
+        }
+        player.AdjustPlayerFinshed(dir, passingmethod);
+
+        // if it needs Call Finished Move of API
+    }
     private Vector2 Ramp_To_Sharp_Pos(Direction gravity,Vector2 position)
     {
         if(gravity == Direction.Down)
@@ -509,7 +529,7 @@ public class PlayerPhysics : MonoBehaviour
 
     private enum MoveType
     {
-        RampToRamp,RampToSharp,RampToCorner,Falling,BlockToBlock,Idle,LeanStick,RampToFall,BlockToFall,OnPlatform,RampToBlock,BlockToRamp,FallDie,Land
+        RampToRamp,RampToSharp,RampToCorner,Falling,BlockToBlock,Idle,LeanStick,RampToFall,BlockToFall,OnPlatform,RampToBlock,BlockToRamp,FallDie,Land,Adjust
     }
 
 }

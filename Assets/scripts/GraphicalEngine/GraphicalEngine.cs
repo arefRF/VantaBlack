@@ -98,6 +98,7 @@ public class GraphicalEngine : MonoBehaviour {
     public void Simple_Container(SimpleContainer container)
     {
         Container_Change_Number(container);
+        Set_Icon(container);
 
     }
 
@@ -141,13 +142,13 @@ public class GraphicalEngine : MonoBehaviour {
 
     private string Icon_Path(AbilityType type)
     {
-        string path = @"Containers\Icons\";
+        string path = @"Containers\Icons\New";
         if (type == AbilityType.Fuel)
         {
-            path += "ABILITY FUEL FULL";
+            path += "Fuel Off";
         }
         else if (type == AbilityType.Key)
-            path = @"Doors\Key B";
+            path = @"Key";
         return path;
     }
     private GameObject GetObjectInChild(GameObject parent,string name) 
@@ -233,6 +234,8 @@ public class GraphicalEngine : MonoBehaviour {
         Vector3 color = Ability_Color(container.abilities,false);
    
     }
+
+    
     private bool ComplimentColor(Container container)
     {
         if (container is DynamicContainer)
@@ -246,13 +249,14 @@ public class GraphicalEngine : MonoBehaviour {
     public void Dynamic_Container(DynamicContainer container)
     {
         //container.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Containers\\Version 2\\Body");
-       // Set_Icon(container);
+        Set_Icon(container);
        // Set_Dynamic_Special_Icon(container);
-       Container_Change_Number(container);
+        Container_Change_Number(container);
         DynamicRotation(container);
         DynamicSwitch(container);
 
     }
+
 
     public void AddLaser(Vector2 pos1,Vector2 pos2,Direction dir)
     {
