@@ -99,6 +99,11 @@ public class APIGraphic{
 
     }
 
+    public void Drain(Player player,Drainer drainer)
+    {
+
+    }
+
     // Block to fall
     public void MovePlayer_Simple_4(Player player, Vector2 position)
     {
@@ -370,6 +375,8 @@ public class APIGraphic{
             graphicalengine.StaticContainer((StaticContainer)unit);
         else if (unit is Gate)
             graphicalengine.Gate((Gate)unit);
+        else if (unit is Branch)
+            graphicalengine.Branch((Branch)unit);
     }
 
     public void Fall_Player_Died(Player player)

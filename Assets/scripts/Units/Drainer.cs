@@ -28,8 +28,6 @@ public class Drainer : Unit {
 
     public void Drain(Player player)
     {
-        player.abilities.Clear();
-        player._setability();
-        api.engine.apigraphic.Absorb(player, null);
+        api.engine.apigraphic.Drain(player, this);
     }
 }

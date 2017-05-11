@@ -21,6 +21,8 @@ public class Ramp : Unit {
             // just left connected
             else if (notconnected[2] && !notconnected[3])
                 ramp_path += "left";
+            else
+                ramp_path += "left";
         }
         else if (type == 2)
         {
@@ -30,6 +32,8 @@ public class Ramp : Unit {
             else if (!notconnected[0] && notconnected[3])
                 ramp_path += "top";
             else if (notconnected[0] && !notconnected[3])
+                ramp_path += "left";
+            else
                 ramp_path += "left";
         }
         else if (type == 3)
@@ -55,6 +59,8 @@ public class Ramp : Unit {
             else if (!notconnected[1] && notconnected[2])
                 ramp_path += "right";
             else if (notconnected[1] && !notconnected[2])
+                ramp_path += "down";
+            else
                 ramp_path += "down";
         }
         GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load(ramp_path, typeof(Sprite));

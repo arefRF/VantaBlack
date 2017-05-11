@@ -181,6 +181,18 @@ public class GraphicalEngine : MonoBehaviour {
         }
     }
     
+    public void Branch(Branch branch)
+    {
+        if (branch.islocked)
+        {
+            branch.transform.GetChild(5).GetComponent<SpriteRenderer>().enabled = true;
+            if(branch.transform.GetChild(5).GetComponent<SpriteRenderer>().sprite == null)
+                branch.transform.GetChild(5).GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Branch/Branch Lock");
+        }
+        else
+            branch.transform.GetChild(5).GetComponent<SpriteRenderer>().enabled = false;
+    }
+
     public void Stop_All_Co()
     {
         StopAllCoroutines();
