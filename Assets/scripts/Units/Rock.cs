@@ -8,7 +8,8 @@ public class Rock : Unit
 
     public override void SetInitialSprite()
     {
-        bool[] notconnected = Toolkit.GetConnectedSides(this);
+        gameObject.GetComponent<SpriteRenderer>().sprite = null;
+        /*bool[] notconnected = Toolkit.GetConnectedSides(this);
         if (notconnected[0] && notconnected[1] && notconnected[2] && notconnected[3])
             gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Rock[1];
         else if (notconnected[0] && notconnected[1] && notconnected[2])
@@ -40,15 +41,15 @@ public class Rock : Unit
         else if (notconnected[3])
             gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Rock[15];
         else
-            gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Rock[0];
-       
+            gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Rock[0];*/
+
     }
 
-    public delegate string mydegligate(string s);
+    /*public delegate string mydegligate(string s);
     public void test(mydegligate method)
     {
         method("hello");
-    }
+    }*/
 
     public override CloneableUnit Clone()
     {
