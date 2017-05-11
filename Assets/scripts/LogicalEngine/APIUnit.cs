@@ -34,9 +34,9 @@ public class APIUnit {
         engine.UnitToGraphic_Land(laningunit, unit, unit.position);
     }
 
-    public void engine_LandOnRamp(Ramp ramp, Unit landingunit, int ramptype, bool isonsameramp)
+    public void engine_LandOnRamp(Ramp ramp, Unit landingunit, int ramptype)
     {
-        engine.UnitToGraphic_LandOnRamp(landingunit, ramp, ramp.position, ramptype, isonsameramp);
+        engine.UnitToGraphic_LandOnRamp(landingunit, ramp, ramp.position, ramptype);
         
     }
 

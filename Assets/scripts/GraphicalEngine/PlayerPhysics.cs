@@ -41,7 +41,7 @@ public class PlayerPhysics : MonoBehaviour
         move_type = MoveType.RampToFall;
         StopAllCoroutines();
         Rotate_On_Ramp(type);
-        last_co =  StartCoroutine(Constant_Move(pos, move_time, true,false));
+        last_co =  StartCoroutine(Constant_Move(pos, move_time, true));
     }
 
     // when platform is moving move the player
@@ -50,7 +50,7 @@ public class PlayerPhysics : MonoBehaviour
         if (last_co != null)
             StopCoroutine(last_co);
         move_type = MoveType.OnPlatform;
-        last_co =  StartCoroutine(Constant_Move(pos, platform_move_time, false,false));
+        last_co =  StartCoroutine(Constant_Move(pos, platform_move_time, false));
 
     }
 
@@ -86,12 +86,13 @@ public class PlayerPhysics : MonoBehaviour
     }
     public void Block_To_Ramp_Move(Vector2 pos, int type)
     {
+        Debug.Log("Block to ramp");
         move_type = MoveType.BlockToRamp;
         if(last_co != null)
             StopCoroutine(last_co);
         Vector2 end1 = pos + Block_To_Ramp_Pos(type);
         Vector2 end2 = (Vector2)pos + On_Ramp_Pos(type);
-        last_co = StartCoroutine(Block_To_Ramp_Coroutine(end1,end2,move_time,true,type));
+        last_co = StartCoroutine(Ramp_To_Block_Coroutine(end1,end2,move_time,true));
         
     }
     
@@ -100,12 +101,13 @@ public class PlayerPhysics : MonoBehaviour
         Rotate_On_Block();
 
     }
-    public void Land_On_Ramp(Vector2 position,int type,bool roll)
+    public void Land_On_Ramp(Vector2 position,int type)
     {
         move_type = MoveType.Land;
         Vector2 pos  = position + On_Ramp_Pos(type);
-        transform.position = pos;
-        player.LandOnRampFinished(roll);
+        if (last_co != null)
+            StopCoroutine(last_co);
+        last_co =  StartCoroutine(LandOnRamp(pos, 0.1f));
     }
 
     private Vector2 Block_To_Ramp_Pos(int type)
@@ -113,16 +115,16 @@ public class PlayerPhysics : MonoBehaviour
         if (type == 4)
         {
             if (player.direction == Direction.Left)
-                return new Vector2(0.2f, 0.7f);
+                return new Vector2(0f, 0.8f);
             else if (player.direction == Direction.Right)
-                return new Vector2(-0.4f, 0);
+                return new Vector2(-0.5f, 0.2f);
         }
         else if(type == 1)
         {
             if (player.direction == Direction.Left)
                 return new Vector2(0.5f, 0);
             else if (player.direction == Direction.Right)
-                return new Vector2(-0.2f, 0.9f);
+                return new Vector2(-0.3f, 0.9f);
         }
         return new Vector2(0, 0);
     }
@@ -171,7 +173,7 @@ public class PlayerPhysics : MonoBehaviour
         if (last_co != null)
             StopCoroutine(last_co);
         move_type = MoveType.LeanStick;
-        last_co =  StartCoroutine(Constant_Move(pos,platform_move_time,true,false));
+        last_co =  StartCoroutine(Constant_Move(pos,platform_move_time,true));
     }
 
     public void Lean_Stick_Stop()
@@ -188,7 +190,7 @@ public class PlayerPhysics : MonoBehaviour
             StopCoroutine(last_co);
         Vector2 on_ramp_pos = On_Ramp_Pos(type);
         pos = (Vector2)pos + on_ramp_pos;
-        last_co = StartCoroutine(Constant_Move(pos, move_time, true,false));
+        last_co = StartCoroutine(Constant_Move(pos, move_time, true));
         Rotate_On_Ramp(type);
     }
    
@@ -224,7 +226,7 @@ public class PlayerPhysics : MonoBehaviour
             StopCoroutine(last_co);
             Rotate_On_Block();
             move_type = MoveType.BlockToBlock;
-            last_co = StartCoroutine(Constant_Move(pos, move_time, true,false));
+            last_co = StartCoroutine(Constant_Move(pos, move_time, true));
 
     }
 
@@ -247,7 +249,7 @@ public class PlayerPhysics : MonoBehaviour
         move_type = MoveType.RampToCorner;
         Rotate_On_Ramp(type);
         pos += Ramp_To_Corner_Pos(Direction.Down, pos);
-        last_co = StartCoroutine(Constant_Move(pos, move_time, true,false));
+        last_co = StartCoroutine(Constant_Move(pos, move_time, true));
     }
 
 
@@ -278,19 +280,17 @@ public class PlayerPhysics : MonoBehaviour
         {
             remain_distance = ((Vector2)player_transofrm.position - end1).sqrMagnitude;
             player_transofrm.position = Vector3.MoveTowards(player_transofrm.position, end1, Time.deltaTime * 1 / move_time);
-            api.Camera_AutoMove();
             yield return null;
         }
         remain_distance = ((Vector2)player_transofrm.position - end2).sqrMagnitude;
-        Rotate_On_Block();
         while (remain_distance > float.Epsilon)
         {
             remain_distance = ((Vector2)player_transofrm.position - end2).sqrMagnitude;
             player_transofrm.position = Vector3.MoveTowards(player.transform.position, end2, Time.deltaTime * 1 / move_time);
             Set_Player_Move_Percent(remain_distance);
-            api.Camera_AutoMove();
             yield return null;
         }
+
         if (call_finish)
             api.MovePlayerFinished(gameObject);
         player.movepercentage = 0;
@@ -331,7 +331,7 @@ public class PlayerPhysics : MonoBehaviour
     }
 
     // For Simple Constant Velocity Moves
-    private IEnumerator Constant_Move(Vector2 end,float move_time,bool call_finish,bool roll)
+    private IEnumerator Constant_Move(Vector2 end,float move_time,bool call_finish)
     {
         set_percent = true;
         float remain_distance = ((Vector2)player_transofrm.position - end).sqrMagnitude;
@@ -351,7 +351,7 @@ public class PlayerPhysics : MonoBehaviour
             else
             {
                 Debug.Log("Land on ramp finish call");
-                player.LandOnRampFinished(roll);   
+                player.LandOnRampFinished();   
             }
         }
 
@@ -405,6 +405,19 @@ public class PlayerPhysics : MonoBehaviour
         }
     }
 
+    private IEnumerator LandOnRamp(Vector2 pos,float time)
+    {
+        float remain_distance = ((Vector2)player_transofrm.position - pos).sqrMagnitude;
+
+        while (remain_distance > float.Epsilon)
+        {
+            remain_distance = ((Vector2)player_transofrm.position - pos).sqrMagnitude;
+            player_transofrm.position = Vector3.MoveTowards(player_transofrm.position, pos, Time.deltaTime / time);
+            yield return null;
+        }
+
+        player.LandOnRampFinished();
+    }
     private IEnumerator Jump_couroutine(Vector2 pos,float jump_time,Direction direction, Jump jump,bool hit)
     {
         float j_velocity = Jump_Velocity;
@@ -432,7 +445,7 @@ public class PlayerPhysics : MonoBehaviour
 
     public IEnumerator RollCouroutine(Vector2 pos)
     {
-        float velocity =2;
+        float velocity =3;
         float remain_distance = ((Vector2)player_transofrm.position - pos).sqrMagnitude;
 
         while (remain_distance > float.Epsilon)
