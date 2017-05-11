@@ -56,7 +56,9 @@ public class Jump : Ability {
             Debug.Log("jump hit");
             // calculate where to hit and call graphic hit
             Vector2 hitPos = playerpos + maxJump * Toolkit.DirectiontoVector(direction);
+            final_pos = hitPos;
             engine.apigraphic.Jump_Hit(player, direction, this, hitPos);
+
         }
         
     }

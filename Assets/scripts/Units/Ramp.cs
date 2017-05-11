@@ -6,7 +6,8 @@ public class Ramp : Unit {
 
     public override void SetInitialSprite()
     {
-        string ramprootpath = "Ramps\\Ramp-type";
+        GetComponent<SpriteRenderer>().sprite = null;
+        /*string ramprootpath = "Ramps\\Ramp-type";
         string ramp_path = "";
         bool[] notconnected = Toolkit.GetConnectedSidesForRamp(this);
         if (type == 1)
@@ -63,7 +64,7 @@ public class Ramp : Unit {
             else
                 ramp_path += "down";
         }
-        GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load(ramp_path, typeof(Sprite));
+        GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load(ramp_path, typeof(Sprite));*/
     }
 
     public override bool PlayerMoveInto(Direction dir)

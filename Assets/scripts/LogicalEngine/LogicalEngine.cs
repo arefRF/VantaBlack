@@ -836,14 +836,14 @@ public class LogicalEngine {
         }
     }
     
-    public void AdjustPlayer(Player player, PlayerState nextstate, Direction leandirection)
+    /*public void AdjustPlayer(Player player, Func)
     {
         if (player.transform.position.x == player.position.x && player.transform.position.y == player.position.y)
             return;
         player.SetState(PlayerState.Adjust);
         player.transform.position = player.position;
         AdjustPlayerFinshed(player, nextstate, leandirection);
-    }
+    }*/
 
     public void AdjustPlayerFinshed(Player player, PlayerState nextstate, Direction leandireciton)
     {
