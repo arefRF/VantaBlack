@@ -50,8 +50,6 @@ public class Fountain : Unit {
                 }
             }
         }
-        api.engine.inputcontroller.LeanUndo(player, player.leandirection, PlayerState.Idle);
-        animator.SetBool("Open", true);
     }
 
     private bool UndoAbilities(Player player)
@@ -105,5 +103,10 @@ public class Fountain : Unit {
         {
             animator.SetBool("Open", false);
         }
+    }
+    
+    public void PlayerLeanUndo()
+    {
+        animator.SetBool("Open", true);
     }
 }
