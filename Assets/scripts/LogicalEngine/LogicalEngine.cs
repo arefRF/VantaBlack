@@ -737,7 +737,6 @@ public class LogicalEngine {
         player.position = player.nextpos;
         apiunit.AddToDatabase(player);*/
         Applygravity();
-        Debug.Log(player.state);
         if (player.lean)
             player.SetState(PlayerState.Lean);
         else
