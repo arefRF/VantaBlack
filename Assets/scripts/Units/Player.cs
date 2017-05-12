@@ -751,7 +751,8 @@ public class Player : Unit
     public void AdjustPlayerFinshed(Direction direction, Action<Player, Direction> passingmethod)
     {
         SetState(PlayerState.Idle);
-        ApplyGravity();
+        if(!(currentAbility is Jump))
+            ApplyGravity();
         passingmethod(this, direction);
     }
 

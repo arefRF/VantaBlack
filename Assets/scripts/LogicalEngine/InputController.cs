@@ -432,8 +432,9 @@ public class InputController {
                 {
                     GameObject.Find("GetInput").GetComponent<GetInput>().StopCoroutine(player.leancoroutine);
                 }
-                if (engine.AdjustPlayer(player, direction, Lean))
-                    return;
+                //if(!(player.currentAbility is Jump))
+                    if (engine.AdjustPlayer(player, direction, Lean))
+                        return;
                 if (Toolkit.HasBranch(pos))
                 {
                     Toolkit.GetBranch(pos).PlayerLeaned(player, direction);
@@ -456,6 +457,7 @@ public class InputController {
                 player.lean = true;
                 player.leandirection = direction;
                 player.currentAbility = null;
+                Debug.Log("lean calling grahcsapicnd'sfkld");
                 engine.apigraphic.Lean(player);
             }
             else
