@@ -10,6 +10,7 @@ public class Fountain : Unit {
     public override void Run()
     {
         abilities = new List<Ability>();
+        api.engine.apigraphic.UnitChangeSprite(this);
         base.Run();
     }
 
