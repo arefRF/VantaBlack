@@ -28,6 +28,7 @@ public class Drainer : Unit {
 
     public void Drain(Player player)
     {
+        player.SetState(PlayerState.Busy);
         api.engine.apigraphic.Drain(player, this);
     }
 }
