@@ -367,8 +367,6 @@ public class Player : Unit
     {
         if (mode == GameMode.Real)
             return false;
-        if (state == PlayerState.Busy)
-            return false;
         isonejumping = false;
         if (api.engine.drainercontroller.Check(this))
             return false;
