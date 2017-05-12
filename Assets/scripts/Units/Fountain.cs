@@ -97,7 +97,7 @@ public class Fountain : Unit {
         player.leandirection = direction;
         if (UndoAbilities(player))
         {
-
+            animator.SetTrigger("Close");
         }
     }
 }
