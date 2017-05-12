@@ -442,7 +442,7 @@ public class InputController {
                 }
                 else if (Toolkit.HasFountain(pos))
                 {
-                    Toolkit.GetFountain(pos).PlayerLeaned(player);
+                    Toolkit.GetFountain(pos).PlayerLeaned(player, direction);
                     return;
                 }
                 player.movepercentage = 0;
