@@ -132,6 +132,7 @@ public class PlayerGraphics : MonoBehaviour {
         animator.SetBool("Jump", false);
         animator.SetInteger("Walk", 0);
         animator.SetBool("Transition", false);
+        animator.SetInteger("Ramp", 0);
        
     }
     public void BranchExit(Direction dir,int ramp_type)
