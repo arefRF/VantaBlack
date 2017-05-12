@@ -92,9 +92,12 @@ public class Fountain : Unit {
     public void PlayerLeaned(Player player, Direction direction)
     {
         player.LeanedTo = this;
-        player.SetState(PlayerState.Lean);
         player.lean = true;
         player.leandirection = direction;
+        player.isonejumping = false;
+        player.SetState(PlayerState.Lean);
+        api.engine.apigraphic.Player_Co_Stop(player);
+        player.currentAbility = null;
         if (UndoAbilities(player))
         {
 
