@@ -750,6 +750,31 @@ public class Player : Unit
         passingmethod(this, direction);
     }
 
+    public bool ShouldAdjust(Direction dir)
+    {
+        if(direction == dir)
+        {
+            switch (direction)
+            {
+                case Direction.Right: return transform.position.x < position.x;
+                case Direction.Left: return transform.position.x > position.x;
+                case Direction.Up: return transform.position.y < position.y;
+                case Direction.Down: return transform.position.y > position.y;
+            }
+        }
+        else
+        {
+            switch (direction)
+            {
+                case Direction.Right: return transform.position.x > position.x;
+                case Direction.Left: return transform.position.x < position.x;
+                case Direction.Up: return transform.position.y > position.y;
+                case Direction.Down: return transform.position.y < position.y;
+            }
+        }
+        return false;
+    }
+
     public override CloneableUnit Clone()
     {
         return new CloneablePlayer(this);
