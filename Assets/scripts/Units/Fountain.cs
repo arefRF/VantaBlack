@@ -107,6 +107,7 @@ public class Fountain : Unit {
     
     public void PlayerLeanUndo()
     {
-        animator.SetBool("Open", true);
+        if(abilities.Count > 0)
+            animator.SetBool("Open", true);
     }
 }
