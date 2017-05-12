@@ -5,7 +5,7 @@ public class Fountain : Unit {
 
     public AbilityType ability;
     public int count;
-    List<Ability> abilities;
+    public List<Ability> abilities;
     private Animator animator;
     public override void Run()
     {
@@ -110,7 +110,7 @@ public class Fountain : Unit {
     
     public void PlayerLeanUndo(Player player)
     {
-        if(abilities.Count > 0 || player.abilities.Count < count)
+        if(abilities.Count > 0 )
             animator.SetBool("Open", true);
     }
 }

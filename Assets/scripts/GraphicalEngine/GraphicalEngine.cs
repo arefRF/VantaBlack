@@ -207,7 +207,12 @@ public class GraphicalEngine : MonoBehaviour {
     {
         GameObject lights = GetObjectInChild(fountatin.gameObject, "Lights");
         Vector3 color = Ability_Color(fountatin.ability, false);
-        for(int i = 0; i < fountatin.count; i++)
+        for (int i = 0; i < 4; i++)
+        {
+           
+            lights.transform.GetChild(i).gameObject.SetActive(false);
+        }
+        for (int i = 0; i < fountatin.count - fountatin.abilities.Count; i++)
         {
             lights.transform.GetChild(i).GetComponent<SpriteRenderer>().color = new Color(color.x,color.y,color.z,1);
             lights.transform.GetChild(i).gameObject.SetActive(true);
