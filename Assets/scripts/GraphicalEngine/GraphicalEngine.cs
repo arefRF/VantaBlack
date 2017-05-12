@@ -117,7 +117,11 @@ public class GraphicalEngine : MonoBehaviour {
     }
     private void Set_Icon(Container container)
     {
-        SpriteRenderer icon = GetObjectInChild(container.gameObject, "Icon").GetComponent<SpriteRenderer>();
+        SpriteRenderer icon; 
+        if (container is DynamicContainer)
+             icon = GetObjectInChild(container.transform.GetChild(1).gameObject, "Icon").GetComponent<SpriteRenderer>();
+        else
+            icon  = GetObjectInChild(container.gameObject, "Icon").GetComponent<SpriteRenderer>();
         Vector3 color = Ability_Color(container.abilities, ComplimentColor(container));
         icon.color = new Color(color.x, color.y, color.z, 1);
         if (container.abilities.Count != 0)
@@ -125,7 +129,7 @@ public class GraphicalEngine : MonoBehaviour {
             if (container.abilities[0].abilitytype == AbilityType.Fuel)
             {
                 if(container is DynamicContainer)
-                    icon.color = new Color(color.x, color.y, color.z, 0.1f);
+                    icon.color = new Color(color.x, color.y, color.z, 1);
                     
             }
             string path = Icon_Path(container.abilities[0].abilitytype);
@@ -142,13 +146,13 @@ public class GraphicalEngine : MonoBehaviour {
 
     private string Icon_Path(AbilityType type)
     {
-        string path = @"Containers\Icons\New";
+        string path = @"Containers\Icons\New\";
         if (type == AbilityType.Fuel)
         {
             path += "Fuel Off";
         }
         else if (type == AbilityType.Key)
-            path = @"Key";
+            path += @"Key";
         return path;
     }
     private GameObject GetObjectInChild(GameObject parent,string name) 

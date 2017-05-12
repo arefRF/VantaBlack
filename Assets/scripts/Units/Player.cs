@@ -85,10 +85,12 @@ public class Player : Unit
     public void SetState(PlayerState state)
     {
         this.state = state;
-        if(state == PlayerState.Transition)
+        if (state == PlayerState.Transition)
         {
             GetComponent<PlayerGraphics>().TransitionAnimation();
         }
+        else if (state == PlayerState.Idle)
+            GetComponent<PlayerGraphics>().ResetStates();
     }
 
     public bool Should_Change_Direction(Direction dir)
@@ -366,7 +368,7 @@ public class Player : Unit
         isonejumping = false;
         if (api.engine.drainercontroller.Check(this))
             return false;
-        state = PlayerState.Idle;
+        SetState(PlayerState.Idle);
         api.engine.lasercontroller.CollisionCheck(position);
 
         // to avoid exception
@@ -414,7 +416,7 @@ public class Player : Unit
         }
         state = PlayerState.Falling;
         api.graphicalengine_Fall(this, FallPos());
-        GetComponent<PlayerGraphics>().ResetStates();
+
         return true;
           
     }
