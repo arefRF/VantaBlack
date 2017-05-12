@@ -397,7 +397,7 @@ public class InputController {
         if (player.lean && player.leandirection == direction)
         {
             if (player.LeanedTo is Fountain)
-                ((Fountain)player.LeanedTo).PlayerLeanUndo();
+                ((Fountain)player.LeanedTo).PlayerLeanUndo(player);
             Starter.GetDataBase().StopTimer();
             player.SetState(nextstate);
             player.lean = false;
