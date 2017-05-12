@@ -50,6 +50,7 @@ public class Fountain : Unit {
                 }
             }
         }
+        api.engine.apigraphic.UnitChangeSprite(this);
     }
 
     private bool UndoAbilities(Player player)
@@ -102,6 +103,7 @@ public class Fountain : Unit {
         if (UndoAbilities(player))
         {
             animator.SetBool("Open", false);
+            api.engine.apigraphic.UnitChangeSprite(this);
         }
     }
     
