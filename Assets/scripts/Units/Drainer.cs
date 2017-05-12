@@ -15,15 +15,17 @@ public class Drainer : Unit {
         base.Run();
     }
 
-    public void Check(Player player)
+    public bool Check(Player player)
     {
         for (int i = 0; i < position_drain.Count; i++)
         {
             if (player.position == position_drain[i])
             {
                 Drain(player);
+                return true;
             }
         }
+        return false;
     }
 
     public void Drain(Player player)
