@@ -91,6 +91,10 @@ public class Player : Unit
         }
         else if (state == PlayerState.Idle)
             GetComponent<PlayerGraphics>().ResetStates();
+        else if(state == PlayerState.Lean)
+        {
+            api.engine.apigraphic.Lean(this);
+        }
     }
 
     public bool Should_Change_Direction(Direction dir)

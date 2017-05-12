@@ -127,6 +127,11 @@ public class PlayerGraphics : MonoBehaviour {
         StartCoroutine(Simple_Move(player.position, 0.3f));
     }
 
+    public void DrainFinished()
+    {
+        player.DrainFinished();
+    }
+
     public void ResetStates()
     {
         animator.SetBool("Jump", false);
