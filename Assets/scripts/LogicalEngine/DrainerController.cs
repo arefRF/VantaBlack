@@ -11,12 +11,16 @@ public class DrainerController{
     }
 
 
-    public void Check(Player player)
+    public bool Check(Player player)
     {
+        if (player.abilities.Count == 0)
+            return false;
         for(int i=0; i<drainers.Count; i++)
         {
-            drainers[i].Check(player);
+            if (drainers[i].Check(player))
+                return true;
         }
+        return false;
     }
 
 }

@@ -364,9 +364,9 @@ public class Player : Unit
         if (state == PlayerState.Busy)
             return false;
         isonejumping = false;
-        api.engine.drainercontroller.Check(this);
+        if (api.engine.drainercontroller.Check(this))
+            return false;
         state = PlayerState.Idle;
-        GetComponent<PlayerGraphics>().ResetStates();
         api.engine.lasercontroller.CollisionCheck(position);
 
         // to avoid exception
@@ -400,11 +400,13 @@ public class Player : Unit
         }
         if (!NewFall())
             return false;
-        api.engine.drainercontroller.Check(this);
+        if (api.engine.drainercontroller.Check(this))
+            return false;
         api.engine.lasercontroller.CollisionCheck(position);
         while (IsInBound(position) && NewFall())
         {
-            api.engine.drainercontroller.Check(this);
+            if (api.engine.drainercontroller.Check(this))
+                return false;
             api.RemoveFromDatabase(this);
             position = Toolkit.VectorSum(position,gravity);
             api.engine.lasercontroller.CollisionCheck(position);
@@ -412,6 +414,7 @@ public class Player : Unit
         }
         state = PlayerState.Falling;
         api.graphicalengine_Fall(this, FallPos());
+        GetComponent<PlayerGraphics>().ResetStates();
         return true;
           
     }
@@ -742,7 +745,7 @@ public class Player : Unit
         abilities.Clear();
         _setability();
         api.engine.apigraphic.Absorb(this, null);
-        state = PlayerState.Idle;
+        ApplyGravity();
     }
 
     public void AdjustPlayerFinshed(Direction direction, Action<Player, Direction> passingmethod)
