@@ -737,7 +737,6 @@ public class LogicalEngine {
         player.position = player.nextpos;
         apiunit.AddToDatabase(player);*/
         Applygravity();
-        Debug.Log(player.state);
         if (player.lean)
             player.SetState(PlayerState.Lean);
         else
@@ -840,7 +839,18 @@ public class LogicalEngine {
     {
         if (player.transform.position.x == player.position.x && player.transform.position.y == player.position.y)
             return false;
+        if (Toolkit.HasRamp(player.position) && !Toolkit.IsdoubleRamp(player.position) && Toolkit.GetRamp(player.position).IsOnRampSide(Toolkit.ReverseDirection(database.gravity_direction)))
+            return false;
         player.SetState(PlayerState.Adjust);
+        if (passingmethod == MovePlayerToDirection)
+        {
+            if (direction != player.direction)
+            {
+                Direction olddir = player.direction;
+                player.direction = direction;
+                player.GetComponent<PlayerGraphics>().Move_Animation(direction);
+            }
+        }
         apigraphic.AdjustPlayer(player, player.position, direction, passingmethod);
         return true;
     }
@@ -850,4 +860,8 @@ public class LogicalEngine {
         inputcontroller.Jump(player);
     }
     
+    public void MovePlayerToDirection(Player player, Direction direction)
+    {
+
+    }
 }

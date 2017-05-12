@@ -360,6 +360,27 @@ public sealed class Toolkit{
         return false;
     }
 
+    public static bool HasFountain(Vector2 position)
+    {
+        List<Unit>[,] units = Starter.GetDataBase().units;
+        for (int i = 0; i < units[(int)position.x, (int)position.y].Count; i++)
+        {
+            if (units[(int)position.x, (int)position.y][i] is Fountain)
+                return true;
+        }
+        return false;
+    }
+
+    public static Fountain GetFountain(Vector2 position)
+    {
+        List<Unit>[,] units = Starter.GetDataBase().units;
+        for (int i = 0; i < units[(int)position.x, (int)position.y].Count; i++)
+        {
+            if (units[(int)position.x, (int)position.y][i] is Fountain)
+                return (Fountain)units[(int)position.x, (int)position.y][i];
+        }
+        return null;
+    }
 
     public static Unit GetUnit(Vector2 position)
     {
