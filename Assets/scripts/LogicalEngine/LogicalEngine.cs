@@ -19,6 +19,8 @@ public class LogicalEngine {
 
     public List<Unit> leanmove;
     public List<Unit> shouldmove;
+
+    public SaveSerialize saveserialize;
     public LogicalEngine(int x, int y)
     {
         sizeX = x;
@@ -33,7 +35,7 @@ public class LogicalEngine {
         initializer = new SubEngine_Initializer(x,y, this);
         pipecontroller = new PipeController(this);
         lasercontroller = new LaserController(database.lasers);
-        
+        saveserialize = new SaveSerialize();
     }
 
     public void Run()
@@ -863,5 +865,10 @@ public class LogicalEngine {
     public void MovePlayerToDirection(Player player, Direction direction)
     {
 
+    }
+
+    public void AddClosedBranchToSerialize(Branch branch)
+    {
+        saveserialize.branchCodeNumbers.Add(branch.codeNumber);
     }
 }

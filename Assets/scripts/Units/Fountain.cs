@@ -52,8 +52,11 @@ public class Fountain : Unit {
         }
     }
 
-    private void UndoAbilities(Player player)
+    private bool UndoAbilities(Player player)
     {
+        Debug.Log("undo ing abilities");
+        if (abilities.Count == 0)
+            return false;
         for (int i = 0; i < abilities.Count; i++)
         {
             if (abilities[i].owner is Player)
@@ -83,10 +86,18 @@ public class Fountain : Unit {
                     }
         }
         abilities.Clear();
+        return true;
     }
 
-    public void PlayerLeaned(Player player)
+    public void PlayerLeaned(Player player, Direction direction)
     {
-        UndoAbilities(player);
+        player.LeanedTo = this;
+        player.SetState(PlayerState.Lean);
+        player.lean = true;
+        player.leandirection = direction;
+        if (UndoAbilities(player))
+        {
+
+        }
     }
 }
