@@ -221,6 +221,9 @@ public class InputController {
 
             if (player.Can_Move_Direction(direction))
             {
+                if (player.ShouldAdjust(direction))
+                    if (engine.AdjustPlayer(player, direction, engine.MovePlayerToDirection))
+                        return;
                 if (player.Should_Change_Direction(direction))
                 {
                     Direction olddir = player.direction;
@@ -364,12 +367,12 @@ public class InputController {
     {
         for (int i = 0; i < database.player.Count; i++)
         {
-            if(database.player[i].state == PlayerState.Adjust)
+            /*if(database.player[i].state == PlayerState.Adjust)
             {
                 engine.apigraphic.Player_Co_Stop(database.player[i]);
                 database.player[i].SetState(PlayerState.Idle);
-            }
-            else if(database.player[i].state == PlayerState.Lean && engine.apiinput.isFunctionKeyDown())
+            }*/
+            if(database.player[i].state == PlayerState.Lean && engine.apiinput.isFunctionKeyDown())
             {
                 FunctionalContainer container = Toolkit.GetContainer(Toolkit.VectorSum(database.player[i].position, direction)) as FunctionalContainer;
                 if (container != null && container.abilities.Count != 0 && container.abilities[0] is Jump)
@@ -429,8 +432,9 @@ public class InputController {
                 {
                     GameObject.Find("GetInput").GetComponent<GetInput>().StopCoroutine(player.leancoroutine);
                 }
-                if (engine.AdjustPlayer(player, direction, Lean))
-                    return;
+                //if(!(player.currentAbility is Jump))
+                    if (engine.AdjustPlayer(player, direction, Lean))
+                        return;
                 if (Toolkit.HasBranch(pos))
                 {
                     Toolkit.GetBranch(pos).PlayerLeaned(player, direction);

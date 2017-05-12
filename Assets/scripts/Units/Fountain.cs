@@ -6,12 +6,18 @@ public class Fountain : Unit {
     public AbilityType ability;
     public int count;
     List<Ability> abilities;
+    private Animator animator;
     public override void Run()
     {
         abilities = new List<Ability>();
         base.Run();
     }
 
+
+    void Start()
+    {
+        animator = GetComponent<Animator>();
+    }
     public void Action(Player player)
     {
         

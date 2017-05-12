@@ -74,26 +74,26 @@ public class GetInput : MonoBehaviour {
                   if (is_space)
                       Get_Space_Arrows();
 
-                  if (Input.GetKeyDown(KeyCode.A))
+                  if (Input.GetKeyDown(KeyCode.Q))
                   {
                       is_holding = true;
                        if(last_co!=null)
                             StopCoroutine(last_co);
                       last_co = StartCoroutine(Wait_For_Absorb_Hold());
                   }
-                  if (Input.GetKeyDown(KeyCode.D))
+                  if (Input.GetKeyDown(KeyCode.E))
                   {
                       is_holding = true;
                 if (last_co != null)
                     StopCoroutine(last_co);
                       StartCoroutine(Wait_For_Release_Hold());
                   }
-                  if (Input.GetKeyUp(KeyCode.D)  )
+                  if (Input.GetKeyUp(KeyCode.E)  )
                   {
                       api.Release();
                       is_holding = false;
                   }
-                  if(Input.GetKeyUp(KeyCode.A))
+                  if(Input.GetKeyUp(KeyCode.Q))
                   {
                       api.Absorb();
                       is_holding = false;
