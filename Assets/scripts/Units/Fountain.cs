@@ -50,6 +50,8 @@ public class Fountain : Unit {
                 }
             }
         }
+        api.engine.inputcontroller.LeanUndo(player, player.leandirection, PlayerState.Idle);
+        animator.SetBool("Open", true);
     }
 
     private bool UndoAbilities(Player player)
@@ -86,6 +88,7 @@ public class Fountain : Unit {
                     }
         }
         abilities.Clear();
+
         return true;
     }
 
@@ -100,7 +103,7 @@ public class Fountain : Unit {
         player.currentAbility = null;
         if (UndoAbilities(player))
         {
-            animator.SetTrigger("Close");
+            animator.SetBool("Open", false);
         }
     }
 }
