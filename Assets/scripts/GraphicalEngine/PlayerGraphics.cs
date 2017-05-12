@@ -220,7 +220,7 @@ public class PlayerGraphics : MonoBehaviour {
 
     public void Drain()
     {
-        Debug.Log("Drain Animator");
+        animator.SetTrigger("Drain");
     }
     public void TransitionAnimation()
     {
