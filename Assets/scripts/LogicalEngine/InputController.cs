@@ -457,7 +457,6 @@ public class InputController {
                 player.lean = true;
                 player.leandirection = direction;
                 player.currentAbility = null;
-                Debug.Log("lean calling grahcsapicnd'sfkld");
                 engine.apigraphic.Lean(player);
             }
             else
