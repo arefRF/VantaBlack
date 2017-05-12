@@ -203,6 +203,16 @@ public class GraphicalEngine : MonoBehaviour {
         StopAllCoroutines();
     }
 
+    public void Fountatin(Fountain fountatin)
+    {
+        GameObject lights = GetObjectInChild(fountatin.gameObject, "Lights");
+        Vector3 color = Ability_Color(fountatin.ability, false);
+        for(int i = 0; i < fountatin.count; i++)
+        {
+            lights.transform.GetChild(i).GetComponent<SpriteRenderer>().color = new Color(color.x,color.y,color.z,1);
+            lights.transform.GetChild(i).gameObject.SetActive(true);
+        }
+    }
     private Vector3 Ability_Color(List<Ability> ability,bool compliment)
     {
         if (ability.Count != 0)
@@ -217,6 +227,22 @@ public class GraphicalEngine : MonoBehaviour {
                 case AbilityType.Rope: return new Vector3(1,0.60f,0.30f);
             }
         }
+        // else white
+        return new Vector3(1, 1, 1);
+    }
+
+    private Vector3 Ability_Color(AbilityType abilitytype, bool compliment)
+    {
+            switch (abilitytype)
+            {
+                case AbilityType.Key: return new Vector3(1, 1, 1);
+                case AbilityType.Fuel: if (compliment) return new Vector3(1, 1, 1); else return new Vector3(1, 0.674f, 0.211f);
+                case AbilityType.Jump: return new Vector3(0.59f, 0.78f, 1);
+                case AbilityType.Teleport: return new Vector3(0.92f, 0.36f, 0.44f);
+                case AbilityType.Gravity: return new Vector3(0.81f, 0.60f, 0.96f);
+                case AbilityType.Rope: return new Vector3(1, 0.60f, 0.30f);
+            }
+        
         // else white
         return new Vector3(1, 1, 1);
     }

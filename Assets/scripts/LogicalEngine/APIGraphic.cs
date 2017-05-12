@@ -379,6 +379,8 @@ public class APIGraphic{
             graphicalengine.Gate((Gate)unit);
         else if (unit is Branch)
             graphicalengine.Branch((Branch)unit);
+        else if (unit is Fountain)
+            graphicalengine.Fountatin((Fountain)unit);
     }
 
     public void Fall_Player_Died(Player player)
