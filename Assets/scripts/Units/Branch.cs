@@ -4,7 +4,7 @@ using System.Collections;
 public class Branch : Unit {
 
     public bool islocked = false;
-
+    public bool blocked = false;
     public override void SetInitialSprite()
     {
         /*bool[] notconnected = Toolkit.GetConnectedSidesForBranch(this);
