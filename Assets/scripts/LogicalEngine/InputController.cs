@@ -396,10 +396,13 @@ public class InputController {
     {
         if (player.lean && player.leandirection == direction)
         {
+            if (player.LeanedTo is Fountain)
+                ((Fountain)player.LeanedTo).PlayerLeanUndo();
             Starter.GetDataBase().StopTimer();
             player.SetState(nextstate);
             player.lean = false;
             engine.apigraphic.LeanFinished(player);
+            player.LeanedTo = null;
             if (engine.leanmove.Contains(player) && !engine.shouldmove.Contains(player))
             {
                 engine.apiunit.AddToDatabase(player);

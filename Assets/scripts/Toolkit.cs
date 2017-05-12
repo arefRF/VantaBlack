@@ -69,7 +69,7 @@ public sealed class Toolkit{
     }
 
 
-    public static Unit GetUnitByCodeNumber(int codenumber)
+    public static Unit GetUnitByCodeNumber(long codenumber)
     {
         for (int i=0; i<database.units.GetLength(0); i++)
         {

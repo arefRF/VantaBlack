@@ -7,7 +7,7 @@ using System.IO;
 [System.Serializable]
 public class SaveSerialize {
     public string scenename;
-    public int posx, poy, abilitycount;
+    public int posx, posy, abilitycount;
     public AbilityType abilitytype;
     public List<long> branchCodeNumbers;
 

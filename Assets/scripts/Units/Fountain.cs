@@ -86,6 +86,7 @@ public class Fountain : Unit {
                     }
         }
         abilities.Clear();
+
         return true;
     }
 
@@ -100,7 +101,13 @@ public class Fountain : Unit {
         player.currentAbility = null;
         if (UndoAbilities(player))
         {
-
+            animator.SetBool("Open", false);
         }
+    }
+    
+    public void PlayerLeanUndo()
+    {
+        if(abilities.Count > 0)
+            animator.SetBool("Open", true);
     }
 }
