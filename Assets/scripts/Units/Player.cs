@@ -364,6 +364,7 @@ public class Player : Unit
         isonejumping = false;
         api.engine.drainercontroller.Check(this);
         state = PlayerState.Idle;
+        Debug.Log("Apply Gravity Reset States");
         GetComponent<PlayerGraphics>().ResetStates();
         api.engine.lasercontroller.CollisionCheck(position);
 

@@ -86,7 +86,7 @@ public class PlayerPhysics : MonoBehaviour
     }
     public void Block_To_Ramp_Move(Vector2 pos, int type)
     {
-        Debug.Log("Block to ramp");
+        
         move_type = MoveType.BlockToRamp;
         if(last_co != null)
             StopCoroutine(last_co);
@@ -241,11 +241,10 @@ public class PlayerPhysics : MonoBehaviour
     }
     public void Branch_Branch(Vector2 pos)
     {
+        move_type = MoveType.BranchToBranch;
         set_percent = true;
         if (last_co != null)
             StopCoroutine(last_co);
-        Rotate_On_Block();
-        move_type = MoveType.BlockToBlock;
         last_co = StartCoroutine(Constant_Move(pos, 0.1f, true));
 
     }
@@ -370,13 +369,18 @@ public class PlayerPhysics : MonoBehaviour
         {
             remain_distance = Distance((Vector2)transform.position, end);
             transform.position = Vector2.MoveTowards(transform.position, end, Time.smoothDeltaTime  / move_time );
-            Set_Player_Move_Percent(remain_distance);
-            api.Camera_AutoMove();
+            if(move_type != MoveType.BranchToBranch)
+                Set_Player_Move_Percent(remain_distance);
             yield return new WaitForSeconds(0.001f);
         }
        
         if (call_finish)
         {
+            if (move_type == MoveType.BranchToBranch)
+            {
+                yield return new WaitForSeconds(0.3f);
+            }
+
             if (move_type != MoveType.Land)
                 api.MovePlayerFinished(gameObject);
             else
@@ -529,7 +533,7 @@ public class PlayerPhysics : MonoBehaviour
 
     private enum MoveType
     {
-        RampToRamp,RampToSharp,RampToCorner,Falling,BlockToBlock,Idle,LeanStick,RampToFall,BlockToFall,OnPlatform,RampToBlock,BlockToRamp,FallDie,Land,Adjust
+        RampToRamp,RampToSharp,RampToCorner,Falling,BlockToBlock,Idle,LeanStick,RampToFall,BlockToFall,OnPlatform,RampToBlock,BlockToRamp,FallDie,Land,Adjust,BranchToBranch
     }
 
 }

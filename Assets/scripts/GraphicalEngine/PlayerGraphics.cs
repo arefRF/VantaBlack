@@ -32,7 +32,6 @@ public class PlayerGraphics : MonoBehaviour {
 
     public void Lean_Left()
     {
-        Debug.Log("lean left");
         ResetStates();
         transform.GetChild(0).rotation = Quaternion.Euler(0, 180, 0);
         animator.SetInteger("Lean", 4);
@@ -125,7 +124,7 @@ public class PlayerGraphics : MonoBehaviour {
         animator.SetInteger("Branch", 1);
         StopAllCoroutines();
 
-        StartCoroutine(Simple_Move(player.position, 0.65f));
+        StartCoroutine(Simple_Move(player.position, 0.3f));
     }
 
     public void ResetStates()
@@ -195,6 +194,8 @@ public class PlayerGraphics : MonoBehaviour {
             api.Camera_AutoMove();
             yield return new WaitForSeconds(0.001f);
         }
+
+        yield return new WaitForSeconds(0.3f);
         api.MovePlayerFinished(player.gameObject);
         //animator.SetInteger("Branch", 0);
     }
@@ -217,6 +218,10 @@ public class PlayerGraphics : MonoBehaviour {
         }
     }
 
+    public void Drain()
+    {
+        Debug.Log("Drain Animator");
+    }
     public void TransitionAnimation()
     {
         animator.SetBool("Transition", true);
