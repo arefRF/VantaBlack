@@ -14,13 +14,10 @@ public class CloseEyesUponRelease : ActionUponRelease {
         container.graphicalactions.Add(this);
     }
 	
-	// Update is called once per frame
-	void Update () {
 	
-	}
 
     public override void Action()
     {
-        Eyepart.GetComponent<SpriteRenderer>().enabled = true;
+        Eyepart.GetComponent<Animator>().SetBool("Open", false);
     }
 }
