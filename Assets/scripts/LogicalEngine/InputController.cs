@@ -436,8 +436,10 @@ public class InputController {
                     GameObject.Find("GetInput").GetComponent<GetInput>().StopCoroutine(player.leancoroutine);
                 }
                 //if(!(player.currentAbility is Jump))
-                    if (engine.AdjustPlayer(player, direction, Lean))
-                        return;
+                if (engine.AdjustPlayer(player, direction, Lean))
+                    return;
+                if (Toolkit.Hasleanable(pos) && !Toolkit.GetLeanable(pos).canLean)
+                    return;
                 if (Toolkit.HasBranch(pos))
                 {
                     Toolkit.GetBranch(pos).PlayerLeaned(player, direction);

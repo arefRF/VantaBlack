@@ -20,10 +20,12 @@ public class EyeMove : MonoBehaviour {
 	void Update () {
         if (EyeLock)
             return;
+        center_position = transform.parent.transform.position;
         constant = Mathf.Sqrt(Mathf.Pow(Mathf.Abs(player.transform.position.x - center_position.x), 2) + Mathf.Pow(Mathf.Abs(player.transform.position.y - center_position.y), 2));
         cos = (player.transform.position.x - center_position.x)/constant;
         sin = (player.transform.position.y - center_position.y)/constant;
-        transform.position = new Vector3(center_position.x + radius * cos, center_position.y + radius * sin, 0);
+        StartCoroutine(EyeSmoothMove());
+        //transform.position = new Vector3(center_position.x + radius * cos, center_position.y + radius * sin, 0);
     }
 
 
