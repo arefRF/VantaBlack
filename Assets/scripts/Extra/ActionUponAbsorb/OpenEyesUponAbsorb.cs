@@ -20,6 +20,6 @@ public class OpenEyesUponAbsorb : ActionUponAbsorb {
 
     public override void Action()
     {
-        Eyepart.GetComponent<SpriteRenderer>().enabled = false;
+        Eyepart.GetComponent<Animator>().SetBool("Open", true);
     }
 }
