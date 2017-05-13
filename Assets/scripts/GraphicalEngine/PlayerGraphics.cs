@@ -9,6 +9,7 @@ public class PlayerGraphics : MonoBehaviour {
     private Vector2 unmoved_pos;
     private Animator animator;
     private Animator eyeAnimator;
+    private Animator bodyAnimator;
     private Player player;
     void Start()
     {
@@ -19,6 +20,7 @@ public class PlayerGraphics : MonoBehaviour {
         eyeAnimator = transform.GetChild(0).GetChild(0).GetChild(3).GetComponent<Animator>();
         player = GetComponent<Player>();
             engine.apigraphic.Absorb(player, null);
+        bodyAnimator = transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Animator>();
     }
 
 
@@ -281,10 +283,17 @@ public class PlayerGraphics : MonoBehaviour {
         player.TeleportFinished();
     }
     public void ChangeColor()
-    {/*
-        float[] color = Ability_Color(player.abilities);
-        transform.GetChild(1).GetChild(0).GetComponent<SpriteRenderer>().color = new Color(color[0], color[1], color[2], color[3]);
-        ChangeBodyColor(); */
+    {
+        if (player.abilities.Count != 0)
+        {
+            if (player.abilities[0].abilitytype == AbilityType.Fuel)
+                bodyAnimator.SetInteger("Ability", 1);
+        }
+    }
+
+    public void ChangeColorFinished()
+    {
+       
     }
 
     private void ChangeBodyColor()
