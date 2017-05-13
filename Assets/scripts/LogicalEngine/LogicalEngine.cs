@@ -843,6 +843,7 @@ public class LogicalEngine {
             return false;
         if (Toolkit.HasRamp(player.position) && !Toolkit.IsdoubleRamp(player.position) && Toolkit.GetRamp(player.position).IsOnRampSide(Toolkit.ReverseDirection(database.gravity_direction)))
             return false;
+        apigraphic.Player_Co_Stop(player);
         player.SetState(PlayerState.Adjust);
         if (passingmethod == MovePlayerToDirection)
         {

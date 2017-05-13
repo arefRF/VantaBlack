@@ -45,7 +45,6 @@ public class Player : Unit
         direction = move_direction[0];
         oneJump = new Jump(1);
         state = PlayerState.Idle;
-
     }
 
     public Direction GetGravity(){
