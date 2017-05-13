@@ -73,26 +73,28 @@ public class APIGraphic{
         player.gameObject.GetComponent<PlayerGraphics>().Move_Animation(player.direction);
     }
 
+
+    // Branch to Branch
     public void MovePlayer_Branch_Branch(Player player,Vector2 pos)
     {
         player.GetComponent<PlayerGraphics>().StopAllCoroutines();
-        player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(pos);
+        player.gameObject.GetComponent<PlayerPhysics>().Branch_Branch(pos);
         player.gameObject.GetComponent<PlayerGraphics>().Move_Animation(player.direction);
     }
     // Block to Branch
     public void MovePlayer_Simple_2(Player player, Vector2 position,Direction direction)
     {
-        Debug.Log("Block to branch");
+        //Debug.Log("Block to branch");
         player.GetComponent<PlayerGraphics>().StopAllCoroutines();
         player.gameObject.GetComponent<PlayerPhysics>().StopAllCoroutines();
         player.GetComponent<PlayerGraphics>().MoveToBranch(direction);
-        player.gameObject.GetComponent<PlayerGraphics>().Move_Animation(player.direction);
+       // player.gameObject.GetComponent<PlayerGraphics>().Move_Animation(player.direction);
     }
 
     // Block to Ramp
     public void MovePlayer_Simple_3(Player player, Vector2 position, int ramptype)
     {
-        Debug.Log("Block to ramp");
+       // Debug.Log("Block to ramp");
         player.GetComponent<PlayerGraphics>().StopAllCoroutines();
         player.GetComponent<PlayerPhysics>().Block_To_Ramp_Move(position,ramptype);
         player.gameObject.GetComponent<PlayerGraphics>().Ramp_Animation(player.direction, ramptype);
@@ -101,7 +103,7 @@ public class APIGraphic{
 
     public void Drain(Player player,Drainer drainer)
     {
-
+        player.GetComponent<PlayerGraphics>().Drain();
     }
 
     // Block to fall
@@ -124,11 +126,11 @@ public class APIGraphic{
     // Branch to Block
     public void MovePlayer_Branch_1(Player player, Vector2 position,Direction dir)
     {
-        Debug.Log("Branch to block");
+        //Debug.Log("Branch to block");
         player.GetComponent<PlayerGraphics>().StopAllCoroutines();
         player.GetComponent<PlayerPhysics>().StopAllCoroutines();
         player.GetComponent<PlayerGraphics>().BranchExit(dir,0);
-        player.gameObject.GetComponent<PlayerGraphics>().Move_Animation(player.direction);
+        //player.gameObject.GetComponent<PlayerGraphics>().Move_Animation(player.direction);
    
 
     }
@@ -136,7 +138,7 @@ public class APIGraphic{
     // Branch to fall
     public void MovePlayer_Branch_2(Player player, Vector2 position,Direction dir)
     {
-        Debug.Log("branch to fall");
+        //Debug.Log("branch to fall");
         player.GetComponent<PlayerPhysics>().StopAllCoroutines();
         player.GetComponent<PlayerGraphics>().StopAllCoroutines();
         player.GetComponent<PlayerGraphics>().BranchExit(dir,0);
@@ -377,6 +379,8 @@ public class APIGraphic{
             graphicalengine.Gate((Gate)unit);
         else if (unit is Branch)
             graphicalengine.Branch((Branch)unit);
+        else if (unit is Fountain)
+            graphicalengine.Fountatin((Fountain)unit);
     }
 
     public void Fall_Player_Died(Player player)
@@ -406,5 +410,10 @@ public class APIGraphic{
     public void RemoveLaser()
     {
         graphicalengine.RemoveLasers();
+    }
+
+    public void AdjustPlayer(Player player, Vector2 pos, Direction direction, System.Action<Player, Direction> passingmethod)
+    {
+        player.GetComponent<PlayerPhysics>().Adjust(pos, direction, passingmethod);
     }
 }

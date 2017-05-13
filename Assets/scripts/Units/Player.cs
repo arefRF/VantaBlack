@@ -85,9 +85,15 @@ public class Player : Unit
     public void SetState(PlayerState state)
     {
         this.state = state;
-        if(state == PlayerState.Transition)
+        if (state == PlayerState.Transition)
         {
             GetComponent<PlayerGraphics>().TransitionAnimation();
+        }
+        else if (state == PlayerState.Idle)
+            GetComponent<PlayerGraphics>().ResetStates();
+        else if(state == PlayerState.Lean)
+        {
+            api.engine.apigraphic.Lean(this);
         }
     }
 
@@ -362,9 +368,9 @@ public class Player : Unit
         if (mode == GameMode.Real)
             return false;
         isonejumping = false;
-        api.engine.drainercontroller.Check(this);
-        state = PlayerState.Idle;
-        GetComponent<PlayerGraphics>().ResetStates();
+        if (api.engine.drainercontroller.Check(this))
+            return false;
+        SetState(PlayerState.Idle);
         api.engine.lasercontroller.CollisionCheck(position);
 
         // to avoid exception
@@ -398,11 +404,13 @@ public class Player : Unit
         }
         if (!NewFall())
             return false;
-        api.engine.drainercontroller.Check(this);
+        if (api.engine.drainercontroller.Check(this))
+            return false;
         api.engine.lasercontroller.CollisionCheck(position);
         while (IsInBound(position) && NewFall())
         {
-            api.engine.drainercontroller.Check(this);
+            if (api.engine.drainercontroller.Check(this))
+                return false;
             api.RemoveFromDatabase(this);
             position = Toolkit.VectorSum(position,gravity);
             api.engine.lasercontroller.CollisionCheck(position);
@@ -410,6 +418,7 @@ public class Player : Unit
         }
         state = PlayerState.Falling;
         api.graphicalengine_Fall(this, FallPos());
+
         return true;
           
     }
@@ -740,7 +749,40 @@ public class Player : Unit
         abilities.Clear();
         _setability();
         api.engine.apigraphic.Absorb(this, null);
-        state = PlayerState.Idle;
+        ApplyGravity();
+    }
+
+    public void AdjustPlayerFinshed(Direction direction, Action<Player, Direction> passingmethod)
+    {
+        SetState(PlayerState.Idle);
+        if(!(currentAbility is Jump))
+            ApplyGravity();
+        passingmethod(this, direction);
+    }
+
+    public bool ShouldAdjust(Direction dir)
+    {
+        if(direction == dir)
+        {
+            switch (direction)
+            {
+                case Direction.Right: return transform.position.x < position.x;
+                case Direction.Left: return transform.position.x > position.x;
+                case Direction.Up: return transform.position.y < position.y;
+                case Direction.Down: return transform.position.y > position.y;
+            }
+        }
+        else
+        {
+            switch (direction)
+            {
+                case Direction.Right: return transform.position.x > position.x;
+                case Direction.Left: return transform.position.x < position.x;
+                case Direction.Up: return transform.position.y > position.y;
+                case Direction.Down: return transform.position.y < position.y;
+            }
+        }
+        return false;
     }
 
     public override CloneableUnit Clone()

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 public class LogicalEngine {
 
@@ -18,6 +19,8 @@ public class LogicalEngine {
 
     public List<Unit> leanmove;
     public List<Unit> shouldmove;
+
+    public SaveSerialize saveserialize;
     public LogicalEngine(int x, int y)
     {
         sizeX = x;
@@ -32,7 +35,7 @@ public class LogicalEngine {
         initializer = new SubEngine_Initializer(x,y, this);
         pipecontroller = new PipeController(this);
         lasercontroller = new LaserController(database.lasers);
-        
+        saveserialize = new SaveSerialize();
     }
 
     public void Run()
@@ -736,7 +739,6 @@ public class LogicalEngine {
         player.position = player.nextpos;
         apiunit.AddToDatabase(player);*/
         Applygravity();
-        Debug.Log(player.state);
         if (player.lean)
             player.SetState(PlayerState.Lean);
         else
@@ -835,35 +837,38 @@ public class LogicalEngine {
             }
         }
     }
-    
-    public void AdjustPlayer(Player player, PlayerState nextstate, Direction leandirection)
+    public bool AdjustPlayer(Player player,Direction direction , Action<Player, Direction> passingmethod)
     {
         if (player.transform.position.x == player.position.x && player.transform.position.y == player.position.y)
-            return;
+            return false;
+        if (Toolkit.HasRamp(player.position) && !Toolkit.IsdoubleRamp(player.position) && Toolkit.GetRamp(player.position).IsOnRampSide(Toolkit.ReverseDirection(database.gravity_direction)))
+            return false;
         player.SetState(PlayerState.Adjust);
-        player.transform.position = player.position;
-        AdjustPlayerFinshed(player, nextstate, leandirection);
+        if (passingmethod == MovePlayerToDirection)
+        {
+            if (direction != player.direction)
+            {
+                Direction olddir = player.direction;
+                player.direction = direction;
+                player.GetComponent<PlayerGraphics>().Move_Animation(direction);
+            }
+        }
+        apigraphic.AdjustPlayer(player, player.position, direction, passingmethod);
+        return true;
     }
 
-    public void AdjustPlayerFinshed(Player player, PlayerState nextstate, Direction leandireciton)
+    public void JumpToDirection(Player player, Direction direction)
     {
-        if(nextstate == PlayerState.Lean)
-        {
-            player.SetState(PlayerState.Idle);
-            player.ApplyGravity();
-            inputcontroller.Lean(player, leandireciton);
-        }
-        else if(nextstate == PlayerState.Moving)
-        {
+        inputcontroller.Jump(player);
+    }
+    
+    public void MovePlayerToDirection(Player player, Direction direction)
+    {
 
-        }
-        else if(nextstate == PlayerState.Jumping)
-        {
-            player.SetState(PlayerState.Idle);
-            player.ApplyGravity();
-            inputcontroller.Jump(player);
-        }
     }
 
-    
+    public void AddClosedBranchToSerialize(Branch branch)
+    {
+        saveserialize.branchCodeNumbers.Add(branch.codeNumber);
+    }
 }

@@ -4,7 +4,7 @@ using System.Collections;
 public class Branch : Unit {
 
     public bool islocked = false;
-
+    public bool blocked = false;
     public override void SetInitialSprite()
     {
         /*bool[] notconnected = Toolkit.GetConnectedSidesForBranch(this);
@@ -120,8 +120,6 @@ public class Branch : Unit {
         }
         else
         {
-            Debug.Log(direction);
-            Debug.Log(api.engine.initializer.sprite_BranchEntrance);
             switch (direction)
             {
                 case Direction.Up:
@@ -171,6 +169,7 @@ public class Branch : Unit {
                 }
                 player.SetState(PlayerState.Lean);
                 //player.transform.position = player.position;
+                player.LeanedTo = this;
                 player.isonejumping = false;
                 api.engine.apigraphic.Player_Co_Stop(player);
                 player.lean = true;

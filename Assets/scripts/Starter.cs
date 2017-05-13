@@ -8,8 +8,11 @@ public class Starter : MonoBehaviour{
     public Direction Gravity_Directin;
     public List<GameObject> player;
     public static LogicalEngine staticengine;
+    public bool BlocksInvis = false;
+    public static bool Blockinvis;
     void Awake()
     {
+        Blockinvis = BlocksInvis;
         _Set_Everything();
     }
     void Start()
@@ -50,5 +53,4 @@ public class Starter : MonoBehaviour{
     {
         return Database.GravityDirection;
     }
-
 }
