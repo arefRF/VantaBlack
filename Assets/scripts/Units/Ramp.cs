@@ -6,65 +6,69 @@ public class Ramp : Unit {
 
     public override void SetInitialSprite()
     {
-        GetComponent<SpriteRenderer>().sprite = null;
-        /*string ramprootpath = "Ramps\\Ramp-type";
-        string ramp_path = "";
-        bool[] notconnected = Toolkit.GetConnectedSidesForRamp(this);
-        if (type == 1)
+        if (Starter.Blockinvis)
+            GetComponent<SpriteRenderer>().sprite = null;
+        else
         {
-            ramp_path = ramprootpath + "1-";
-            // bot and left connected
-            if (!notconnected[2] && !notconnected[3])
-                ramp_path += "2";
-            // just bot connected
-            else if (!notconnected[2] && notconnected[3])
-                ramp_path += "down";
-            // just left connected
-            else if (notconnected[2] && !notconnected[3])
-                ramp_path += "left";
-            else
-                ramp_path += "left";
-        }
-        else if (type == 2)
-        {
-            ramp_path = ramprootpath + "2-";
-            if (!notconnected[0] && !notconnected[3])
-                ramp_path += "2";
-            else if (!notconnected[0] && notconnected[3])
-                ramp_path += "top";
-            else if (notconnected[0] && !notconnected[3])
-                ramp_path += "left";
-            else
-                ramp_path += "left";
-        }
-        else if (type == 3)
-        {
-            ramp_path = ramprootpath + "3-";
-            if (!notconnected[0] && !notconnected[1])
-                ramp_path += "2";
-            //right connected
-            else if (notconnected[0] && !notconnected[1])
-                ramp_path += "right";
-            else if (!notconnected[0] && notconnected[1])
-                ramp_path += "top";
-            //not connected to anything
-            else
-                ramp_path += "0";
+            string ramprootpath = "Ramps\\Ramp-type";
+            string ramp_path = "";
+            bool[] notconnected = Toolkit.GetConnectedSidesForRamp(this);
+            if (type == 1)
+            {
+                ramp_path = ramprootpath + "1-";
+                // bot and left connected
+                if (!notconnected[2] && !notconnected[3])
+                    ramp_path += "2";
+                // just bot connected
+                else if (!notconnected[2] && notconnected[3])
+                    ramp_path += "down";
+                // just left connected
+                else if (notconnected[2] && !notconnected[3])
+                    ramp_path += "left";
+                else
+                    ramp_path += "left";
+            }
+            else if (type == 2)
+            {
+                ramp_path = ramprootpath + "2-";
+                if (!notconnected[0] && !notconnected[3])
+                    ramp_path += "2";
+                else if (!notconnected[0] && notconnected[3])
+                    ramp_path += "top";
+                else if (notconnected[0] && !notconnected[3])
+                    ramp_path += "left";
+                else
+                    ramp_path += "left";
+            }
+            else if (type == 3)
+            {
+                ramp_path = ramprootpath + "3-";
+                if (!notconnected[0] && !notconnected[1])
+                    ramp_path += "2";
+                //right connected
+                else if (notconnected[0] && !notconnected[1])
+                    ramp_path += "right";
+                else if (!notconnected[0] && notconnected[1])
+                    ramp_path += "top";
+                //not connected to anything
+                else
+                    ramp_path += "0";
 
+            }
+            else if (type == 4)
+            {
+                ramp_path = ramprootpath + "4-";
+                if (!notconnected[1] && !notconnected[2])
+                    ramp_path += "2";
+                else if (!notconnected[1] && notconnected[2])
+                    ramp_path += "right";
+                else if (notconnected[1] && !notconnected[2])
+                    ramp_path += "down";
+                else
+                    ramp_path += "down";
+            }
+            GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load(ramp_path, typeof(Sprite));
         }
-        else if (type == 4)
-        {
-            ramp_path = ramprootpath + "4-";
-            if (!notconnected[1] && !notconnected[2])
-                ramp_path += "2";
-            else if (!notconnected[1] && notconnected[2])
-                ramp_path += "right";
-            else if (notconnected[1] && !notconnected[2])
-                ramp_path += "down";
-            else
-                ramp_path += "down";
-        }
-        GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load(ramp_path, typeof(Sprite));*/
     }
 
     public override bool PlayerMoveInto(Direction dir)
