@@ -122,7 +122,7 @@ public class PlayerGraphics : MonoBehaviour {
             player.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 270);
             */
         //ResetStates();
-        animator.SetInteger("Walk", 0);
+        ResetStates();
         animator.SetInteger("Branch", 1);
         StopAllCoroutines();
 
