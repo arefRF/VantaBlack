@@ -128,8 +128,13 @@ public class GraphicalEngine : MonoBehaviour {
         {
             if (container.abilities[0].abilitytype == AbilityType.Fuel)
             {
-                if(container is DynamicContainer)
-                    icon.color = new Color(color.x, color.y, color.z, 1);
+                if (container is DynamicContainer)
+                {
+                    if(!((DynamicContainer)container).on)
+                        icon.color = new Color(color.x, color.y, color.z, 1);
+                    else
+                        icon.color = new Color(0, 0, 0, 1);
+                }
                     
             }
             string path = Icon_Path(container.abilities[0].abilitytype);
