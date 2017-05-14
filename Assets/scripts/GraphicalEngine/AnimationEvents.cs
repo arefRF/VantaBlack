@@ -6,4 +6,9 @@ public class AnimationEvents : MonoBehaviour {
     {
         transform.parent.parent.GetComponent<PlayerGraphics>().DrainFinished();
     }
+
+    private void ChangeColorFinished()
+    {
+        transform.parent.parent.GetComponent<PlayerGraphics>().ChangeColorFinished();
+    }
 }

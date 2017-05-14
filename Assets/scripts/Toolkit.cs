@@ -371,6 +371,27 @@ public sealed class Toolkit{
         return false;
     }
 
+    public static bool Hasleanable(Vector2 position)
+    {
+        List<Unit>[,] units = Starter.GetDataBase().units;
+        for (int i = 0; i < units[(int)position.x, (int)position.y].Count; i++)
+        {
+            if (units[(int)position.x, (int)position.y][i] is Leanable)
+                return true;
+        }
+        return false;
+    }
+    public static Leanable GetLeanable(Vector2 position)
+    {
+        List<Unit>[,] units = Starter.GetDataBase().units;
+        for (int i = 0; i < units[(int)position.x, (int)position.y].Count; i++)
+        {
+            if (units[(int)position.x, (int)position.y][i] is Leanable)
+                return (Leanable)units[(int)position.x, (int)position.y][i];
+        }
+        return null;
+    }
+
     public static Fountain GetFountain(Vector2 position)
     {
         List<Unit>[,] units = Starter.GetDataBase().units;

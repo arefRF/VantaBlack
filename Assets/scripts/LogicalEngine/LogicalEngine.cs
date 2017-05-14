@@ -692,6 +692,8 @@ public class LogicalEngine {
                                 ((ParentContainer)database.player[i].LeanedTo).Action(database.player[i], Toolkit.ReverseDirection(database.player[i].leandirection));
                             else if (database.player[i].LeanedTo is FunctionalContainer)
                                 ((FunctionalContainer)database.player[i].LeanedTo).ActionKeyDown(database.player[i], Toolkit.ReverseDirection(database.player[i].leandirection));
+                            else if (database.player[i].LeanedTo is Leanable)
+                                ((Leanable)database.player[i].LeanedTo).LeanedAction(database.player[i], Toolkit.ReverseDirection(database.player[i].leandirection));
                         }
                     }
                     else
