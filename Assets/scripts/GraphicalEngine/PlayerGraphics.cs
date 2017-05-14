@@ -122,7 +122,7 @@ public class PlayerGraphics : MonoBehaviour {
             player.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 270);
             */
         //ResetStates();
-        animator.SetInteger("Walk", 0);
+        ResetStates();
         animator.SetInteger("Branch", 1);
         StopAllCoroutines();
 
@@ -284,11 +284,20 @@ public class PlayerGraphics : MonoBehaviour {
     }
     public void ChangeColor()
     {
+        if(bodyAnimator == null)
+            bodyAnimator = bodyAnimator = transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Animator>();
         if (player.abilities.Count != 0)
         {
+            Debug.Log(player.abilities[0].abilitytype);
             if (player.abilities[0].abilitytype == AbilityType.Fuel)
                 bodyAnimator.SetInteger("Ability", 1);
+            else
+            {
+                bodyAnimator.SetInteger("Ability", 0);
+            }
         }
+        else
+            bodyAnimator.SetInteger("Ability", 0);
     }
 
     public void ChangeColorFinished()
