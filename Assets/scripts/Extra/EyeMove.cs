@@ -44,7 +44,7 @@ public class EyeMove : MonoBehaviour {
             sin = (player.transform.position.y - center_position.y) / constant;
             target = new Vector3(center_position.x + radius * cos, center_position.y + radius * sin, 0);
             remain = (transform.position - target).sqrMagnitude;
-            transform.position = Vector3.MoveTowards(transform.position, target, Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, target, Time.deltaTime/3f);
             yield return null;
         }
         

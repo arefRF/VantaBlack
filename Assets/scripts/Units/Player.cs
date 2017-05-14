@@ -47,6 +47,11 @@ public class Player : Unit
         state = PlayerState.Idle;
     }
 
+    public void Update()
+    {
+        Debug.Log(state);
+    }
+
     public Direction GetGravity(){
         return gravity;
     }
