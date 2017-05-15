@@ -49,7 +49,6 @@ public class Player : Unit
 
     public void Update()
     {
-        Debug.Log(state);
     }
 
     public Direction GetGravity(){
