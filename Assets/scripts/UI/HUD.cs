@@ -2,25 +2,22 @@
 using System.Collections;
 using UnityEngine.UI;
 public class HUD : MonoBehaviour {
-    private UnityEngine.UI.Image icon, count;
-    private Sprite[] countsprite;
+    private UnityEngine.UI.Image icon, circle;
+    private Image[] lights;
     void Awake()
     {
-        count = transform.GetChild(1).GetComponent<Image>();
-        countsprite = new Sprite[6];
-        countsprite[0] = null;
-        countsprite[1] = (Sprite)Resources.Load("HUD\\Count 1", typeof(Sprite));
-        countsprite[2] = (Sprite)Resources.Load("HUD\\Count 2", typeof(Sprite));
-        countsprite[3] = (Sprite)Resources.Load("HUD\\Count 3", typeof(Sprite));
-        countsprite[4] = (Sprite)Resources.Load("HUD\\Count 4", typeof(Sprite));
-        countsprite[5] = (Sprite)Resources.Load("HUD\\Full", typeof(Sprite));
-        icon = transform.GetChild(0).GetComponent<Image>();
+        circle = transform.GetChild(1).GetComponent<Image>();
+        icon = transform.GetChild(3).GetComponent<Image>();
+        lights = transform.GetChild(2).GetComponentsInChildren<Image>();
     }
+
+    // main function of HUD
     public void AbilityChanged(Player player)
     {
-        iconChange(player);
-        countChange(player);
+        
+        IconChange(player);
         ColorChange(player);
+        CountChange(player);
     }
 
     private void ColorChange(Player player)
@@ -44,20 +41,23 @@ public class HUD : MonoBehaviour {
             color[3] = 0;
         }
         icon.color = new Color(color[0], color[1], color[2], color[3]);
-        count.color = new Color(color[0], color[1], color[2], color[3]);
+        for (int i = 0; i < 4; i++)
+        {
+            lights[i].color = new Color(color[0], color[1], color[2], color[3]);
+        }
     }
 
-    private void iconChange(Player player)
+    private void IconChange(Player player)
     {
-        string path = "HUD\\";
+        string path = "Containers\\Icons\\New\\";
         if (player.abilities.Count != 0)
         {
             if (player.abilities[0].abilitytype == AbilityType.Fuel)
-                path += "Fuel";
+                path += "Fuel Off";
             else if (player.abilities[0].abilitytype == AbilityType.Jump)
                 path += "Jump";
             else if (player.abilities[0].abilitytype == AbilityType.Key)
-                path += "Door";
+                path += "Key";
         }
         else
             path += "";
@@ -65,13 +65,17 @@ public class HUD : MonoBehaviour {
         
     }
 
-    private void countChange(Player player)
+    // Change Number
+    private void CountChange(Player player)
     {
-        if(player.abilities.Count != 0 && player.abilities[0].abilitytype == AbilityType.Key)
+
+        for (int i = 0; i < 4; i++)
         {
-            count.sprite = countsprite[5];
+            lights[i].enabled = false;
         }
-        else
-            count.sprite = countsprite[player.abilitycount];
+        for (int i = 0; i < player.abilities.Count; i++)
+        {
+            lights[i].enabled = true;
+        }
     }
 }
