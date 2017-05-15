@@ -25,7 +25,7 @@ public class LeanableP2 : Leanable{
                 for (int i = 0; i < ConnectedUnits.Count; i++)
                 {
                     api.RemoveFromDatabase(ConnectedUnits[i]);
-                    ConnectedUnits[i].position = new Vector2(ConnectedUnits[i].position.x, ConnectedUnits[i].position.y + 1);
+                    ConnectedUnits[i].position = new Vector2(ConnectedUnits[i].position.x, ConnectedUnits[i].position.y + 2);
                     ConnectedUnits[i].transform.position = position;
                     api.AddToDatabase(ConnectedUnits[i]);
                 }
@@ -36,7 +36,7 @@ public class LeanableP2 : Leanable{
                 {
                     Debug.Log(ConnectedUnits[i].position);
                     api.RemoveFromDatabase(ConnectedUnits[i]);
-                    ConnectedUnits[i].position = new Vector2(ConnectedUnits[i].position.x, ConnectedUnits[i].position.y - 1);
+                    ConnectedUnits[i].position = new Vector2(ConnectedUnits[i].position.x, ConnectedUnits[i].position.y - 2);
                     ConnectedUnits[i].transform.position = position;
                     api.AddToDatabase(ConnectedUnits[i]);
                 }
