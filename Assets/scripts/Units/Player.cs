@@ -52,11 +52,11 @@ public class Player : Unit
 
     public void Update()
     {
-        if(state != tempstate)
+        /*if(state != tempstate)
         {
             Debug.Log(state);
             tempstate = state;
-        }
+        }*/
     }
 
     public Direction GetGravity(){
