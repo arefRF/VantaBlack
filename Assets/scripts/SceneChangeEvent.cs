@@ -19,7 +19,6 @@ public class SceneChangeEvent : MonoBehaviour
         {
             if (smoothchange)
             {
-
                 sceneloader.Load(scenename, loadtime);
             }
         }
