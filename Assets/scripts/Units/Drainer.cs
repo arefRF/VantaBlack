@@ -32,6 +32,7 @@ public class Drainer : Unit {
     {
         player.SetState(PlayerState.Busy);
         api.engine.apigraphic.Player_Co_Stop(player);
+        player.GetComponent<PlayerGraphics>().ResetStates();
         api.engine.apigraphic.Drain(player, this);
     }
 }

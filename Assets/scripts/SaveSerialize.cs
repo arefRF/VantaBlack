@@ -16,8 +16,14 @@ public class SaveSerialize {
         branchCodeNumbers = new List<long>();
     }
 
-    public void serialize(string scenename, Vector2 playerpos, AbilityType abilitytype, int abilityCount)
+    public void serialize(string scenename, Vector2 playerpos, AbilityType abilitytype, int abilitycount)
     {
+        this.scenename = scenename;
+        posx = (int)playerpos.x;
+        posy = (int)playerpos.y;
+        this.abilitytype = abilitytype;
+        this.abilitycount = abilitycount;
+        Debug.Log("serializing");
         IFormatter formatter = new BinaryFormatter();
         Stream stream = new FileStream("save.bin", FileMode.Create, FileAccess.Write, FileShare.None);
         formatter.Serialize(stream, this);

@@ -21,10 +21,10 @@ public class GameManager : MonoBehaviour {
             manager = this;
         }
         DontDestroyOnLoad(gameObject);
-        if(File.Exists(Application.persistentDataPath + "save.bin"))
+        if(File.Exists(/*Application.persistentDataPath + */"save.bin"))
         {
             BinaryFormatter bf = new BinaryFormatter();
-            file = File.Open(Application.persistentDataPath + "save.bin", FileMode.Open);
+            file = File.Open(/*Application.persistentDataPath + */"save.bin", FileMode.Open);
             SaveSerialize temp = bf.Deserialize(file) as SaveSerialize;
             for(int i=0; i<temp.branchCodeNumbers.Count; i++)
             {
@@ -32,6 +32,7 @@ public class GameManager : MonoBehaviour {
                 branch.blocked = true;
             }
             SetPlayer(temp);
+            file.Close();
         }
         else
         {
