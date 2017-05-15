@@ -31,6 +31,7 @@ public class Drainer : Unit {
     public void Drain(Player player)
     {
         player.SetState(PlayerState.Busy);
+        api.engine.apigraphic.Player_Co_Stop(player);
         api.engine.apigraphic.Drain(player, this);
     }
 }

@@ -19,6 +19,7 @@ public class Fountain : Unit {
     {
         animator = GetComponent<Animator>();
     }
+
     public void Action(Player player)
     {
         

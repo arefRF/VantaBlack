@@ -254,6 +254,10 @@ public class InputController {
 
             if (player.movepercentage == 98)
             {
+                if (engine.drainercontroller.Check(player))
+                {
+                    return;
+                }
                 if (!player.ApplyGravity()){
                     if (!player.Move(direction))
                     {
