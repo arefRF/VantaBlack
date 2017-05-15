@@ -32,6 +32,8 @@ public class Player : Unit
     private bool onthesameramp;
     public GameMode mode;
 
+    private PlayerState tempstate;
+
     public Coroutine leancoroutine {get; set;}
     public void Awake()
     {
@@ -45,10 +47,16 @@ public class Player : Unit
         direction = move_direction[0];
         oneJump = new Jump(1);
         state = PlayerState.Idle;
+        tempstate = state;
     }
 
     public void Update()
     {
+        if(state != tempstate)
+        {
+            Debug.Log(state);
+            tempstate = state;
+        }
     }
 
     public Direction GetGravity(){
