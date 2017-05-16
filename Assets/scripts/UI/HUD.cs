@@ -70,6 +70,7 @@ public class HUD : MonoBehaviour {
         }
         else
             path += "";
+        Debug.Log(path);
         icon.sprite = (Sprite)Resources.Load(path, typeof(Sprite));
         icon.SetNativeSize();
 
