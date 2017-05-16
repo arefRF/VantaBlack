@@ -8,7 +8,7 @@ public class DrainPoints : MonoBehaviour {
         light = transform.GetChild(0).GetChild(2).GetComponent<Image>();
 	}
     
-    public void DrainPoint(int number)
+    public void DrainPoint(int number, int lastsum)
     {
         if(light == null)
             light = transform.GetChild(0).GetChild(2).GetComponent<Image>();
