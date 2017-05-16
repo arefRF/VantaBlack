@@ -24,9 +24,12 @@ public class Menu : MonoBehaviour {
         transform.GetChild(0).gameObject.SetActive(false);
     }
 
+    // Show Continue not new game
     public void Continue()
     {
-
+        Transform textPanel = transform.GetChild(1);
+        textPanel.GetChild(0).gameObject.SetActive(false);
+        textPanel.GetChild(1).gameObject.SetActive(true);
     }
     public void Back()
     {
