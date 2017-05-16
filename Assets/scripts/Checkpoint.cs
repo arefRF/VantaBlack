@@ -9,7 +9,7 @@ public class Checkpoint : MonoBehaviour {
         {
             Player player = Starter.GetDataBase().player[0];
             Starter.GetEngine().savecheckpoint.Save(player);
-            if (Starter.GetGameManager().shouldload)
+            if (GameManager.manager.shouldload)
             {
                 Starter.GetEngine().saveserialize.serialize(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name, player.position, player.abilitytype, player.abilitycount);
             }
