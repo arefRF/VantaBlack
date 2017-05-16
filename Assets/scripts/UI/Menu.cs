@@ -2,7 +2,12 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 public class Menu : MonoBehaviour {
-    
+    private Animator animator;
+
+    void Awake()
+    {
+        animator = GetComponent<Animator>();
+    }
     public void NewGame()
     {
         SceneManager.LoadScene("Level-1");    
@@ -14,8 +19,7 @@ public class Menu : MonoBehaviour {
     }
     public void Levels()
     {
-         transform.GetChild(0).gameObject.SetActive(false);
-        transform.GetChild(1).gameObject.SetActive(true);
+        animator.SetBool("Levels", true);
     }
     public void Controls()
     {
@@ -33,9 +37,7 @@ public class Menu : MonoBehaviour {
     }
     public void Back()
     {
-        transform.GetChild(2).gameObject.SetActive(false);
-        transform.GetChild(1).gameObject.SetActive(false);
-        transform.GetChild(0).gameObject.SetActive(true);
+        animator.SetBool("Levels", false);
     }
     public void Quit()
     {
