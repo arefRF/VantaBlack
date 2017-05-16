@@ -889,5 +889,7 @@ public class LogicalEngine {
             player.abilities.Add(Ability.GetAbilityInstance(savecheckpoint.abilitytype));
         }
         player._setability();
+        player.SetState(PlayerState.Idle);
+        player.ApplyGravity();
     }
 }

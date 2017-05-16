@@ -57,4 +57,17 @@ public class GameManager : MonoBehaviour {
         }
         player._setability();
     }
+
+    public void NewGame()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Part-0");
+    }
+
+    public void Continue()
+    {
+        BinaryFormatter bf = new BinaryFormatter();
+        file = File.Open(/*Application.persistentDataPath + */"save.bin", FileMode.Open);
+        SaveSerialize temp = bf.Deserialize(file) as SaveSerialize;
+        UnityEngine.SceneManagement.SceneManager.LoadScene(temp.scenename);
+    }
 }
