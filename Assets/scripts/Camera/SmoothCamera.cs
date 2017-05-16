@@ -87,6 +87,5 @@ public class SmoothCamera : MonoBehaviour {
             yield return null;
         }
         auto = true;
-       
     }
 }
