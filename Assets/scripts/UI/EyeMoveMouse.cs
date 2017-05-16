@@ -16,8 +16,12 @@ public class EyeMoveMouse : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if ((Input.mousePosition - transform.parent.transform.position).sqrMagnitude < 50)
-            radius = max_radius / 4;
+        if ((Input.mousePosition - transform.parent.transform.position).sqrMagnitude < 80)
+            radius = max_radius / 2;
+        else if((Input.mousePosition - transform.parent.transform.position).sqrMagnitude < 60)
+            radius = max_radius / 3;
+        else if((Input.mousePosition - transform.parent.transform.position).sqrMagnitude < 40)
+             radius = max_radius / 4;
         else
             radius = max_radius;
         center_position = transform.parent.transform.position;
