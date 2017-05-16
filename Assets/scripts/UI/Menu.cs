@@ -24,6 +24,10 @@ public class Menu : MonoBehaviour {
         transform.GetChild(0).gameObject.SetActive(false);
     }
 
+    public void Continue()
+    {
+
+    }
     public void Back()
     {
         transform.GetChild(2).gameObject.SetActive(false);
