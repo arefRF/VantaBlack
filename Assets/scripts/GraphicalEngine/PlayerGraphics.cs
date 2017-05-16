@@ -87,17 +87,7 @@ public class PlayerGraphics : MonoBehaviour {
         transform.GetChild(0).localPosition = new Vector2(0, 0);
         transform.GetChild(1).localPosition = new Vector2(0, 0);*/
     }
-    public void Shield_Color_Hide()
-    {
-        
-        transform.GetChild(1).GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0);
-    }
 
-    public void Shield_Color_Show()
-    {
-        float[] color = Ability_Color(player.abilities);
-        transform.GetChild(1).GetComponent<SpriteRenderer>().color = new Color(color[0],color[1],color[2],color[3]);
-    }
     public void Lean_Finished()
     {
         animator.SetInteger("Lean", 0);
@@ -105,23 +95,6 @@ public class PlayerGraphics : MonoBehaviour {
 
     public void MoveToBranch(Direction dir)
     {
-        /*
-        if (dir == Direction.Up)
-        {
-            player.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 0);
-        }
-        else if (dir == Direction.Down)
-        {
-            player.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 180);
-        }
-        else if (dir == Direction.Left)
-        {
-            player.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 90);
-        }
-        else
-            player.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 270);
-            */
-        //ResetStates();
         ResetStates();
         animator.SetInteger("Branch", 1);
         StopAllCoroutines();
@@ -143,26 +116,16 @@ public class PlayerGraphics : MonoBehaviour {
        
     }
     public void BranchExit(Direction dir,int ramp_type)
-    {/*
-        if (dir == Direction.Up)
-        {
-            player.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 180);
-        }
-        else if (dir == Direction.Down)
-        {
-            player.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 0);
-        }
-        else if (dir == Direction.Left)
-        {
-            player.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 270);
-        }
-        else
-            player.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 90);
-        ResetStates();
-        animator.SetInteger("Branch", -1); */
+    {
         StopAllCoroutines();
         animator.SetInteger("Branch", 0);
         Vector2 pos = On_Ramp_Pos(ramp_type) + player.position;
+        if (dir == Direction.Right)
+            transform.GetChild(0).rotation = Quaternion.Euler(0, 0, 0);
+        else if(dir == Direction.Left)
+            transform.GetChild(0).rotation = Quaternion.Euler(0, 180, 0);
+
+
         StartCoroutine(Simple_Move(pos, 0.65f));
     }
     private Vector2 On_Ramp_Pos(int type)
@@ -203,9 +166,8 @@ public class PlayerGraphics : MonoBehaviour {
             yield return new WaitForSeconds(0.001f);
         }
 
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.2f);
         api.MovePlayerFinished(player.gameObject);
-        //animator.SetInteger("Branch", 0);
     }
 
     public void Ramp_Animation(Direction dir,int type)
@@ -289,7 +251,6 @@ public class PlayerGraphics : MonoBehaviour {
             bodyAnimator = bodyAnimator = transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Animator>();
         if (player.abilities.Count != 0)
         {
-            Debug.Log(player.abilities[0].abilitytype);
             if (player.abilities[0].abilitytype == AbilityType.Fuel)
                 bodyAnimator.SetInteger("Ability", 1);
             else
@@ -304,23 +265,6 @@ public class PlayerGraphics : MonoBehaviour {
     public void ChangeColorFinished()
     {
        
-    }
-
-    private void ChangeBodyColor()
-    {/*
-        string path = "Player\\";
-        if (player.abilities.Count != 0)
-        {
-            if (player.abilities[0].abilitytype == AbilityType.Fuel)
-                path += "player 1 green";
-            else if (player.abilities[0].abilitytype == AbilityType.Key)
-                path += "player 1 white";
-            else
-                path += "player 1";
-        }
-        else
-            path += "player 1";
-        player.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load(path, typeof(Sprite));*/
     }
 
     private float[] Ability_Color(List<Ability> ability)

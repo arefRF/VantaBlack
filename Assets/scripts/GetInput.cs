@@ -99,24 +99,10 @@ public class GetInput : MonoBehaviour {
         // Joy Stick Move
         Get_Joy_Move();
 
-        //Joystick absorb release
+        //Joystick absorb release action and jump
         Get_Joy_AR();
-        // Lean Keys Up
-        Get_Action_Joy();
     }
-    private void Get_Action_Joy()
-    {
-        if (Mathf.Abs(Input.GetAxis("Action")) > 0.5f)
-        {
-            if (!action_lock)
-            {
-                action_lock = true;
-                api.Action_Key(true);
-            }
-        }
-        else if (Input.GetAxis("Action") == 0)
-            action_lock = false;
-    }
+
 
 
     // Absorb Release and jump
@@ -155,28 +141,28 @@ public class GetInput : MonoBehaviour {
     }
     private void Get_Joy_Move()
     {
-        if (Input.GetAxis("Horizontal") == 1)
+        if (Input.GetAxis("Horizontal") > 0.9)
         {
             api.MovePressed(Direction.Right);
             lean = Direction.Right;
             move_input = true;
         }
-        else if (Input.GetAxis("Horizontal") == -1)
+        else if (Input.GetAxis("Horizontal") < -0.9)
         {
             api.MovePressed(Direction.Left);
             lean = Direction.Left;
             move_input = true;
         }
-        else if (Input.GetAxis("Vertical") == 1)
+        else if (Input.GetAxis("Vertical") > 0.9)
         {
             api.MovePressed(Direction.Up);
             lean = Direction.Up;
             move_input = true;
         }
-        else if (Input.GetAxis("Vertical") == -1)
+        else if (Input.GetAxis("Vertical") < -0.9)
         {
             api.MovePressed(Direction.Down);
-            lean = Direction.Left;
+            lean = Direction.Down;
             move_input = true;
         }
         else if (move_input)
