@@ -760,6 +760,7 @@ public class Player : Unit
 
         GameObject.Find("UI").GetComponent<Get>().DrainShow();
         GameObject.Find("DrainUI").GetComponent<DrainPoints>().DrainPoint(abilities.Count);
+        api.engine.saveserialize.draincount += abilities.Count;
         abilities.Clear();
         _setability();
         api.engine.apigraphic.Absorb(this, null);
