@@ -11,7 +11,6 @@ public class GameManager : MonoBehaviour {
     public bool shouldload;
     void Start()
     {
-        
         if (manager != null && manager != this)
         {
             Destroy(gameObject);
@@ -22,7 +21,11 @@ public class GameManager : MonoBehaviour {
         }
         DontDestroyOnLoad(gameObject);
         if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name.Equals("Menu V2"))
+        {
+            if(File.Exists(/*Application.persistentDataPath + */"save.bin"))
+                GameObject.Find("Menu").GetComponent<Menu>().Continue();
             return;
+        }
         database = Starter.GetDataBase();
         engine = Starter.GetEngine();
         if (File.Exists(/*Application.persistentDataPath + */"save.bin"))
@@ -30,7 +33,7 @@ public class GameManager : MonoBehaviour {
             BinaryFormatter bf = new BinaryFormatter();
             file = File.Open(/*Application.persistentDataPath + */"save.bin", FileMode.Open);
             SaveSerialize temp = bf.Deserialize(file) as SaveSerialize;
-            if (temp.scenename == UnityEngine.SceneManagement.SceneManager.GetActiveScene().name && shouldload)
+            if (temp.scenename == UnityEngine.SceneManagement.SceneManager.GetActiveScene().name && manager.shouldload)
             {
                 for (int i = 0; i < temp.branchCodeNumbers.Count; i++)
                 {
@@ -63,14 +66,25 @@ public class GameManager : MonoBehaviour {
 
     public void NewGame()
     {
+        Debug.Log("new game");
+        manager.shouldload = true;
         UnityEngine.SceneManagement.SceneManager.LoadScene("Part-0");
     }
 
     public void Continue()
     {
+        Debug.Log("continue");
+        manager.shouldload = true;
         BinaryFormatter bf = new BinaryFormatter();
         file = File.Open(/*Application.persistentDataPath + */"save.bin", FileMode.Open);
         SaveSerialize temp = bf.Deserialize(file) as SaveSerialize;
         UnityEngine.SceneManagement.SceneManager.LoadScene(temp.scenename);
+        file.Close();
+    }
+
+    public void LoadLevel(string scenename)
+    {
+        manager.shouldload = false;
+        UnityEngine.SceneManagement.SceneManager.LoadScene(scenename);
     }
 }
