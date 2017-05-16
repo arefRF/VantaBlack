@@ -32,8 +32,8 @@ public class Menu : MonoBehaviour {
     public void Continue()
     {
         Transform textPanel = transform.GetChild(1);
-        textPanel.GetChild(0).gameObject.SetActive(false);
-        textPanel.GetChild(1).gameObject.SetActive(true);
+        textPanel.GetChild(0).GetChild(0).gameObject.SetActive(false);
+        textPanel.GetChild(0).GetChild(1).gameObject.SetActive(true);
     }
     public void Back()
     {
