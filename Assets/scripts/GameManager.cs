@@ -11,8 +11,7 @@ public class GameManager : MonoBehaviour {
     public bool shouldload;
     void Start()
     {
-        database = Starter.GetDataBase();
-        engine = Starter.GetEngine();
+        
         if (manager != null && manager != this)
         {
             Destroy(gameObject);
@@ -22,7 +21,11 @@ public class GameManager : MonoBehaviour {
             manager = this;
         }
         DontDestroyOnLoad(gameObject);
-        if(File.Exists(/*Application.persistentDataPath + */"save.bin"))
+        if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name.Equals("Menu V2"))
+            return;
+        database = Starter.GetDataBase();
+        engine = Starter.GetEngine();
+        if (File.Exists(/*Application.persistentDataPath + */"save.bin"))
         {
             BinaryFormatter bf = new BinaryFormatter();
             file = File.Open(/*Application.persistentDataPath + */"save.bin", FileMode.Open);

@@ -8,8 +8,8 @@ public class HUD : MonoBehaviour {
     void Awake()
     {
         circle = transform.GetChild(1).GetComponent<Image>();
-        icon = transform.GetChild(4).GetComponent<Image>();
-        lights = transform.GetChild(3).GetComponentsInChildren<Image>();
+        icon = transform.GetChild(3).GetComponent<Image>();
+        lights = transform.GetChild(4).GetComponentsInChildren<Image>();
         animator = GetComponent<Animator>();
     }
 
@@ -70,6 +70,7 @@ public class HUD : MonoBehaviour {
         }
         else
             path += "";
+        
         icon.sprite = (Sprite)Resources.Load(path, typeof(Sprite));
         icon.SetNativeSize();
 
