@@ -33,148 +33,99 @@ public class GetInput : MonoBehaviour {
     void Update()
     {
         if (joystick)
-        {
-            // Joy Stick Move
-            Get_Joy_Move();
-
-            //Joystick absorb release
-            Get_Joy_AR();
-            // Lean Keys Up
-            Get_Action_Joy();
-            if (Input.GetKeyDown(KeyCode.Joystick1Button4))
-                api.UndoPressed();
-
-        }
+            Get_JoyStick();
         else
-        {
-            if (Input.GetKeyDown(KeyCode.Escape))
-                GameObject.Find("UI").GetComponent<Get>().inMenu_Show();
-                
-           Get_Lean_Undo();
-            // Directional Abilities use
-            if (Input.GetKeyUp(KeyCode.F))
-            {
-                api.Action_Key(true);
-                is_space = false;
-            }
-            if (is_space)
-                Get_Space_Arrows();
-            else
-                Get_Move();
-
-                  if (Input.GetKeyDown(KeyCode.F))
-                  {
-                      api.Action_Key(false);
-                      is_space = true;
-                  }
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                api.Jump();
-            }
-                  if (is_space)
-                      Get_Space_Arrows();
-
-                  if (Input.GetKeyDown(KeyCode.Q))
-                  {
-                      is_holding = true;
-                       if(last_co!=null)
-                            StopCoroutine(last_co);
-                      last_co = StartCoroutine(Wait_For_Absorb_Hold());
-                  }
-                  if (Input.GetKeyDown(KeyCode.E))
-                  {
-                      is_holding = true;
-                if (last_co != null)
-                    StopCoroutine(last_co);
-                      StartCoroutine(Wait_For_Release_Hold());
-                  }
-                  if (Input.GetKeyUp(KeyCode.E)  )
-                  {
-                      api.Release();
-                      is_holding = false;
-                  }
-                  if(Input.GetKeyUp(KeyCode.Q))
-                  {
-                      api.Absorb();
-                      is_holding = false;
-                  }
-                  if (Input.GetKeyUp(KeyCode.R))
-                  {
-                      api.UndoPressed();
-                  }
-              
-        }
+            Get_Keyboard();
     }
 
 
-
-    private void Get_Action_Joy()
+    private void Get_Keyboard()
     {
-        if (Mathf.Abs(Input.GetAxis("Action")) > 0.5f)
+        if (Input.GetKeyDown(KeyCode.Escape))
+            GameObject.Find("UI").GetComponent<Get>().inMenu_Show();
+
+        Get_Lean_Undo();
+        // Directional Abilities use
+        if (Input.GetKeyUp(KeyCode.F))
         {
-            if (!action_lock)
-            {
-                action_lock = true;
-                api.Action_Key(true);
-            }
+            api.Action_Key(true);
+            is_space = false;
         }
-        else if (Input.GetAxis("Action") == 0)
-            action_lock = false;
+        if (is_space)
+            Get_Space_Arrows();
+        else
+            Get_Move();
+
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            api.Action_Key(false);
+            is_space = true;
+        }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            api.Jump();
+        }
+        if (is_space)
+            Get_Space_Arrows();
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            is_holding = true;
+            if (last_co != null)
+                StopCoroutine(last_co);
+            last_co = StartCoroutine(Wait_For_Absorb_Hold());
+        }
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            is_holding = true;
+            if (last_co != null)
+                StopCoroutine(last_co);
+            StartCoroutine(Wait_For_Release_Hold());
+        }
+        if (Input.GetKeyUp(KeyCode.E))
+        {
+            api.Release();
+            is_holding = false;
+        }
+        if (Input.GetKeyUp(KeyCode.Q))
+        {
+            api.Absorb();
+            is_holding = false;
+        }
     }
+
+    private void Get_JoyStick()
+    {
+        // Joy Stick Move
+        Get_Joy_Move();
+
+        //Joystick absorb release action and jump
+        Get_Joy_AR();
+    }
+
+
+
+    // Absorb Release and jump
     private void Get_Joy_AR()
     {
-        if (Input.GetAxis("AR-H") == 1)
+        if (Input.GetButtonDown("Absorb"))
+            api.Absorb();
+        else if (Input.GetButtonDown("Release"))
+            api.Release();
+
+        if (Input.GetButtonDown("Jump"))
+            api.Jump();
+        if (Input.GetButtonDown("Action"))
         {
-            if (!ar_input)
-            {
-                is_holding = true;
-                hold_direction = Direction.Right;
-                StopAllCoroutines();
-                StartCoroutine(Wait_For_AR_Hold_Joy());
-                ar_input = true;
-            }
+            api.Action_Key(false);
+            is_space = true;
         }
-        else if (Input.GetAxis("AR-H") == -1)
+        if (Input.GetButtonUp("Action"))
         {
-            if (!ar_input)
-            {
-                is_holding = true;
-                hold_direction = Direction.Left;
-                StopAllCoroutines();
-                StartCoroutine(Wait_For_AR_Hold_Joy());
-                ar_input = true;
-            }
+            api.Action_Key(true);
+            is_space = false;
         }
-        else if (Input.GetAxis("AR-V") == 1)
-        {
-            if (!ar_input)
-            {
-                is_holding = true;
-                hold_direction = Direction.Down;
-                StopAllCoroutines();
-                StartCoroutine(Wait_For_AR_Hold_Joy());
-                ar_input = true;
-            }
-        }
-        else if (Input.GetAxis("AR-V") == -1)
-        {
-            if (!ar_input)
-            {
-                is_holding = true;
-                hold_direction = Direction.Up;
-                StopAllCoroutines();
-                StartCoroutine(Wait_For_AR_Hold_Joy());
-                ar_input = true;
-            }
-        }
-        else if (ar_input)
-        {
-            api.AbsorbRelease(hold_direction);
-            ar_input = false;
-            is_holding = false;
-        }
-        else
-            is_holding = false;
+        
         
     }
 
@@ -190,28 +141,28 @@ public class GetInput : MonoBehaviour {
     }
     private void Get_Joy_Move()
     {
-        if (Input.GetAxis("Horizontal") == 1)
+        if (Input.GetAxis("Horizontal") > 0.9)
         {
             api.MovePressed(Direction.Right);
             lean = Direction.Right;
             move_input = true;
         }
-        else if (Input.GetAxis("Horizontal") == -1)
+        else if (Input.GetAxis("Horizontal") < -0.9)
         {
             api.MovePressed(Direction.Left);
             lean = Direction.Left;
             move_input = true;
         }
-        else if (Input.GetAxis("Vertical") == 1)
+        else if (Input.GetAxis("Vertical") > 0.9)
         {
             api.MovePressed(Direction.Up);
             lean = Direction.Up;
             move_input = true;
         }
-        else if (Input.GetAxis("Vertical") == -1)
+        else if (Input.GetAxis("Vertical") < -0.9)
         {
             api.MovePressed(Direction.Down);
-            lean = Direction.Left;
+            lean = Direction.Down;
             move_input = true;
         }
         else if (move_input)

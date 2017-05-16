@@ -214,7 +214,6 @@ public class GraphicalEngine : MonoBehaviour {
         Vector3 color = Ability_Color(fountatin.ability, false);
         for (int i = 0; i < 4; i++)
         {
-           
             lights.transform.GetChild(i).gameObject.SetActive(false);
         }
         for (int i = 0; i < fountatin.count - fountatin.abilities.Count; i++)

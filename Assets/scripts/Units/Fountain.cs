@@ -57,7 +57,6 @@ public class Fountain : Unit {
 
     private bool UndoAbilities(Player player)
     {
-        Debug.Log("undo ing abilities");
         if (abilities.Count == 0)
             return false;
         for (int i = 0; i < abilities.Count; i++)
