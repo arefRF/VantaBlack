@@ -63,7 +63,6 @@ public class GameManager : MonoBehaviour {
         }
         player._setability();
         player.SetState(PlayerState.Idle);
-        player.ApplyGravity();
     }
 
     public void NewGame()
