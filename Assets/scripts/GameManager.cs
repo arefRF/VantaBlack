@@ -62,6 +62,8 @@ public class GameManager : MonoBehaviour {
             player.abilities.Add(Ability.GetAbilityInstance(saveserialize.abilitytype));
         }
         player._setability();
+        player.SetState(PlayerState.Idle);
+        player.ApplyGravity();
     }
 
     public void NewGame()
