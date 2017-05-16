@@ -41,8 +41,8 @@ public class GameManager : MonoBehaviour {
                     branch.blocked = true;
                 }
                 SetPlayer(temp);
-                file.Close();
             }
+            file.Close();
         }
         else
         {
