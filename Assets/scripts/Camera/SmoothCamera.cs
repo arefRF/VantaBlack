@@ -76,11 +76,11 @@ public class SmoothCamera : MonoBehaviour {
 
     private IEnumerator SmoothMove(Vector3 pos)
     {
-        float remain = (float)Toolkit.GetDistance(pos, transform.position);
+        float remain = (pos- transform.position).sqrMagnitude;
         while(remain > float.Epsilon)
         {
-           
-            remain = (float)Toolkit.GetDistance(pos, transform.position);
+
+            remain = (pos - transform.position).sqrMagnitude;
             //Vector3 newPos = Vector3.SmoothDamp(transform.position, pos, ref m_CurrentVelocity, damping);
             Vector3 newPos = Vector3.MoveTowards(transform.position, pos, Time.smoothDeltaTime / 0.5f);
             transform.position = newPos;
