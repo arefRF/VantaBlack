@@ -43,7 +43,15 @@ public class InputController {
 
     private void LeanTransitionPlayerMove(Player player, Direction direction)
     {
-        if (player.Can_Lean(direction))
+        if(Toolkit.HasBranch(Toolkit.VectorSum(player.position, direction)))
+        {
+            Branch branch = Toolkit.GetBranch(Toolkit.VectorSum(player.position, direction));
+            if(!branch.islocked && !branch.blocked)
+            {
+                player.Move(direction);
+            }
+        }
+        else if (player.Can_Lean(direction))
         {
             Lean(player, direction);
         }

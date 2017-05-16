@@ -21,6 +21,7 @@ public class LogicalEngine {
     public List<Unit> shouldmove;
 
     public SaveSerialize saveserialize;
+    public SaveCheckpoint savecheckpoint;
     public LogicalEngine(int x, int y)
     {
         sizeX = x;
@@ -36,6 +37,7 @@ public class LogicalEngine {
         pipecontroller = new PipeController(this);
         lasercontroller = new LaserController(database.lasers);
         saveserialize = new SaveSerialize();
+        savecheckpoint = new SaveCheckpoint();
     }
 
     public void Run()
@@ -873,5 +875,21 @@ public class LogicalEngine {
     public void AddClosedBranchToSerialize(Branch branch)
     {
         saveserialize.branchCodeNumbers.Add(branch.codeNumber);
+    }
+
+    public void Revive(Player player)
+    {
+        apiunit.RemoveFromDatabase(player);
+        player.position = savecheckpoint.position;
+        player.transform.position = player.position;
+        apiunit.AddToDatabase(player);
+        player.abilities.Clear();
+        for (int i = 0; i < savecheckpoint.abilitycount; i++)
+        {
+            player.abilities.Add(Ability.GetAbilityInstance(savecheckpoint.abilitytype));
+        }
+        player._setability();
+        player.SetState(PlayerState.Idle);
+        player.ApplyGravity();
     }
 }
