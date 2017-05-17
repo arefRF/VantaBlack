@@ -665,7 +665,7 @@ public class LogicalEngine {
     {
         for(int i=0; i<database.player.Count; i++)
         {
-            if (database.player[i].state == PlayerState.Idle || database.player[i].state == PlayerState.Lean)
+            if (database.player[i].state == PlayerState.Idle || database.player[i].state == PlayerState.Lean || database.player[i].state == PlayerState.Gir)
             {
                 if (!Toolkit.IsInsideBranch(database.player[i]))
                 {
@@ -733,6 +733,8 @@ public class LogicalEngine {
         player.position = player.nextpos;
         apiunit.AddToDatabase(player);*/
         player.movepercentage = 0;
+        if (player.state == PlayerState.Gir)
+            return;
         if (!player.ApplyGravity())
             player.SetState(PlayerState.Idle);
     }
@@ -742,6 +744,8 @@ public class LogicalEngine {
         /*apiunit.RemoveFromDatabase(player);
         player.position = player.nextpos;
         apiunit.AddToDatabase(player);*/
+        if (player.state == PlayerState.Gir)
+            return;
         Applygravity();
         if (player.lean)
             player.SetState(PlayerState.Lean);
@@ -751,6 +755,9 @@ public class LogicalEngine {
 
     public void graphic_GameObjectMoveAnimationFinished(GameObject gameobject, Unit unit)
     {
+        if(unit is Player)
+            if (((Player)unit).state == PlayerState.Gir)
+                return;
         if (unit == null)
             return;
         //unit.gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = false;
