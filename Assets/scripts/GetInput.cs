@@ -96,6 +96,8 @@ public class GetInput : MonoBehaviour {
 
     private void Get_JoyStick()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+            GameObject.Find("UI").GetComponent<Get>().inMenu_Show();
         // Joy Stick Move
         Get_Joy_Move();
 
