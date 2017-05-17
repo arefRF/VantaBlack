@@ -45,7 +45,10 @@ public class PlayerGraphics : MonoBehaviour {
         ResetStates();
         if (player.abilities.Count != 0)
             if (player.abilities[0].abilitytype == AbilityType.Fuel)
-                animator.SetInteger("Lean", 5);
+            {
+                animator.SetInteger("Lean", 1);
+                bodyAnimator.SetBool("Lean", true);
+            }
             else
                 animator.SetInteger("Lean", 1);
         else
@@ -98,6 +101,7 @@ public class PlayerGraphics : MonoBehaviour {
     public void Lean_Finished()
     {
         animator.SetInteger("Lean", 0);
+        bodyAnimator.SetBool("Lean", false);
     }
 
     public void MoveToBranch(Direction dir)
@@ -258,11 +262,27 @@ public class PlayerGraphics : MonoBehaviour {
         if (player.abilities.Count != 0)
         {
             if (player.abilities[0].abilitytype == AbilityType.Fuel)
-                bodyAnimator.SetInteger("Ability", 1);
+            {
+                if (player.state == PlayerState.Lean && player.leandirection == Direction.Up)
+                {
+                    bodyAnimator.SetInteger("Ability", 2);
+                    bodyAnimator.SetBool("Lean", true);
+                }
+                else
+                    bodyAnimator.SetInteger("Ability", 1);
+            }
             else
             {
-                bodyAnimator.SetInteger("Ability", 0);
+                if (player.state == PlayerState.Lean && player.leandirection == Direction.Up)
+                {
+                    bodyAnimator.SetInteger("ABility", -2);
+                    
+                }
+
+                else
+                    bodyAnimator.SetInteger("ABility", -1);
             }
+            
         }
         else
             bodyAnimator.SetInteger("Ability", 0);
