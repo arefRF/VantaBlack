@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour {
     FileStream file;
     public LogicalEngine engine;
     public bool shouldload;
+    public bool controller;
     void Start()
     {
         if (manager != null && manager != this)
@@ -28,6 +29,10 @@ public class GameManager : MonoBehaviour {
         }
         if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name.Equals("Intro"))
             return;
+        if(controller)
+            GameObject.Find("GetInput").GetComponent<GetInput>().joystick = true;
+        else
+            GameObject.Find("GetInput").GetComponent<GetInput>().joystick = false;
         database = Starter.GetDataBase();
         engine = Starter.GetEngine();
         if (File.Exists(Application.persistentDataPath + "save.bin"))
