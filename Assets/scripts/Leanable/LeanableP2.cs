@@ -16,7 +16,6 @@ public class LeanableP2 : Leanable{
     {
         if (on == tempon || !roboscrip.moved)
             return;
-        Debug.Log("duuuude");
         tempon = on;
         if (roboscrip.moved)
         {
