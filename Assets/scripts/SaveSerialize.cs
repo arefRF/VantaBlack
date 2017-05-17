@@ -13,6 +13,7 @@ public class SaveSerialize {
 
     public SaveSerialize()
     {
+        draincount = 0;
         branchCodeNumbers = new List<long>();
     }
 
