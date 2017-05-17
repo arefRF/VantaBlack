@@ -43,7 +43,14 @@ public class PlayerGraphics : MonoBehaviour {
     public void Lean_Up()
     {
         ResetStates();
-        animator.SetInteger("Lean", 1);
+        if (player.abilities.Count != 0)
+            if (player.abilities[0].abilitytype == AbilityType.Fuel)
+                animator.SetInteger("Lean", 5);
+            else
+                animator.SetInteger("Lean", 1);
+        else
+            animator.SetInteger("Lean", 1);
+
     }
 
     public void Lean_Down()
