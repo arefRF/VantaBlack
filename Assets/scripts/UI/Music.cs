@@ -9,10 +9,15 @@ public class Music : MonoBehaviour {
     void Start () {
         if (instance != null && instance != this)
         {
+            Debug.Log(SceneManager.GetActiveScene().name);
             if (SceneManager.GetActiveScene().name == "Part-0")
             {
                 Debug.Log(Music.instance.source);
                 Music.instance.source.PlayOneShot(sounds[0]);
+            }
+            else if(SceneManager.GetActiveScene().name == "Part-4")
+            {
+
             }
             Destroy(this.gameObject);
             return;
