@@ -13,6 +13,21 @@ public class Menu : MonoBehaviour {
         GameManager.manager.NewGame();
     }
 
+    public void Controller()
+    {
+        GameManager.manager.controller = true;
+            transform.GetChild(1).GetChild(0).GetChild(3).gameObject.SetActive(false);
+            transform.GetChild(1).GetChild(0).GetChild(5).gameObject.SetActive(true);
+
+    }
+
+    public void Keyboard()
+    {
+        GameManager.manager.controller = false;
+        transform.GetChild(1).GetChild(0).GetChild(3).gameObject.SetActive(true);
+        transform.GetChild(1).GetChild(0).GetChild(5).gameObject.SetActive(false);
+    }
+
     public void Resume()
     {
         GameManager.manager.Continue();

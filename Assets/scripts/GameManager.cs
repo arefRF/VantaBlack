@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour {
     {
         if (manager != null && manager != this)
         {
+
             Destroy(gameObject);
         }
         else
@@ -29,10 +30,13 @@ public class GameManager : MonoBehaviour {
         }
         if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name.Equals("Intro"))
             return;
-        if(controller)
-            GameObject.Find("GetInput").GetComponent<GetInput>().joystick = true;
-        else
-            GameObject.Find("GetInput").GetComponent<GetInput>().joystick = false;
+
+
+        print(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+        Debug.Log(controller);
+        GameObject.Find("GetInput").GetComponent<GetInput>().joystick = manager.controller;
+        Debug.Log(GameObject.Find("GetInput").GetComponent<GetInput>().joystick);
+
         database = Starter.GetDataBase();
         engine = Starter.GetEngine();
         if (File.Exists(Application.persistentDataPath + "save.bin"))
@@ -73,7 +77,6 @@ public class GameManager : MonoBehaviour {
 
     public void NewGame()
     {
-        Debug.Log("new game");
         manager.shouldload = true;
         UnityEngine.SceneManagement.SceneManager.LoadScene("Part-0");
     }
