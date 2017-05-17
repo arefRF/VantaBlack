@@ -10,7 +10,12 @@ public class Menu : MonoBehaviour {
     }
     public void NewGame()
     {
-        SceneManager.LoadScene("Level-1");    
+        GameManager.manager.NewGame();
+    }
+
+    public void Resume()
+    {
+        GameManager.manager.Continue();
     }
 
     public void LoadLevel(string name)
