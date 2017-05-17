@@ -275,12 +275,12 @@ public class PlayerGraphics : MonoBehaviour {
             {
                 if (player.state == PlayerState.Lean && player.leandirection == Direction.Up)
                 {
-                    bodyAnimator.SetInteger("ABility", -2);
+                    bodyAnimator.SetInteger("Ability", 0);
                     
                 }
 
                 else
-                    bodyAnimator.SetInteger("ABility", -1);
+                    bodyAnimator.SetInteger("Ability", 0);
             }
             
         }
