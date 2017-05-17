@@ -104,7 +104,7 @@ public class Player : Unit
             GetComponent<PlayerGraphics>().ResetStates();
         else if(state == PlayerState.Lean)
         {
-            api.engine.apigraphic.Lean(this);
+            //api.engine.apigraphic.Lean(this);
         }
     }
 

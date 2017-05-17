@@ -101,6 +101,7 @@ public class Fountain : Unit {
         player.SetState(PlayerState.Lean);
         api.engine.apigraphic.Player_Co_Stop(player);
         player.currentAbility = null;
+        api.engine.apigraphic.Lean(player);
         if (UndoAbilities(player))
         {
             animator.SetBool("Open", false);
