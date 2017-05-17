@@ -20,12 +20,14 @@ public class GameManager : MonoBehaviour {
             manager = this;
         }
         DontDestroyOnLoad(gameObject);
-        if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name.Equals("Menu V2"))
+        if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name.Equals("Menu V2")  ) 
         {
             if(File.Exists(/*Application.persistentDataPath + */"save.bin"))
                 GameObject.Find("Menu").GetComponent<Menu>().Continue();
             return;
         }
+        if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name.Equals("Intro"))
+            return;
         database = Starter.GetDataBase();
         engine = Starter.GetEngine();
         if (File.Exists(/*Application.persistentDataPath + */"save.bin"))
