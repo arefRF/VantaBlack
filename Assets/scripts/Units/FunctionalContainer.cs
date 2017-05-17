@@ -21,10 +21,8 @@ public class FunctionalContainer : Container
             return;
         if (abilities.Count == 0)
             return;
-        api.AddToSnapshot(this);
-        api.AddToSnapshot(ConnectedUnits);
-        //api.AddToSnapshot(player);
-        //api.TakeSnapshot();
+        if (player.state == PlayerState.Gir)
+            player.SetState(PlayerState.Lean);
         switch (abilities[0].abilitytype)
         {
             case AbilityType.Fuel: SetOnorOff(); firstmove = true; Action_Fuel(); break;

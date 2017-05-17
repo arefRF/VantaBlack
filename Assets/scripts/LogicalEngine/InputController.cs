@@ -308,6 +308,8 @@ public class InputController {
     {
         for (int i = 0; i < engine.database.player.Count; i++)
         {
+            if (engine.database.player[i].state == PlayerState.Gir)
+                continue;
             if (engine.database.player[i].lean) //for release
             {
                 if (database.player[i].LeanedTo is Container)
@@ -326,6 +328,8 @@ public class InputController {
     {
         for (int i = 0; i < engine.database.player.Count; i++)
         {
+            if (engine.database.player[i].state == PlayerState.Gir)
+                continue;
             if (engine.database.player[i].lean) //for release
             {
                     if (database.player[i].LeanedTo is Container)
@@ -384,6 +388,8 @@ public class InputController {
                 engine.apigraphic.Player_Co_Stop(database.player[i]);
                 database.player[i].SetState(PlayerState.Idle);
             }*/
+            if (database.player[i].state == PlayerState.Gir)
+                continue;
             if(database.player[i].state == PlayerState.Lean && engine.apiinput.isFunctionKeyDown())
             {
                 FunctionalContainer container = Toolkit.GetContainer(Toolkit.VectorSum(database.player[i].position, direction)) as FunctionalContainer;

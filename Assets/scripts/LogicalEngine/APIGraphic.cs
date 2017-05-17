@@ -386,13 +386,15 @@ public class APIGraphic{
     public void Fall_Player_Died(Player player)
     {
         player.GetComponent<PlayerPhysics>().Fall_Die(new Vector2(player.position.x, -10));
+        Debug.Log("fall player died");
         GameObject.Find("UI").GetComponent<Get>().inMenu_Show();
     }
 
     public void Crush_Player_Died(Player player)
     {
-        GameObject.Find("UI").GetComponent<Get>().inMenu_Show();
         Debug.Log("crush player died");
+        player.SetState(PlayerState.Gir);
+        //GameObject.Find("UI").GetComponent<Get>().inMenu_Show();
     }
 
     

@@ -26,7 +26,7 @@ public class SaveSerialize {
         this.abilitycount = abilitycount;
         Debug.Log("serializing");
         IFormatter formatter = new BinaryFormatter();
-        Stream stream = new FileStream("save.bin", FileMode.Create, FileAccess.Write, FileShare.None);
+        Stream stream = new FileStream(Application.persistentDataPath + "save.bin", FileMode.Create, FileAccess.Write, FileShare.None);
         formatter.Serialize(stream, this);
         stream.Close();
     }

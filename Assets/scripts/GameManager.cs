@@ -22,16 +22,16 @@ public class GameManager : MonoBehaviour {
         DontDestroyOnLoad(gameObject);
         if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name.Equals("Menu V2"))
         {
-            if(File.Exists(/*Application.persistentDataPath + */"save.bin"))
+            if(File.Exists(Application.persistentDataPath + "save.bin"))
                 GameObject.Find("Menu").GetComponent<Menu>().Continue();
             return;
         }
         database = Starter.GetDataBase();
         engine = Starter.GetEngine();
-        if (File.Exists(/*Application.persistentDataPath + */"save.bin"))
+        if (File.Exists(Application.persistentDataPath + "save.bin"))
         {
             BinaryFormatter bf = new BinaryFormatter();
-            file = File.Open(/*Application.persistentDataPath + */"save.bin", FileMode.Open);
+            file = File.Open(Application.persistentDataPath + "save.bin", FileMode.Open);
             SaveSerialize temp = bf.Deserialize(file) as SaveSerialize;
             if (temp.scenename == UnityEngine.SceneManagement.SceneManager.GetActiveScene().name && manager.shouldload)
             {
@@ -76,7 +76,7 @@ public class GameManager : MonoBehaviour {
         Debug.Log("continue");
         manager.shouldload = true;
         BinaryFormatter bf = new BinaryFormatter();
-        file = File.Open(/*Application.persistentDataPath + */"save.bin", FileMode.Open);
+        file = File.Open(Application.persistentDataPath + "save.bin", FileMode.Open);
         SaveSerialize temp = bf.Deserialize(file) as SaveSerialize;
         UnityEngine.SceneManagement.SceneManager.LoadScene(temp.scenename);
         file.Close();

@@ -106,6 +106,10 @@ public class Player : Unit
         {
             //api.engine.apigraphic.Lean(this);
         }
+        else if(state == PlayerState.Gir)
+        {
+            state = PlayerState.Gir;
+        }
     }
 
     public bool Should_Change_Direction(Direction dir)
@@ -376,6 +380,8 @@ public class Player : Unit
 
     public override bool ApplyGravity()
     {
+        if (state == PlayerState.Gir)
+            return false;
         if (mode == GameMode.Real)
             return false;
         isonejumping = false;
