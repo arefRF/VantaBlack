@@ -8,8 +8,12 @@ public class Starter : MonoBehaviour{
     public Direction Gravity_Directin;
     public List<GameObject> player;
     public static LogicalEngine staticengine;
+    public bool BlocksInvis = false;
+    public static bool Blockinvis;
+    public static GameManager gamemanager;
     void Awake()
     {
+        Blockinvis = BlocksInvis;
         _Set_Everything();
     }
     void Start()
@@ -30,6 +34,7 @@ public class Starter : MonoBehaviour{
         staticengine = logicalengine;
         GameObject.Find("Graphical").GetComponent<GraphicalEngine>().database = database;
         Toolkit.database = database;
+        gamemanager = GameObject.Find("GameManager").GetComponent<GameManager>();
         logicalengine.Run();
     }
 
@@ -51,4 +56,8 @@ public class Starter : MonoBehaviour{
         return Database.GravityDirection;
     }
 
+    public static GameManager GetGameManager()
+    {
+        return gamemanager;
+    }
 }

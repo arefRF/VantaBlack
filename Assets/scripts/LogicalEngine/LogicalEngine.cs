@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 public class LogicalEngine {
 
@@ -18,6 +19,9 @@ public class LogicalEngine {
 
     public List<Unit> leanmove;
     public List<Unit> shouldmove;
+
+    public SaveSerialize saveserialize;
+    public SaveCheckpoint savecheckpoint;
     public LogicalEngine(int x, int y)
     {
         sizeX = x;
@@ -32,7 +36,8 @@ public class LogicalEngine {
         initializer = new SubEngine_Initializer(x,y, this);
         pipecontroller = new PipeController(this);
         lasercontroller = new LaserController(database.lasers);
-        
+        saveserialize = new SaveSerialize();
+        savecheckpoint = new SaveCheckpoint();
     }
 
     public void Run()
@@ -660,7 +665,7 @@ public class LogicalEngine {
     {
         for(int i=0; i<database.player.Count; i++)
         {
-            if (database.player[i].state == PlayerState.Idle || database.player[i].state == PlayerState.Lean)
+            if (database.player[i].state == PlayerState.Idle || database.player[i].state == PlayerState.Lean || database.player[i].state == PlayerState.Gir)
             {
                 if (!Toolkit.IsInsideBranch(database.player[i]))
                 {
@@ -689,10 +694,8 @@ public class LogicalEngine {
                                 ((ParentContainer)database.player[i].LeanedTo).Action(database.player[i], Toolkit.ReverseDirection(database.player[i].leandirection));
                             else if (database.player[i].LeanedTo is FunctionalContainer)
                                 ((FunctionalContainer)database.player[i].LeanedTo).ActionKeyDown(database.player[i], Toolkit.ReverseDirection(database.player[i].leandirection));
-                        }
-                        else if (database.player[i].LeanedTo is Fountain)
-                        {
-                            ((Fountain)database.player[i].LeanedTo).Action(database.player[i]);
+                            else if (database.player[i].LeanedTo is Leanable)
+                                ((Leanable)database.player[i].LeanedTo).LeanedAction(database.player[i], Toolkit.ReverseDirection(database.player[i].leandirection));
                         }
                     }
                     else
@@ -730,6 +733,8 @@ public class LogicalEngine {
         player.position = player.nextpos;
         apiunit.AddToDatabase(player);*/
         player.movepercentage = 0;
+        if (player.state == PlayerState.Gir)
+            return;
         if (!player.ApplyGravity())
             player.SetState(PlayerState.Idle);
     }
@@ -739,6 +744,8 @@ public class LogicalEngine {
         /*apiunit.RemoveFromDatabase(player);
         player.position = player.nextpos;
         apiunit.AddToDatabase(player);*/
+        if (player.state == PlayerState.Gir)
+            return;
         Applygravity();
         if (player.lean)
             player.SetState(PlayerState.Lean);
@@ -748,6 +755,9 @@ public class LogicalEngine {
 
     public void graphic_GameObjectMoveAnimationFinished(GameObject gameobject, Unit unit)
     {
+        if(unit is Player)
+            if (((Player)unit).state == PlayerState.Gir)
+                return;
         if (unit == null)
             return;
         //unit.gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = false;
@@ -837,5 +847,56 @@ public class LogicalEngine {
                 }
             }
         }
+    }
+    public bool AdjustPlayer(Player player,Direction direction , Action<Player, Direction> passingmethod)
+    {
+        if (player.transform.position.x == player.position.x && player.transform.position.y == player.position.y)
+            return false;
+        if (Toolkit.HasRamp(player.position) && !Toolkit.IsdoubleRamp(player.position) && Toolkit.GetRamp(player.position).IsOnRampSide(Toolkit.ReverseDirection(database.gravity_direction)))
+            return false;
+        apigraphic.Player_Co_Stop(player);
+        player.SetState(PlayerState.Adjust);
+        if (passingmethod == MovePlayerToDirection)
+        {
+            if (direction != player.direction)
+            {
+                Direction olddir = player.direction;
+                player.direction = direction;
+                player.GetComponent<PlayerGraphics>().Move_Animation(direction);
+            }
+        }
+        apigraphic.AdjustPlayer(player, player.position, direction, passingmethod);
+        return true;
+    }
+
+    public void JumpToDirection(Player player, Direction direction)
+    {
+        inputcontroller.Jump(player);
+    }
+    
+    public void MovePlayerToDirection(Player player, Direction direction)
+    {
+
+    }
+
+    public void AddClosedBranchToSerialize(Branch branch)
+    {
+        saveserialize.branchCodeNumbers.Add(branch.codeNumber);
+    }
+
+    public void Revive(Player player)
+    {
+        apiunit.RemoveFromDatabase(player);
+        player.position = savecheckpoint.position;
+        player.transform.position = player.position;
+        apiunit.AddToDatabase(player);
+        player.abilities.Clear();
+        for (int i = 0; i < savecheckpoint.abilitycount; i++)
+        {
+            player.abilities.Add(Ability.GetAbilityInstance(savecheckpoint.abilitytype));
+        }
+        player._setability();
+        player.SetState(PlayerState.Idle);
+        player.ApplyGravity();
     }
 }

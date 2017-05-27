@@ -43,7 +43,15 @@ public class InputController {
 
     private void LeanTransitionPlayerMove(Player player, Direction direction)
     {
-        if (player.Can_Lean(direction))
+        if(Toolkit.HasBranch(Toolkit.VectorSum(player.position, direction)))
+        {
+            Branch branch = Toolkit.GetBranch(Toolkit.VectorSum(player.position, direction));
+            if(!branch.islocked && !branch.blocked)
+            {
+                player.Move(direction);
+            }
+        }
+        else if (player.Can_Lean(direction))
         {
             Lean(player, direction);
         }
@@ -171,13 +179,15 @@ public class InputController {
     {
         if(player.state == PlayerState.Idle)
         {
+            if (engine.AdjustPlayer(player, database.gravity_direction, engine.JumpToDirection))
+                return;
             // Idle and simple jump
             Direction direction;
             if (player.lean)
                 direction = Toolkit.ReverseDirection(player.leandirection);
             else
                 direction = Toolkit.ReverseDirection(player.GetGravity());
-            if(!Toolkit.IsInsideBranch(player) || Toolkit.HasBranch(Toolkit.VectorSum(player.position, direction)))
+            if(!Toolkit.IsInsideBranch(player) && !Toolkit.HasBranch(Toolkit.VectorSum(player.position, direction)))
             {
                 player.isonejumping = true;
                 player.oneJump.Action(player, direction);
@@ -186,6 +196,8 @@ public class InputController {
         }
         else if(player.state == PlayerState.Lean)
         {
+            if (engine.AdjustPlayer(player, database.gravity_direction, engine.JumpToDirection))
+                return;
             Direction direction = Toolkit.ReverseDirection(player.leandirection);
             if (!Toolkit.IsInsideBranch(player) && Toolkit.IsEmpty(Toolkit.VectorSum(player.position, direction)))
             {
@@ -196,6 +208,8 @@ public class InputController {
         }
         else if (player.state == PlayerState.Transition && player.isonejumping && player.abilities.Count != 0 && player.abilities[0].abilitytype == AbilityType.Jump)
         {
+            if (engine.AdjustPlayer(player, database.gravity_direction, engine.JumpToDirection))
+                return;
             player.isonejumping = false;
             Direction direction = Toolkit.ReverseDirection(Toolkit.ReverseDirection(player.jumpdirection));
             if (!Toolkit.IsInsideBranch(player) && Toolkit.IsEmpty(Toolkit.VectorSum(player.position, direction)))
@@ -212,8 +226,12 @@ public class InputController {
     {
         if (!player.lean)
         {
+
             if (player.Can_Move_Direction(direction))
             {
+                if (player.ShouldAdjust(direction))
+                    if (engine.AdjustPlayer(player, direction, engine.MovePlayerToDirection))
+                        return;
                 if (player.Should_Change_Direction(direction))
                 {
                     Direction olddir = player.direction;
@@ -244,6 +262,10 @@ public class InputController {
 
             if (player.movepercentage == 98)
             {
+                if (engine.drainercontroller.Check(player))
+                {
+                    return;
+                }
                 if (!player.ApplyGravity()){
                     if (!player.Move(direction))
                     {
@@ -286,11 +308,17 @@ public class InputController {
     {
         for (int i = 0; i < engine.database.player.Count; i++)
         {
+            if (engine.database.player[i].state == PlayerState.Gir)
+                continue;
             if (engine.database.player[i].lean) //for release
             {
                 if (database.player[i].LeanedTo is Container)
                 {
                     engine.database.player[i].Absorb((Container)database.player[i].LeanedTo);
+                }
+                else if (database.player[i].LeanedTo is Fountain)
+                {
+                    ((Fountain)database.player[i].LeanedTo).Action(database.player[i]);
                 }
             }
         }
@@ -300,6 +328,8 @@ public class InputController {
     {
         for (int i = 0; i < engine.database.player.Count; i++)
         {
+            if (engine.database.player[i].state == PlayerState.Gir)
+                continue;
             if (engine.database.player[i].lean) //for release
             {
                     if (database.player[i].LeanedTo is Container)
@@ -353,6 +383,13 @@ public class InputController {
     {
         for (int i = 0; i < database.player.Count; i++)
         {
+            /*if(database.player[i].state == PlayerState.Adjust)
+            {
+                engine.apigraphic.Player_Co_Stop(database.player[i]);
+                database.player[i].SetState(PlayerState.Idle);
+            }*/
+            if (database.player[i].state == PlayerState.Gir)
+                continue;
             if(database.player[i].state == PlayerState.Lean && engine.apiinput.isFunctionKeyDown())
             {
                 FunctionalContainer container = Toolkit.GetContainer(Toolkit.VectorSum(database.player[i].position, direction)) as FunctionalContainer;
@@ -377,10 +414,13 @@ public class InputController {
     {
         if (player.lean && player.leandirection == direction)
         {
+            if (player.LeanedTo is Fountain)
+                ((Fountain)player.LeanedTo).PlayerLeanUndo(player);
             Starter.GetDataBase().StopTimer();
             player.SetState(nextstate);
             player.lean = false;
             engine.apigraphic.LeanFinished(player);
+            player.LeanedTo = null;
             if (engine.leanmove.Contains(player) && !engine.shouldmove.Contains(player))
             {
                 engine.apiunit.AddToDatabase(player);
@@ -413,9 +453,19 @@ public class InputController {
                 {
                     GameObject.Find("GetInput").GetComponent<GetInput>().StopCoroutine(player.leancoroutine);
                 }
+                //if(!(player.currentAbility is Jump))
+                if (engine.AdjustPlayer(player, direction, Lean))
+                    return;
+                if (Toolkit.Hasleanable(pos) && !Toolkit.GetLeanable(pos).canLean)
+                    return;
                 if (Toolkit.HasBranch(pos))
                 {
                     Toolkit.GetBranch(pos).PlayerLeaned(player, direction);
+                    return;
+                }
+                else if (Toolkit.HasFountain(pos))
+                {
+                    Toolkit.GetFountain(pos).PlayerLeaned(player, direction);
                     return;
                 }
                 player.movepercentage = 0;
@@ -424,7 +474,7 @@ public class InputController {
                 player.position = Toolkit.VectorSum(pos, Toolkit.ReverseDirection(direction));
                 player.api.AddToDatabase(player);
                 player.SetState(PlayerState.Lean);
-                player.transform.position = player.position;
+                //player.transform.position = player.position;
                 player.isonejumping = false;
                 engine.apigraphic.Player_Co_Stop(player);
                 player.lean = true;

@@ -5,11 +5,19 @@ public class Fountain : Unit {
 
     public AbilityType ability;
     public int count;
-    List<Ability> abilities;
+    public List<Ability> abilities;
+    private Animator animator;
     public override void Run()
     {
         abilities = new List<Ability>();
+        api.engine.apigraphic.UnitChangeSprite(this);
         base.Run();
+    }
+
+
+    void Start()
+    {
+        animator = GetComponent<Animator>();
     }
 
     public void Action(Player player)
@@ -17,7 +25,7 @@ public class Fountain : Unit {
         
         if(player.abilities.Count == 0)
         {
-            UndoAbilities(player);
+            
             for (int i = 0; i < count; i++)
             {
                 Ability temp = Ability.GetAbilityInstance(ability).ConvertContainerAbilityToPlayer(player);
@@ -33,7 +41,6 @@ public class Fountain : Unit {
             {
                 if(player.abilities.Count < count)
                 {
-                    UndoAbilities(player);
                     while(player.abilities.Count < count)
                     {
                         Ability temp = Ability.GetAbilityInstance(ability).ConvertContainerAbilityToPlayer(player);
@@ -45,10 +52,13 @@ public class Fountain : Unit {
                 }
             }
         }
+        api.engine.apigraphic.UnitChangeSprite(this);
     }
 
-    private void UndoAbilities(Player player)
+    private bool UndoAbilities(Player player)
     {
+        if (abilities.Count == 0)
+            return false;
         for (int i = 0; i < abilities.Count; i++)
         {
             if (abilities[i].owner is Player)
@@ -77,5 +87,31 @@ public class Fountain : Unit {
                         ((FunctionalContainer)abilities[i].owner).Action_Fuel();
                     }
         }
+        abilities.Clear();
+
+        return true;
+    }
+
+    public void PlayerLeaned(Player player, Direction direction)
+    {
+        player.LeanedTo = this;
+        player.lean = true;
+        player.leandirection = direction;
+        player.isonejumping = false;
+        player.SetState(PlayerState.Lean);
+        api.engine.apigraphic.Player_Co_Stop(player);
+        player.currentAbility = null;
+        api.engine.apigraphic.Lean(player);
+        if (UndoAbilities(player))
+        {
+            animator.SetBool("Open", false);
+            api.engine.apigraphic.UnitChangeSprite(this);
+        }
+    }
+    
+    public void PlayerLeanUndo(Player player)
+    {
+        if(abilities.Count > 0 )
+            animator.SetBool("Open", true);
     }
 }

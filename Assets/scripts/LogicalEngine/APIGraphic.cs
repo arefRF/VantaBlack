@@ -73,11 +73,12 @@ public class APIGraphic{
         player.gameObject.GetComponent<PlayerGraphics>().Move_Animation(player.direction);
     }
 
+
+    // Branch to Branch
     public void MovePlayer_Branch_Branch(Player player,Vector2 pos)
     {
         player.GetComponent<PlayerGraphics>().StopAllCoroutines();
-        player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(pos);
-        player.gameObject.GetComponent<PlayerGraphics>().Move_Animation(player.direction);
+        player.gameObject.GetComponent<PlayerPhysics>().Branch_Branch(pos);
         player.gameObject.GetComponent<PlayerGraphics>().Move_Animation(player.direction);
     }
     // Block to Branch
@@ -87,17 +88,22 @@ public class APIGraphic{
         player.GetComponent<PlayerGraphics>().StopAllCoroutines();
         player.gameObject.GetComponent<PlayerPhysics>().StopAllCoroutines();
         player.GetComponent<PlayerGraphics>().MoveToBranch(direction);
-        player.gameObject.GetComponent<PlayerGraphics>().Move_Animation(player.direction);
+       // player.gameObject.GetComponent<PlayerGraphics>().Move_Animation(player.direction);
     }
 
     // Block to Ramp
     public void MovePlayer_Simple_3(Player player, Vector2 position, int ramptype)
     {
-        Debug.Log("Block to ramp");
+       // Debug.Log("Block to ramp");
         player.GetComponent<PlayerGraphics>().StopAllCoroutines();
         player.GetComponent<PlayerPhysics>().Block_To_Ramp_Move(position,ramptype);
         player.gameObject.GetComponent<PlayerGraphics>().Ramp_Animation(player.direction, ramptype);
 
+    }
+
+    public void Drain(Player player,Drainer drainer)
+    {
+        player.GetComponent<PlayerGraphics>().Drain();
     }
 
     // Block to fall
@@ -120,11 +126,11 @@ public class APIGraphic{
     // Branch to Block
     public void MovePlayer_Branch_1(Player player, Vector2 position,Direction dir)
     {
-        Debug.Log("Branch to block");
+        //Debug.Log("Branch to block");
         player.GetComponent<PlayerGraphics>().StopAllCoroutines();
         player.GetComponent<PlayerPhysics>().StopAllCoroutines();
         player.GetComponent<PlayerGraphics>().BranchExit(dir,0);
-        player.gameObject.GetComponent<PlayerGraphics>().Move_Animation(player.direction);
+        //player.gameObject.GetComponent<PlayerGraphics>().Move_Animation(player.direction);
    
 
     }
@@ -132,7 +138,7 @@ public class APIGraphic{
     // Branch to fall
     public void MovePlayer_Branch_2(Player player, Vector2 position,Direction dir)
     {
-        Debug.Log("branch to fall");
+        //Debug.Log("branch to fall");
         player.GetComponent<PlayerPhysics>().StopAllCoroutines();
         player.GetComponent<PlayerGraphics>().StopAllCoroutines();
         player.GetComponent<PlayerGraphics>().BranchExit(dir,0);
@@ -184,7 +190,6 @@ public class APIGraphic{
     }
     public void LandOnRamp(Player player, Vector2 position, Unit fallonunit, int ramptype)
     {
-        Debug.Log("sxdcfvgbhjkm");
         player.GetComponent<PlayerGraphics>().StopAllCoroutines();
         player.GetComponent<PlayerPhysics>().Land_On_Ramp(position, ramptype);
         
@@ -208,7 +213,7 @@ public class APIGraphic{
 
     public void Jump_Finish(Player player, Vector2 finalpos, Jump jump)
     {
-        jump.JumpFinished(player, finalpos);
+        jump.JumpFinished(player);
     }
 
     public void Jump_Hit(Player player,Direction dir,Jump ability,Vector2 pos)
@@ -219,7 +224,7 @@ public class APIGraphic{
 
     public void Jump_Hit_Finish(Player player,Jump ability,Vector2 finalpos)
     {
-        ability.JumpHitFinished(player,finalpos);
+        ability.JumpHitFinished(player);
     }
 
     public void MovePlayerOnPlatform(Player player,Vector2 pos)
@@ -307,7 +312,7 @@ public class APIGraphic{
     }
     public void Release(Player player, Container container)
     {
-        
+        player.GetComponent<PlayerGraphics>().ChangeColor();
     }
 
     public void PlayerChangeDirection(Player player, Direction olddirection, Direction newdirection)
@@ -332,6 +337,10 @@ public class APIGraphic{
         }
     }
 
+    public void Roll(Player player,Vector2 pos)
+    {
+        player.GetComponent<PlayerPhysics>().Roll(pos);
+    } 
     public void EnterPortalMode(List<Unit> portals,Container container)
     {
         graphicalengine.EnterPortalMode(portals,container);
@@ -368,18 +377,24 @@ public class APIGraphic{
             graphicalengine.StaticContainer((StaticContainer)unit);
         else if (unit is Gate)
             graphicalengine.Gate((Gate)unit);
+        else if (unit is Branch)
+            graphicalengine.Branch((Branch)unit);
+        else if (unit is Fountain)
+            graphicalengine.Fountatin((Fountain)unit);
     }
 
     public void Fall_Player_Died(Player player)
     {
         player.GetComponent<PlayerPhysics>().Fall_Die(new Vector2(player.position.x, -10));
+        Debug.Log("fall player died");
         GameObject.Find("UI").GetComponent<Get>().inMenu_Show();
     }
 
     public void Crush_Player_Died(Player player)
     {
-        GameObject.Find("UI").GetComponent<Get>().inMenu_Show();
         Debug.Log("crush player died");
+        player.SetState(PlayerState.Gir);
+        //GameObject.Find("UI").GetComponent<Get>().inMenu_Show();
     }
 
     
@@ -397,5 +412,10 @@ public class APIGraphic{
     public void RemoveLaser()
     {
         graphicalengine.RemoveLasers();
+    }
+
+    public void AdjustPlayer(Player player, Vector2 pos, Direction direction, System.Action<Player, Direction> passingmethod)
+    {
+        player.GetComponent<PlayerPhysics>().Adjust(pos, direction, passingmethod);
     }
 }

@@ -150,6 +150,16 @@ public class Container : ParentContainer {
             else
                 Swap(player);
         }
+        if (graphicalactions != null)
+        {
+            for (int i = 0; i < graphicalactions.Count; i++)
+            {
+                if (graphicalactions[i] is ActionUponAbsorb)
+                {
+                    graphicalactions[i].Action();
+                }
+            }
+        }
 
     }
 
@@ -172,7 +182,16 @@ public class Container : ParentContainer {
             else
                 Swap(player);
         }
-        
+        if (graphicalactions != null)
+        {
+            for (int i = 0; i < graphicalactions.Count; i++)
+            {
+                if (graphicalactions[i] is ActionUponRelease)
+                {
+                    graphicalactions[i].Action();
+                }
+            }
+        }
     }
 
     public virtual void PlayerAbsorbHold(Player player)
@@ -218,6 +237,16 @@ public class Container : ParentContainer {
                 }
             }
         }
+        if (graphicalactions != null)
+        {
+            for (int i = 0; i < graphicalactions.Count; i++)
+            {
+                if (graphicalactions[i] is ActionUponAbsorb)
+                {
+                    graphicalactions[i].Action();
+                }
+            }
+        }
     }
 
     public virtual void PlayerReleaseHold(Player player)
@@ -255,6 +284,16 @@ public class Container : ParentContainer {
                 {
                     SetNextState();
                     ((FunctionalContainer)this).Action_Fuel();
+                }
+            }
+        }
+        if (graphicalactions != null)
+        {
+            for (int i = 0; i < graphicalactions.Count; i++)
+            {
+                if (graphicalactions[i] is ActionUponRelease)
+                {
+                    graphicalactions[i].Action();
                 }
             }
         }

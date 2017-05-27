@@ -86,12 +86,13 @@ public class PlayerPhysics : MonoBehaviour
     }
     public void Block_To_Ramp_Move(Vector2 pos, int type)
     {
+        
         move_type = MoveType.BlockToRamp;
         if(last_co != null)
             StopCoroutine(last_co);
         Vector2 end1 = pos + Block_To_Ramp_Pos(type);
         Vector2 end2 = (Vector2)pos + On_Ramp_Pos(type);
-        last_co = StartCoroutine(Block_To_Ramp_Coroutine(end1,end2,move_time,true,type));
+        last_co = StartCoroutine(Ramp_To_Block_Coroutine(end1,end2,move_time,true));
         
     }
     
@@ -102,11 +103,11 @@ public class PlayerPhysics : MonoBehaviour
     }
     public void Land_On_Ramp(Vector2 position,int type)
     {
-        Debug.Log("la la land");
         move_type = MoveType.Land;
         Vector2 pos  = position + On_Ramp_Pos(type);
-        transform.position = pos;
-        player.LandOnRampFinished();
+        if (last_co != null)
+            StopCoroutine(last_co);
+        last_co =  StartCoroutine(LandOnRamp(pos, 0.1f));
     }
 
     private Vector2 Block_To_Ramp_Pos(int type)
@@ -114,16 +115,16 @@ public class PlayerPhysics : MonoBehaviour
         if (type == 4)
         {
             if (player.direction == Direction.Left)
-                return new Vector2(0.2f, 0.7f);
+                return new Vector2(0f, 0.8f);
             else if (player.direction == Direction.Right)
-                return new Vector2(-0.4f, 0);
+                return new Vector2(-0.5f, 0.2f);
         }
         else if(type == 1)
         {
             if (player.direction == Direction.Left)
                 return new Vector2(0.5f, 0);
             else if (player.direction == Direction.Right)
-                return new Vector2(-0.2f, 0.9f);
+                return new Vector2(-0.3f, 0.9f);
         }
         return new Vector2(0, 0);
     }
@@ -139,7 +140,27 @@ public class PlayerPhysics : MonoBehaviour
         sharp_type = type;
     }
 
+    public void Adjust(Vector2 pos,Direction dir, System.Action<Player, Direction> passingmethod)
+    {
+        StartCoroutine(AdjustCo(pos,dir,passingmethod));
+    }
 
+
+    private IEnumerator AdjustCo(Vector2 end,Direction dir, System.Action<Player, Direction> passingmethod)
+    {
+        set_percent = true;
+        float remain_distance = Distance((Vector2)transform.position, end);
+        while (remain_distance > float.Epsilon)
+        {
+            remain_distance = Distance((Vector2)transform.position, end);
+            transform.position = Vector2.MoveTowards(transform.position, end, Time.smoothDeltaTime / move_time);
+            api.Camera_AutoMove();
+            yield return new WaitForSeconds(0.001f);
+        }
+        player.AdjustPlayerFinshed(dir, passingmethod);
+
+        // if it needs Call Finished Move of API
+    }
     private Vector2 Ramp_To_Sharp_Pos(Direction gravity,Vector2 position)
     {
         if(gravity == Direction.Down)
@@ -218,6 +239,15 @@ public class PlayerPhysics : MonoBehaviour
         StopAllCoroutines();
         StartCoroutine(Accelerated_Move(pos, fall_velocity, fall_acceleration, false));
     }
+    public void Branch_Branch(Vector2 pos)
+    {
+        move_type = MoveType.BranchToBranch;
+        set_percent = true;
+        if (last_co != null)
+            StopCoroutine(last_co);
+        last_co = StartCoroutine(Constant_Move(pos, 0.1f, true));
+
+    }
     public void Simple_Move(Vector2 pos)
     {
         set_percent = true;
@@ -279,19 +309,17 @@ public class PlayerPhysics : MonoBehaviour
         {
             remain_distance = ((Vector2)player_transofrm.position - end1).sqrMagnitude;
             player_transofrm.position = Vector3.MoveTowards(player_transofrm.position, end1, Time.deltaTime * 1 / move_time);
-            api.Camera_AutoMove();
             yield return null;
         }
         remain_distance = ((Vector2)player_transofrm.position - end2).sqrMagnitude;
-        Rotate_On_Block();
         while (remain_distance > float.Epsilon)
         {
             remain_distance = ((Vector2)player_transofrm.position - end2).sqrMagnitude;
             player_transofrm.position = Vector3.MoveTowards(player.transform.position, end2, Time.deltaTime * 1 / move_time);
             Set_Player_Move_Percent(remain_distance);
-            api.Camera_AutoMove();
             yield return null;
         }
+
         if (call_finish)
             api.MovePlayerFinished(gameObject);
         player.movepercentage = 0;
@@ -305,6 +333,7 @@ public class PlayerPhysics : MonoBehaviour
         while (remain_distance > float.Epsilon)
         {
             remain_distance = ((Vector2)player_transofrm.position -end1).sqrMagnitude;
+            
             player_transofrm.position = Vector3.MoveTowards(player_transofrm.position, end1, Time.deltaTime * 1 /  move_time);
             api.Camera_AutoMove();
             yield return null;
@@ -335,19 +364,23 @@ public class PlayerPhysics : MonoBehaviour
     private IEnumerator Constant_Move(Vector2 end,float move_time,bool call_finish)
     {
         set_percent = true;
-        float remain_distance = ((Vector2)player_transofrm.position - end).sqrMagnitude;
-        while(remain_distance > float.Epsilon)
+        float remain_distance = Distance((Vector2)transform.position, end);
+        while (remain_distance > float.Epsilon)
         {
-            remain_distance = ((Vector2)transform.position - end).sqrMagnitude;
+            remain_distance = Distance((Vector2)transform.position, end);
             transform.position = Vector2.MoveTowards(transform.position, end, Time.smoothDeltaTime  / move_time );
-            Set_Player_Move_Percent(remain_distance);
-            api.Camera_AutoMove();
+            if(move_type != MoveType.BranchToBranch)
+                Set_Player_Move_Percent(remain_distance);
             yield return new WaitForSeconds(0.001f);
         }
        
         if (call_finish)
         {
-            Debug.Log(move_type);
+            if (move_type == MoveType.BranchToBranch)
+            {
+                yield return new WaitForSeconds(0.3f);
+            }
+
             if (move_type != MoveType.Land)
                 api.MovePlayerFinished(gameObject);
             else
@@ -407,6 +440,19 @@ public class PlayerPhysics : MonoBehaviour
         }
     }
 
+    private IEnumerator LandOnRamp(Vector2 pos,float time)
+    {
+        float remain_distance = ((Vector2)player_transofrm.position - pos).sqrMagnitude;
+
+        while (remain_distance > float.Epsilon)
+        {
+            remain_distance = ((Vector2)player_transofrm.position - pos).sqrMagnitude;
+            player_transofrm.position = Vector3.MoveTowards(player_transofrm.position, pos, Time.deltaTime / time);
+            yield return null;
+        }
+
+        player.LandOnRampFinished();
+    }
     private IEnumerator Jump_couroutine(Vector2 pos,float jump_time,Direction direction, Jump jump,bool hit)
     {
         float j_velocity = Jump_Velocity;
@@ -427,7 +473,25 @@ public class PlayerPhysics : MonoBehaviour
             api.Jump_Hit_Finish(player, jump, pos);
         }
     }
+    public void Roll(Vector2 pos)
+    {
+        StartCoroutine(RollCouroutine(pos));
+    }
 
+    public IEnumerator RollCouroutine(Vector2 pos)
+    {
+        float velocity =3;
+        float remain_distance = ((Vector2)player_transofrm.position - pos).sqrMagnitude;
+
+        while (remain_distance > float.Epsilon)
+        {
+            remain_distance = ((Vector2)player_transofrm.position - pos).sqrMagnitude;
+            player_transofrm.position = Vector3.MoveTowards(player_transofrm.position, pos, Time.deltaTime * velocity);
+            yield return null;
+        }
+        player.RollingFinished();
+
+    }
     
     private float Distance(Vector2 pos1, Vector2 pos2)
     {
@@ -449,9 +513,9 @@ public class PlayerPhysics : MonoBehaviour
     private Vector2 On_Ramp_Pos(int type)
     {
         if (type == 4)
-            return new Vector2(-0.4f, 0.6f);
+            return new Vector2(-0.35f, 0.4f);
         else if (type == 1)
-            return new Vector2(0.6f,0.4f);
+            return new Vector2(0.35f,0.4f);
 
         return new Vector2(0, 0);
     }
@@ -469,7 +533,7 @@ public class PlayerPhysics : MonoBehaviour
 
     private enum MoveType
     {
-        RampToRamp,RampToSharp,RampToCorner,Falling,BlockToBlock,Idle,LeanStick,RampToFall,BlockToFall,OnPlatform,RampToBlock,BlockToRamp,FallDie,Land
+        RampToRamp,RampToSharp,RampToCorner,Falling,BlockToBlock,Idle,LeanStick,RampToFall,BlockToFall,OnPlatform,RampToBlock,BlockToRamp,FallDie,Land,Adjust,BranchToBranch
     }
 
 }

@@ -98,6 +98,7 @@ public class GraphicalEngine : MonoBehaviour {
     public void Simple_Container(SimpleContainer container)
     {
         Container_Change_Number(container);
+        Set_Icon(container);
 
     }
 
@@ -116,15 +117,24 @@ public class GraphicalEngine : MonoBehaviour {
     }
     private void Set_Icon(Container container)
     {
-        SpriteRenderer icon = GetObjectInChild(container.gameObject, "Icon").GetComponent<SpriteRenderer>();
+        SpriteRenderer icon; 
+        if (container is DynamicContainer)
+             icon = GetObjectInChild(container.transform.GetChild(1).gameObject, "Icon").GetComponent<SpriteRenderer>();
+        else
+            icon  = GetObjectInChild(container.gameObject, "Icon").GetComponent<SpriteRenderer>();
         Vector3 color = Ability_Color(container.abilities, ComplimentColor(container));
         icon.color = new Color(color.x, color.y, color.z, 1);
         if (container.abilities.Count != 0)
         {
             if (container.abilities[0].abilitytype == AbilityType.Fuel)
             {
-                if(container is DynamicContainer)
-                    icon.color = new Color(color.x, color.y, color.z, 0.1f);
+                if (container is DynamicContainer)
+                {
+                    if(!((DynamicContainer)container).on)
+                        icon.color = new Color(color.x, color.y, color.z, 1);
+                    else
+                        icon.color = new Color(0, 0, 0, 1);
+                }
                     
             }
             string path = Icon_Path(container.abilities[0].abilitytype);
@@ -141,13 +151,13 @@ public class GraphicalEngine : MonoBehaviour {
 
     private string Icon_Path(AbilityType type)
     {
-        string path = @"Containers\Icons\";
+        string path = @"Containers\Icons\New\";
         if (type == AbilityType.Fuel)
         {
-            path += "ABILITY FUEL FULL";
+            path += "Fuel Off";
         }
         else if (type == AbilityType.Key)
-            path = @"Doors\Key B";
+            path += @"Key";
         return path;
     }
     private GameObject GetObjectInChild(GameObject parent,string name) 
@@ -181,11 +191,37 @@ public class GraphicalEngine : MonoBehaviour {
         }
     }
     
+    public void Branch(Branch branch)
+    {
+        if (branch.islocked)
+        {
+            branch.transform.GetChild(5).GetComponent<SpriteRenderer>().enabled = true;
+            if(branch.transform.GetChild(5).GetComponent<SpriteRenderer>().sprite == null)
+                branch.transform.GetChild(5).GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Branch/Branch Lock");
+        }
+        else
+            branch.transform.GetChild(5).GetComponent<SpriteRenderer>().enabled = false;
+    }
+
     public void Stop_All_Co()
     {
         StopAllCoroutines();
     }
 
+    public void Fountatin(Fountain fountatin)
+    {
+        GameObject lights = GetObjectInChild(fountatin.gameObject, "Lights");
+        Vector3 color = Ability_Color(fountatin.ability, false);
+        for (int i = 0; i < 4; i++)
+        {
+            lights.transform.GetChild(i).gameObject.SetActive(false);
+        }
+        for (int i = 0; i < fountatin.count - fountatin.abilities.Count; i++)
+        {
+            lights.transform.GetChild(i).GetComponent<SpriteRenderer>().color = new Color(color.x,color.y,color.z,1);
+            lights.transform.GetChild(i).gameObject.SetActive(true);
+        }
+    }
     private Vector3 Ability_Color(List<Ability> ability,bool compliment)
     {
         if (ability.Count != 0)
@@ -200,6 +236,22 @@ public class GraphicalEngine : MonoBehaviour {
                 case AbilityType.Rope: return new Vector3(1,0.60f,0.30f);
             }
         }
+        // else white
+        return new Vector3(1, 1, 1);
+    }
+
+    private Vector3 Ability_Color(AbilityType abilitytype, bool compliment)
+    {
+            switch (abilitytype)
+            {
+                case AbilityType.Key: return new Vector3(1, 1, 1);
+                case AbilityType.Fuel: if (compliment) return new Vector3(1, 1, 1); else return new Vector3(1, 0.674f, 0.211f);
+                case AbilityType.Jump: return new Vector3(0.59f, 0.78f, 1);
+                case AbilityType.Teleport: return new Vector3(0.92f, 0.36f, 0.44f);
+                case AbilityType.Gravity: return new Vector3(0.81f, 0.60f, 0.96f);
+                case AbilityType.Rope: return new Vector3(1, 0.60f, 0.30f);
+            }
+        
         // else white
         return new Vector3(1, 1, 1);
     }
@@ -221,6 +273,8 @@ public class GraphicalEngine : MonoBehaviour {
         Vector3 color = Ability_Color(container.abilities,false);
    
     }
+
+    
     private bool ComplimentColor(Container container)
     {
         if (container is DynamicContainer)
@@ -234,13 +288,14 @@ public class GraphicalEngine : MonoBehaviour {
     public void Dynamic_Container(DynamicContainer container)
     {
         //container.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Containers\\Version 2\\Body");
-       // Set_Icon(container);
+        Set_Icon(container);
        // Set_Dynamic_Special_Icon(container);
-       Container_Change_Number(container);
+        Container_Change_Number(container);
         DynamicRotation(container);
         DynamicSwitch(container);
 
     }
+
 
     public void AddLaser(Vector2 pos1,Vector2 pos2,Direction dir)
     {

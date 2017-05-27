@@ -23,7 +23,7 @@ public class InMenu : MonoBehaviour {
 
     public void Quit()
     {
-        SceneManager.LoadScene("Menu");
+        SceneManager.LoadScene("Menu V2");
     }
 
     public void Undo()

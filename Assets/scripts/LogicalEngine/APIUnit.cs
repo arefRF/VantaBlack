@@ -50,12 +50,6 @@ public class APIUnit {
     {
         engine.apigraphic.Fall((Player)unit, fallposition);
     }
-
-    public void graphicalengine_LandOnRamp(Unit unit, Vector2 landposition)
-    {
-        Ramp ramp = Toolkit.GetRamp(landposition);
-        engine.apigraphic.LandOnRamp((Player)unit, landposition, ramp, ramp.type);
-    }
     public void unit_Move(Unit unit, Direction dir)
     {
         if (unit is Player)

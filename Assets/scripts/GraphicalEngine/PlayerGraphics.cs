@@ -9,6 +9,7 @@ public class PlayerGraphics : MonoBehaviour {
     private Vector2 unmoved_pos;
     private Animator animator;
     private Animator eyeAnimator;
+    private Animator bodyAnimator;
     private Player player;
     void Start()
     {
@@ -19,6 +20,7 @@ public class PlayerGraphics : MonoBehaviour {
         eyeAnimator = transform.GetChild(0).GetChild(0).GetChild(3).GetComponent<Animator>();
         player = GetComponent<Player>();
             engine.apigraphic.Absorb(player, null);
+        bodyAnimator = transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Animator>();
     }
 
 
@@ -32,7 +34,6 @@ public class PlayerGraphics : MonoBehaviour {
 
     public void Lean_Left()
     {
-        Debug.Log("lean left");
         ResetStates();
         transform.GetChild(0).rotation = Quaternion.Euler(0, 180, 0);
         animator.SetInteger("Lean", 4);
@@ -42,7 +43,17 @@ public class PlayerGraphics : MonoBehaviour {
     public void Lean_Up()
     {
         ResetStates();
-        animator.SetInteger("Lean", 1);
+        if (player.abilities.Count != 0)
+            if (player.abilities[0].abilitytype == AbilityType.Fuel)
+            {
+                animator.SetInteger("Lean", 1);
+                bodyAnimator.SetBool("Lean", true);
+            }
+            else
+                animator.SetInteger("Lean", 1);
+        else
+            animator.SetInteger("Lean", 1);
+
     }
 
     public void Lean_Down()
@@ -86,45 +97,25 @@ public class PlayerGraphics : MonoBehaviour {
         transform.GetChild(0).localPosition = new Vector2(0, 0);
         transform.GetChild(1).localPosition = new Vector2(0, 0);*/
     }
-    public void Shield_Color_Hide()
-    {
-        
-        transform.GetChild(1).GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0);
-    }
 
-    public void Shield_Color_Show()
-    {
-        float[] color = Ability_Color(player.abilities);
-        transform.GetChild(1).GetComponent<SpriteRenderer>().color = new Color(color[0],color[1],color[2],color[3]);
-    }
     public void Lean_Finished()
     {
         animator.SetInteger("Lean", 0);
+        bodyAnimator.SetBool("Lean", false);
     }
 
     public void MoveToBranch(Direction dir)
     {
-        /*
-        if (dir == Direction.Up)
-        {
-            player.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 0);
-        }
-        else if (dir == Direction.Down)
-        {
-            player.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 180);
-        }
-        else if (dir == Direction.Left)
-        {
-            player.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 90);
-        }
-        else
-            player.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 270);
-            */
-        //ResetStates();
-        //animator.SetInteger("Branch", 1);
+        ResetStates();
+        animator.SetInteger("Branch", 1);
         StopAllCoroutines();
 
-        StartCoroutine(Simple_Move(player.position, 0.65f));
+        StartCoroutine(Simple_Move(player.position, 0.3f));
+    }
+
+    public void DrainFinished()
+    {
+        player.DrainFinished();
     }
 
     public void ResetStates()
@@ -132,28 +123,20 @@ public class PlayerGraphics : MonoBehaviour {
         animator.SetBool("Jump", false);
         animator.SetInteger("Walk", 0);
         animator.SetBool("Transition", false);
+        animator.SetInteger("Ramp", 0);
        
     }
     public void BranchExit(Direction dir,int ramp_type)
-    {/*
-        if (dir == Direction.Up)
-        {
-            player.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 180);
-        }
-        else if (dir == Direction.Down)
-        {
-            player.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 0);
-        }
-        else if (dir == Direction.Left)
-        {
-            player.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 270);
-        }
-        else
-            player.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 90);
-        ResetStates();
-        animator.SetInteger("Branch", -1); */
+    {
         StopAllCoroutines();
+        animator.SetInteger("Branch", 0);
         Vector2 pos = On_Ramp_Pos(ramp_type) + player.position;
+        if (dir == Direction.Right)
+            transform.GetChild(0).rotation = Quaternion.Euler(0, 0, 0);
+        else if(dir == Direction.Left)
+            transform.GetChild(0).rotation = Quaternion.Euler(0, 180, 0);
+
+
         StartCoroutine(Simple_Move(pos, 0.65f));
     }
     private Vector2 On_Ramp_Pos(int type)
@@ -193,8 +176,9 @@ public class PlayerGraphics : MonoBehaviour {
             api.Camera_AutoMove();
             yield return new WaitForSeconds(0.001f);
         }
+
+        yield return new WaitForSeconds(0.2f);
         api.MovePlayerFinished(player.gameObject);
-        //animator.SetInteger("Branch", 0);
     }
 
     public void Ramp_Animation(Direction dir,int type)
@@ -215,6 +199,10 @@ public class PlayerGraphics : MonoBehaviour {
         }
     }
 
+    public void Drain()
+    {
+        animator.SetTrigger("Drain");
+    }
     public void TransitionAnimation()
     {
         animator.SetBool("Transition", true);
@@ -268,27 +256,41 @@ public class PlayerGraphics : MonoBehaviour {
         player.TeleportFinished();
     }
     public void ChangeColor()
-    {/*
-        float[] color = Ability_Color(player.abilities);
-        transform.GetChild(1).GetChild(0).GetComponent<SpriteRenderer>().color = new Color(color[0], color[1], color[2], color[3]);
-        ChangeBodyColor(); */
-    }
-
-    private void ChangeBodyColor()
-    {/*
-        string path = "Player\\";
+    {
+        if(bodyAnimator == null)
+            bodyAnimator = bodyAnimator = transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Animator>();
         if (player.abilities.Count != 0)
         {
             if (player.abilities[0].abilitytype == AbilityType.Fuel)
-                path += "player 1 green";
-            else if (player.abilities[0].abilitytype == AbilityType.Key)
-                path += "player 1 white";
+            {
+                if (player.state == PlayerState.Lean && player.leandirection == Direction.Up)
+                {
+                    bodyAnimator.SetInteger("Ability", 2);
+                    bodyAnimator.SetBool("Lean", true);
+                }
+                else
+                    bodyAnimator.SetInteger("Ability", 1);
+            }
             else
-                path += "player 1";
+            {
+                if (player.state == PlayerState.Lean && player.leandirection == Direction.Up)
+                {
+                    bodyAnimator.SetInteger("Ability", 0);
+                    
+                }
+
+                else
+                    bodyAnimator.SetInteger("Ability", 0);
+            }
+            
         }
         else
-            path += "player 1";
-        player.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load(path, typeof(Sprite));*/
+            bodyAnimator.SetInteger("Ability", 0);
+    }
+
+    public void ChangeColorFinished()
+    {
+       
     }
 
     private float[] Ability_Color(List<Ability> ability)

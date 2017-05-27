@@ -13,6 +13,8 @@ public class Unit : MonoBehaviour {
 
     public List<Unit> players { get; set; }
 
+    public List<GraphicalActions> graphicalactions {get; set;}
+
     // public abstract bool CanMove(UnitType unittype);
     public virtual void Run()
     {

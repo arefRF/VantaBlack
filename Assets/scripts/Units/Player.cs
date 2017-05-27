@@ -29,9 +29,12 @@ public class Player : Unit
     private List<Unit>[,] units;
     private int x_bound;
     private int y_bound;
+    private bool onthesameramp;
     public GameMode mode;
 
-    public Coroutine leancoroutine;
+    private PlayerState tempstate;
+
+    public Coroutine leancoroutine {get; set;}
     public void Awake()
     {
         abilities = new List<Ability>();
@@ -44,7 +47,16 @@ public class Player : Unit
         direction = move_direction[0];
         oneJump = new Jump(1);
         state = PlayerState.Idle;
+        tempstate = state;
+    }
 
+    public void Update()
+    {
+        /*if(state != tempstate)
+        {
+            Debug.Log(state);
+            tempstate = state;
+        }*/
     }
 
     public Direction GetGravity(){
@@ -84,9 +96,19 @@ public class Player : Unit
     public void SetState(PlayerState state)
     {
         this.state = state;
-        if(state == PlayerState.Transition)
+        if (state == PlayerState.Transition)
         {
             GetComponent<PlayerGraphics>().TransitionAnimation();
+        }
+        else if (state == PlayerState.Idle)
+            GetComponent<PlayerGraphics>().ResetStates();
+        else if(state == PlayerState.Lean)
+        {
+            //api.engine.apigraphic.Lean(this);
+        }
+        else if(state == PlayerState.Gir)
+        {
+            state = PlayerState.Gir;
         }
     }
 
@@ -277,6 +299,7 @@ public class Player : Unit
         {
             UseAbility(abilities[0]);
         }
+        direction = dir;
         api.engine_Move(this, dir);
         return true;
     }
@@ -357,12 +380,14 @@ public class Player : Unit
 
     public override bool ApplyGravity()
     {
+        if (state == PlayerState.Gir)
+            return false;
         if (mode == GameMode.Real)
             return false;
         isonejumping = false;
-        api.engine.drainercontroller.Check(this);
-        state = PlayerState.Idle;
-        this.GetComponent<PlayerGraphics>().ResetStates();
+        if (api.engine.drainercontroller.Check(this))
+            return false;
+        SetState(PlayerState.Idle);
         api.engine.lasercontroller.CollisionCheck(position);
 
         // to avoid exception
@@ -372,13 +397,21 @@ public class Player : Unit
             return false;
         if (lean)
             return false;
+        if (Toolkit.HasBranch(position) || Toolkit.HasRamp(position))
+            return false;
+        
+        Vector2 pos = Toolkit.VectorSum(position, gravity);
+        onthesameramp = false;
 
-        if (Stand_On_Ramp(position) || Toolkit.HasBranch(position))
+        if (Stand_On_Ramp(pos))
         {
+            api.RemoveFromDatabase(this);
+            position = pos;
+            api.AddToDatabase(this);
+            onthesameramp = true;
+            api.engine.apigraphic.LandOnRamp(this, pos, Toolkit.GetRamp(pos), Toolkit.GetRamp(pos).type);
             return false;
         }
-
-        Vector2 pos = Toolkit.VectorSum(position, gravity);
         if (Toolkit.IsdoubleRamp(pos))
             return false;
         if (units[(int)pos.x, (int)pos.y].Count != 0)
@@ -386,14 +419,15 @@ public class Player : Unit
             if (!Stand_On_Ramp(pos))
                 return false;
         }
-
         if (!NewFall())
             return false;
-        api.engine.drainercontroller.Check(this);
+        if (api.engine.drainercontroller.Check(this))
+            return false;
         api.engine.lasercontroller.CollisionCheck(position);
         while (IsInBound(position) && NewFall())
         {
-            api.engine.drainercontroller.Check(this);
+            if (api.engine.drainercontroller.Check(this))
+                return false;
             api.RemoveFromDatabase(this);
             position = Toolkit.VectorSum(position,gravity);
             api.engine.lasercontroller.CollisionCheck(position);
@@ -401,6 +435,7 @@ public class Player : Unit
         }
         state = PlayerState.Falling;
         api.graphicalengine_Fall(this, FallPos());
+
         return true;
           
     }
@@ -540,7 +575,7 @@ public class Player : Unit
             else
             {
                 Vector2 temp = Toolkit.GetRamp(pos).fallOn(this, Toolkit.ReverseDirection(Starter.GetGravityDirection()));
-                if (temp == position)
+                /*if (temp == position)
                 {
                     api.graphicalengine_Land(this, position);
                 }
@@ -551,7 +586,7 @@ public class Player : Unit
                     api.AddToDatabase(this);
                     api.graphicalengine_LandOnRamp(this, position);
                     onramp = true;
-                }
+                }*/
             }
         }
         else //Block
@@ -645,8 +680,23 @@ public class Player : Unit
 
     public void LandOnRampFinished()
     {
-        int ramptype = Toolkit.GetRamp(position).type;
-        int x = (int)position.x, y = (int)position.y;
+        if (onthesameramp)
+        {
+            state = PlayerState.Idle;
+            onthesameramp = false;
+            return;
+        }
+        
+        Vector2 newpos = Toolkit.VectorSum(position, api.engine.database.gravity_direction);
+        Ramp ramp = Toolkit.GetRamp(newpos);
+        if (ramp == null)
+        {
+            ApplyGravity();
+            return;
+        }
+        int ramptype = ramp.type;
+        int x = (int)newpos.x, y = (int)newpos.y;
+        Vector2 temppos = new Vector2(x, y);
         while (true)
         {
             switch (api.engine.database.gravity_direction)
@@ -676,21 +726,84 @@ public class Player : Unit
                     else return;
                     break;
             }
-            Vector2 temppos = new Vector2(x, y);
-            if (Toolkit.HasRamp(temppos) && !Toolkit.IsdoubleRamp(temppos))
-                if (Toolkit.GetRamp(temppos).type == ramptype)
+
+            Vector2 temppos1 = new Vector2(x, y);
+            temppos = temppos1;
+            if (Toolkit.HasRamp(temppos1) && !Toolkit.IsdoubleRamp(temppos1))
+            {
+                if (Toolkit.GetRamp(temppos1).type == ramptype)
+                {
                     continue;
+                }
+            }
+            else
+                state = PlayerState.Idle;
             break;
         }
-        Debug.Log(x + " , " + y);
-        if ((int)position.x != x || (int)position.y != y)
+        
+        if(!Toolkit.IsEmpty(temppos))
+            temppos = Toolkit.VectorSum(temppos, Toolkit.ReverseDirection(api.engine.database.gravity_direction));
+        if (newpos.x != temppos.x || newpos.y != temppos.y)
         {
-            Vector2 temppos = new Vector2(x, y);
             api.RemoveFromDatabase(this);
             position = temppos;
             api.AddToDatabase(this);
-            api.engine.apigraphic.MovePlayerOnPlatform(this, temppos);
+            //api.engine.apigraphic.MovePlayerOnPlatform(this, temppos);
+            Debug.Log(position);
+            state = PlayerState.Busy;
+            api.engine.apigraphic.Roll(this, position);
+            //ApplyGravity();
         }
+    }
+
+    public void RollingFinished()
+    {
+        ApplyGravity();
+    }
+
+    public void DrainFinished()
+    {
+
+        GameObject.Find("UI").GetComponent<Get>().DrainShow();
+        GameObject.Find("DrainUI").GetComponent<DrainPoints>().DrainPoint(abilities.Count, api.engine.saveserialize.draincount);
+        api.engine.saveserialize.draincount += abilities.Count;
+        abilities.Clear();
+        _setability();
+        api.engine.apigraphic.Absorb(this, null);
+        ApplyGravity();
+    }
+
+    public void AdjustPlayerFinshed(Direction direction, Action<Player, Direction> passingmethod)
+    {
+        SetState(PlayerState.Idle);
+        if(!(currentAbility is Jump))
+            ApplyGravity();
+        passingmethod(this, direction);
+    }
+
+    public bool ShouldAdjust(Direction dir)
+    {
+        if(direction == dir)
+        {
+            switch (direction)
+            {
+                case Direction.Right: return transform.position.x < position.x;
+                case Direction.Left: return transform.position.x > position.x;
+                case Direction.Up: return transform.position.y < position.y;
+                case Direction.Down: return transform.position.y > position.y;
+            }
+        }
+        else
+        {
+            switch (direction)
+            {
+                case Direction.Right: return transform.position.x > position.x;
+                case Direction.Left: return transform.position.x < position.x;
+                case Direction.Up: return transform.position.y > position.y;
+                case Direction.Down: return transform.position.y < position.y;
+            }
+        }
+        return false;
     }
 
     public override CloneableUnit Clone()
