@@ -172,13 +172,68 @@ public class Branch : Unit {
                 player.LeanedTo = this;
                 player.isonejumping = false;
                 api.engine.apigraphic.Player_Co_Stop(player);
-                player.lean = true;
+                player.SetState(PlayerState.Lean);
                 player.leandirection = direction;
                 player.currentAbility = null;
                 api.engine.apigraphic.Lean(player);
             }
         }
     }
+    public void PlayerMove(Direction CameFrom, Player player)
+    {
+        bool[] hastbranch = new bool[4];
+        int branchcounter = 0;
+        if (Toolkit.HasBranch(Toolkit.VectorSum(position, Direction.Up)))
+        {
+            hastbranch[0] = true;
+            branchcounter++;
+        }
+        if (Toolkit.HasBranch(Toolkit.VectorSum(position, Direction.Right)))
+        {
+            hastbranch[1] = true;
+            branchcounter++;
+        }
+        if (Toolkit.HasBranch(Toolkit.VectorSum(position, Direction.Down)))
+        {
+            hastbranch[2] = true;
+            branchcounter++;
+        }
+        if (Toolkit.HasBranch(Toolkit.VectorSum(position, Direction.Left)))
+        {
+            hastbranch[3] = true;
+            branchcounter++;
+        }
+
+        if(branchcounter == 0)  //fucked up
+        {
+            Debug.Log("fucked up    ");
+            if (player.Move(Toolkit.ReverseDirection(CameFrom)))
+            {
+                player.SetState(PlayerState.Moving);
+            }
+            return;
+        }
+        else if(branchcounter == 1 || branchcounter == 3 || branchcounter == 4)
+        {
+            api.RemoveFromDatabase(player);
+            player.position = position;
+            player.transform.position = position;
+            api.AddToDatabase(player);
+            return;
+        }
+        else if(branchcounter == 2)
+        {
+            for(int i=0; i<4; i++)
+            {
+                if(hastbranch[i] && Toolkit.DirectionToNumber(CameFrom)-1 != i)
+                {
+                    Toolkit.GetBranch(Toolkit.VectorSum(position, Toolkit.NumberToDirection(i + 1))).PlayerMove(Toolkit.ReverseDirection(Toolkit.NumberToDirection(i + 1)), player);
+                    return;
+                }
+            }
+        }
+    }
+
 
 }
 

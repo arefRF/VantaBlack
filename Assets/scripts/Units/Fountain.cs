@@ -95,7 +95,7 @@ public class Fountain : Unit {
     public void PlayerLeaned(Player player, Direction direction)
     {
         player.LeanedTo = this;
-        player.lean = true;
+        player.SetState(PlayerState.Lean);
         player.leandirection = direction;
         player.isonejumping = false;
         player.SetState(PlayerState.Lean);

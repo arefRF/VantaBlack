@@ -34,7 +34,7 @@ public class Starter : MonoBehaviour{
         staticengine = logicalengine;
         GameObject.Find("Graphical").GetComponent<GraphicalEngine>().database = database;
         Toolkit.database = database;
-        gamemanager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        //gamemanager = GameObject.Find("GameManager").GetComponent<GameManager>();
         logicalengine.Run();
     }
 

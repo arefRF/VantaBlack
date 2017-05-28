@@ -13,7 +13,6 @@ public class Player : Unit
     public int movepercentage { get; set; }
     public PlayerState state { get; private set; }
     public Direction leandirection { get; set; }
-    public bool lean { get; set; }
     public Unit LeanedTo { get; set; }
     public bool onramp { get; set; }
     private Direction gravity { get; set; }
@@ -395,7 +394,7 @@ public class Player : Unit
             return false;
         if (state == PlayerState.Falling)
             return false;
-        if (lean)
+        if (state == PlayerState.Lean)
             return false;
         if (Toolkit.HasBranch(position) || Toolkit.HasRamp(position))
             return false;
@@ -837,7 +836,6 @@ public class CloneablePlayer : CloneableUnit
         movepercentage = player.movepercentage;
         state = player.state;
         leandirection = player.leandirection;
-        lean = player.lean;
         onramp = player.onramp;
         gravity = player.GetGravity();
         nextpos = new Vector2(player.nextpos.x, player.nextpos.y);
@@ -860,11 +858,9 @@ public class CloneablePlayer : CloneableUnit
         original.movepercentage = movepercentage;
         original.SetState(state);
         original.leandirection = leandirection;
-        original.lean = lean;
         original.onramp = onramp;
         original.SetGravity(gravity);
         original.nextpos = new Vector2(nextpos.x, nextpos.y);
-        original.lean = false;
         original.api.engine.apigraphic.Absorb(original, null);
         original.abilitycount = original.abilities.Count;
         if (original.abilitycount != 0)

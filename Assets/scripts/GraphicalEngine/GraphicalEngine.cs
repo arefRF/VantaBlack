@@ -270,7 +270,6 @@ public class GraphicalEngine : MonoBehaviour {
         }
         GetObjectInChild(container.gameObject, "Light Holder").transform.rotation = Quaternion.Euler(new Vector3(0, 0, rot));
         GetObjectInChild(container.gameObject, "Arrow").GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(arrow);
-        Vector3 color = Ability_Color(container.abilities,false);
    
     }
 

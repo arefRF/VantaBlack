@@ -216,7 +216,7 @@ public class LogicalEngine {
         List<Unit> players = new List<Unit>();
         for(int i=0; i<database.player.Count; i++)
         {
-            if (database.player[i].lean)
+            if (database.player[i].state == PlayerState.Lean)
             {
                 if (database.player[i].IsRelatedLean(parent))
                     players.Add(database.player[i]);
@@ -669,7 +669,7 @@ public class LogicalEngine {
             {
                 if (!Toolkit.IsInsideBranch(database.player[i]))
                 {
-                    if (database.player[i].lean)
+                    if (database.player[i].state == PlayerState.Lean)
                     {
                         /*//Vector2 newpos = Toolkit.VectorSum(database.player[i].position, Toolkit.DirectiontoVector(database.player[i].leandirection));
                         Vector2 newpos = Toolkit.GetNearestUnit(database.player[i].transform.position, database.player[i].leandirection);
@@ -713,7 +713,7 @@ public class LogicalEngine {
         {
             if (database.player[i].state != PlayerState.Idle)
                 continue;
-            if (database.player[i].lean)
+            if (database.player[i].state == PlayerState.Lean)
                 continue;
             database.player[i].Action(dir);
         }
@@ -735,6 +735,8 @@ public class LogicalEngine {
         player.movepercentage = 0;
         if (player.state == PlayerState.Gir)
             return;
+        if (Toolkit.IsInsideBranch(player))
+            return;
         if (!player.ApplyGravity())
             player.SetState(PlayerState.Idle);
     }
@@ -747,9 +749,7 @@ public class LogicalEngine {
         if (player.state == PlayerState.Gir)
             return;
         Applygravity();
-        if (player.lean)
-            player.SetState(PlayerState.Lean);
-        else
+        if (player.state != PlayerState.Lean)
             player.SetState(PlayerState.Idle);
     }
 
@@ -877,26 +877,5 @@ public class LogicalEngine {
     public void MovePlayerToDirection(Player player, Direction direction)
     {
 
-    }
-
-    public void AddClosedBranchToSerialize(Branch branch)
-    {
-        saveserialize.branchCodeNumbers.Add(branch.codeNumber);
-    }
-
-    public void Revive(Player player)
-    {
-        apiunit.RemoveFromDatabase(player);
-        player.position = savecheckpoint.position;
-        player.transform.position = player.position;
-        apiunit.AddToDatabase(player);
-        player.abilities.Clear();
-        for (int i = 0; i < savecheckpoint.abilitycount; i++)
-        {
-            player.abilities.Add(Ability.GetAbilityInstance(savecheckpoint.abilitytype));
-        }
-        player._setability();
-        player.SetState(PlayerState.Idle);
-        player.ApplyGravity();
     }
 }
