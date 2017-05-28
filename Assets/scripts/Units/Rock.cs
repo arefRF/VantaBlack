@@ -55,6 +55,11 @@ public class Rock : Unit
     {
         return new CloneableRock(this);
     }
+
+    public override bool isLeanable()
+    {
+        return isleanable;
+    }
 }
 
 

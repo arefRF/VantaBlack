@@ -586,6 +586,7 @@ public sealed class Toolkit{
             case 4: return Direction.Left;
             default: throw new System.Exception();
         }
+        
     }
 }
 

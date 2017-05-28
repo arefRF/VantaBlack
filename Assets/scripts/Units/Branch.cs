@@ -234,7 +234,10 @@ public class Branch : Unit {
         }
     }
 
-
+    public override bool isLeanable()
+    {
+        return true;
+    }
 }
 
 public class CloneableBranch : CloneableUnit

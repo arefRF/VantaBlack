@@ -111,6 +111,11 @@ public class Unit : MonoBehaviour {
     {
         return false;
     }
+
+    public virtual bool isLeanable()
+    {
+        return false;
+    }
 }
 
 public class CloneableUnit
@@ -134,5 +139,7 @@ public class CloneableUnit
     {
         original.gameObject.transform.position = original.position;
     }
+
+    
 }
 
