@@ -88,7 +88,6 @@ public class Jump : Ability {
     }
     public void StartTimer(Player player,Direction direction)
     {
-        Vector2 maxPosition = player.position + 4 * Toolkit.DirectiontoVector(direction);
         maxJump = GetShouldJump(player.position,direction);
         number = 2;
         Starter.GetDataBase().timer =  GameObject.Find("GetInput").GetComponent<GetInput>().StartCoroutine(Timer());
