@@ -39,14 +39,15 @@ public class APIInput{
         {
             for (int i = 0; i < engine.database.player.Count; i++)
             {
-                if (engine.database.player[i].state == PlayerState.Transition)
+                Debug.Log("real mode have bug click here!!!!");
+                /*if (engine.database.player[i].state == PlayerState.Transition)
                 {
                     engine.inputcontroller.RealModePlayerTransitionMove(engine.database.player[i], dir);
                 }
                 else
                 {
                     engine.database.player[i].GetComponent<PlayerGraphics>().Move_Animation(dir);
-                }
+                }*/
             }
         }
     }
@@ -139,5 +140,15 @@ public class APIInput{
     public bool isFunctionKeyDown()
     {
         return input.isFunctionKeyDown();
+    }
+
+    public bool isArrowKeyDown(Direction direction)
+    {
+        return false;
+    }
+
+    public bool isAnyArrowKeyDown()
+    {
+        return false;
     }
 }

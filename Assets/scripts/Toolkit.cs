@@ -444,10 +444,10 @@ public sealed class Toolkit{
     public static bool[] GetConnectedSides(Unit unit)
     {
         bool[] result = new bool[4];
-        result[0] = !IsConnectedFromPosition(unit, VectorSum(unit.position, Direction.Up));
-        result[1] = !IsConnectedFromPosition(unit, VectorSum(unit.position, Direction.Right));
-        result[2] = !IsConnectedFromPosition(unit, VectorSum(unit.position, Direction.Down));
-        result[3] = !IsConnectedFromPosition(unit, VectorSum(unit.position, Direction.Left));
+        result[0] = IsConnectedFromPosition(unit, VectorSum(unit.position, Direction.Up));
+        result[1] = IsConnectedFromPosition(unit, VectorSum(unit.position, Direction.Right));
+        result[2] = IsConnectedFromPosition(unit, VectorSum(unit.position, Direction.Down));
+        result[3] = IsConnectedFromPosition(unit, VectorSum(unit.position, Direction.Left));
         
         return result;
     }
@@ -586,6 +586,7 @@ public sealed class Toolkit{
             case 4: return Direction.Left;
             default: throw new System.Exception();
         }
+        
     }
 }
 
