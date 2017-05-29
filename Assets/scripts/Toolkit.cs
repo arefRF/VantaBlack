@@ -433,10 +433,10 @@ public sealed class Toolkit{
     public static bool[] GetConnectedSidesForContainer(Unit unit)
     {
         bool[] result = new bool[4];
-        result[0] = !IsConnectedFromPositionForContainer(unit, VectorSum(unit.position, new Vector2(0, 1)), Direction.Up);
-        result[1] = !IsConnectedFromPositionForContainer(unit, VectorSum(unit.position, new Vector2(1, 0)), Direction.Right);
-        result[2] = !IsConnectedFromPositionForContainer(unit, VectorSum(unit.position, new Vector2(0, -1)), Direction.Down);
-        result[3] = !IsConnectedFromPositionForContainer(unit, VectorSum(unit.position, new Vector2(-1, 0)), Direction.Left);
+        result[0] = IsConnectedFromPositionForContainer(unit, VectorSum(unit.position, new Vector2(0, 1)), Direction.Up);
+        result[1] = IsConnectedFromPositionForContainer(unit, VectorSum(unit.position, new Vector2(1, 0)), Direction.Right);
+        result[2] = IsConnectedFromPositionForContainer(unit, VectorSum(unit.position, new Vector2(0, -1)), Direction.Down);
+        result[3] = IsConnectedFromPositionForContainer(unit, VectorSum(unit.position, new Vector2(-1, 0)), Direction.Left);
 
         return result;
     }

@@ -259,7 +259,7 @@ public class GraphicalEngine : MonoBehaviour {
     private void DynamicRotation(DynamicContainer container)
     {
         //Rotation for Abilities with Direction
-        string arrow = "Containers\\Version 2\\Blue\\";
+        string arrow = "Containers\\Version 4\\";
         int rot = 0;
         switch (container.direction)
         {
