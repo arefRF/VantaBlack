@@ -104,7 +104,7 @@ public class GraphicalEngine : MonoBehaviour {
 
     private void Set_Dynamic_Special_Icon(DynamicContainer container)
     {
-        SpriteRenderer fuel_icon = GetObjectInChild(container.gameObject, "Icon Holder").transform.GetChild(0).GetComponent<SpriteRenderer>(); ;
+        SpriteRenderer fuel_icon = Toolkit.GetObjectInChild(container.gameObject, "Icon Holder").transform.GetChild(0).GetComponent<SpriteRenderer>(); ;
         if (container.abilities.Count != 0)
         {
             if (container.abilities[0].abilitytype == AbilityType.Fuel)
@@ -119,9 +119,9 @@ public class GraphicalEngine : MonoBehaviour {
     {
         SpriteRenderer icon; 
         if (container is DynamicContainer)
-             icon = GetObjectInChild(container.transform.GetChild(1).gameObject, "Icon").GetComponent<SpriteRenderer>();
+             icon = Toolkit.GetObjectInChild(container.transform.GetChild(1).gameObject, "Icon").GetComponent<SpriteRenderer>();
         else
-            icon  = GetObjectInChild(container.gameObject, "Icon").GetComponent<SpriteRenderer>();
+            icon  = Toolkit.GetObjectInChild(container.gameObject, "Icon").GetComponent<SpriteRenderer>();
         Vector3 color = Ability_Color(container.abilities, ComplimentColor(container));
         icon.color = new Color(color.x, color.y, color.z, 1);
         if (container.abilities.Count != 0)
@@ -160,26 +160,17 @@ public class GraphicalEngine : MonoBehaviour {
             path += @"Key";
         return path;
     }
-    private GameObject GetObjectInChild(GameObject parent,string name) 
-    {
-        for(int i = 0; i < parent.transform.childCount; i++)
-        {
-            if (parent.transform.GetChild(i).name == name)
-                return parent.transform.GetChild(i).gameObject;
-        }
-        return null;
-    }
     public void Container_Change_Number(Container container)
     {
         Vector3 color = Ability_Color(container.abilities, false);
         for (int i = 1; i < 4 + 1; i++)
         {
-            GetObjectInChild(container.gameObject, "Light Holder").transform.GetChild(i).gameObject.SetActive(false);
+            Toolkit.GetObjectInChild(container.gameObject, "Light Holder").transform.GetChild(i).gameObject.SetActive(false);
         }
         for (int i = 1; i < container.abilities.Count + 1; i++)
         {
-            GetObjectInChild(container.gameObject, "Light Holder").transform.GetChild(i).gameObject.SetActive(true);
-            GetObjectInChild(container.gameObject, "Light Holder").transform.GetChild(i).GetComponent<SpriteRenderer>().color = new Color(color.x, color.y, color.z, 1);
+            Toolkit.GetObjectInChild(container.gameObject, "Light Holder").transform.GetChild(i).gameObject.SetActive(true);
+            Toolkit.GetObjectInChild(container.gameObject, "Light Holder").transform.GetChild(i).GetComponent<SpriteRenderer>().color = new Color(color.x, color.y, color.z, 1);
         }
     }
 
@@ -210,7 +201,7 @@ public class GraphicalEngine : MonoBehaviour {
 
     public void Fountatin(Fountain fountatin)
     {
-        GameObject lights = GetObjectInChild(fountatin.gameObject, "Lights");
+        GameObject lights = Toolkit.GetObjectInChild(fountatin.gameObject, "Lights");
         Vector3 color = Ability_Color(fountatin.ability, false);
         for (int i = 0; i < 4; i++)
         {
@@ -268,8 +259,8 @@ public class GraphicalEngine : MonoBehaviour {
             case Direction.Up: rot = 0; arrow += "Arrow Up"; break;
             case Direction.Down: rot =180; arrow += "Arrow Down"; break;
         }
-        GetObjectInChild(container.gameObject, "Light Holder").transform.rotation = Quaternion.Euler(new Vector3(0, 0, rot));
-        GetObjectInChild(container.gameObject, "Arrow").GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(arrow);
+        Toolkit.GetObjectInChild(container.gameObject, "Light Holder").transform.rotation = Quaternion.Euler(new Vector3(0, 0, rot));
+        Toolkit.GetObjectInChild(container.gameObject, "Arrow").GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(arrow);
    
     }
 
@@ -345,17 +336,17 @@ public class GraphicalEngine : MonoBehaviour {
   
         if (container.on)
         {
-            GetObjectInChild(container.gameObject, "Light Holder").transform.GetChild(0).gameObject.SetActive(true);
+            Toolkit.GetObjectInChild(container.gameObject, "Light Holder").transform.GetChild(0).gameObject.SetActive(true);
             Vector3 color = Ability_Color(container.abilities, false);
-            GetObjectInChild(container.gameObject, "Light Holder").transform.GetChild(0).GetComponent<SpriteRenderer>().color = new Color(color.x, color.y, color.z,1);
+            Toolkit.GetObjectInChild(container.gameObject, "Light Holder").transform.GetChild(0).GetComponent<SpriteRenderer>().color = new Color(color.x, color.y, color.z,1);
   
 
         }
         else
         {
-            GetObjectInChild(container.gameObject, "Light Holder").transform.GetChild(0).gameObject.SetActive(false);
+            Toolkit.GetObjectInChild(container.gameObject, "Light Holder").transform.GetChild(0).gameObject.SetActive(false);
             Vector3 color = Ability_Color(container.abilities, false);
-            GetObjectInChild(container.gameObject, "Light Holder").transform.GetChild(0).GetComponent<SpriteRenderer>().color = new Color(1,1, 1, 1);
+            Toolkit.GetObjectInChild(container.gameObject, "Light Holder").transform.GetChild(0).GetComponent<SpriteRenderer>().color = new Color(1,1, 1, 1);
         }
     }
 

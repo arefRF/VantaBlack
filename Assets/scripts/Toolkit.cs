@@ -592,5 +592,15 @@ public sealed class Toolkit{
         }
         
     }
+
+    public static GameObject GetObjectInChild(GameObject parent, string name)
+    {
+        for (int i = 0; i < parent.transform.childCount; i++)
+        {
+            if (parent.transform.GetChild(i).name == name)
+                return parent.transform.GetChild(i).gameObject;
+        }
+        return null;
+    }
 }
 

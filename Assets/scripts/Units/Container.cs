@@ -13,39 +13,66 @@ public class Container : ParentContainer {
     public override void SetInitialSprite()
     {
         bool[] connected = Toolkit.GetConnectedSidesForContainer(this);
-        /*if (notconnected[0] && notconnected[1] && notconnected[2] && notconnected[3])
-            gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Container[1];
-        else if (notconnected[0] && notconnected[1] && notconnected[2])
-            gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Container[2];
-        else if (notconnected[0] && notconnected[2] && notconnected[3])
-            gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Container[3];
-        else if (notconnected[0] && notconnected[1] && notconnected[3])
-            gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Container[4];
-        else if (notconnected[1] && notconnected[2] && notconnected[3])
-            gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Container[5];
-        else if (notconnected[0] && notconnected[2])
-            gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Container[6];
-        else if (notconnected[0] && notconnected[1])
-            gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Container[7];
-        else if (notconnected[1] && notconnected[3])
-            gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Container[8];
-        else if (notconnected[0] && notconnected[3])
-            gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Container[9];
-        else if (notconnected[2] && notconnected[3])
-            gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Container[10];
-        else if (notconnected[1] && notconnected[2])
-            gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Container[11];
-        else if (notconnected[0])
-            gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Container[12];
-        else if (notconnected[1])
-            gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Container[13];
-        else if (notconnected[2])
-            gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Container[14];
-        else if (notconnected[3])
-            gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Container[15];
-        api.ChangeSprite(this); */
+        int sidecount = 0;
+        for (int i = 0; i < 4; i++)
+            sidecount += System.Convert.ToInt32(connected[i]);
+        switch (sidecount)
+        {
+            case 1: Connected_1(connected); break;
+            case 2: Connected_2(connected); break;
+            case 3: Connected_3(connected); break;
+            case 4: Connected_4(connected); break;
+        }
     }
 
+    private void Connected_1(bool[] connected)
+    {
+        Debug.Log("herehereherehere");
+        Transform tr = Toolkit.GetObjectInChild(gameObject, "Connected").transform;
+        tr.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Container[0];
+        if (connected[1])
+            tr.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, 270);
+        if (connected[2])
+            tr.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, 180);
+        if (connected[3])
+            tr.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, 90);
+    }
+    private void Connected_2(bool[] connected)
+    {
+        Transform tr = Toolkit.GetObjectInChild(gameObject, "Connected").transform;
+        if (connected[0] && connected[2])
+            tr.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Container[2];
+        else if (connected[1] && connected[3])
+        {
+            tr.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Container[2];
+            tr.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, 270);
+        }
+        else
+        {
+            tr.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Container[1];
+            if (connected[1] && connected[2])
+                tr.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, 270);
+            else if (connected[2] && connected[3])
+                tr.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, 180);
+            else if (connected[3] && connected[0])
+                tr.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, 90);
+        }
+    }
+    private void Connected_3(bool[] connected)
+    {
+        Transform tr = Toolkit.GetObjectInChild(gameObject, "Connected").transform;
+        tr.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Container[3];
+        if (!connected[0])
+            tr.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, 270);
+        if (!connected[1])
+            tr.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, 180);
+        if (!connected[2])
+            tr.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, 90);
+    }
+    private void Connected_4(bool[] connected)
+    {
+        Toolkit.GetObjectInChild(gameObject, "Connected").GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Container[4];
+    }
     void Start()
     {
         
