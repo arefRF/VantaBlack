@@ -451,13 +451,17 @@ public sealed class Toolkit{
         
         return result;
     }
-    public static bool[] GetConnectedSidesForRamp(Unit unit)
+    public static bool[] GetConnectedSidesForRamp(Ramp ramp)
     {
         bool[] result = new bool[4];
-        result[0] = !IsConnectedFromPositionForRamp(unit, VectorSum(unit.position, Direction.Up));
-        result[1] = !IsConnectedFromPositionForRamp(unit, VectorSum(unit.position, Direction.Right));
-        result[2] = !IsConnectedFromPositionForRamp(unit, VectorSum(unit.position, Direction.Down));
-        result[3] = !IsConnectedFromPositionForRamp(unit, VectorSum(unit.position, Direction.Left));
+        if(ramp.type == 2 || ramp.type == 3)
+            result[0] = IsConnectedFromPositionForRamp(ramp, VectorSum(ramp.position, Direction.Up));
+        if (ramp.type == 3 || ramp.type == 4)
+            result[1] = IsConnectedFromPositionForRamp(ramp, VectorSum(ramp.position, Direction.Right));
+        if (ramp.type == 1 || ramp.type == 4)
+            result[2] = IsConnectedFromPositionForRamp(ramp, VectorSum(ramp.position, Direction.Down));
+        if (ramp.type == 1 || ramp.type == 2)
+            result[3] = IsConnectedFromPositionForRamp(ramp, VectorSum(ramp.position, Direction.Left));
 
         return result;
     }

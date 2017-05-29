@@ -16,10 +16,8 @@ public class Rock : Unit
             int sidecount = 0;
             for (int i = 0; i < 4; i++)
             {
-                Debug.Log(connected[i]);
                 sidecount += Convert.ToInt32(connected[i]);
             }
-            Debug.Log(sidecount);
             switch (sidecount)
             {
                 case 0: Connected_0(connected); break;
@@ -70,7 +68,6 @@ public class Rock : Unit
     private void Connected_1(bool[] connected)
     {
         gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Rock[2];
-        Debug.Log(connected[1]);
         if (connected[0])
             transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, 270);
         else if (connected[1])

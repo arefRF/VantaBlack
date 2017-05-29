@@ -10,7 +10,17 @@ public class Ramp : Unit {
             GetComponent<SpriteRenderer>().sprite = null;
         else
         {
-            string ramprootpath = "Ramps\\Ramp-type";
+            bool[] connected = Toolkit.GetConnectedSidesForRamp(this);
+            int sidecount = 0;
+            for (int i = 0; i < 4; i++)
+                sidecount += System.Convert.ToInt32(connected[i]);
+            switch (sidecount)
+            {
+                case 0: Connected_0(connected); break;
+                case 1: Connected_1(connected); break;
+                case 2: Connected_2(connected); break;
+            }
+            /*string ramprootpath = "Ramps\\Version 4\\Rock Half ";
             string ramp_path = "";
             bool[] notconnected = Toolkit.GetConnectedSidesForRamp(this);
             if (type == 1)
@@ -68,9 +78,49 @@ public class Ramp : Unit {
                     ramp_path += "down";
             }
             GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load(ramp_path, typeof(Sprite));
+        }*/
         }
     }
 
+
+    private void Connected_0(bool[] connected)
+    {
+        gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Ramp[2];
+    }
+    private void Connected_1(bool[] connected)
+    {
+        switch (type)
+        {
+            case 1:
+                if (connected[2])
+                    gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Ramp[1];
+                else if(connected[3])
+                    gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Ramp[3];
+                break;
+            case 2:
+                if (connected[0])
+                    gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Ramp[3];
+                else if (connected[3])
+                    gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Ramp[1];
+                break;
+            case 3:
+                if (connected[0])
+                    gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Ramp[1];
+                else if (connected[1])
+                    gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Ramp[3];
+                break;
+            case 4:
+                if (connected[1])
+                    gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Ramp[1];
+                else if (connected[2])
+                    gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Ramp[3];
+                break;
+        }
+    }
+    private void Connected_2(bool[] connected)
+    {
+        gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Ramp[0];
+    }
     public override bool PlayerMoveInto(Direction dir)
     {
         if (dir == Direction.Left)
