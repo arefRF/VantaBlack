@@ -18,21 +18,20 @@ public class SubEngine_Initializer{
         api = engine.apiunit;
 
         sprite_Container = new Sprite[16];
-        sprite_Rock = new Sprite[16];
+        sprite_Rock = new Sprite[6];
         string containerrootpath = "Containers\\Box";
-        string rockrootpath = "Rocks\\Rock";
+        string rockrootpath = "Rocks\\Version 4\\Rock";
         string branchrootpath = "Branch\\";
         sprite_BranchEntrance = Resources.Load<Sprite>(branchrootpath + "Branch Entry");
         sprite_BranchHolder = Resources.Load<Sprite>(branchrootpath + "Branch Holder");
 
-        for (int i=1; i < 16; i++)
+        for (int i=0; i < 6; i++)
         {
             string containerpath = containerrootpath + " " + i;
             sprite_Container[i] = Resources.Load<Sprite>(containerpath);
-            string rockpath = rockrootpath + "" + i;
+            string rockpath = rockrootpath + "" + (i + 1);
             sprite_Rock[i] = Resources.Load<Sprite>(rockpath);
         }
-        sprite_Rock[0] = Resources.Load<Sprite>(rockrootpath + "-full");
     }
 
     public List<Unit>[,] init()
