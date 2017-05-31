@@ -8,6 +8,7 @@ public class Jump : Ability {
     LogicalEngine engine;
     public Coroutine coroutine;
     private Vector2 final_pos;
+    private Direction leandirection;
 	public Jump()
     {
        abilitytype = AbilityType.Jump;
@@ -21,6 +22,7 @@ public class Jump : Ability {
 
     public void Action(Player player, Direction direction)
     {
+        leandirection = Starter.GetGravityDirection();
         Vector2 playerpos = player.position;
         Vector2 playerpos2 = player.position;
         switch (direction)
@@ -65,16 +67,47 @@ public class Jump : Ability {
 
     public void JumpFinished(Player player)
     {
-        player.SetState(PlayerState.Transition);
         engine.apiunit.RemoveFromDatabase(player);
         player.position = final_pos;
         engine.apiunit.AddToDatabase(player);
         Vector2 temppos = Toolkit.VectorSum(player.position, engine.database.gravity_direction);
         Ramp ramp = Toolkit.GetRamp(temppos);
         if (Toolkit.IsEmpty(Toolkit.VectorSum(player.position, engine.database.gravity_direction)) || (ramp != null && !Toolkit.IsdoubleRamp(temppos) && ramp.IsOnRampSide(Toolkit.ReverseDirection(engine.database.gravity_direction))))
-            coroutine = GameObject.Find("GetInput").GetComponent<GetInput>().StartCoroutine(JumpWait(0.5f, player));
+        {
+            if (!PlayerLean(player))
+                player.ApplyGravity();
+        }
         else
             player.ApplyGravity();
+    }
+
+    private bool PlayerLean(Player player)
+    {
+        if (!Toolkit.IsEmpty(Toolkit.VectorSum(player.position, leandirection)) && Toolkit.GetUnit(Toolkit.VectorSum(player.position, leandirection)).isLeanable())
+        {
+            engine.inputcontroller.Lean(player, leandirection);
+            return true;
+        }
+        else if (!Toolkit.IsEmpty(Toolkit.VectorSum(player.position, player.direction)) && Toolkit.GetUnit(Toolkit.VectorSum(player.position, player.direction)))
+        {
+            engine.inputcontroller.Lean(player, player.direction);
+            return true;
+        }
+        else
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                Vector2 temppos = Toolkit.VectorSum(player.position, Toolkit.NumberToDirection(i + 1));
+                if (Toolkit.NumberToDirection(i + 1) != player.GetGravity())
+                    if (!Toolkit.IsEmpty(temppos))
+                        if (Toolkit.GetUnit(temppos).isLeanable())
+                        {
+                            engine.inputcontroller.Lean(player, Toolkit.NumberToDirection(i + 1));
+                            return true;
+                        }
+            }
+        }
+        return false;
     }
 
     public void JumpHitFinished(Player player)

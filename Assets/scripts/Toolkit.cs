@@ -433,10 +433,10 @@ public sealed class Toolkit{
     public static bool[] GetConnectedSidesForContainer(Unit unit)
     {
         bool[] result = new bool[4];
-        result[0] = !IsConnectedFromPositionForContainer(unit, VectorSum(unit.position, new Vector2(0, 1)), Direction.Up);
-        result[1] = !IsConnectedFromPositionForContainer(unit, VectorSum(unit.position, new Vector2(1, 0)), Direction.Right);
-        result[2] = !IsConnectedFromPositionForContainer(unit, VectorSum(unit.position, new Vector2(0, -1)), Direction.Down);
-        result[3] = !IsConnectedFromPositionForContainer(unit, VectorSum(unit.position, new Vector2(-1, 0)), Direction.Left);
+        result[0] = IsConnectedFromPositionForContainer(unit, VectorSum(unit.position, new Vector2(0, 1)), Direction.Up);
+        result[1] = IsConnectedFromPositionForContainer(unit, VectorSum(unit.position, new Vector2(1, 0)), Direction.Right);
+        result[2] = IsConnectedFromPositionForContainer(unit, VectorSum(unit.position, new Vector2(0, -1)), Direction.Down);
+        result[3] = IsConnectedFromPositionForContainer(unit, VectorSum(unit.position, new Vector2(-1, 0)), Direction.Left);
 
         return result;
     }
@@ -444,20 +444,24 @@ public sealed class Toolkit{
     public static bool[] GetConnectedSides(Unit unit)
     {
         bool[] result = new bool[4];
-        result[0] = !IsConnectedFromPosition(unit, VectorSum(unit.position, Direction.Up));
-        result[1] = !IsConnectedFromPosition(unit, VectorSum(unit.position, Direction.Right));
-        result[2] = !IsConnectedFromPosition(unit, VectorSum(unit.position, Direction.Down));
-        result[3] = !IsConnectedFromPosition(unit, VectorSum(unit.position, Direction.Left));
+        result[0] = IsConnectedFromPosition(unit, VectorSum(unit.position, Direction.Up));
+        result[1] = IsConnectedFromPosition(unit, VectorSum(unit.position, Direction.Right));
+        result[2] = IsConnectedFromPosition(unit, VectorSum(unit.position, Direction.Down));
+        result[3] = IsConnectedFromPosition(unit, VectorSum(unit.position, Direction.Left));
         
         return result;
     }
-    public static bool[] GetConnectedSidesForRamp(Unit unit)
+    public static bool[] GetConnectedSidesForRamp(Ramp ramp)
     {
         bool[] result = new bool[4];
-        result[0] = !IsConnectedFromPositionForRamp(unit, VectorSum(unit.position, Direction.Up));
-        result[1] = !IsConnectedFromPositionForRamp(unit, VectorSum(unit.position, Direction.Right));
-        result[2] = !IsConnectedFromPositionForRamp(unit, VectorSum(unit.position, Direction.Down));
-        result[3] = !IsConnectedFromPositionForRamp(unit, VectorSum(unit.position, Direction.Left));
+        if(ramp.type == 2 || ramp.type == 3)
+            result[0] = IsConnectedFromPositionForRamp(ramp, VectorSum(ramp.position, Direction.Up));
+        if (ramp.type == 3 || ramp.type == 4)
+            result[1] = IsConnectedFromPositionForRamp(ramp, VectorSum(ramp.position, Direction.Right));
+        if (ramp.type == 1 || ramp.type == 4)
+            result[2] = IsConnectedFromPositionForRamp(ramp, VectorSum(ramp.position, Direction.Down));
+        if (ramp.type == 1 || ramp.type == 2)
+            result[3] = IsConnectedFromPositionForRamp(ramp, VectorSum(ramp.position, Direction.Left));
 
         return result;
     }
@@ -586,6 +590,17 @@ public sealed class Toolkit{
             case 4: return Direction.Left;
             default: throw new System.Exception();
         }
+        
+    }
+
+    public static GameObject GetObjectInChild(GameObject parent, string name)
+    {
+        for (int i = 0; i < parent.transform.childCount; i++)
+        {
+            if (parent.transform.GetChild(i).name == name)
+                return parent.transform.GetChild(i).gameObject;
+        }
+        return null;
     }
 }
 

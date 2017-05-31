@@ -7,7 +7,7 @@ public class SubEngine_Initializer{
     int x, y;
     APIUnit api;
     LogicalEngine engine;
-    public Sprite[] sprite_Container, sprite_Rock;
+    public Sprite[] sprite_Container, sprite_Rock, sprite_Ramp;
     public Sprite sprite_BranchEntrance, sprite_BranchHolder;
 
     public SubEngine_Initializer(int x, int y, LogicalEngine engine)
@@ -17,22 +17,31 @@ public class SubEngine_Initializer{
         this.engine = engine;
         api = engine.apiunit;
 
-        sprite_Container = new Sprite[16];
-        sprite_Rock = new Sprite[16];
-        string containerrootpath = "Containers\\Box";
-        string rockrootpath = "Rocks\\Rock";
+        sprite_Container = new Sprite[5];
+        sprite_Rock = new Sprite[6];
+        sprite_Ramp = new Sprite[4];
+        string containerrootpath = "Containers\\Version 4\\Connected";
+        string rockrootpath = "Rocks\\Version 4\\Rock";
         string branchrootpath = "Branch\\";
+        string ramprootpath = "Ramps\\Version 4\\Rock Half";
         sprite_BranchEntrance = Resources.Load<Sprite>(branchrootpath + "Branch Entry");
         sprite_BranchHolder = Resources.Load<Sprite>(branchrootpath + "Branch Holder");
 
-        for (int i=1; i < 16; i++)
+        for (int i=0; i < 6; i++)
         {
-            string containerpath = containerrootpath + " " + i;
-            sprite_Container[i] = Resources.Load<Sprite>(containerpath);
-            string rockpath = rockrootpath + "" + i;
+            string rockpath = rockrootpath + "" + (i + 1);
             sprite_Rock[i] = Resources.Load<Sprite>(rockpath);
         }
-        sprite_Rock[0] = Resources.Load<Sprite>(rockrootpath + "-full");
+        for(int i=0; i < 5; i++)
+        {
+            string containerpath = containerrootpath + " " + (i + 1);
+            sprite_Container[i] = Resources.Load<Sprite>(containerpath);
+        }
+        for(int i=0; i<4; i++)
+        {
+            string ramppath = ramprootpath + " " + (i + 1);
+            sprite_Ramp[i] = Resources.Load<Sprite>(ramppath);
+        }
     }
 
     public List<Unit>[,] init()

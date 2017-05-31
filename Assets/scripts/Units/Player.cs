@@ -51,11 +51,11 @@ public class Player : Unit
 
     public void Update()
     {
-        /*if(state != tempstate)
+        if(state != tempstate)
         {
             Debug.Log(state);
             tempstate = state;
-        }*/
+        }
     }
 
     public Direction GetGravity(){
@@ -95,11 +95,11 @@ public class Player : Unit
     public void SetState(PlayerState state)
     {
         this.state = state;
-        if (state == PlayerState.Transition)
+        /*if (state == PlayerState.Transition)
         {
             GetComponent<PlayerGraphics>().TransitionAnimation();
-        }
-        else if (state == PlayerState.Idle)
+        }*/
+        if (state == PlayerState.Idle)
             GetComponent<PlayerGraphics>().ResetStates();
         else if(state == PlayerState.Lean)
         {
