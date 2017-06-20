@@ -22,7 +22,7 @@ public class Jump : Ability {
 
     public void Action(Player player, Direction direction)
     {
-        leandirection = Starter.GetGravityDirection();
+        leandirection = direction;
         Vector2 playerpos = player.position;
         Vector2 playerpos2 = player.position;
         switch (direction)
@@ -59,7 +59,9 @@ public class Jump : Ability {
             // calculate where to hit and call graphic hit
             Vector2 hitPos = playerpos + maxJump * Toolkit.DirectiontoVector(direction);
             final_pos = hitPos;
-            engine.apigraphic.Jump_Hit(player, direction, this, hitPos);
+            if(!PlayerLean(player))
+                if(!PlayerMove(player))
+                    engine.apigraphic.Jump_Hit(player, direction, this, hitPos);
 
         }
         
@@ -75,10 +77,24 @@ public class Jump : Ability {
         if (Toolkit.IsEmpty(Toolkit.VectorSum(player.position, engine.database.gravity_direction)) || (ramp != null && !Toolkit.IsdoubleRamp(temppos) && ramp.IsOnRampSide(Toolkit.ReverseDirection(engine.database.gravity_direction))))
         {
             if (!PlayerLean(player))
-                player.ApplyGravity();
+                if(!PlayerMove(player))
+                    player.ApplyGravity();
         }
         else
             player.ApplyGravity();
+    }
+
+    public bool PlayerMove(Player player)
+    {
+        
+        if (!Toolkit.IsEmpty(Toolkit.VectorSum(player.position, player.direction)))
+            return false;
+        Vector2 pos = Toolkit.VectorSum(Toolkit.VectorSum(player.position, player.direction), Starter.GetGravityDirection());
+        if (Toolkit.IsEmpty(pos))
+            return false;
+        player.SetState(PlayerState.Jumping);
+        engine.inputcontroller.JumpingPlayerMove(player, player.direction);
+        return true;
     }
 
     private bool PlayerLean(Player player)

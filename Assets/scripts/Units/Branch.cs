@@ -175,6 +175,7 @@ public class Branch : Unit {
                 player.SetState(PlayerState.Lean);
                 player.leandirection = direction;
                 player.currentAbility = null;
+                api.engine.apiinput.leanlock = true;
                 api.engine.apigraphic.Lean(player);
             }
         }
