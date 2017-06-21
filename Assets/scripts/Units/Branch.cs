@@ -8,8 +8,6 @@ public class Branch : Unit {
     public override void SetInitialSprite()
     {
         bool[] connected = Toolkit.GetConnectedSidesForBranch(this);
-        for (int i = 0; i < 4; i++)
-            print(connected[i]);
         if (connected[0] && connected[1] && connected[2] && connected[3])
         {
             GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Branch[3];
