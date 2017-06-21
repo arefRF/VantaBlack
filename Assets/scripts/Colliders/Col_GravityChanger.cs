@@ -9,8 +9,6 @@ public class Col_GravityChanger : MonoBehaviour {
     {
         if(col.tag == "Player")
         {
-            Debug.Log((Vector2)col.transform.position);
-            Debug.Log(col.gameObject.GetComponent<Unit>().position);
             if ((Vector2)col.transform.position == col.gameObject.GetComponent<Unit>().position)
             {
                 Starter.GetDataBase().SetGravity(GravityDirection);

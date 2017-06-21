@@ -729,7 +729,6 @@ public class LogicalEngine {
     public void graphic_PlayerMoveAnimationFinished(Player player)
     {
         player.movepercentage = 0;
-        Debug.Log(player.state);
         if (player.state == PlayerState.Lean)
             return;
         if (player.state == PlayerState.Gir)
@@ -742,7 +741,6 @@ public class LogicalEngine {
 
     public void graphic_LeanStickMoveFinished(Player player)
     {
-        Debug.Log("here");
         /*apiunit.RemoveFromDatabase(player);
         player.position = player.nextpos;
         apiunit.AddToDatabase(player);*/

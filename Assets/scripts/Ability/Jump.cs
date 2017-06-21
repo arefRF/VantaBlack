@@ -52,15 +52,17 @@ public class Jump : Ability {
         engine.inputcontroller.LeanUndo(player, player.leandirection, PlayerState.Busy);
         player.jumpdirection = direction;
         if (number <= maxJump)
+        {
             engine.apigraphic.Jump(player, this, finalpos, direction);
+        }
         else
         {
             Debug.Log("jump hit");
             // calculate where to hit and call graphic hit
             Vector2 hitPos = playerpos + maxJump * Toolkit.DirectiontoVector(direction);
             final_pos = hitPos;
-            if(!PlayerLean(player))
-                if(!PlayerMove(player))
+            if (!PlayerLean(player))
+                if (!PlayerMove(player))
                     engine.apigraphic.Jump_Hit(player, direction, this, hitPos);
 
         }
@@ -69,6 +71,7 @@ public class Jump : Ability {
 
     public void JumpFinished(Player player)
     {
+        Debug.Log("jump finished");
         engine.apiunit.RemoveFromDatabase(player);
         player.position = final_pos;
         engine.apiunit.AddToDatabase(player);
@@ -153,14 +156,14 @@ public class Jump : Ability {
 
     }
 
-    private IEnumerator JumpWait(float f,Player player)
+    /*private IEnumerator JumpWait(float f,Player player)
     {
         yield return new WaitForSeconds(f);
         if(player.mode == GameMode.Real)
             player.GetComponent<Rigidbody2D>().isKinematic = false;
         player.ApplyGravity();
 
-    }
+    }*/
 
 
 
