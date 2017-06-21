@@ -27,7 +27,6 @@ public class Container : ParentContainer {
 
     private void Connected_1(bool[] connected)
     {
-        Debug.Log("herehereherehere");
         Transform tr = Toolkit.GetObjectInChild(gameObject, "Connected").transform;
         tr.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Container[0];
         if (connected[1])

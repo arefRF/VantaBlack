@@ -39,18 +39,25 @@ public class InputController {
     {
         if(player.leandirection == Toolkit.ReverseDirection(direction))
         {
-            Vector2 temppos = Toolkit.VectorSum(player.position, direction);
-            if (!Toolkit.IsEmpty(temppos) && Toolkit.GetUnit(temppos).isLeanable())
+            LeanUndo(player, player.leandirection, PlayerState.Idle);
+        }
+        else
+        {
+            if (Toolkit.IsEmpty(Toolkit.VectorSum(player.position, direction)))
             {
-                player.SetState(PlayerState.Idle);
-                Lean(player, direction);
+                LeanUndo(player, player.leandirection, PlayerState.Jumping);
+                player.direction = direction;
+                JumpingPlayerMove(player, direction);
             }
             else
-                LeanUndo(player, player.leandirection, PlayerState.Idle);
-        }
-        else if (direction == player.GetGravity())
-        {
-            LeanUndo(player, player.leandirection, PlayerState.Idle);
+            {
+                List<Unit> units = engine.GetUnits(Toolkit.VectorSum(player.position, direction));
+                if (units[0].isLeanable())
+                {
+                    LeanUndo(player, player.leandirection, PlayerState.Busy);
+                    Lean(player, direction);
+                }
+            }
         }
     }
 
@@ -120,7 +127,7 @@ public class InputController {
         }
     }*/
 
-    private void JumpingPlayerMove(Player player, Direction direction)
+    public void JumpingPlayerMove(Player player, Direction direction)
     {
         if (player.state == PlayerState.Jumping)
         {
@@ -136,7 +143,7 @@ public class InputController {
                 }
                 else if (direction != player.jumpdirection && direction != Toolkit.ReverseDirection(player.jumpdirection) && player.JumpingMove(direction))
                 {
-                    GameObject.Find("GetInput").GetComponent<GetInput>().StopCoroutine(((Jump)player.currentAbility).coroutine);
+                    //GameObject.Find("GetInput").GetComponent<GetInput>().StopCoroutine(((Jump)player.currentAbility).coroutine);
                     player.currentAbility = null;
                     player.SetState(PlayerState.Moving);
                 }
@@ -144,7 +151,7 @@ public class InputController {
                 {
                     if (player.Can_Lean(Toolkit.VectorSum(player.position, direction)))
                     {
-                        GameObject.Find("GetInput").GetComponent<GetInput>().StopCoroutine(((Jump)player.currentAbility).coroutine);
+                        //GameObject.Find("GetInput").GetComponent<GetInput>().StopCoroutine(((Jump)player.currentAbility).coroutine);
                         if (!player.isonejumping && player.abilities.Count > 0)
                         {
                             player.UseAbility(player.abilities[0]);
@@ -267,6 +274,7 @@ public class InputController {
                 }
                 else
                 {
+                    engine.apiinput.leanlock = false;
                     player.SetState(PlayerState.Moving);
                 }
             }
@@ -464,7 +472,6 @@ public class InputController {
                 {
                     GameObject.Find("GetInput").GetComponent<GetInput>().StopCoroutine(player.leancoroutine);
                 }
-                //if(!(player.currentAbility is Jump))
                 if (engine.AdjustPlayer(player, direction, Lean))
                     return;
                 if (Toolkit.Hasleanable(pos) && !Toolkit.GetLeanable(pos).canLean)
@@ -491,6 +498,7 @@ public class InputController {
                 player.SetState(PlayerState.Lean);
                 player.leandirection = direction;
                 player.currentAbility = null;
+                engine.apiinput.leanlock = true;
                 engine.apigraphic.Lean(player);
             }
             else

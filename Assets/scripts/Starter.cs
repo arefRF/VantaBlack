@@ -28,7 +28,7 @@ public class Starter : MonoBehaviour{
             database.player.Add(player[i].GetComponent<Player>());
         logicalengine = new LogicalEngine(x, y);
         staticengine = logicalengine;
-        database.gravity_direction = Gravity_Directin;
+        database.SetGravity(Gravity_Directin);
         Database.GravityDirection = database.gravity_direction;
         database.state = State.Busy;
         staticengine = logicalengine;

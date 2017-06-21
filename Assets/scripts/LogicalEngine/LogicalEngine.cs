@@ -136,8 +136,7 @@ public class LogicalEngine {
             apiunit.RemoveFromDatabase(unit);
             unit.position = Toolkit.VectorSum(unit.position, Toolkit.DirectiontoVector(dir));
             apiunit.AddToDatabase(unit);
-
-            for(int i=0; i<leanmove.Count; i++)
+            for (int i=0; i<leanmove.Count; i++)
             {
                 bool flag = false;
                 for(int j=0; j<shouldmove.Count;j++)
@@ -729,10 +728,10 @@ public class LogicalEngine {
 
     public void graphic_PlayerMoveAnimationFinished(Player player)
     {
-        /*apiunit.RemoveFromDatabase(player);
-        player.position = player.nextpos;
-        apiunit.AddToDatabase(player);*/
         player.movepercentage = 0;
+        Debug.Log(player.state);
+        if (player.state == PlayerState.Lean)
+            return;
         if (player.state == PlayerState.Gir)
             return;
         if (Toolkit.IsInsideBranch(player))
@@ -743,6 +742,7 @@ public class LogicalEngine {
 
     public void graphic_LeanStickMoveFinished(Player player)
     {
+        Debug.Log("here");
         /*apiunit.RemoveFromDatabase(player);
         player.position = player.nextpos;
         apiunit.AddToDatabase(player);*/
@@ -755,21 +755,23 @@ public class LogicalEngine {
 
     public void graphic_GameObjectMoveAnimationFinished(GameObject gameobject, Unit unit)
     {
-        if(unit is Player)
+        if (unit is Player)
+        {
             if (((Player)unit).state == PlayerState.Gir)
                 return;
+        }
         if (unit == null)
             return;
         //unit.gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock = false;
         /*apiunit.RemoveFromDatabase(unit);
         unit.position = unit.next_pos;
         apiunit.AddToDatabase(unit);*/
-        for(int i=0; i<unit.ConnectedUnits.Count; i++)
+        /*for(int i=0; i<unit.ConnectedUnits.Count; i++)
         {
             apiunit.RemoveFromDatabase(unit.ConnectedUnits[i]);
             unit.ConnectedUnits[i].position = unit.ConnectedUnits[i].next_pos;
             apiunit.AddToDatabase(unit.ConnectedUnits[i]);
-        }
+        }*/
         if(unit is FunctionalContainer)
         {
             apiunit.GameObjectAnimationFinished((FunctionalContainer)unit);
