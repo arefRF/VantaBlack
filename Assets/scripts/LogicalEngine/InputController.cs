@@ -77,7 +77,7 @@ public class InputController {
             }
         }
         else if (player.Can_Lean(direction))
-        {
+    a    {
             Lean(player, direction);
         }
     }*/
@@ -252,6 +252,7 @@ public class InputController {
     {
         if (player.state == PlayerState.Idle)
         {
+            Debug.Log(player.state);
             if (Toolkit.IsInsideBranch(player))
             {
                 if (Toolkit.HasBranch(Toolkit.VectorSum(player.position, direction)))
