@@ -469,10 +469,10 @@ public sealed class Toolkit{
     public static bool[] GetConnectedSidesForBranch(Unit unit)
     {
         bool[] result = new bool[4];
-        result[0] = !IsConnectedFromPositionToBranch(unit, Direction.Up);
-        result[1] = !IsConnectedFromPositionToBranch(unit, Direction.Right);
-        result[2] = !IsConnectedFromPositionToBranch(unit, Direction.Down);
-        result[3] = !IsConnectedFromPositionToBranch(unit, Direction.Left);
+        result[0] = IsConnectedFromPositionToBranch(unit, Direction.Up);
+        result[1] = IsConnectedFromPositionToBranch(unit, Direction.Right);
+        result[2] = IsConnectedFromPositionToBranch(unit, Direction.Down);
+        result[3] = IsConnectedFromPositionToBranch(unit, Direction.Left);
         return result;
     }
 
@@ -519,7 +519,7 @@ public sealed class Toolkit{
                 return false;
             }
         }
-        return false;
+        return true;
     }
     public static bool IsConnectedFromPositionForContainer(Unit unit, Vector2 pos, Direction direction)
     {

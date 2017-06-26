@@ -54,7 +54,12 @@ public class GetInput : MonoBehaviour {
         if (is_space)
             Get_Space_Arrows();
         else
-            Get_Move();
+        {
+            if (!api.leanlock)
+                Get_Move();
+            else
+                Get_Move_Once();
+        }
 
         if (Input.GetKeyDown(KeyCode.F))
         {
@@ -250,6 +255,17 @@ public class GetInput : MonoBehaviour {
         }
     }
 
+    private void Get_Move_Once()
+    {
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+            api.MovePressed(Direction.Right);
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+            api.MovePressed(Direction.Left);
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+            api.MovePressed(Direction.Down);
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+            api.MovePressed(Direction.Up);
+    }
 
     private void Set_Camera(Vector3 pos)
     {

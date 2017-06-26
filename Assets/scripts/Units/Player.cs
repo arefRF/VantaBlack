@@ -53,7 +53,7 @@ public class Player : Unit
     {
         if(state != tempstate)
         {
-            Debug.Log(state);
+            //Debug.Log(state);
             tempstate = state;
         }
     }
@@ -382,6 +382,8 @@ public class Player : Unit
         if (state == PlayerState.Gir)
             return false;
         if (mode == GameMode.Real)
+            return false;
+        if (state == PlayerState.Lean)
             return false;
         isonejumping = false;
         if (api.engine.drainercontroller.Check(this))

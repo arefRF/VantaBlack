@@ -26,7 +26,6 @@ public class PlayerPhysics : MonoBehaviour
         Init();
     }
 
-
     private void Init()
     {
         engine = Starter.GetEngine();
@@ -457,11 +456,12 @@ public class PlayerPhysics : MonoBehaviour
     {
         float j_velocity = Jump_Velocity;
         float remain_distance = ((Vector2)player_transofrm.position - pos).sqrMagnitude;
-        while(remain_distance > float.Epsilon)
+        //float remain_distance = Mathf.Sqrt(Mathf.Pow(player_transofrm.position.x - pos.x, 2) + Mathf.Pow(player_transofrm.position.y - pos.y, 2));
+        while (remain_distance > float.Epsilon)
         {
             remain_distance = ((Vector2)player_transofrm.position - pos).sqrMagnitude;
             player_transofrm.position = Vector3.MoveTowards(player_transofrm.position, pos, Time.deltaTime * j_velocity);
-            j_velocity += Jump_Acceleration;
+            j_velocity += Jump_Acceleration/2f;
             api.Camera_AutoMove();
             yield return null;
         }

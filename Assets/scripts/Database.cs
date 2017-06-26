@@ -17,7 +17,7 @@ public class Database {
     public List<Player> player;
     public readonly int numberOfSnapshot = 5;
     public int snapShotCount;
-    public Direction gravity_direction { get; set; }
+    public Direction gravity_direction { get; private set; }
     public List<Unit>[,] units;
     public long turn;
     public List<TimeLaps> timeLaps;
@@ -38,6 +38,15 @@ public class Database {
     public List<Unit> GetUnits(Vector2 position)
     {
         return units[(int)position.x, (int)position.y];
+    }
+
+    public void SetGravity(Direction newdirection)
+    {
+        gravity_direction = newdirection;
+        for (int i = 0; i < player.Count; i++)
+        {
+            player[i].SetGravity(newdirection);
+        }
     }
 
     public void StopTimer()
