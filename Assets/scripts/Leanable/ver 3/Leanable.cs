@@ -4,7 +4,6 @@ using System.Collections.Generic;
 public class Leanable : Container {
 
     public bool canLean = true;
-    public GameObject Robot;
 
     public override void PlayerAbsorb(Player player)
     {
@@ -18,5 +17,6 @@ public class Leanable : Container {
 
     public virtual void LeanedAction(Player player, Direction direction)
     {
+
     }
 }

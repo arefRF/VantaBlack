@@ -3,27 +3,17 @@ using System.Collections.Generic;
 
 public class Drainer : Unit {
 
-    List<Vector2> position_drain;
-
     public override void Run()
     {
-        position_drain = new List<Vector2>();
-        position_drain.Add(Toolkit.VectorSum(position, Direction.Up));
-        position_drain.Add(Toolkit.VectorSum(position, Direction.Right));
-        position_drain.Add(Toolkit.VectorSum(position, Direction.Down));
-        position_drain.Add(Toolkit.VectorSum(position, Direction.Left));
         base.Run();
     }
 
     public bool Check(Player player)
     {
-        for (int i = 0; i < position_drain.Count; i++)
+        if (player.position == position)
         {
-            if (player.position == position_drain[i])
-            {
-                Drain(player);
-                return true;
-            }
+            Drain(player);
+            return true;
         }
         return false;
     }
@@ -34,5 +24,10 @@ public class Drainer : Unit {
         api.engine.apigraphic.Player_Co_Stop(player);
         player.GetComponent<PlayerGraphics>().ResetStates();
         api.engine.apigraphic.Drain(player, this);
+    }
+
+    public override bool PlayerMoveInto(Direction dir)
+    {
+        return true;
     }
 }

@@ -7,7 +7,7 @@ public class LeanableP2 : Leanable{
     private bool on, tempon;
     public override void Run()
     {
-        roboscrip = Robot.GetComponent<Part0_RobotScript>();
+        //roboscrip = Robot.GetComponent<Part0_RobotScript>();
         abilities = new List<Ability>();
         base.Run();
     }
@@ -45,7 +45,7 @@ public class LeanableP2 : Leanable{
 
     public override void LeanedAction(Player player, Direction direction)
     {
-        if (abilities.Count == 0)
+        /*if (abilities.Count == 0)
             return;
         on = !on;
         Debug.Log(on);
@@ -56,6 +56,6 @@ public class LeanableP2 : Leanable{
         else
         {
             Robot.GetComponent<Animator>().SetBool("Start", false);
-        }
+        }*/
     }
 }

@@ -77,7 +77,7 @@ public class InputController {
             }
         }
         else if (player.Can_Lean(direction))
-        {
+    a    {
             Lean(player, direction);
         }
     }*/
