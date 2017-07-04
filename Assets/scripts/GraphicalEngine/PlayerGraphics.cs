@@ -16,11 +16,11 @@ public class PlayerGraphics : MonoBehaviour {
         unmoved_pos = transform.position;
         engine = Starter.GetEngine();
         api = engine.apigraphic;
-        animator = transform.GetChild(0).GetChild(0).GetComponent<Animator>();
-        eyeAnimator = transform.GetChild(0).GetChild(0).GetChild(3).GetComponent<Animator>();
+        animator = transform.GetChild(0).GetComponent<Animator>();
+        eyeAnimator = transform.GetChild(0).GetChild(2).GetComponent<Animator>();
         player = GetComponent<Player>();
-            engine.apigraphic.Absorb(player, null);
-        bodyAnimator = transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Animator>();
+        engine.apigraphic.Absorb(player, null);
+        bodyAnimator = transform.GetChild(0).GetComponent<Animator>();
     }
 
 
@@ -28,7 +28,7 @@ public class PlayerGraphics : MonoBehaviour {
     {
         ResetStates();
         transform.GetChild(0).rotation = Quaternion.Euler(0, 0, 0);
-        animator.SetInteger("Lean", 2);
+        animator.SetInteger("Lean", 3);
 
     }
 
@@ -36,7 +36,7 @@ public class PlayerGraphics : MonoBehaviour {
     {
         ResetStates();
         transform.GetChild(0).rotation = Quaternion.Euler(0, 180, 0);
-        animator.SetInteger("Lean", 4);
+        animator.SetInteger("Lean", 3);
 
     }
 
@@ -59,7 +59,8 @@ public class PlayerGraphics : MonoBehaviour {
     public void Lean_Down()
     {
         ResetStates();
-        animator.SetInteger("Lean", 3);
+        Debug.Log("Lean Down");
+        animator.SetInteger("Lean", 2);
   
     }
 
@@ -235,9 +236,9 @@ public class PlayerGraphics : MonoBehaviour {
     public void Player_Change_Direction(Player player,Direction dir)
     {
         int rot = 0;
-        if (player.transform.rotation.y == 0)
+        if (player.transform.GetChild(0).rotation.y == 0)
             rot = 180;
-        player.transform.rotation = Quaternion.Euler(player.transform.rotation.x, rot, player.transform.rotation.z);
+        player.transform.GetChild(0).rotation = Quaternion.Euler(player.transform.rotation.x, rot, player.transform.rotation.z);
         api.PlayerChangeDirectionFinished(gameObject.GetComponent<Player>());
     }  
 
@@ -260,7 +261,7 @@ public class PlayerGraphics : MonoBehaviour {
     public void ChangeColor()
     {
         if(bodyAnimator == null)
-            bodyAnimator = bodyAnimator = transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Animator>();
+             bodyAnimator = transform.GetChild(0).GetComponent<Animator>();
         if (player.abilities.Count != 0)
         {
             if (player.abilities[0].abilitytype == AbilityType.Fuel)
