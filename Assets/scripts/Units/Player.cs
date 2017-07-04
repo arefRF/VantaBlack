@@ -225,6 +225,7 @@ public class Player : Unit
         for (int i = 0; i < units.Count; i++) {
             if (!units[i].PlayerMoveInto(Toolkit.ReverseDirection(dir)))
             {
+                
                 return false;
             }
         }
@@ -768,7 +769,8 @@ public class Player : Unit
     {
 
         GameObject.Find("UI").GetComponent<Get>().DrainShow();
-        GameObject.Find("DrainUI").GetComponent<DrainPoints>().DrainPoint(abilities.Count, api.engine.saveserialize.draincount);
+        Debug.Log("drain UI commented");
+        //GameObject.Find("DrainUI").GetComponent<DrainPoints>().DrainPoint(abilities.Count, api.engine.saveserialize.draincount);
         api.engine.saveserialize.draincount += abilities.Count;
         abilities.Clear();
         _setability();

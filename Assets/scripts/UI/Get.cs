@@ -16,6 +16,12 @@ public class Get : MonoBehaviour {
 
     public void DrainShow()
     {
-        drainUI.SetActive(true);
+        try {
+            drainUI.SetActive(true);
+        }
+        catch
+        {
+            Debug.Log("drain animation not set yet");
+        }
     }
 }
