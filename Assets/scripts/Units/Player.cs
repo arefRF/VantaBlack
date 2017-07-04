@@ -469,6 +469,8 @@ public class Player : Unit
         }
         else if (obj is Pipe)
             return false;
+        else if (obj is BotPart)
+            return true;
         else
         {
             if (gravity == Direction.Down || gravity == Direction.Up)

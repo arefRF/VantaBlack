@@ -81,6 +81,7 @@ public class SubEngine_Initializer{
                     case "Drainer": units[(int)obj.transform.position.x, (int)obj.transform.position.y].Add(obj.GetComponent<Drainer>()); engine.database.drainers.Add(obj.GetComponent<Drainer>()); break;
                     case "Laser": units[(int)obj.transform.position.x, (int)obj.transform.position.y].Add(obj.GetComponent<Laser>()); engine.database.lasers.Add(obj.GetComponent<Laser>()); break;
                     case "Leanable" : units[(int)obj.transform.position.x, (int)obj.transform.position.y].Add(obj.GetComponent<Leanable>()); break;
+                    case "Mocking Bot": obj.GetComponent<MockingBotPart>().api = api; obj.GetComponent<MockingBotPart>().bot.init(obj.GetComponent<MockingBotPart>(), units); continue;
                     default: Debug.Log(obj + " Not supported"); break;
                 }
                 units[(int)obj.transform.position.x, (int)obj.transform.position.y][units[(int)obj.transform.position.x, (int)obj.transform.position.y].Count - 1].ConnectedUnits = new List<Unit>();

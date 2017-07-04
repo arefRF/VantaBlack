@@ -7,7 +7,7 @@ public class LeanableP0 : Leanable {
 
     public override void Run()
     {
-        roboscrip = Robot.GetComponent<Part0_RobotScript>();
+        //roboscrip = Robot.GetComponent<Part0_RobotScript>();
         abilities = new List<Ability>();
         base.Run();
     }
@@ -24,10 +24,10 @@ public class LeanableP0 : Leanable {
 
     public override void LeanedAction(Player player, Direction direction)
     {
-        if (abilities.Count == 0)
+        /*if (abilities.Count == 0)
             return;
         canLean = false;
         api.engine.inputcontroller.LeanUndo(player, Toolkit.ReverseDirection(direction), PlayerState.Idle);
-        Robot.GetComponent<Animator>().SetBool("Start", true);
+        Robot.GetComponent<Animator>().SetBool("Start", true);*/
     }
 }

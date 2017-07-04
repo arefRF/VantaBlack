@@ -62,8 +62,7 @@ public class Jump : Ability {
             Vector2 hitPos = playerpos + maxJump * Toolkit.DirectiontoVector(direction);
             final_pos = hitPos;
             if (!PlayerLean(player))
-                if (!PlayerMove(player))
-                    engine.apigraphic.Jump_Hit(player, direction, this, hitPos);
+                engine.apigraphic.Jump_Hit(player, direction, this, hitPos);
 
         }
         
