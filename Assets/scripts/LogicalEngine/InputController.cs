@@ -46,7 +46,21 @@ public class InputController {
             if (Toolkit.IsEmpty(Toolkit.VectorSum(player.position, direction)))
             {
                 if (!Toolkit.IsEmpty(Toolkit.VectorSum(player.position, player.GetGravity())))
+                {
+                    Debug.Log("check");
                     LeanUndo(player, player.leandirection, PlayerState.Idle);
+                    if (direction == player.direction)
+                    {
+                        IdlePLayerMove(player, direction);
+                    }
+                    else if(direction == Toolkit.ReverseDirection(player.direction))
+                    {
+                        Direction olddir = player.direction;
+                        player.direction = direction;
+                        engine.apigraphic.PlayerChangeDirection(player, olddir, player.direction);
+                        IdlePLayerMove(player, direction);
+                    }
+                }
                 else
                 {
                     LeanUndo(player, player.leandirection, PlayerState.Jumping);

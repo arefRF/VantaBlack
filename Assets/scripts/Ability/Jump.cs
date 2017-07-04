@@ -79,7 +79,7 @@ public class Jump : Ability {
         if (Toolkit.IsEmpty(Toolkit.VectorSum(player.position, engine.database.gravity_direction)) || (ramp != null && !Toolkit.IsdoubleRamp(temppos) && ramp.IsOnRampSide(Toolkit.ReverseDirection(engine.database.gravity_direction))))
         {
             if (!PlayerLean(player))
-                if(!PlayerMove(player))
+                if (!PlayerMove(player))
                     player.ApplyGravity();
         }
         else
@@ -106,7 +106,7 @@ public class Jump : Ability {
             engine.inputcontroller.Lean(player, leandirection);
             return true;
         }
-        else if (!Toolkit.IsEmpty(Toolkit.VectorSum(player.position, player.direction)) && Toolkit.GetUnit(Toolkit.VectorSum(player.position, player.direction)))
+        else if (!Toolkit.IsEmpty(Toolkit.VectorSum(player.position, player.direction)) && Toolkit.GetUnit(Toolkit.VectorSum(player.position, player.direction)).isLeanable())
         {
             engine.inputcontroller.Lean(player, player.direction);
             return true;
