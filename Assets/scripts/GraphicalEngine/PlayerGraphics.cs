@@ -235,9 +235,9 @@ public class PlayerGraphics : MonoBehaviour {
     public void Player_Change_Direction(Player player,Direction dir)
     {
         int rot = 0;
-        if (player.transform.rotation.y == 0)
+        if (player.transform.GetChild(0).rotation.y == 0)
             rot = 180;
-        player.transform.rotation = Quaternion.Euler(player.transform.rotation.x, rot, player.transform.rotation.z);
+        player.transform.GetChild(0).rotation = Quaternion.Euler(player.transform.rotation.x, rot, player.transform.rotation.z);
         api.PlayerChangeDirectionFinished(gameObject.GetComponent<Player>());
     }  
 
