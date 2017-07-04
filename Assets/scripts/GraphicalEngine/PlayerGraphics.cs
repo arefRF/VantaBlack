@@ -28,7 +28,7 @@ public class PlayerGraphics : MonoBehaviour {
     {
         ResetStates();
         transform.GetChild(0).rotation = Quaternion.Euler(0, 0, 0);
-        animator.SetInteger("Lean", 2);
+        animator.SetInteger("Lean", 3);
 
     }
 
@@ -36,7 +36,7 @@ public class PlayerGraphics : MonoBehaviour {
     {
         ResetStates();
         transform.GetChild(0).rotation = Quaternion.Euler(0, 180, 0);
-        animator.SetInteger("Lean", 4);
+        animator.SetInteger("Lean", 3);
 
     }
 
@@ -59,7 +59,8 @@ public class PlayerGraphics : MonoBehaviour {
     public void Lean_Down()
     {
         ResetStates();
-        animator.SetInteger("Lean", 3);
+        Debug.Log("Lean Down");
+        animator.SetInteger("Lean", 2);
   
     }
 
