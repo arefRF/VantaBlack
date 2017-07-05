@@ -520,6 +520,13 @@ public class LogicalEngine {
                     List<Unit> units = GetUnits(nextpos);
                     if (units.Count != 0)
                     {
+                        if(units[0] is Drainer)
+                        {
+                            database.units[(int)player.position.x, (int)player.position.y].Remove(player);
+                            player.position = nextpos;
+                            database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                            apigraphic.MovePlayer_Simple_1(player, nextpos);
+                        }
 
                         if (units[0] is Branch)
                         {
@@ -694,7 +701,10 @@ public class LogicalEngine {
                             else if (database.player[i].LeanedTo is FunctionalContainer)
                                 ((FunctionalContainer)database.player[i].LeanedTo).ActionKeyDown(database.player[i], Toolkit.ReverseDirection(database.player[i].leandirection));
                             else if (database.player[i].LeanedTo is Leanable)
+                            {
+                                Debug.Log("asdasfaf");
                                 ((Leanable)database.player[i].LeanedTo).LeanedAction(database.player[i], Toolkit.ReverseDirection(database.player[i].leandirection));
+                            }
                         }
                     }
                     else

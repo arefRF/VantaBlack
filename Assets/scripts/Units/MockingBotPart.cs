@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MockingBotPart : Unit {
+public class MockingBotPart : BotPart {
+
+    public MockingBot bot;
 
 	// Use this for initialization
 	void Start () {

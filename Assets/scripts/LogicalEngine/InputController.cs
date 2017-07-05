@@ -252,7 +252,6 @@ public class InputController {
     {
         if (player.state == PlayerState.Idle)
         {
-            Debug.Log(player.state);
             if (Toolkit.IsInsideBranch(player))
             {
                 if (Toolkit.HasBranch(Toolkit.VectorSum(player.position, direction)))
