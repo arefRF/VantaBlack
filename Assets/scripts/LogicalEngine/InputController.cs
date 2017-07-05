@@ -37,6 +37,8 @@ public class InputController {
 
     private void LeanMove(Player player, Direction direction)
     {
+        if (player.leandirection == direction)
+            return;
         if(player.leandirection == Toolkit.ReverseDirection(direction) || direction == player.GetGravity())
         {
             LeanUndo(player, player.leandirection, PlayerState.Idle);
@@ -381,7 +383,6 @@ public class InputController {
     {
         for (int i = 0; i < engine.database.player.Count; i++)
         {
-            Debug.Log(engine.database.player[i]);
             if (engine.database.player[i].state == PlayerState.Gir)
                 continue;
             if (engine.database.player[i].state == PlayerState.Lean) //for release
