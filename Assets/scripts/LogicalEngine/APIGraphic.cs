@@ -246,6 +246,7 @@ public class APIGraphic{
 
     public void Lean_On_Air(Player player)
     {
+        Debug.Log("On Air");
         PlayerGraphics gl = player.GetComponent<PlayerGraphics>();
         switch (player.leandirection)
         {

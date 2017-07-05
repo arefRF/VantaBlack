@@ -28,7 +28,10 @@ public class PlayerGraphics : MonoBehaviour {
     {
         ResetStates();
         transform.GetChild(0).rotation = Quaternion.Euler(0, 0, 0);
-        animator.SetInteger("Lean", 3);
+        if (on_air)
+            animator.SetInteger("Lean Air", 3);
+        else
+            animator.SetInteger("Lean", 3);
 
     }
 
@@ -36,7 +39,10 @@ public class PlayerGraphics : MonoBehaviour {
     {
         ResetStates();
         transform.GetChild(0).rotation = Quaternion.Euler(0, 180, 0);
-        animator.SetInteger("Lean", 3);
+        if (on_air)
+            animator.SetInteger("Lean Air", 3);
+        else
+            animator.SetInteger("Lean", 3);
 
     }
 
