@@ -99,6 +99,7 @@ public class PlayerGraphics : MonoBehaviour {
     public void Lean_Finished()
     {
         animator.SetInteger("Lean", 0);
+        animator.SetInteger("Lean Air", 0);
         bodyAnimator.SetBool("Lean", false);
     }
 
