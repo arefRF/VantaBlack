@@ -278,4 +278,35 @@ public class GetInput : MonoBehaviour {
     {
         return Input.GetKey(KeyCode.F);
     }
+
+    public bool isArrowKeyDown(Direction direction)
+    {
+        switch (direction)
+        {
+            case Direction.Up: return Input.GetKeyDown(KeyCode.UpArrow);
+            case Direction.Right: return Input.GetKeyDown(KeyCode.RightArrow);
+            case Direction.Left: return Input.GetKeyDown(KeyCode.LeftArrow);
+            case Direction.Down: return Input.GetKeyDown(KeyCode.DownArrow);
+            default: return false;
+        }
+    }
+
+    public bool isAnyArrowKeyDown()
+    {
+        return (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.DownArrow));
+    }
+
+    public Direction GetArrowKeyDown()
+    {
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+            return Direction.Up;
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+            return Direction.Right;
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+            return Direction.Left;
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+            return Direction.Down;
+        Debug.Log("error error big error");
+        return Direction.Up;
+    }
 }

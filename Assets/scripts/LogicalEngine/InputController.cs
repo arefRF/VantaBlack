@@ -529,6 +529,53 @@ public class InputController {
         }
     }
 
+    public void LeanOnAir(Player player, Direction direction)
+    {
+        if (player.state != PlayerState.Lean)
+        {
+            Vector2 pos = Toolkit.VectorSum(player.position, direction);
+            if (player.Can_Lean(pos))
+            {
+                if (player.leancoroutine != null)
+                {
+                    GameObject.Find("GetInput").GetComponent<GetInput>().StopCoroutine(player.leancoroutine);
+                }
+                if (engine.AdjustPlayer(player, direction, Lean))
+                    return;
+                if (Toolkit.Hasleanable(pos) && !Toolkit.GetLeanable(pos).canLean)
+                    return;
+                if (Toolkit.HasBranch(pos))
+                {
+                    Toolkit.GetBranch(pos).PlayerLeaned(player, direction);
+                    return;
+                }
+                else if (Toolkit.HasFountain(pos))
+                {
+                    Toolkit.GetFountain(pos).PlayerLeaned(player, direction);
+                    return;
+                }
+                player.movepercentage = 0;
+                player.LeanedTo = Toolkit.GetUnit(pos);
+                player.api.RemoveFromDatabase(player);
+                player.position = Toolkit.VectorSum(pos, Toolkit.ReverseDirection(direction));
+                player.api.AddToDatabase(player);
+                player.SetState(PlayerState.Lean);
+                //player.transform.position = player.position;
+                player.isonejumping = false;
+                engine.apigraphic.Player_Co_Stop(player);
+                player.SetState(PlayerState.Lean);
+                player.leandirection = direction;
+                player.currentAbility = null;
+                engine.apiinput.leanlock = true;
+                engine.apigraphic.Lean_On_Air(player);
+            }
+            else
+            {
+                FakeLean(player, direction);
+            }
+        }
+    }
+
     public void FakeLean(Player player, Direction direction)
     {
         if (player.state == PlayerState.Idle || player.state == PlayerState.Fakelean)

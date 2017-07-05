@@ -78,12 +78,29 @@ public class Jump : Ability {
         Ramp ramp = Toolkit.GetRamp(temppos);
         if (Toolkit.IsEmpty(Toolkit.VectorSum(player.position, engine.database.gravity_direction)) || (ramp != null && !Toolkit.IsdoubleRamp(temppos) && ramp.IsOnRampSide(Toolkit.ReverseDirection(engine.database.gravity_direction))))
         {
-            if (!PlayerLean(player))
-                if (!PlayerMove(player))
+            /*if (engine.apiinput.isAnyArrowKeyDown())
+            {
+                Direction direction = engine.apiinput.GetArrowKeyDown();
+                PlayerMoveDirection(player, direction);
+            }*/
+            if (!PlayerMove(player))
+                if (!PlayerLean(player))
                     player.ApplyGravity();
         }
         else
             player.ApplyGravity();
+    }
+
+    private bool PlayerMoveDirection(Player player, Direction direction)
+    {
+        if (!Toolkit.IsEmpty(Toolkit.VectorSum(player.position, direction)))
+            return false;
+        Vector2 pos = Toolkit.VectorSum(Toolkit.VectorSum(player.position, direction), Starter.GetGravityDirection());
+        if (Toolkit.IsEmpty(pos))
+            return false;
+        player.SetState(PlayerState.Jumping);
+        engine.inputcontroller.JumpingPlayerMove(player, direction);
+        return true;
     }
 
     public bool PlayerMove(Player player)

@@ -145,11 +145,16 @@ public class APIInput{
 
     public bool isArrowKeyDown(Direction direction)
     {
-        return false;
+        return input.isArrowKeyDown(direction);
     }
 
     public bool isAnyArrowKeyDown()
     {
-        return false;
+        return input.isAnyArrowKeyDown();
+    }
+
+    public Direction GetArrowKeyDown()
+    {
+        return input.GetArrowKeyDown();
     }
 }
