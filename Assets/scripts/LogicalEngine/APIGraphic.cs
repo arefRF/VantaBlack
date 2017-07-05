@@ -237,11 +237,23 @@ public class APIGraphic{
            PlayerGraphics gl = player.GetComponent<PlayerGraphics>();
            switch (player.leandirection)
            {
-               case Direction.Right: gl.Lean_Right(); break;
-               case Direction.Left: gl.Lean_Left(); break;
-               case Direction.Up: gl.Lean_Up(); break;
-               case Direction.Down: gl.Lean_Down(); break;
+               case Direction.Right: gl.Lean_Right(false); break;
+               case Direction.Left: gl.Lean_Left(false); break;
+               case Direction.Up: gl.Lean_Up(false); break;
+               case Direction.Down: gl.Lean_Down(false); break;
            }
+    }
+
+    public void Lean_On_Air(Player player)
+    {
+        PlayerGraphics gl = player.GetComponent<PlayerGraphics>();
+        switch (player.leandirection)
+        {
+            case Direction.Right: gl.Lean_Right(true); break;
+            case Direction.Left: gl.Lean_Left(true); break;
+            case Direction.Up: gl.Lean_Up(true); break;
+            case Direction.Down: gl.Lean_Down(true); break;
+        }
     }
     public void Camera_AutoMove()
     {
