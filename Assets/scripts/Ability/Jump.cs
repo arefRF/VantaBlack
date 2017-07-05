@@ -136,12 +136,12 @@ public class Jump : Ability {
     {
         if (!Toolkit.IsEmpty(Toolkit.VectorSum(player.position, leandirection)) && Toolkit.GetUnit(Toolkit.VectorSum(player.position, leandirection)).isLeanable())
         {
-            engine.inputcontroller.Lean(player, leandirection);
+            engine.inputcontroller.LeanOnAir(player, leandirection);
             return true;
         }
         else if (!Toolkit.IsEmpty(Toolkit.VectorSum(player.position, player.direction)) && Toolkit.GetUnit(Toolkit.VectorSum(player.position, player.direction)).isLeanable())
         {
-            engine.inputcontroller.Lean(player, player.direction);
+            engine.inputcontroller.LeanOnAir(player, player.direction);
             return true;
         }
         else
