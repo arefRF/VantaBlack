@@ -37,6 +37,8 @@ public class InputController {
 
     private void LeanMove(Player player, Direction direction)
     {
+        if (player.leandirection == direction)
+            return;
         if(player.leandirection == Toolkit.ReverseDirection(direction) || direction == player.GetGravity())
         {
             LeanUndo(player, player.leandirection, PlayerState.Idle);
@@ -46,7 +48,21 @@ public class InputController {
             if (Toolkit.IsEmpty(Toolkit.VectorSum(player.position, direction)))
             {
                 if (!Toolkit.IsEmpty(Toolkit.VectorSum(player.position, player.GetGravity())))
+                {
+                    Debug.Log("check");
                     LeanUndo(player, player.leandirection, PlayerState.Idle);
+                    if (direction == player.direction)
+                    {
+                        IdlePLayerMove(player, direction);
+                    }
+                    else if(direction == Toolkit.ReverseDirection(player.direction))
+                    {
+                        Direction olddir = player.direction;
+                        player.direction = direction;
+                        engine.apigraphic.PlayerChangeDirection(player, olddir, player.direction);
+                        IdlePLayerMove(player, direction);
+                    }
+                }
                 else
                 {
                     LeanUndo(player, player.leandirection, PlayerState.Jumping);
@@ -367,7 +383,6 @@ public class InputController {
     {
         for (int i = 0; i < engine.database.player.Count; i++)
         {
-            Debug.Log(engine.database.player[i]);
             if (engine.database.player[i].state == PlayerState.Gir)
                 continue;
             if (engine.database.player[i].state == PlayerState.Lean) //for release
@@ -506,6 +521,53 @@ public class InputController {
                 player.currentAbility = null;
                 engine.apiinput.leanlock = true;
                 engine.apigraphic.Lean(player);
+            }
+            else
+            {
+                FakeLean(player, direction);
+            }
+        }
+    }
+
+    public void LeanOnAir(Player player, Direction direction)
+    {
+        if (player.state != PlayerState.Lean)
+        {
+            Vector2 pos = Toolkit.VectorSum(player.position, direction);
+            if (player.Can_Lean(pos))
+            {
+                if (player.leancoroutine != null)
+                {
+                    GameObject.Find("GetInput").GetComponent<GetInput>().StopCoroutine(player.leancoroutine);
+                }
+                if (engine.AdjustPlayer(player, direction, Lean))
+                    return;
+                if (Toolkit.Hasleanable(pos) && !Toolkit.GetLeanable(pos).canLean)
+                    return;
+                if (Toolkit.HasBranch(pos))
+                {
+                    Toolkit.GetBranch(pos).PlayerLeaned(player, direction);
+                    return;
+                }
+                else if (Toolkit.HasFountain(pos))
+                {
+                    Toolkit.GetFountain(pos).PlayerLeaned(player, direction);
+                    return;
+                }
+                player.movepercentage = 0;
+                player.LeanedTo = Toolkit.GetUnit(pos);
+                player.api.RemoveFromDatabase(player);
+                player.position = Toolkit.VectorSum(pos, Toolkit.ReverseDirection(direction));
+                player.api.AddToDatabase(player);
+                player.SetState(PlayerState.Lean);
+                //player.transform.position = player.position;
+                player.isonejumping = false;
+                engine.apigraphic.Player_Co_Stop(player);
+                player.SetState(PlayerState.Lean);
+                player.leandirection = direction;
+                player.currentAbility = null;
+                engine.apiinput.leanlock = true;
+                engine.apigraphic.Lean_On_Air(player);
             }
             else
             {

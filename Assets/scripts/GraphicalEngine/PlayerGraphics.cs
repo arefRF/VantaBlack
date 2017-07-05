@@ -24,39 +24,36 @@ public class PlayerGraphics : MonoBehaviour {
     }
 
 
-    public void Lean_Right()
+    public void Lean_Right(bool on_air)
     {
         ResetStates();
         transform.GetChild(0).rotation = Quaternion.Euler(0, 0, 0);
-        animator.SetInteger("Lean", 3);
+        if (on_air)
+            animator.SetInteger("Lean Air", 3);
+        else
+            animator.SetInteger("Lean", 3);
 
     }
 
-    public void Lean_Left()
+    public void Lean_Left(bool on_air)
     {
         ResetStates();
         transform.GetChild(0).rotation = Quaternion.Euler(0, 180, 0);
-        animator.SetInteger("Lean", 3);
+        if (on_air)
+            animator.SetInteger("Lean Air", 3);
+        else
+            animator.SetInteger("Lean", 3);
 
     }
 
-    public void Lean_Up()
+    public void Lean_Up(bool on_air)
     {
         ResetStates();
-        if (player.abilities.Count != 0)
-            if (player.abilities[0].abilitytype == AbilityType.Fuel)
-            {
-                animator.SetInteger("Lean", 1);
-                bodyAnimator.SetBool("Lean", true);
-            }
-            else
-                animator.SetInteger("Lean", 1);
-        else
-            animator.SetInteger("Lean", 1);
+        animator.SetInteger("Lean", 1);
 
     }
 
-    public void Lean_Down()
+    public void Lean_Down(bool on_air)
     {
         ResetStates();
         Debug.Log("Lean Down");

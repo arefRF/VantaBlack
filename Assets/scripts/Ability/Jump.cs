@@ -78,17 +78,40 @@ public class Jump : Ability {
         Ramp ramp = Toolkit.GetRamp(temppos);
         if (Toolkit.IsEmpty(Toolkit.VectorSum(player.position, engine.database.gravity_direction)) || (ramp != null && !Toolkit.IsdoubleRamp(temppos) && ramp.IsOnRampSide(Toolkit.ReverseDirection(engine.database.gravity_direction))))
         {
-            if (!PlayerLean(player))
-                if(!PlayerMove(player))
+            /*if (engine.apiinput.isAnyArrowKeyDown())
+            {
+                Direction direction = engine.apiinput.GetArrowKeyDown();
+                if (PlayerMoveDirection(player, direction))
+                    return;
+                if(PlayerLeanDireciton(player, direction))
+                    return;
+                
+            }*/
+            if (!PlayerMove(player))
+                if (!PlayerLean(player))
                     player.ApplyGravity();
         }
         else
             player.ApplyGravity();
     }
 
+    private bool PlayerMoveDirection(Player player, Direction direction)
+    {
+        Debug.Log("player move direction called");
+        if (!Toolkit.IsEmpty(Toolkit.VectorSum(player.position, direction)))
+            return false;
+        Debug.Log("1111");
+        Vector2 pos = Toolkit.VectorSum(Toolkit.VectorSum(player.position, direction), Starter.GetGravityDirection());
+        if (Toolkit.IsEmpty(pos))
+            return false;
+        Debug.Log("222  ");
+        player.SetState(PlayerState.Jumping);
+        engine.inputcontroller.JumpingPlayerMove(player, direction);
+        return true;
+    }
+
     public bool PlayerMove(Player player)
     {
-        
         if (!Toolkit.IsEmpty(Toolkit.VectorSum(player.position, player.direction)))
             return false;
         Vector2 pos = Toolkit.VectorSum(Toolkit.VectorSum(player.position, player.direction), Starter.GetGravityDirection());
@@ -99,6 +122,16 @@ public class Jump : Ability {
         return true;
     }
 
+    private bool PlayerLeanDireciton(Player player, Direction direction)
+    {
+        if (!Toolkit.IsEmpty(Toolkit.VectorSum(player.position, direction)) && Toolkit.GetUnit(Toolkit.VectorSum(player.position, direction)).isLeanable())
+        {
+            engine.inputcontroller.Lean(player, leandirection);
+            return true;
+        }
+        return false;
+    }
+
     private bool PlayerLean(Player player)
     {
         if (!Toolkit.IsEmpty(Toolkit.VectorSum(player.position, leandirection)) && Toolkit.GetUnit(Toolkit.VectorSum(player.position, leandirection)).isLeanable())
@@ -106,7 +139,7 @@ public class Jump : Ability {
             engine.inputcontroller.Lean(player, leandirection);
             return true;
         }
-        else if (!Toolkit.IsEmpty(Toolkit.VectorSum(player.position, player.direction)) && Toolkit.GetUnit(Toolkit.VectorSum(player.position, player.direction)))
+        else if (!Toolkit.IsEmpty(Toolkit.VectorSum(player.position, player.direction)) && Toolkit.GetUnit(Toolkit.VectorSum(player.position, player.direction)).isLeanable())
         {
             engine.inputcontroller.Lean(player, player.direction);
             return true;
@@ -120,7 +153,7 @@ public class Jump : Ability {
                     if (!Toolkit.IsEmpty(temppos))
                         if (Toolkit.GetUnit(temppos).isLeanable())
                         {
-                            engine.inputcontroller.Lean(player, Toolkit.NumberToDirection(i + 1));
+                            engine.inputcontroller.LeanOnAir(player, Toolkit.NumberToDirection(i + 1));
                             return true;
                         }
             }

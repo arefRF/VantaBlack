@@ -9,6 +9,26 @@ public class LeanableC0_RemoteOn : Leanable {
         capacity = 0;
     }
 
+    public override void PlayerAbsorb(Player player)
+    {
+        return;
+    }
+
+    public override void PlayerRelease(Player player)
+    {
+        return;
+    }
+
+    public override void PlayerAbsorbHold(Player player)
+    {
+        return;
+    }
+
+    public override void PlayerReleaseHold(Player player)
+    {
+        return;
+    }
+
     public override void LeanedAction(Player player, Direction direction)
     {
         bot.TurnOn();
