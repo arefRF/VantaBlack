@@ -283,28 +283,28 @@ public class GetInput : MonoBehaviour {
     {
         switch (direction)
         {
-            case Direction.Up: return Input.GetKeyDown(KeyCode.UpArrow);
-            case Direction.Right: return Input.GetKeyDown(KeyCode.RightArrow);
-            case Direction.Left: return Input.GetKeyDown(KeyCode.LeftArrow);
-            case Direction.Down: return Input.GetKeyDown(KeyCode.DownArrow);
+            case Direction.Up: return Input.GetKey(KeyCode.UpArrow);
+            case Direction.Right: return Input.GetKey(KeyCode.RightArrow);
+            case Direction.Left: return Input.GetKey(KeyCode.LeftArrow);
+            case Direction.Down: return Input.GetKey(KeyCode.DownArrow);
             default: return false;
         }
     }
 
     public bool isAnyArrowKeyDown()
     {
-        return (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.DownArrow));
+        return (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.DownArrow));
     }
 
     public Direction GetArrowKeyDown()
     {
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (Input.GetKey(KeyCode.UpArrow))
             return Direction.Up;
-        if (Input.GetKeyDown(KeyCode.RightArrow))
+        if (Input.GetKey(KeyCode.RightArrow))
             return Direction.Right;
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        if (Input.GetKey(KeyCode.LeftArrow))
             return Direction.Left;
-        if (Input.GetKeyDown(KeyCode.DownArrow))
+        if (Input.GetKey(KeyCode.DownArrow))
             return Direction.Down;
         Debug.Log("error error big error");
         return Direction.Up;
