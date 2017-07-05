@@ -37,6 +37,8 @@ public class InputController {
 
     private void LeanMove(Player player, Direction direction)
     {
+        if (player.leandirection == direction)
+            return;
         if(player.leandirection == Toolkit.ReverseDirection(direction) || direction == player.GetGravity())
         {
             LeanUndo(player, player.leandirection, PlayerState.Idle);
@@ -46,7 +48,21 @@ public class InputController {
             if (Toolkit.IsEmpty(Toolkit.VectorSum(player.position, direction)))
             {
                 if (!Toolkit.IsEmpty(Toolkit.VectorSum(player.position, player.GetGravity())))
+                {
+                    Debug.Log("check");
                     LeanUndo(player, player.leandirection, PlayerState.Idle);
+                    if (direction == player.direction)
+                    {
+                        IdlePLayerMove(player, direction);
+                    }
+                    else if(direction == Toolkit.ReverseDirection(player.direction))
+                    {
+                        Direction olddir = player.direction;
+                        player.direction = direction;
+                        engine.apigraphic.PlayerChangeDirection(player, olddir, player.direction);
+                        IdlePLayerMove(player, direction);
+                    }
+                }
                 else
                 {
                     LeanUndo(player, player.leandirection, PlayerState.Jumping);
@@ -367,7 +383,6 @@ public class InputController {
     {
         for (int i = 0; i < engine.database.player.Count; i++)
         {
-            Debug.Log(engine.database.player[i]);
             if (engine.database.player[i].state == PlayerState.Gir)
                 continue;
             if (engine.database.player[i].state == PlayerState.Lean) //for release
