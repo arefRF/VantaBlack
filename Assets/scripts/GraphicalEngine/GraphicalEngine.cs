@@ -202,7 +202,8 @@ public class GraphicalEngine : MonoBehaviour {
 
     public void Fountatin(Fountain fountatin)
     {
-        GameObject lights = Toolkit.GetObjectInChild(fountatin.gameObject, "Lights");
+        Debug.Log("fountain code commented in graphical engine!!! click here");
+        /*GameObject lights = Toolkit.GetObjectInChild(fountatin.gameObject, "Lights");
         Vector3 color = Ability_Color(fountatin.ability, false);
         for (int i = 0; i < 4; i++)
         {
@@ -212,7 +213,7 @@ public class GraphicalEngine : MonoBehaviour {
         {
             lights.transform.GetChild(i).GetComponent<SpriteRenderer>().color = new Color(color.x,color.y,color.z,1);
             lights.transform.GetChild(i).gameObject.SetActive(true);
-        }
+        }*/
     }
     private Vector3 Ability_Color(List<Ability> ability,bool compliment)
     {
