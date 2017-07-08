@@ -157,4 +157,16 @@ public class APIInput{
     {
         return input.GetArrowKeyDown();
     }
+
+    public void Zoom(float zoom)
+    {
+        if (zoom < 0)
+        {
+            Camera.main.orthographicSize -= zoom;
+        }
+        else if (zoom > 0)
+        {
+            Camera.main.orthographicSize -= zoom;
+        }
+    }
 }

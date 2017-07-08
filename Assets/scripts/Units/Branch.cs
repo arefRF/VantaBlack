@@ -181,10 +181,6 @@ public class Branch : Unit {
             }
             else
             {
-                if (player.currentAbility is Jump)
-                {
-                    GameObject.Find("GetInput").GetComponent<GetInput>().StopCoroutine(((Jump)player.currentAbility).coroutine);
-                }
                 player.SetState(PlayerState.Lean);
                 //player.transform.position = player.position;
                 player.LeanedTo = this;
@@ -194,7 +190,10 @@ public class Branch : Unit {
                 player.leandirection = direction;
                 player.currentAbility = null;
                 api.engine.apiinput.leanlock = true;
-                api.engine.apigraphic.Lean(player);
+                if (Toolkit.IsEmpty(Toolkit.VectorSum(player.position, player.GetGravity())))
+                    api.engine.apigraphic.Lean_On_Air(player);
+                else
+                    api.engine.apigraphic.Lean(player);
             }
         }
     }
@@ -255,7 +254,7 @@ public class Branch : Unit {
 
     public override bool isLeanable()
     {
-        return true;
+        return islocked;
     }
 }
 
