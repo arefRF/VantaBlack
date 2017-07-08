@@ -15,9 +15,12 @@ public class Laser : Unit {
 
     public override void SetInitialSprite()
     {
-
-
-
+        bool[] connected = Toolkit.GetConnectedSidesForLaser(this);
+        for(int i=0; i<4; i++)
+        {
+            if (!connected[i])
+                transform.GetChild(i).GetComponent<SpriteRenderer>().sprite = null;
+        }
     }
     public void SetLaser()
     {
