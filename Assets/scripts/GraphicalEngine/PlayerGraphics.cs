@@ -106,10 +106,18 @@ public class PlayerGraphics : MonoBehaviour {
     public void MoveToBranch(Direction dir)
     {
         ResetStates();
-        animator.SetInteger("Branch", 1);
         StopAllCoroutines();
 
-        StartCoroutine(Simple_Move(player.position, 0.3f));
+        if (dir == Direction.Left || dir == Direction.Right)
+            animator.SetInteger("Branch", 3);
+        else if(dir == Direction.Up)
+            StartCoroutine(Simple_Move(player.position, 0.3f));
+        else
+            StartCoroutine(Simple_Move(player.position, 0.3f));
+
+       
+
+       
     }
 
     public void DrainFinished()
@@ -135,6 +143,7 @@ public class PlayerGraphics : MonoBehaviour {
         else if(dir == Direction.Left)
             transform.GetChild(0).rotation = Quaternion.Euler(0, 180, 0);
 
+        transform.GetChild(0).localScale = new Vector2(1, 1);
 
         StartCoroutine(Simple_Move(pos, 0.65f));
     }
@@ -148,18 +157,6 @@ public class PlayerGraphics : MonoBehaviour {
         return new Vector2(0, 0);
     }
 
-    // animation calls this
-    public void MoveToBranchAnimationFinished()
-    {
-       // animator.SetInteger("Branch", 0);
-    }
-
-    // animation calss this
-    public void BranchExitAnimationFinished()
-    {
-       // animator.SetInteger("Branch", 0);
-    }
-
     public void Hit()
     {
         animator.SetTrigger("Hit");
@@ -170,12 +167,12 @@ public class PlayerGraphics : MonoBehaviour {
         float remain_distance = ((Vector2)transform.position - end).sqrMagnitude;
         while (remain_distance > float.Epsilon)
         {
+           
             remain_distance = ((Vector2)transform.position - end).sqrMagnitude;
             transform.position = Vector2.MoveTowards(transform.position, end, Time.smoothDeltaTime / move_time);
-            api.Camera_AutoMove();
+            Debug.Log(remain_distance);
             yield return new WaitForSeconds(0.001f);
         }
-
         yield return new WaitForSeconds(0.2f);
         api.MovePlayerFinished(player.gameObject);
     }

@@ -151,7 +151,7 @@ public class GraphicalEngine : MonoBehaviour {
 
     private string Icon_Path(AbilityType type)
     {
-        string path = @"Containers\Icons\New\";
+        string path = @"Containers\Icons\";
         if (type == AbilityType.Fuel)
         {
             path += "Fuel Off";
@@ -250,7 +250,7 @@ public class GraphicalEngine : MonoBehaviour {
     private void DynamicRotation(DynamicContainer container)
     {
         //Rotation for Abilities with Direction
-        string arrow = "Containers\\Version 4\\";
+        string arrow = "Containers\\";
         int rot = 0;
         switch (container.direction)
         {
