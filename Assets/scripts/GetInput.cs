@@ -229,7 +229,6 @@ public class GetInput : MonoBehaviour {
     }
     private void Get_Move()
     {
-        
         if (getOnce)
         {
             if (Input.GetKeyDown(KeyCode.RightArrow))

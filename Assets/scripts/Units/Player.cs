@@ -9,6 +9,10 @@ public class Player : Unit
     public int abilitycount;
     public List<Ability> abilities;
     public List<Direction> move_direction;
+
+    //Skill locks
+    public bool OneJump;
+
     public Direction direction { get; set; }
     public int movepercentage { get; set; }
     public PlayerState state { get; private set; }
