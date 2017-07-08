@@ -127,10 +127,10 @@ public class PlayerGraphics : MonoBehaviour {
 
     public void ResetStates()
     {
-        animator.SetBool("Jump", false);
+       // animator.SetBool("Jump", false);
         animator.SetInteger("Walk", 0);
-        animator.SetBool("Transition", false);
-        animator.SetInteger("Ramp", 0);
+       // animator.SetBool("Transition", false);
+      //  animator.SetInteger("Ramp", 0);
        
     }
     public void BranchExit(Direction dir,int ramp_type)
@@ -209,8 +209,8 @@ public class PlayerGraphics : MonoBehaviour {
     }
     public void Move_Animation(Direction dir)
     {
-        animator.SetInteger("Ramp", 0);
-        animator.SetBool("Transition", false);
+        //animator.SetInteger("Ramp", 0);
+       // animator.SetBool("Transition", false);
         if (dir == Direction.Right)
         {
             transform.GetChild(0).rotation = Quaternion.Euler(0, 0, 0);
