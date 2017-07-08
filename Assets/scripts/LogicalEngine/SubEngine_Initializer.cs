@@ -17,7 +17,7 @@ public class SubEngine_Initializer{
         api = engine.apiunit;
 
         sprite_Container = new Sprite[5];
-        sprite_Rock = new Sprite[6];
+        sprite_Rock = new Sprite[15];
         sprite_Ramp = new Sprite[4];
         sprite_Branch = new Sprite[4];
         string containerrootpath = "Containers\\Connected";
@@ -25,7 +25,7 @@ public class SubEngine_Initializer{
         string branchrootpath = "Branch\\";
         string ramprootpath = "Ramps\\Rock Half";
 
-        for (int i=0; i < 6; i++)
+        for (int i=0; i < 15; i++)
         {
             string rockpath = rockrootpath + "" + (i + 1);
             sprite_Rock[i] = Resources.Load<Sprite>(rockpath);
