@@ -731,7 +731,8 @@ public class LogicalEngine {
     {
         for (int i = 0; i < database.player.Count; i++)
         {
-            inputcontroller.Jump(database.player[i]);
+            if(database.player[i].OneJump)
+                inputcontroller.Jump(database.player[i]);
         }
     }
 

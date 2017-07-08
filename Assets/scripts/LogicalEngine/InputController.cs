@@ -15,6 +15,7 @@ public class InputController {
 
     public void PlayerMoveAction(Player player, Direction direction)
     {
+        Debug.Log(player.state);
         if (player.state == PlayerState.Idle)
         {
             IdlePLayerMove(player, direction);
@@ -474,6 +475,7 @@ public class InputController {
                 engine.apiunit.AddToDatabase(player);
                 engine.apigraphic.LeanStickStop(player);
             }
+            engine.apiinput.leanlock = false;
             player.SetState(nextstate);
             if (nextstate == PlayerState.Idle)
                 player.ApplyGravity();
@@ -486,6 +488,11 @@ public class InputController {
     {
         if (player.state != PlayerState.Lean)
         {
+            if (Toolkit.IsEmpty(Toolkit.VectorSum(player.position, player.GetGravity())))
+            {
+                LeanOnAir(player, direction);
+                return;
+            }
             Vector2 pos = Toolkit.VectorSum(player.position, direction);
             if (player.Can_Lean(pos))
             {
@@ -568,7 +575,7 @@ public class InputController {
                 player.currentAbility = null;
                 engine.apiinput.leanlock = true;
                 engine.apigraphic.Lean_On_Air(player);
-            }
+            } 
             else
             {
                 FakeLean(player, direction);
