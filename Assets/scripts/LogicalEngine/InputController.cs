@@ -273,7 +273,7 @@ public class InputController {
                 if (Toolkit.HasBranch(Toolkit.VectorSum(player.position, direction)))
                 {
                     player.SetState(PlayerState.Busy);
-                    Toolkit.GetBranch(Toolkit.VectorSum(player.position, direction)).PlayerMove(Toolkit.ReverseDirection(direction), player);
+                    Toolkit.GetBranch(Toolkit.VectorSum(player.position, direction)).PlayerMove (Toolkit.ReverseDirection(direction), player);
                     //player.SetState(PlayerState.Idle);
                     return;
                 }
@@ -474,6 +474,7 @@ public class InputController {
                 engine.apiunit.AddToDatabase(player);
                 engine.apigraphic.LeanStickStop(player);
             }
+            engine.apiinput.leanlock = false;
             player.SetState(nextstate);
             if (nextstate == PlayerState.Idle)
                 player.ApplyGravity();
@@ -486,6 +487,11 @@ public class InputController {
     {
         if (player.state != PlayerState.Lean)
         {
+            if (Toolkit.IsEmpty(Toolkit.VectorSum(player.position, player.GetGravity())))
+            {
+                LeanOnAir(player, direction);
+                return;
+            }
             Vector2 pos = Toolkit.VectorSum(player.position, direction);
             if (player.Can_Lean(pos))
             {
@@ -568,7 +574,7 @@ public class InputController {
                 player.currentAbility = null;
                 engine.apiinput.leanlock = true;
                 engine.apigraphic.Lean_On_Air(player);
-            }
+            } 
             else
             {
                 FakeLean(player, direction);

@@ -12,20 +12,39 @@ public class Rock : Unit
             gameObject.GetComponent<SpriteRenderer>().sprite = null;
         else
         {
-            bool[] connected = Toolkit.GetConnectedSides(this);
-            int sidecount = 0;
-            for (int i = 0; i < 4; i++)
-            {
-                sidecount += Convert.ToInt32(connected[i]);
-            }
-            switch (sidecount)
-            {
-                case 0: Connected_0(connected); break;
-                case 1: Connected_1(connected); break;
-                case 2: Connected_2(connected); break;
-                case 3: Connected_3(connected); break;
-                case 4: Connected_4(connected); break;
-            }
+            bool[] notconnected = Toolkit.GetConnectedSides(this);
+            if (notconnected[0] && notconnected[1] && notconnected[2] && notconnected[3])
+                return;
+            else if(notconnected[0] && notconnected[1] && notconnected[2])
+                transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Rock[8];
+            else if (notconnected[1] && notconnected[2] && notconnected[3])
+                transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Rock[9];
+            else if (notconnected[2] && notconnected[3] && notconnected[0]) 
+                transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Rock[10];
+            else if (notconnected[3] && notconnected[0] && notconnected[1])
+                transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Rock[11];
+            else if (notconnected[0] && notconnected[1])
+                transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Rock[7];
+            else if (notconnected[1] && notconnected[2])
+                transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Rock[5];
+            else if (notconnected[2] && notconnected[3])
+                transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Rock[4];
+            else if (notconnected[3] && notconnected[0])
+                transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Rock[6];
+            else if (notconnected[0] && notconnected[2])
+                transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Rock[13];
+            else if (notconnected[1] && notconnected[3])
+                transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Rock[12];
+            else if (notconnected[0])
+                transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Rock[3];
+            else if (notconnected[1])
+                transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Rock[1];
+            else if (notconnected[2])
+                transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Rock[0];
+            else if (notconnected[3])
+                transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Rock[2];
+            else
+                transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Rock[14];
         }
 
     }

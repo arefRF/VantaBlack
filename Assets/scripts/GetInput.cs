@@ -97,6 +97,14 @@ public class GetInput : MonoBehaviour {
             api.Absorb();
             is_holding = false;
         }
+        if (Input.GetKey(KeyCode.Equals))
+        {
+            api.Zoom(0.1f);
+        }
+        if (Input.GetKey(KeyCode.Minus))
+        {
+            api.Zoom(-0.1f);
+        }
     }
 
     private void Get_JoyStick()
@@ -229,7 +237,6 @@ public class GetInput : MonoBehaviour {
     }
     private void Get_Move()
     {
-        
         if (getOnce)
         {
             if (Input.GetKeyDown(KeyCode.RightArrow))

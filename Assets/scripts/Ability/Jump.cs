@@ -97,10 +97,10 @@ public class Jump : Ability {
 
     private bool PlayerMoveDirection(Player player, Direction direction)
     {
-        if (!Toolkit.IsEmpty(Toolkit.VectorSum(player.position, direction)))
+        if (!Toolkit.IsEmpty(Toolkit.VectorSum(player.position, direction)) && !Toolkit.HasBranch(Toolkit.VectorSum(player.position, direction)))
             return false;
         Vector2 pos = Toolkit.VectorSum(Toolkit.VectorSum(player.position, direction), player.GetGravity());
-        if (Toolkit.IsEmpty(pos))
+        if (Toolkit.IsEmpty(pos) && !Toolkit.HasBranch(Toolkit.VectorSum(player.position, direction)))
             return false;
         player.direction = direction;
         player.SetState(PlayerState.Jumping);
@@ -110,10 +110,10 @@ public class Jump : Ability {
 
     public bool PlayerMove(Player player)
     {
-        if (!Toolkit.IsEmpty(Toolkit.VectorSum(player.position, player.direction)))
+        if (!Toolkit.IsEmpty(Toolkit.VectorSum(player.position, player.direction)) && !Toolkit.HasBranch(Toolkit.VectorSum(player.position, player.direction)))
             return false;
         Vector2 pos = Toolkit.VectorSum(Toolkit.VectorSum(player.position, player.direction), Starter.GetGravityDirection());
-        if (Toolkit.IsEmpty(pos))
+        if (Toolkit.IsEmpty(pos) && !Toolkit.HasBranch(Toolkit.VectorSum(player.position, player.direction)))
             return false;
         player.SetState(PlayerState.Jumping);
         engine.inputcontroller.JumpingPlayerMove(player, player.direction);
@@ -151,6 +151,7 @@ public class Jump : Ability {
                     if (!Toolkit.IsEmpty(temppos))
                         if (Toolkit.GetUnit(temppos).isLeanable())
                         {
+                            Debug.Log(Toolkit.NumberToDirection(i + 1));
                             engine.inputcontroller.LeanOnAir(player, Toolkit.NumberToDirection(i + 1));
                             return true;
                         }
