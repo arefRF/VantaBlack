@@ -78,7 +78,7 @@ public class Jump : Ability {
         Ramp ramp = Toolkit.GetRamp(temppos);
         if (Toolkit.IsEmpty(Toolkit.VectorSum(player.position, engine.database.gravity_direction)) || (ramp != null && !Toolkit.IsdoubleRamp(temppos) && ramp.IsOnRampSide(Toolkit.ReverseDirection(engine.database.gravity_direction))))
         {
-            /*if (engine.apiinput.isAnyArrowKeyDown())
+            if (engine.apiinput.isAnyArrowKeyDown())
             {
                 Direction direction = engine.apiinput.GetArrowKeyDown();
                 if (PlayerMoveDirection(player, direction))
@@ -86,7 +86,7 @@ public class Jump : Ability {
                 if(PlayerLeanDireciton(player, direction))
                     return;
                 
-            }*/
+            }
             if (!PlayerMove(player))
                 if (!PlayerLean(player))
                     player.ApplyGravity();
@@ -97,14 +97,12 @@ public class Jump : Ability {
 
     private bool PlayerMoveDirection(Player player, Direction direction)
     {
-        Debug.Log("player move direction called");
         if (!Toolkit.IsEmpty(Toolkit.VectorSum(player.position, direction)))
             return false;
-        Debug.Log("1111");
-        Vector2 pos = Toolkit.VectorSum(Toolkit.VectorSum(player.position, direction), Starter.GetGravityDirection());
+        Vector2 pos = Toolkit.VectorSum(Toolkit.VectorSum(player.position, direction), player.GetGravity());
         if (Toolkit.IsEmpty(pos))
             return false;
-        Debug.Log("222  ");
+        player.direction = direction;
         player.SetState(PlayerState.Jumping);
         engine.inputcontroller.JumpingPlayerMove(player, direction);
         return true;
@@ -126,7 +124,7 @@ public class Jump : Ability {
     {
         if (!Toolkit.IsEmpty(Toolkit.VectorSum(player.position, direction)) && Toolkit.GetUnit(Toolkit.VectorSum(player.position, direction)).isLeanable())
         {
-            engine.inputcontroller.Lean(player, leandirection);
+            engine.inputcontroller.LeanOnAir(player, direction);
             return true;
         }
         return false;
@@ -136,12 +134,12 @@ public class Jump : Ability {
     {
         if (!Toolkit.IsEmpty(Toolkit.VectorSum(player.position, leandirection)) && Toolkit.GetUnit(Toolkit.VectorSum(player.position, leandirection)).isLeanable())
         {
-            engine.inputcontroller.Lean(player, leandirection);
+            engine.inputcontroller.LeanOnAir(player, leandirection);
             return true;
         }
         else if (!Toolkit.IsEmpty(Toolkit.VectorSum(player.position, player.direction)) && Toolkit.GetUnit(Toolkit.VectorSum(player.position, player.direction)).isLeanable())
         {
-            engine.inputcontroller.Lean(player, player.direction);
+            engine.inputcontroller.LeanOnAir(player, player.direction);
             return true;
         }
         else

@@ -43,7 +43,6 @@ public class Branch : Unit {
         // 2 way top bot
         else if (connected[0] && connected[2])
         {
-           Debug.Log("Top bot");
            GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Branch[0];
            transform.rotation = Quaternion.Euler(0, 0, 90);
         }
