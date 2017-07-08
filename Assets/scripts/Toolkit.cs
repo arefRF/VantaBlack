@@ -525,7 +525,7 @@ public sealed class Toolkit{
             Unit u = database.units[(int)pos.x, (int)pos.y][i];
             if (u.gameObject.transform.parent == unit.gameObject.transform.parent)
             {
-                if (u is Gate)
+                if (u is Gate || u is Branch)
                     return false;
                 return true;
             }
