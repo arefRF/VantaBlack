@@ -201,27 +201,24 @@ public class Branch : Unit {
     {
         bool[] hastbranch = new bool[4];
         int branchcounter = 0;
-        if (Toolkit.HasBranch(Toolkit.VectorSum(position, Direction.Up)))
+        int counter = 0;
+        for(int i=0; i<4; i++)
         {
-            hastbranch[0] = true;
-            branchcounter++;
-        }
-        if (Toolkit.HasBranch(Toolkit.VectorSum(position, Direction.Right)))
-        {
-            hastbranch[1] = true;
-            branchcounter++;
-        }
-        if (Toolkit.HasBranch(Toolkit.VectorSum(position, Direction.Down)))
-        {
-            hastbranch[2] = true;
-            branchcounter++;
-        }
-        if (Toolkit.HasBranch(Toolkit.VectorSum(position, Direction.Left)))
-        {
-            hastbranch[3] = true;
-            branchcounter++;
-        }
+            Vector2 temppos = Toolkit.VectorSum(position, Toolkit.NumberToDirection(i+1));
+            if (Toolkit.HasBranch(temppos))
+            {
+                hastbranch[i] = true;
+                branchcounter++;
+            }
+            if (Toolkit.IsEmpty(temppos))
+            {
+                counter++;
+            }
 
+        }
+        /*Debug.Log(position);
+        Debug.Log(branchcounter);
+        Debug.Log(counter);*/
         if(branchcounter == 0)  //fucked up
         {
             Debug.Log("fucked up    ");
@@ -231,7 +228,7 @@ public class Branch : Unit {
             }
             return;
         }
-        else if(branchcounter == 1 || branchcounter == 3 || branchcounter == 4)
+        else if(branchcounter == 1 || branchcounter == 3 || branchcounter == 4 || (branchcounter == 2 && (counter == 2 || counter == 1)))
         {
             api.RemoveFromDatabase(player);
             player.position = position;
