@@ -354,6 +354,29 @@ public sealed class Toolkit{
         }
         return false;
     }
+
+    public static bool HasDrainer(Vector2 position)
+    {
+        List<Unit>[,] units = Starter.GetDataBase().units;
+        for (int i = 0; i < units[(int)position.x, (int)position.y].Count; i++)
+        {
+            if (units[(int)position.x, (int)position.y][i] is Drainer)
+                return true;
+        }
+        return false;
+    }
+
+    public static Drainer GetDrianer(Vector2 position)
+    {
+        List<Unit>[,] units = Starter.GetDataBase().units;
+        for (int i = 0; i < units[(int)position.x, (int)position.y].Count; i++)
+        {
+            if (units[(int)position.x, (int)position.y][i] is Drainer)
+                return (Drainer)units[(int)position.x, (int)position.y][i];
+        }
+        return null;
+    }
+
     public static Leanable GetLeanable(Vector2 position)
     {
         List<Unit>[,] units = Starter.GetDataBase().units;
@@ -510,7 +533,7 @@ public sealed class Toolkit{
             Unit u = database.units[(int)pos.x, (int)pos.y][i];
             if (u.gameObject.transform.parent == unit.gameObject.transform.parent)
             {
-                if (u is Gate || u is Branch)
+                if (u is Gate)
                     return false;
                 return true;
             }

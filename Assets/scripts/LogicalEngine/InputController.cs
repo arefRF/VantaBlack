@@ -78,6 +78,15 @@ public class InputController {
                     LeanUndo(player, player.leandirection, PlayerState.Busy);
                     Lean(player, direction);
                 }
+                else if(units[0] is Branch)
+                {
+                    LeanUndo(player, player.leandirection, PlayerState.Busy);
+                    player.api.RemoveFromDatabase(player);
+                    player.position = units[0].position;
+                    player.api.AddToDatabase(player);
+                    Debug.Log(direction);
+                    engine.apigraphic.MovePlayer_Simple_2(player, player.position, direction);
+                }
             }
         }
     }

@@ -226,7 +226,7 @@ public class LogicalEngine {
 
     public void MovePlayer(Player player, Direction dir)
     {
-        try {
+        //try {
             Vector2 nextpos;
             //snpmanager.AddToSnapShot(player);
             if (player.onramp && player.state != PlayerState.Jumping) //ramp move
@@ -370,6 +370,13 @@ public class LogicalEngine {
                                 player.position = nextpos;
                                 database.units[(int)player.position.x, (int)player.position.y].Add(player);
                                 apigraphic.MovePlayer_Ramp_2(player, player.position, ramp.type);
+                            }
+                            else if (Toolkit.HasDrainer(nextpos))
+                            {
+                                database.units[(int)player.position.x, (int)player.position.y].Remove(player);
+                                player.position = nextpos;
+                                database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                                apigraphic.MovePlayer_Simple_1(player, player.position);
                             }
                             else if (Toolkit.CanplayerGoOnRampSideFromRamp(Toolkit.GetRamp(nextpos), database.gravity_direction, dir))
                             {
@@ -616,11 +623,11 @@ public class LogicalEngine {
                 }
             }
             snpmanager.takesnapshot();
-        }
+        /*}
         catch
         {
             Debug.Log("cant move!!!");
-        }
+        }*/
     }
 
     public void Undo()
