@@ -533,6 +533,7 @@ public class LogicalEngine {
                             database.units[(int)player.position.x, (int)player.position.y].Remove(player);
                             player.position = nextpos;
                             database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                            player.SetState(PlayerState.Busy);
                             apigraphic.MovePlayer_Simple_2(player, nextpos, dir);
                         }
                         else if (units[0] is Ramp)
