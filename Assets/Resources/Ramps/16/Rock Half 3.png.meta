@@ -1,12 +1,5 @@
 fileFormatVersion: 2
-<<<<<<< HEAD:Assets/Resources/Ramps/16/Rock Half 3.png.meta
 guid: 159ca5d93a97bde47879c377850bc38a
-timeCreated: 1499596054
-=======
-guid: cc056d4b7bd43ac4c98c380968569ca8
-timeCreated: 1499595683
->>>>>>> 9e791e6a415ffff3b9e580a8d13f4d44be118e50:Assets/Resources/Ramps/16/Rock Half 3.png.meta
-licenseType: Pro
 TextureImporter:
   fileIDToRecycleName: {}
   serializedVersion: 2
@@ -35,7 +28,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     filterMode: -1
-    aniso: -1
+    aniso: 16
     mipBias: -1
     wrapMode: 1
   nPOTScale: 0
