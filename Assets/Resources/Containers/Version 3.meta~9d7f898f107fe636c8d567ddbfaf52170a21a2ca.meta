@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Resources/Containers/Version 3.meta~9d7f898f107fe636c8d567ddbfaf52170a21a2ca.meta
 guid: 809fdeac32b8f494082fb3b100b352e3
 timeCreated: 1499598027
+=======
+guid: 3977a5c44b428cc45967a7a2c1ce7a46
+timeCreated: 1499597868
+>>>>>>> eb0f55d471adffbe793e8f4296d9efe7faf81bff:Assets/Resources/Containers/Version 3.meta~9d7f898f107fe636c8d567ddbfaf52170a21a2ca.meta
 licenseType: Pro
 DefaultImporter:
   userData: 
