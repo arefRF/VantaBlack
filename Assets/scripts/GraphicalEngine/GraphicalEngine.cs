@@ -78,6 +78,7 @@ public class GraphicalEngine : MonoBehaviour {
      
     private IEnumerator Move_Object_Coroutine(GameObject obj, Unit unit,Vector2 end)
     {
+        Debug.Log("Move Object Co");
         float remain_distance = ((Vector2)obj.transform.position - end).sqrMagnitude;
         float move_time = 1f;
         while (remain_distance > float.Epsilon)
@@ -201,7 +202,8 @@ public class GraphicalEngine : MonoBehaviour {
 
     public void Fountatin(Fountain fountatin)
     {
-        GameObject lights = Toolkit.GetObjectInChild(fountatin.gameObject, "Lights");
+        Debug.Log("fountain code commented in graphical engine!!! click here");
+        /*GameObject lights = Toolkit.GetObjectInChild(fountatin.gameObject, "Lights");
         Vector3 color = Ability_Color(fountatin.ability, false);
         for (int i = 0; i < 4; i++)
         {
@@ -211,7 +213,7 @@ public class GraphicalEngine : MonoBehaviour {
         {
             lights.transform.GetChild(i).GetComponent<SpriteRenderer>().color = new Color(color.x,color.y,color.z,1);
             lights.transform.GetChild(i).gameObject.SetActive(true);
-        }
+        }*/
     }
     private Vector3 Ability_Color(List<Ability> ability,bool compliment)
     {
