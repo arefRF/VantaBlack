@@ -782,6 +782,12 @@ public class Player : Unit
         ApplyGravity();
     }
 
+
+    public void MoveToBranchFinished()
+    {
+
+    }
+
     public void AdjustPlayerFinshed(Direction direction, Action<Player, Direction> passingmethod)
     {
         SetState(PlayerState.Idle);
