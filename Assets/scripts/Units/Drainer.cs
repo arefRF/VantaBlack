@@ -20,10 +20,13 @@ public class Drainer : Unit {
 
     public void Drain(Player player)
     {
+        Debug.Log("dariner has some commented code! check");
         player.SetState(PlayerState.Busy);
+        player.abilities.Clear();
         api.engine.apigraphic.Player_Co_Stop(player);
         player.GetComponent<PlayerGraphics>().ResetStates();
-        api.engine.apigraphic.Drain(player, this);
+        player.SetState(PlayerState.Idle);
+        //api.engine.apigraphic.Drain(player, this);
     }
 
     public override bool PlayerMoveInto(Direction dir)
