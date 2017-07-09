@@ -20,6 +20,16 @@ public class Fountain : Unit {
         animator = GetComponent<Animator>();
     }
 
+    public override void SetInitialSprite()
+    {
+        bool[] notcoonected = Toolkit.GetConnectedSides(this);
+        for(int i=0; i<4; i++)
+        {
+            if (!notcoonected[i])
+                transform.GetChild(i).GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Fountain[i];
+        }
+    }
+
     public void Action(Player player)
     {
         

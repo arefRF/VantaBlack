@@ -2,7 +2,7 @@
 using System.Collections;
 public class Get : MonoBehaviour {
 
-    public GameObject hud;
+    public GameObject hud { get; set; }
     public GameObject inMenu;
     public GameObject drainUI;
     private bool menu_show;
