@@ -366,6 +366,28 @@ public sealed class Toolkit{
         return false;
     }
 
+    public static bool HasLaser(Vector2 position)
+    {
+        List<Unit>[,] units = Starter.GetDataBase().units;
+        for (int i = 0; i < units[(int)position.x, (int)position.y].Count; i++)
+        {
+            if (units[(int)position.x, (int)position.y][i] is Laser)
+                return true;
+        }
+        return false;
+    }
+
+    public static Laser GetLaser(Vector2 position)
+    {
+        List<Unit>[,] units = Starter.GetDataBase().units;
+        for (int i = 0; i < units[(int)position.x, (int)position.y].Count; i++)
+        {
+            if (units[(int)position.x, (int)position.y][i] is Laser)
+                return (Laser)units[(int)position.x, (int)position.y][i];
+        }
+        return null;
+    }
+
     public static Drainer GetDrianer(Vector2 position)
     {
         List<Unit>[,] units = Starter.GetDataBase().units;

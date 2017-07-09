@@ -21,12 +21,12 @@ public class SubEngine_Initializer{
         sprite_Rock = new Sprite[15];
         sprite_Ramp = new Sprite[4,4];
         sprite_Branch = new Sprite[4];
-        sprite_Fountain = new Sprite[4];
+        sprite_Fountain = new Sprite[12];
         string containerrootpath = "Containers\\Connected";
         string rockrootpath = "Rocks\\Rock";
         string branchrootpath = "Branch\\";
         string ramprootpath = "Ramps\\16\\Ramp-";
-        string fountainrootpath = "Fountain\\";
+        string fountainrootpath = "Fountain\\Fountain";
 
         for (int i=0; i < 15; i++)
         {
@@ -52,9 +52,9 @@ public class SubEngine_Initializer{
             string branch_path = branchrootpath + "Branch " + (i + 1);
             sprite_Branch[i] = Resources.Load<Sprite>(branch_path);
         }
-        for(int i=0; i < 4; i++)
+        for(int i=0; i < 12; i++)
         {
-            string fountainpath = fountainrootpath + "Connected " + (i + 1);
+            string fountainpath = fountainrootpath + " " + (i + 1);
             sprite_Fountain[i] = Resources.Load<Sprite>(fountainpath);
         }
     }
