@@ -22,11 +22,19 @@ public class Fountain : Unit {
 
     public override void SetInitialSprite()
     {
-        bool[] notcoonected = Toolkit.GetConnectedSides(this);
+        bool[] connected = Toolkit.GetConnectedSidesForLaser(this);
         for(int i=0; i<4; i++)
         {
-            if (!notcoonected[i])
-                transform.GetChild(i).GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Fountain[i];
+            if (!connected[i])
+                transform.GetChild(i).GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Fountain[i + 8];
+            else
+            {
+                Vector2 pos = Toolkit.VectorSum(position, Toolkit.NumberToDirection(i + 1));
+                if(Toolkit.HasBranch(pos) || Toolkit.HasLaser(pos))
+                    transform.GetChild(i).GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Fountain[i + 4];
+                else
+                    transform.GetChild(i).GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Fountain[i];
+            }
         }
     }
 
