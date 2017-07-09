@@ -11,115 +11,62 @@ public class Ramp : Unit {
         else
         {
             bool[] connected = Toolkit.GetConnectedSidesForRamp(this);
-            int sidecount = 0;
-            for (int i = 0; i < 4; i++)
-                sidecount += System.Convert.ToInt32(connected[i]);
-            switch (sidecount)
-            {
-                case 0: Connected_0(connected); break;
-                case 1: Connected_1(connected); break;
-                case 2: Connected_2(connected); break;
-            }
-            /*string ramprootpath = "Ramps\\Version 4\\Rock Half ";
-            string ramp_path = "";
-            bool[] notconnected = Toolkit.GetConnectedSidesForRamp(this);
-            if (type == 1)
-            {
-                ramp_path = ramprootpath + "1-";
-                // bot and left connected
-                if (!notconnected[2] && !notconnected[3])
-                    ramp_path += "2";
-                // just bot connected
-                else if (!notconnected[2] && notconnected[3])
-                    ramp_path += "down";
-                // just left connected
-                else if (notconnected[2] && !notconnected[3])
-                    ramp_path += "left";
-                else
-                    ramp_path += "left";
-            }
-            else if (type == 2)
-            {
-                ramp_path = ramprootpath + "2-";
-                if (!notconnected[0] && !notconnected[3])
-                    ramp_path += "2";
-                else if (!notconnected[0] && notconnected[3])
-                    ramp_path += "top";
-                else if (notconnected[0] && !notconnected[3])
-                    ramp_path += "left";
-                else
-                    ramp_path += "left";
-            }
-            else if (type == 3)
-            {
-                ramp_path = ramprootpath + "3-";
-                if (!notconnected[0] && !notconnected[1])
-                    ramp_path += "2";
-                //right connected
-                else if (notconnected[0] && !notconnected[1])
-                    ramp_path += "right";
-                else if (!notconnected[0] && notconnected[1])
-                    ramp_path += "top";
-                //not connected to anything
-                else
-                    ramp_path += "0";
 
-            }
-            else if (type == 4)
+            switch (type)
             {
-                ramp_path = ramprootpath + "4-";
-                if (!notconnected[1] && !notconnected[2])
-                    ramp_path += "2";
-                else if (!notconnected[1] && notconnected[2])
-                    ramp_path += "right";
-                else if (notconnected[1] && !notconnected[2])
-                    ramp_path += "down";
-                else
-                    ramp_path += "down";
+                case 1: Type1Sprite(connected); break;
+                case 2: Type2Sprite(connected); break;
+                case 3: Type3Sprite(connected); break;
+                case 4: Type4Sprite(connected); break;
             }
-            GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load(ramp_path, typeof(Sprite));
-        }*/
+
         }
     }
 
+    private void Type1Sprite(bool[] connected)
+    {
+        if (connected[2] && connected[3])
+            GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Ramp[0, 3];
+        else if (connected[2])
+            GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Ramp[0, 1];
+        else if (connected[2] && connected[3])
+            GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Ramp[0, 2];
+        else
+            GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Ramp[0, 0];
 
-    private void Connected_0(bool[] connected)
-    {
-        gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Ramp[2];
     }
-    private void Connected_1(bool[] connected)
+    private void Type2Sprite(bool[] connected)
     {
-        switch (type)
-        {
-            case 1:
-                if (connected[2])
-                    gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Ramp[1];
-                else if(connected[3])
-                    gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Ramp[3];
-                break;
-            case 2:
-                if (connected[0])
-                    gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Ramp[3];
-                else if (connected[3])
-                    gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Ramp[1];
-                break;
-            case 3:
-                if (connected[0])
-                    gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Ramp[1];
-                else if (connected[1])
-                    gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Ramp[3];
-                break;
-            case 4:
-                if (connected[1])
-                    gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Ramp[1];
-                else if (connected[2])
-                    gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Ramp[3];
-                break;
-        }
+        if (connected[3] && connected[0])
+            GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Ramp[1, 3];
+        else if (connected[3])
+            GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Ramp[1, 1];
+        else if (connected[0])
+            GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Ramp[1, 2];
+        else
+            GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Ramp[1, 0];
     }
-    private void Connected_2(bool[] connected)
+    private void Type3Sprite(bool[] connected)
     {
-        gameObject.GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Ramp[0];
+        if (connected[0] && connected[1])
+            GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Ramp[2, 3];
+        else if (connected[0])
+            GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Ramp[2, 1];
+        else if (connected[1])
+            GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Ramp[2, 2];
+        else
+            GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Ramp[2, 0];
+    }
+    private void Type4Sprite(bool[] connected)
+    {
+        if (connected[1] && connected[2])
+            GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Ramp[3, 3];
+        else if (connected[1])
+            GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Ramp[3, 1];
+        else if (connected[2])
+            GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Ramp[3, 2];
+        else
+            GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Ramp[3, 0];
     }
     public override bool PlayerMoveInto(Direction dir)
     {

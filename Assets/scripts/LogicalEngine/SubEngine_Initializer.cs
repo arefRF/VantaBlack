@@ -7,7 +7,8 @@ public class SubEngine_Initializer{
     int x, y;
     APIUnit api;
     LogicalEngine engine;
-    public Sprite[] sprite_Container, sprite_Rock, sprite_Ramp,sprite_Branch, sprite_Fountain;
+    public Sprite[] sprite_Container, sprite_Rock, sprite_Branch, sprite_Fountain;
+    public Sprite[,] sprite_Ramp;
 
     public SubEngine_Initializer(int x, int y, LogicalEngine engine)
     {
@@ -18,13 +19,13 @@ public class SubEngine_Initializer{
 
         sprite_Container = new Sprite[5];
         sprite_Rock = new Sprite[15];
-        sprite_Ramp = new Sprite[4];
+        sprite_Ramp = new Sprite[4,4];
         sprite_Branch = new Sprite[4];
         sprite_Fountain = new Sprite[4];
         string containerrootpath = "Containers\\Connected";
         string rockrootpath = "Rocks\\Rock";
         string branchrootpath = "Branch\\";
-        string ramprootpath = "Ramps\\Rock Half";
+        string ramprootpath = "Ramps\\16\\Ramp-";
         string fountainrootpath = "Fountain\\";
 
         for (int i=0; i < 15; i++)
@@ -39,8 +40,11 @@ public class SubEngine_Initializer{
         }
         for(int i=0; i < 4; i++)
         {
-            string ramppath = ramprootpath + " " + (i + 1);
-            sprite_Ramp[i] = Resources.Load<Sprite>(ramppath);
+            for (int j = 0; j < 4; j++)
+            {
+                string ramppath = ramprootpath + (i + 1) + "-" + (j + 1);
+                sprite_Ramp[i,j] = Resources.Load<Sprite>(ramppath);
+            }
         }
      
         for (int i =0; i < 4; i++)
