@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Resources/Ramps/16/Rock Half 1.png.meta
 guid: 94e69ab819d2c754199eb7a386f77adf
 timeCreated: 1499596056
+=======
+guid: 6a981b0fcc63a104d999ce40f8407b08
+timeCreated: 1499595682
+>>>>>>> 9e791e6a415ffff3b9e580a8d13f4d44be118e50:Assets/Resources/Ramps/16/Rock Half 1.png.meta
 licenseType: Pro
 TextureImporter:
   fileIDToRecycleName: {}
