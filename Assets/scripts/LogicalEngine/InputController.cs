@@ -296,12 +296,19 @@ public class InputController {
                         return;
                 if (player.Should_Change_Direction(direction))
                 {
-                    Direction olddir = player.direction;
-                    player.direction = direction;
-                    engine.apigraphic.PlayerChangeDirection(player, olddir, player.direction);
-                    player.SetState(PlayerState.Busy);
-                    engine.apiinput.input.StartCoroutine(ChangeDirectionWait(0.15f, player));
-                    return;
+                    if (Toolkit.IsInsideBranch(player)) // avoiding direction change inside branch
+                    {
+                        player.direction = direction;
+                    }
+                    else
+                    {
+                        Direction olddir = player.direction;
+                        player.direction = direction;
+                        engine.apigraphic.PlayerChangeDirection(player, olddir, player.direction);
+                        player.SetState(PlayerState.Busy);
+                        engine.apiinput.input.StartCoroutine(ChangeDirectionWait(0.15f, player));
+                        return;
+                    }
                 }
                 if (!player.Move(direction))
                 {
@@ -479,6 +486,8 @@ public class InputController {
 
     public bool LeanUndo(Player player, Direction direction, PlayerState nextstate)
     {
+        if (player.state == PlayerState.Busy)
+            return false;
         if (player.state == PlayerState.Lean && player.leandirection == direction)
         {
             if (player.LeanedTo is Fountain)
@@ -491,10 +500,8 @@ public class InputController {
                 engine.apiunit.AddToDatabase(player);
                 engine.apigraphic.LeanStickStop(player);
             }
-            engine.apiinput.leanlock = false;
-            player.SetState(nextstate);
-            if (nextstate == PlayerState.Idle)
-                player.ApplyGravity();
+            player.SetState(PlayerState.Busy);
+            player.LeanUndoNextState = nextstate;
             return true;
         }
         return false;
