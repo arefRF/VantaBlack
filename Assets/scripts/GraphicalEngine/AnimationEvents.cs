@@ -32,7 +32,6 @@ public class AnimationEvents : MonoBehaviour {
 
     private void MoveToBranchFinished()
     {
-        Debug.Log("Move to Branch");
         transform.parent.GetComponent<Player>().MoveToBranchFinished();
     }
 }

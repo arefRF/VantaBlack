@@ -94,7 +94,6 @@ public class APIGraphic{
     // Block to Ramp
     public void MovePlayer_Simple_3(Player player, Vector2 position, int ramptype)
     {
-       // Debug.Log("Block to ramp");
         player.GetComponent<PlayerGraphics>().StopAllCoroutines();
         player.GetComponent<PlayerPhysics>().Block_To_Ramp_Move(position,ramptype);
         player.gameObject.GetComponent<PlayerGraphics>().Ramp_Animation(player.direction, ramptype);

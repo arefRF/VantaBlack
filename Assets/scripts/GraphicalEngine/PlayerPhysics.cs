@@ -384,7 +384,6 @@ public class PlayerPhysics : MonoBehaviour
                 api.MovePlayerFinished(gameObject);
             else
             {
-                Debug.Log("Land on ramp finish call");
                 player.LandOnRampFinished();   
             }
         }

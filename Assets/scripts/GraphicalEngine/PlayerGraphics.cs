@@ -56,7 +56,6 @@ public class PlayerGraphics : MonoBehaviour {
     public void Lean_Down(bool on_air)
     {
         ResetStates();
-        Debug.Log("Lean Down");
         animator.SetInteger("Lean", 2);
   
     }
@@ -166,7 +165,6 @@ public class PlayerGraphics : MonoBehaviour {
            
             remain_distance = ((Vector2)transform.position - end).sqrMagnitude;
             transform.position = Vector2.MoveTowards(transform.position, end, Time.smoothDeltaTime / move_time);
-            Debug.Log(remain_distance);
             yield return new WaitForSeconds(0.001f);
         }
         yield return new WaitForSeconds(0.2f);
@@ -175,12 +173,38 @@ public class PlayerGraphics : MonoBehaviour {
 
     public void Ramp_Animation(Direction dir,int type)
     {
+        int rot = 0;
         if (dir == Direction.Right)
             transform.GetChild(0).rotation = Quaternion.Euler(0, 0, 0);
         else
+        {
             transform.GetChild(0).rotation = Quaternion.Euler(0, 180, 0);
-        animator.SetInteger("Walk", 2);
+            rot = 180;
+        }
+        animator.SetInteger("Walk", 1);
         if (dir == Direction.Right)
+        {
+            if (type == 4)
+            {
+                transform.GetChild(0).rotation = Quaternion.Euler(0, rot, 45);
+            }
+            else
+            {
+                transform.GetChild(0).rotation = Quaternion.Euler(0, rot, -45);
+            }
+        }
+        else
+        {
+            if(type == 4)
+            {
+                transform.GetChild(0).rotation = Quaternion.Euler(0, rot, -45);
+            }
+            else
+            {
+                transform.GetChild(0).rotation = Quaternion.Euler(0, rot, 45);
+            }
+        }
+      /*  if (dir == Direction.Right)
             animator.SetInteger("Ramp", type);
         else
         {
@@ -188,7 +212,7 @@ public class PlayerGraphics : MonoBehaviour {
                 animator.SetInteger("Ramp", 4);
             else
                 animator.SetInteger("Ramp", 1);
-        }
+        } */
     }
 
     public void Drain()
@@ -205,6 +229,7 @@ public class PlayerGraphics : MonoBehaviour {
     }
     public void Move_Animation(Direction dir)
     {
+        Debug.Log("Move");
         //animator.SetInteger("Ramp", 0);
        // animator.SetBool("Transition", false);
         if (dir == Direction.Right)
