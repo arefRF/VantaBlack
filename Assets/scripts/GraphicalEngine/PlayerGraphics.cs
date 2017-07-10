@@ -151,7 +151,22 @@ public class PlayerGraphics : MonoBehaviour {
         // for later change
         else
             animator.SetInteger("branch", 4);
-        StartCoroutine(Simple_Move(pos, 0.65f,false));
+        StartCoroutine(Branch_Exit(pos, 0.65f));
+    }
+
+
+    private IEnumerator Branch_Exit(Vector2 end, float move_time)
+    {
+        float remain_distance = ((Vector2)transform.position - end).sqrMagnitude;
+        float speed = 1;
+        while (remain_distance > float.Epsilon)
+        {
+            remain_distance = ((Vector2)transform.position - end).sqrMagnitude;
+            transform.position = Vector2.MoveTowards(transform.position, end, Time.smoothDeltaTime * speed);
+            yield return new WaitForSeconds(0.001f);
+        }
+        yield return new WaitForSeconds(0.2f);
+            player.MoveOutOfBranchFinished();
     }
     private Vector2 On_Ramp_Pos(int type)
     {
