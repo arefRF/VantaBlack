@@ -327,6 +327,7 @@ public class InputController {
 
     private void MovingPlayerMove(Player player, Direction direction)
     {
+        
         if (player.direction == direction)
         {
             //Debug.Log("calling graphicals");
@@ -456,8 +457,8 @@ public class InputController {
                 engine.apigraphic.Player_Co_Stop(database.player[i]);
                 database.player[i].SetState(PlayerState.Idle);
             }*/
-            if (Toolkit.IsInsideBranch(database.player[i]))
-                database.player[i].SetState(PlayerState.Idle);
+            /*if (Toolkit.IsInsideBranch(database.player[i]))
+                database.player[i].SetState(PlayerState.Idle);*/
             if (database.player[i].state == PlayerState.Gir)
                 continue;
             if(database.player[i].state == PlayerState.Lean && engine.apiinput.isFunctionKeyDown())
