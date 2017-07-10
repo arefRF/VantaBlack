@@ -174,7 +174,7 @@ public class PlayerGraphics : MonoBehaviour {
             yield return new WaitForSeconds(0.001f);
         }
         yield return new WaitForSeconds(0.2f);
-        api.MovePlayerFinished(player.gameObject);
+        player.MoveToBranchFinished();
     }
 
     public void Ramp_Animation(Direction dir,int type)
