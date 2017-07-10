@@ -249,7 +249,8 @@ public class Branch : Unit {
             }
 
         }
-        if(branchcounter == 0)  //fucked up
+        api.engine.apigraphic.BranchLight(false, this);
+        if (branchcounter == 0)  //fucked up
         {
             Debug.Log("fucked up    ");
             if (player.Move(Toolkit.ReverseDirection(CameFrom)))
@@ -274,7 +275,6 @@ public class Branch : Unit {
             {
                 if(hastbranch[i] && Toolkit.DirectionToNumber(CameFrom)-1 != i)
                 {
-                    api.engine.apigraphic.BranchLight(false, this);
                     Toolkit.GetBranch(Toolkit.VectorSum(position, Toolkit.NumberToDirection(i + 1))).PlayerMove(Toolkit.ReverseDirection(Toolkit.NumberToDirection(i + 1)), player);
                     return;
                 }
