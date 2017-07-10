@@ -78,6 +78,7 @@ public class APIGraphic{
     // Branch to Branch
     public void MovePlayer_Branch_Branch(Player player,Vector2 pos)
     {
+        Debug.Log("branch to branch");
         player.GetComponent<PlayerGraphics>().StopAllCoroutines();
         player.gameObject.GetComponent<PlayerPhysics>().Branch_Branch(pos);
         player.gameObject.GetComponent<PlayerGraphics>().Move_Animation(player.direction);

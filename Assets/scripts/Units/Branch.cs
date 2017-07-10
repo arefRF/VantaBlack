@@ -267,7 +267,7 @@ public class Branch : Unit {
             player.position = position;
             player.transform.position = position;
             api.AddToDatabase(player);
-            player.SetState(PlayerState.Idle);
+            StartCoroutine(Wait(0.3f, player));
             return;
         }
         else if(branchcounter == 2)
@@ -286,6 +286,12 @@ public class Branch : Unit {
     public override bool isLeanable()
     {
         return islocked;
+    }
+
+    private IEnumerator Wait(float f, Player player)
+    {
+        yield return new WaitForSeconds(f);
+        player.SetState(PlayerState.Idle);
     }
 }
 

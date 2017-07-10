@@ -538,17 +538,9 @@ public class LogicalEngine {
                         if (units[0] is Branch)
                         {
                             database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                            if (Toolkit.HasBranch(player.position))
-                            {
-                                player.position = nextpos;
-                                database.units[(int)player.position.x, (int)player.position.y].Add(player);
-                                apigraphic.MovePlayer_Branch_Branch(player, player.position);
-                            }
-                            else {
-                                player.position = nextpos;
-                                database.units[(int)player.position.x, (int)player.position.y].Add(player);
-                                apigraphic.MovePlayer_Simple_2(player, nextpos, dir);
-                            }
+                            player.position = nextpos;
+                            database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                            apigraphic.MovePlayer_Simple_2(player, nextpos, dir);
                         }
                         else if (units[0] is Ramp)
                         {
