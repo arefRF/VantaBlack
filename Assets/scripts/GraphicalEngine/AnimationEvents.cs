@@ -12,7 +12,6 @@ public class AnimationEvents : MonoBehaviour {
         transform.parent.parent.GetComponent<PlayerGraphics>().ChangeColorFinished();
     }
 
-   
 
     private void InTheBranch()
     {
@@ -21,13 +20,14 @@ public class AnimationEvents : MonoBehaviour {
 
     private void LeanUndoFinished()
     {
-        Debug.Log("Lean Undo Finished");
         transform.parent.GetComponent<Player>().LeanUndoFinished();
     }
 
     private void MoveToBranchFinished()
     {
-        Debug.Log("Move To Branch");
+        transform.localScale = new Vector2(0, 0);
+        transform.parent.transform.position = transform.parent.GetComponent<Player>().position;
+        Starter.GetEngine().apigraphic.MovePlayerFinished(transform.parent.gameObject);
         transform.parent.GetComponent<Player>().MoveToBranchFinished();
     }
 }
