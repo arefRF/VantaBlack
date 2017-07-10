@@ -113,11 +113,7 @@ public class PlayerGraphics : MonoBehaviour {
         else if(dir == Direction.Up)
             StartCoroutine(Simple_Move(player.position, 0.3f));
         else
-            StartCoroutine(Simple_Move(player.position, 0.3f));
-
-       
-
-       
+            StartCoroutine(Simple_Move(player.position, 0.3f));  
     }
 
     public void DrainFinished()
