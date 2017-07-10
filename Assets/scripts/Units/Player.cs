@@ -766,7 +766,6 @@ public class Player : Unit
         System.Diagnostics.StackTrace stackTrace = new System.Diagnostics.StackTrace();
 
         // Get calling method name
-        Debug.Log(stackTrace.GetFrame(1).GetMethod().Name);
         SetState(PlayerState.Idle);
         int counter = 0;
         for(int i = 0; i < 4; i++)
