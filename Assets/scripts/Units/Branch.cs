@@ -144,6 +144,7 @@ public class Branch : Unit {
                 Toolkit.GetObjectInChild(this.gameObject, "Entrances").transform.GetChild(i).gameObject.SetActive(true);
             }
         }
+        
     }
     private void SetJointOrEntrance(Direction direction)
     { /*
