@@ -23,9 +23,10 @@ public class APIGraphic{
     // Ramp to Block
     public void MovePlayer_Ramp_2(Player player, Vector2 position,int type)
     {
+
             player.GetComponent<PlayerGraphics>().StopAllCoroutines();
             player.GetComponent<PlayerPhysics>().Ramp_To_Block_Move(position, type);
-        player.gameObject.GetComponent<PlayerGraphics>().Move_Animation(player.direction);
+        player.gameObject.GetComponent<PlayerGraphics>().Ramp_To_Block_Animation(player.direction);
     }
 
     //Ramp to fall

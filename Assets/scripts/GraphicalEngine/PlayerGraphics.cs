@@ -11,8 +11,10 @@ public class PlayerGraphics : MonoBehaviour {
     private Animator eyeAnimator;
     private Animator bodyAnimator;
     private Player player;
+    private int z_rot;
     void Start()
     {
+        z_rot = 0;
         unmoved_pos = transform.position;
         engine = Starter.GetEngine();
         api = engine.apigraphic;
@@ -173,46 +175,33 @@ public class PlayerGraphics : MonoBehaviour {
 
     public void Ramp_Animation(Direction dir,int type)
     {
-        int rot = 0;
-        if (dir == Direction.Right)
-            transform.GetChild(0).rotation = Quaternion.Euler(0, 0, 0);
-        else
-        {
-            transform.GetChild(0).rotation = Quaternion.Euler(0, 180, 0);
-            rot = 180;
-        }
         animator.SetInteger("Walk", 1);
         if (dir == Direction.Right)
         {
             if (type == 4)
             {
-                transform.GetChild(0).rotation = Quaternion.Euler(0, rot, 45);
+                transform.GetChild(0).rotation= Quaternion.Euler(0,0, 45);
+                z_rot = 45;
             }
             else
             {
-                transform.GetChild(0).rotation = Quaternion.Euler(0, rot, -45);
+                transform.GetChild(0).rotation = Quaternion.Euler(0, 0, -45);
+                z_rot = 315;
             }
         }
         else
         {
             if(type == 4)
             {
-                transform.GetChild(0).rotation = Quaternion.Euler(0, rot, -45);
+                transform.GetChild(0).rotation = Quaternion.Euler(0, 180, -45);
+                z_rot = 45;
             }
             else
             {
-                transform.GetChild(0).rotation = Quaternion.Euler(0, rot, 45);
+                transform.GetChild(0).rotation = Quaternion.Euler(0,180, 45);
+                z_rot = 315;
             }
         }
-      /*  if (dir == Direction.Right)
-            animator.SetInteger("Ramp", type);
-        else
-        {
-            if (type == 1)
-                animator.SetInteger("Ramp", 4);
-            else
-                animator.SetInteger("Ramp", 1);
-        } */
     }
 
     public void Drain()
@@ -229,7 +218,6 @@ public class PlayerGraphics : MonoBehaviour {
     }
     public void Move_Animation(Direction dir)
     {
-        Debug.Log("Move");
         //animator.SetInteger("Ramp", 0);
        // animator.SetBool("Transition", false);
         if (dir == Direction.Right)
@@ -245,6 +233,30 @@ public class PlayerGraphics : MonoBehaviour {
         }
     }
 
+    public void Ramp_To_Block_Animation(Direction dir)
+    {
+        animator.SetInteger("Walk", 1);
+        int y = 0;
+        if (dir == Direction.Right)
+        {
+            transform.GetChild(0).rotation = Quaternion.Euler(0, 0, z_rot);
+            y = 0;
+        }
+        else
+        {
+            transform.GetChild(0).rotation = Quaternion.Euler(0, 180, z_rot);
+            y = 180;
+        }
+
+        StartCoroutine(RampToBlockWait(y));
+    }
+
+    private IEnumerator RampToBlockWait(float y)
+    {
+        yield return new WaitForSeconds(0.4f);
+        transform.GetChild(0).rotation = Quaternion.Euler(0, y, 0);
+        z_rot = 0;
+    }
     public void Move_Finished()
     {
         animator.SetInteger("Walk", 0);
@@ -254,7 +266,10 @@ public class PlayerGraphics : MonoBehaviour {
         int rot = 0;
         if (player.transform.GetChild(0).rotation.y == 0)
             rot = 180;
-        player.transform.GetChild(0).rotation = Quaternion.Euler(player.transform.rotation.x, rot, player.transform.rotation.z);
+        z_rot = -z_rot;
+        Debug.Log(z_rot);
+        player.transform.GetChild(0).rotation = Quaternion.Euler(player.transform.rotation.x, rot, z_rot);
+        
         api.PlayerChangeDirectionFinished(gameObject.GetComponent<Player>());
     }  
 
