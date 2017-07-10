@@ -111,10 +111,16 @@ public class PlayerGraphics : MonoBehaviour {
 
         if (dir == Direction.Left || dir == Direction.Right)
             animator.SetInteger("Branch", 3);
-        else if(dir == Direction.Up)
-            StartCoroutine(Simple_Move(player.position, 0.3f,true));
+        else if (dir == Direction.Up)
+        {
+            StartCoroutine(Simple_Move(player.position, 0.3f, true));
+            animator.SetInteger("Branch", 1);
+        }
         else
-            StartCoroutine(Simple_Move(player.position, 0.3f,true));  
+        {
+            StartCoroutine(Simple_Move(player.position, 0.3f, true));
+            animator.SetInteger("Branch", 1);
+        }
     }
 
     public void DrainFinished()
@@ -132,7 +138,6 @@ public class PlayerGraphics : MonoBehaviour {
     }
     public void BranchExit(Direction dir,int ramp_type)
     {
-        Debug.Log("Branch Exit");
         StopAllCoroutines();
         animator.SetInteger("Branch", 0);
         Vector2 pos = On_Ramp_Pos(ramp_type) + player.position;
@@ -143,7 +148,9 @@ public class PlayerGraphics : MonoBehaviour {
 
         if (dir == Direction.Left || dir == Direction.Right)
             animator.SetInteger("Branch", 4);
-        
+        // for later change
+        else
+            animator.SetInteger("branch", 4);
         StartCoroutine(Simple_Move(pos, 0.65f,false));
     }
     private Vector2 On_Ramp_Pos(int type)
