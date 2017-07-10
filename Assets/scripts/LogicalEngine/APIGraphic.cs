@@ -167,8 +167,7 @@ public class APIGraphic{
     public void MovePlayerFinished(GameObject player_obj)
     {
         logicalengine.graphic_PlayerMoveAnimationFinished(player_obj.GetComponent<Player>());
-        player_obj.GetComponent<PlayerGraphics>().Move_Finished();
-           
+        player_obj.GetComponent<PlayerGraphics>().Move_Finished();   
     }    
     public void Fall(Player player, Vector2 position)
     {   

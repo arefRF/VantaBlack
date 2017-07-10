@@ -143,8 +143,8 @@ public class PlayerGraphics : MonoBehaviour {
 
         if (dir == Direction.Left || dir == Direction.Right)
             animator.SetInteger("Branch", 4);
-        else
-            StartCoroutine(Simple_Move(pos, 0.65f,false));
+        
+        StartCoroutine(Simple_Move(pos, 0.65f,false));
     }
     private Vector2 On_Ramp_Pos(int type)
     {
