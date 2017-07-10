@@ -32,10 +32,8 @@ public class GameManager : MonoBehaviour {
             return;
 
 
-        print(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
-        Debug.Log(controller);
+
         GameObject.Find("GetInput").GetComponent<GetInput>().joystick = manager.controller;
-        Debug.Log(GameObject.Find("GetInput").GetComponent<GetInput>().joystick);
 
         database = Starter.GetDataBase();
         engine = Starter.GetEngine();

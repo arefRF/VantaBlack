@@ -37,6 +37,8 @@ public class Player : Unit
 
     private PlayerState tempstate;
 
+    public PlayerState LeanUndoNextState;
+
     public Coroutine leancoroutine {get; set;}
     public void Awake()
     {
@@ -790,7 +792,14 @@ public class Player : Unit
 
     public void LeanUndoFinished()
     {
-
+        if (state == PlayerState.Lean)
+            return;
+        Debug.Log("lean undo finished");
+        Debug.Log(LeanUndoNextState);
+        api.engine.apiinput.leanlock = false;
+        SetState(LeanUndoNextState);
+        if (LeanUndoNextState == PlayerState.Idle)
+            ApplyGravity();
     }
 
     public void AdjustPlayerFinshed(Direction direction, Action<Player, Direction> passingmethod)
