@@ -646,12 +646,6 @@ public class InputController {
         }
     }
 
-    private IEnumerator LeanWait(float f, Player player)
-    {
-        yield return new WaitForSeconds(f);
-        player.ApplyGravity();
-    }
-
     private IEnumerator ChangeDirectionWait(float f, Player player)
     {
         yield return new WaitForSeconds(f);

@@ -135,7 +135,7 @@ public class Branch : Unit {
 
     private void Setentrance()
     {
-        bool[] isEmptySides = Toolkit.GetIsEmptySides(this);
+        bool[] isEmptySides = Toolkit.GetEmptySidesSameParent(this);
         for(int i = 0; i < 4; i++)
         {
             if (isEmptySides[i])
@@ -144,6 +144,7 @@ public class Branch : Unit {
                 Toolkit.GetObjectInChild(this.gameObject, "Entrances").transform.GetChild(i).gameObject.SetActive(true);
             }
         }
+        
     }
     private void SetJointOrEntrance(Direction direction)
     { /*
@@ -248,10 +249,7 @@ public class Branch : Unit {
             }
 
         }
-        /*Debug.Log(position);
-        Debug.Log(branchcounter);
-        Debug.Log(counter);*/
-        if(branchcounter == 0)  //fucked up
+        if (branchcounter == 0)  //fucked up
         {
             Debug.Log("fucked up    ");
             if (player.Move(Toolkit.ReverseDirection(CameFrom)))
@@ -262,10 +260,13 @@ public class Branch : Unit {
         }
         else if(branchcounter == 1 || branchcounter == 3 || branchcounter == 4 || (branchcounter == 2 && (counter == 2 || counter == 1)))
         {
+            api.engine.apigraphic.BranchLight(false, this);
             api.RemoveFromDatabase(player);
             player.position = position;
             player.transform.position = position;
             api.AddToDatabase(player);
+            api.engine.apigraphic.BranchLight(true, Toolkit.GetBranch(player.position));
+            StartCoroutine(Wait(0.3f, player));
             return;
         }
         else if(branchcounter == 2)
@@ -284,6 +285,12 @@ public class Branch : Unit {
     public override bool isLeanable()
     {
         return islocked;
+    }
+
+    private IEnumerator Wait(float f, Player player)
+    {
+        yield return new WaitForSeconds(f);
+        player.SetState(PlayerState.Idle);
     }
 }
 

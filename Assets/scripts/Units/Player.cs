@@ -59,7 +59,7 @@ public class Player : Unit
     {
         if(state != tempstate)
         {
-            //Debug.Log(state);
+    //        Debug.Log(state);
             tempstate = state;
         }
     }
@@ -441,7 +441,7 @@ public class Player : Unit
             api.engine.lasercontroller.CollisionCheck(position);
             api.AddToDatabase(this);
         }
-        state = PlayerState.Falling;
+        SetState(PlayerState.Falling);
         api.graphicalengine_Fall(this, FallPos());
 
         return true;
@@ -533,31 +533,6 @@ public class Player : Unit
             }
         }
         return true;
-    }
-
-    private bool Fall(Vector2 position)
-    {
-        List<Unit>[,] units = Starter.GetDataBase().units;
-        if (units[(int)position.x, (int)position.y].Count != 0)
-        {
-            for (int i = 0; i < units[(int)position.x, (int)position.y].Count; i++)
-            {
-                Unit unit = units[(int)position.x, (int)position.y][i];
-                if (unit is Ramp)
-                {
-                    Ramp ramp = (Ramp)unit;
-                    // Land On Ramp should be called
-                    return false;
-                }
-
-            }
-            // There is Some Object and fall should stop
-            return false;
-        }
-        else
-        {
-            return true;
-        }
     }
 
     public void TeleportFinished()
@@ -788,14 +763,28 @@ public class Player : Unit
     public void MoveToBranchFinished()
     {
         SetState(PlayerState.Idle);
+        for (int i = 0; i < 4; i++)
+        {
+            Direction dir = Toolkit.NumberToDirection(i + 1);
+            if (Toolkit.HasBranch(Toolkit.VectorSum(position, dir)))
+            {
+                SetState(PlayerState.Busy);
+                Toolkit.GetBranch(Toolkit.VectorSum(position, dir)).PlayerMove(Toolkit.ReverseDirection(dir), this);
+                return;
+            }
+        }
+    }
+
+    public void MoveOutOfBranchFinished()
+    {
+        SetState(PlayerState.Idle);
+        ApplyGravity();
     }
 
     public void LeanUndoFinished()
     {
         if (state == PlayerState.Lean)
             return;
-        Debug.Log("lean undo finished");
-        Debug.Log(LeanUndoNextState);
         api.engine.apiinput.leanlock = false;
         SetState(LeanUndoNextState);
         if (LeanUndoNextState == PlayerState.Idle)

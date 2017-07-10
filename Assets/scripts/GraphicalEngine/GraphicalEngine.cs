@@ -185,16 +185,17 @@ public class GraphicalEngine : MonoBehaviour {
     
     public void Branch(Branch branch)
     {
-      /*  if (branch.islocked)
-        {
-            branch.transform.GetChild(5).GetComponent<SpriteRenderer>().enabled = true;
-            if(branch.transform.GetChild(5).GetComponent<SpriteRenderer>().sprite == null)
-                branch.transform.GetChild(5).GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Branch/Branch Lock");
-        }
+        if (branch.islocked)
+            Toolkit.GetObjectInChild(branch.gameObject, "Icon").transform.GetChild(1).gameObject.SetActive(true);
         else
-            branch.transform.GetChild(5).GetComponent<SpriteRenderer>().enabled = false; */
+            Toolkit.GetObjectInChild(branch.gameObject, "Icon").transform.GetChild(1).gameObject.SetActive(false);
     }
 
+
+    public void BranchLight(Branch branch,bool on)
+    {
+        Toolkit.GetObjectInChild(branch.gameObject, "Icon").transform.GetChild(0).gameObject.SetActive(on);
+    }
     public void Stop_All_Co()
     {
         StopAllCoroutines();

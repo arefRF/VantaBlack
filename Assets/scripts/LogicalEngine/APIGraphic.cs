@@ -78,9 +78,15 @@ public class APIGraphic{
     // Branch to Branch
     public void MovePlayer_Branch_Branch(Player player,Vector2 pos)
     {
+        Debug.Log("branch to branch");
         player.GetComponent<PlayerGraphics>().StopAllCoroutines();
         player.gameObject.GetComponent<PlayerPhysics>().Branch_Branch(pos);
         player.gameObject.GetComponent<PlayerGraphics>().Move_Animation(player.direction);
+    }
+
+    public void BranchLight(bool on,Branch branch)
+    {
+        graphicalengine.BranchLight(branch, on);
     }
     // Block to Branch
     public void MovePlayer_Simple_2(Player player, Vector2 position,Direction direction)
@@ -126,7 +132,7 @@ public class APIGraphic{
     // Branch to Block
     public void MovePlayer_Branch_1(Player player, Vector2 position,Direction dir)
     {
-        //Debug.Log("Branch to block");
+        Debug.Log("Branch to block");
         player.GetComponent<PlayerGraphics>().StopAllCoroutines();
         player.GetComponent<PlayerPhysics>().StopAllCoroutines();
         player.GetComponent<PlayerGraphics>().BranchExit(dir,0);
@@ -138,7 +144,7 @@ public class APIGraphic{
     // Branch to fall
     public void MovePlayer_Branch_2(Player player, Vector2 position,Direction dir)
     {
-        //Debug.Log("branch to fall");
+        Debug.Log("branch to fall");
         player.GetComponent<PlayerPhysics>().StopAllCoroutines();
         player.GetComponent<PlayerGraphics>().StopAllCoroutines();
         player.GetComponent<PlayerGraphics>().BranchExit(dir,0);
@@ -161,8 +167,7 @@ public class APIGraphic{
     public void MovePlayerFinished(GameObject player_obj)
     {
         logicalengine.graphic_PlayerMoveAnimationFinished(player_obj.GetComponent<Player>());
-        player_obj.GetComponent<PlayerGraphics>().Move_Finished();
-           
+        player_obj.GetComponent<PlayerGraphics>().Move_Finished();   
     }    
     public void Fall(Player player, Vector2 position)
     {   
