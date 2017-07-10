@@ -249,7 +249,6 @@ public class Branch : Unit {
             }
 
         }
-        api.engine.apigraphic.BranchLight(false, this);
         if (branchcounter == 0)  //fucked up
         {
             Debug.Log("fucked up    ");
@@ -261,6 +260,7 @@ public class Branch : Unit {
         }
         else if(branchcounter == 1 || branchcounter == 3 || branchcounter == 4 || (branchcounter == 2 && (counter == 2 || counter == 1)))
         {
+            api.engine.apigraphic.BranchLight(false, this);
             api.RemoveFromDatabase(player);
             player.position = position;
             player.transform.position = position;
