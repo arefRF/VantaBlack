@@ -787,9 +787,13 @@ public class Player : Unit
 
     public void MoveToBranchFinished()
     {
-        //Debug.Log("wtf");
+        Debug.Log("wtf");
         SetState(PlayerState.Idle);
-        //Toolkit.GetBranch(position).PlayerMove(Toolkit.ReverseDirection(direction), this);
+        if (Toolkit.HasBranch(Toolkit.VectorSum(position, direction)))
+        {
+            SetState(PlayerState.Busy);
+            Toolkit.GetBranch(Toolkit.VectorSum(position, direction)).PlayerMove(Toolkit.ReverseDirection(direction), this);
+        }
     }
 
     public void MoveOutOfBranchFinished()

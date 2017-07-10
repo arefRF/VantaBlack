@@ -249,9 +249,6 @@ public class Branch : Unit {
             }
 
         }
-        /*Debug.Log(position);
-        Debug.Log(branchcounter);
-        Debug.Log(counter);*/
         if(branchcounter == 0)  //fucked up
         {
             Debug.Log("fucked up    ");
