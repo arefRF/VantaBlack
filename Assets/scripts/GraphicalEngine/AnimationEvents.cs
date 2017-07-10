@@ -24,4 +24,14 @@ public class AnimationEvents : MonoBehaviour {
     {
         transform.localScale = new Vector2(1, 1);
     }
+
+    private void LeanUndoFinished()
+    {
+        transform.parent.GetComponent<Player>().LeanUndoFinished();
+    }
+
+    private void MoveToBranchFinished()
+    {
+        transform.parent.GetComponent<Player>().MoveToBranchFinished();
+    }
 }
