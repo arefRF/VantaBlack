@@ -189,10 +189,13 @@ public class GraphicalEngine : MonoBehaviour {
             Toolkit.GetObjectInChild(branch.gameObject, "Icon").transform.GetChild(1).gameObject.SetActive(true);
         else
             Toolkit.GetObjectInChild(branch.gameObject, "Icon").transform.GetChild(1).gameObject.SetActive(false);
-  
+    }
 
-}
 
+    public void BranchLight(Branch branch,bool on)
+    {
+        Toolkit.GetObjectInChild(branch.gameObject, "Icon").transform.GetChild(0).gameObject.SetActive(on);
+    }
     public void Stop_All_Co()
     {
         StopAllCoroutines();

@@ -86,7 +86,7 @@ public class APIGraphic{
 
     public void BranchLight(bool on,Branch branch)
     {
-
+        graphicalengine.BranchLight(branch, on);
     }
     // Block to Branch
     public void MovePlayer_Simple_2(Player player, Vector2 position,Direction direction)
