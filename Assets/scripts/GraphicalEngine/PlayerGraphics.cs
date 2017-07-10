@@ -113,11 +113,7 @@ public class PlayerGraphics : MonoBehaviour {
         else if(dir == Direction.Up)
             StartCoroutine(Simple_Move(player.position, 0.3f));
         else
-            StartCoroutine(Simple_Move(player.position, 0.3f));
-
-       
-
-       
+            StartCoroutine(Simple_Move(player.position, 0.3f));  
     }
 
     public void DrainFinished()
@@ -170,11 +166,10 @@ public class PlayerGraphics : MonoBehaviour {
            
             remain_distance = ((Vector2)transform.position - end).sqrMagnitude;
             transform.position = Vector2.MoveTowards(transform.position, end, Time.smoothDeltaTime / move_time);
-            Debug.Log(remain_distance);
             yield return new WaitForSeconds(0.001f);
         }
         yield return new WaitForSeconds(0.2f);
-        api.MovePlayerFinished(player.gameObject);
+        player.MoveToBranchFinished();
     }
 
     public void Ramp_Animation(Direction dir,int type)

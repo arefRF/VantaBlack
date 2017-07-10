@@ -785,6 +785,11 @@ public class Player : Unit
 
     public void MoveToBranchFinished()
     {
+        SetState(PlayerState.Idle);
+    }
+
+    public void LeanUndoFinished()
+    {
 
     }
 
