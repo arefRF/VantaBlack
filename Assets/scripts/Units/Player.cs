@@ -790,6 +790,11 @@ public class Player : Unit
         SetState(PlayerState.Idle);
     }
 
+    public void MoveOutOfBranchFinished()
+    {
+        SetState(PlayerState.Idle);
+    }
+
     public void LeanUndoFinished()
     {
         if (state == PlayerState.Lean)
