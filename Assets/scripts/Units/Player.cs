@@ -762,6 +762,11 @@ public class Player : Unit
 
     public void MoveToBranchFinished()
     {
+        // Get call stack
+        System.Diagnostics.StackTrace stackTrace = new System.Diagnostics.StackTrace();
+
+        // Get calling method name
+        Debug.Log(stackTrace.GetFrame(1).GetMethod().Name);
         SetState(PlayerState.Idle);
         int counter = 0;
         for(int i = 0; i < 4; i++)
@@ -777,6 +782,8 @@ public class Player : Unit
             Direction dir = Toolkit.NumberToDirection(i + 1);
             if (Toolkit.HasBranch(Toolkit.VectorSum(position, dir)))
             {
+                Debug.Log(position);
+                Debug.Log(dir);
                 SetState(PlayerState.Busy);
                 api.engine.apigraphic.BranchLight(false, Toolkit.GetBranch(position));
                 Toolkit.GetBranch(Toolkit.VectorSum(position, dir)).PlayerMove(Toolkit.ReverseDirection(dir), this);
