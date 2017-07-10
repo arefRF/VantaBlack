@@ -794,8 +794,6 @@ public class Player : Unit
     {
         if (state == PlayerState.Lean)
             return;
-        Debug.Log("lean undo finished");
-        Debug.Log(LeanUndoNextState);
         api.engine.apiinput.leanlock = false;
         SetState(LeanUndoNextState);
         if (LeanUndoNextState == PlayerState.Idle)

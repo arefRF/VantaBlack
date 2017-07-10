@@ -266,6 +266,7 @@ public class Branch : Unit {
             player.position = position;
             player.transform.position = position;
             api.AddToDatabase(player);
+            player.SetState(PlayerState.Idle);
             return;
         }
         else if(branchcounter == 2)
