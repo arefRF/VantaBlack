@@ -57,7 +57,7 @@ public class Player : Unit
     {
         if(state != tempstate)
         {
-            Debug.Log(state);
+            //Debug.Log(state);
             tempstate = state;
         }
     }
@@ -785,7 +785,7 @@ public class Player : Unit
 
     public void MoveToBranchFinished()
     {
-        Debug.Log("jlasbkhjabdlsjvbildfvbldfv");
+        SetState(PlayerState.Idle);
     }
 
     public void LeanUndoFinished()
