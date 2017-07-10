@@ -26,7 +26,7 @@ public class AnimationEvents : MonoBehaviour {
     private void BranchExitFinished()
     {
         GetComponent<Animator>().SetInteger("Branch", 0);
-        transform.parent.GetComponent<Player>().MoveOutOfBranchFinished();
+        
     }
 
     private void MoveToBranchFinished()
