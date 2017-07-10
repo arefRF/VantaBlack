@@ -327,6 +327,7 @@ public class InputController {
 
     private void MovingPlayerMove(Player player, Direction direction)
     {
+        
         if (player.direction == direction)
         {
             //Debug.Log("calling graphicals");

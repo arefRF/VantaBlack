@@ -170,7 +170,6 @@ public class PlayerGraphics : MonoBehaviour {
            
             remain_distance = ((Vector2)transform.position - end).sqrMagnitude;
             transform.position = Vector2.MoveTowards(transform.position, end, Time.smoothDeltaTime / move_time);
-            Debug.Log(remain_distance);
             yield return new WaitForSeconds(0.001f);
         }
         yield return new WaitForSeconds(0.2f);
