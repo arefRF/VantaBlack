@@ -264,6 +264,7 @@ public class Branch : Unit {
             player.position = position;
             player.transform.position = position;
             api.AddToDatabase(player);
+            api.engine.apigraphic.BranchLight(true, Toolkit.GetBranch(player.position));
             StartCoroutine(Wait(0.3f, player));
             return;
         }
@@ -273,6 +274,7 @@ public class Branch : Unit {
             {
                 if(hastbranch[i] && Toolkit.DirectionToNumber(CameFrom)-1 != i)
                 {
+                    api.engine.apigraphic.BranchLight(false, this);
                     Toolkit.GetBranch(Toolkit.VectorSum(position, Toolkit.NumberToDirection(i + 1))).PlayerMove(Toolkit.ReverseDirection(Toolkit.NumberToDirection(i + 1)), player);
                     return;
                 }

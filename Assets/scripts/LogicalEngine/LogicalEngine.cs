@@ -459,6 +459,7 @@ public class LogicalEngine {
             {
                 if (Toolkit.IsInsideBranch(player) && player.state != PlayerState.Jumping) //branch move
                 {
+                    apigraphic.BranchLight(false, Toolkit.GetBranch(player.position));
                     nextpos = Toolkit.VectorSum(player.position, Toolkit.DirectiontoVector(dir));
                     Vector2 temp = Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction));
                     List<Unit> units = GetUnits(nextpos);
