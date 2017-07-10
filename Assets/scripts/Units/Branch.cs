@@ -8,111 +8,143 @@ public class Branch : Unit {
     public override void SetInitialSprite()
     {
         bool[] connected = Toolkit.GetConnectedSidesForBranch(this);
+        int rot = 0;
+        Sprite body = null;
         if (connected[0] && connected[1] && connected[2] && connected[3])
         {
-            GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Branch[3];
+            body = api.engine.initializer.sprite_Branch[3];
         }
         // 3 way
         else if(connected[0] && connected[1] && connected[2])
         {
-           GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Branch[2];
-           transform.rotation = Quaternion.Euler(0, 0, 270);
+            body = api.engine.initializer.sprite_Branch[2];
+           //transform.rotation = Quaternion.Euler(0, 0, 270);
+            rot = 270;
         }
         // tekrari badan pak kon
         else if (connected[0] && connected[1] && connected[2])
         {
-            GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Branch[2];
-            transform.rotation = Quaternion.Euler(0, 0, 270);
+            body = api.engine.initializer.sprite_Branch[2];
+           // transform.rotation = Quaternion.Euler(0, 0, 270);
+            rot = 270;
         }
         else if (connected[0] && connected[1] && connected[3])
         {
-            GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Branch[2];
-           transform.rotation = Quaternion.Euler(0, 0, 0);
+            body = api.engine.initializer.sprite_Branch[2];
+           //transform.rotation = Quaternion.Euler(0, 0, 0);
+            rot = 0;
         }
         else if (connected[0] && connected[2] && connected[3])
         {
-           GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Branch[2];
-           transform.rotation = Quaternion.Euler(0, 0, 90);
+            body = api.engine.initializer.sprite_Branch[2];
+           //transform.rotation = Quaternion.Euler(0, 0, 90);
+            rot = 90;
         }
         else if (connected[1] && connected[2] && connected[3])
         {
-           GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Branch[2];
-           transform.rotation = Quaternion.Euler(0, 0, 180);
+            body = api.engine.initializer.sprite_Branch[2];
+           //transform.rotation = Quaternion.Euler(0, 0, 180);
+            rot = 180;
         }
 
         // 2 way top bot
         else if (connected[0] && connected[2])
         {
-           GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Branch[0];
-           transform.rotation = Quaternion.Euler(0, 0, 90);
+            body = api.engine.initializer.sprite_Branch[0];
+          // transform.rotation = Quaternion.Euler(0, 0, 90);
+            rot = 90;
         }
 
         // 2 way left right
         else if (connected[1] && connected[3])
         {
-           GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Branch[0];
-           transform.rotation = Quaternion.Euler(0, 0, 0);
+            body = api.engine.initializer.sprite_Branch[0];
+          // transform.rotation = Quaternion.Euler(0, 0, 0);
+            rot = 0;
         }
 
         // 2 way  top right
         else if (connected[0] && connected[1])
         {
-           GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Branch[1];
-           transform.rotation = Quaternion.Euler(0, 0, 270);
+            body = api.engine.initializer.sprite_Branch[1];
+           //transform.rotation = Quaternion.Euler(0, 0, 270);
+            rot = 270;
         }
 
         // 2 way  right bot
         else if (connected[1] && connected[2])
         {
-            GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Branch[1];
-           transform.rotation = Quaternion.Euler(0, 0, 180);
+            body = api.engine.initializer.sprite_Branch[1];
+           //transform.rotation = Quaternion.Euler(0, 0, 180);
+            rot = 180;
         }
         // 2 way  bot left
         else if (connected[2] && connected[3])
         {
-            GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Branch[1];
-           transform.rotation = Quaternion.Euler(0, 0, 90);
+            body = api.engine.initializer.sprite_Branch[1];
+           //transform.rotation = Quaternion.Euler(0, 0, 90);
+            rot = 90;
         }
 
         // 2 way left top
         else if (connected[3] && connected[0])
         {
-           GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Branch[1];
-           transform.rotation = Quaternion.Euler(0, 0, 0);
+            body = api.engine.initializer.sprite_Branch[1];
+          // transform.rotation = Quaternion.Euler(0, 0, 0);
+            rot = 0;
         }
 
         // 1 way top
         else if (connected[0])
         {
-           GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Branch[3];
-           transform.rotation = Quaternion.Euler(0, 0, 90);
+            body = api.engine.initializer.sprite_Branch[3];
+           //transform.rotation = Quaternion.Euler(0, 0, 90);
+            rot = 90;
         }
         else if (connected[1])
         {
-            GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Branch[3];
+            body = api.engine.initializer.sprite_Branch[3];
         }
         else if (connected[2])
         {
-           GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Branch[3];
-           transform.rotation = Quaternion.Euler(0, 0, 270);
+            body = api.engine.initializer.sprite_Branch[3];
+          // transform.rotation = Quaternion.Euler(0, 0, 270);
+            rot = 270;
         }
         else if (connected[3])
         {
-           GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Branch[3];
-           transform.rotation = Quaternion.Euler(0, 0, 180);
+            body = api.engine.initializer.sprite_Branch[3];
+           //transform.rotation = Quaternion.Euler(0, 0, 180);
+            rot = 180;
         }
         else
         {
-           GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Branch[3];
+            body = api.engine.initializer.sprite_Branch[3];
         }
 
-       // SetJointOrEntrance(Direction.Up);
+        Toolkit.GetObjectInChild(this.gameObject,"BranchBody").transform.rotation = Quaternion.Euler(0, 0, rot);
+        Toolkit.GetObjectInChild(this.gameObject, "BranchBody").GetComponent<SpriteRenderer>().sprite = body;
+        Setentrance();
+
+        // SetJointOrEntrance(Direction.Up);
         //SetJointOrEntrance(Direction.Right);
-      //  SetJointOrEntrance(Direction.Down);
-      //  SetJointOrEntrance(Direction.Left);
+        //  SetJointOrEntrance(Direction.Down);
+        //  SetJointOrEntrance(Direction.Left);
         api.engine.apigraphic.UnitChangeSprite(this);
     }
 
+    private void Setentrance()
+    {
+        bool[] isEmptySides = Toolkit.GetIsEmptySides(this);
+        for(int i = 0; i < 4; i++)
+        {
+            if (isEmptySides[i])
+            {
+                Toolkit.GetObjectInChild(this.gameObject, "Icon").SetActive(true);
+                Toolkit.GetObjectInChild(this.gameObject, "Entrances").transform.GetChild(i).gameObject.SetActive(true);
+            }
+        }
+    }
     private void SetJointOrEntrance(Direction direction)
     { /*
         if(Toolkit.IsConnectedFromPosition(this, Toolkit.VectorSum(position, direction)))

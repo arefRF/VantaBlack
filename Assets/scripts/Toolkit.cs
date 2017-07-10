@@ -249,6 +249,7 @@ public sealed class Toolkit{
         return false;
     }
 
+    
     public static bool IsEmpty(Vector2 position)
     {
         List<Unit>[,] units = Starter.GetDataBase().units;
@@ -482,6 +483,17 @@ public sealed class Toolkit{
         result[1] = IsConnectedFromPositionForContainer(unit, VectorSum(unit.position, new Vector2(1, 0)), Direction.Right);
         result[2] = IsConnectedFromPositionForContainer(unit, VectorSum(unit.position, new Vector2(0, -1)), Direction.Down);
         result[3] = IsConnectedFromPositionForContainer(unit, VectorSum(unit.position, new Vector2(-1, 0)), Direction.Left);
+
+        return result;
+    }
+
+    public static bool[] GetIsEmptySides(Unit unit)
+    {
+        bool[] result = new bool[4];
+        for(int i = 0; i < 4; i++)
+        {
+           result[i] = IsEmpty(VectorSum(unit.position , NumberToDirection(i + 1)));
+        }
 
         return result;
     }
