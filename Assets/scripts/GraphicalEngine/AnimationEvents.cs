@@ -6,7 +6,7 @@ public class AnimationEvents : MonoBehaviour {
     {
         transform.parent.parent.GetComponent<PlayerGraphics>().DrainFinished();
     }
-
+    
     private void ChangeColorFinished()
     {
         transform.parent.parent.GetComponent<PlayerGraphics>().ChangeColorFinished();
@@ -21,6 +21,12 @@ public class AnimationEvents : MonoBehaviour {
     private void LeanUndoFinished()
     {
         transform.parent.GetComponent<Player>().LeanUndoFinished();
+    }
+
+    private void BranchExitFinished()
+    {
+        GetComponent<Animator>().SetInteger("Branch", 0);
+        transform.parent.GetComponent<Player>().MoveOutOfBranchFinished();
     }
 
     private void MoveToBranchFinished()

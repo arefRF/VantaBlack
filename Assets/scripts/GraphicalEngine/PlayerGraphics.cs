@@ -112,9 +112,9 @@ public class PlayerGraphics : MonoBehaviour {
         if (dir == Direction.Left || dir == Direction.Right)
             animator.SetInteger("Branch", 3);
         else if(dir == Direction.Up)
-            StartCoroutine(Simple_Move(player.position, 0.3f));
+            StartCoroutine(Simple_Move(player.position, 0.3f,true));
         else
-            StartCoroutine(Simple_Move(player.position, 0.3f));  
+            StartCoroutine(Simple_Move(player.position, 0.3f,true));  
     }
 
     public void DrainFinished()
@@ -132,6 +132,7 @@ public class PlayerGraphics : MonoBehaviour {
     }
     public void BranchExit(Direction dir,int ramp_type)
     {
+        Debug.Log("Branch Exit");
         StopAllCoroutines();
         animator.SetInteger("Branch", 0);
         Vector2 pos = On_Ramp_Pos(ramp_type) + player.position;
@@ -140,9 +141,10 @@ public class PlayerGraphics : MonoBehaviour {
         else if(dir == Direction.Left)
             transform.GetChild(0).rotation = Quaternion.Euler(0, 180, 0);
 
-        transform.GetChild(0).localScale = new Vector2(1, 1);
-
-        StartCoroutine(Simple_Move(pos, 0.65f));
+        if (dir == Direction.Left || dir == Direction.Right)
+            animator.SetInteger("Branch", 4);
+        else
+            StartCoroutine(Simple_Move(pos, 0.65f,false));
     }
     private Vector2 On_Ramp_Pos(int type)
     {
@@ -159,7 +161,7 @@ public class PlayerGraphics : MonoBehaviour {
         animator.SetTrigger("Hit");
         eyeAnimator.SetTrigger("Hit");
     }
-    private IEnumerator Simple_Move(Vector2 end, float move_time)
+    private IEnumerator Simple_Move(Vector2 end, float move_time,bool enter)
     {
         float remain_distance = ((Vector2)transform.position - end).sqrMagnitude;
         while (remain_distance > float.Epsilon)
@@ -170,7 +172,10 @@ public class PlayerGraphics : MonoBehaviour {
             yield return new WaitForSeconds(0.001f);
         }
         yield return new WaitForSeconds(0.2f);
-        player.MoveToBranchFinished();
+        if (enter)
+            player.MoveToBranchFinished();
+        else
+            player.MoveOutOfBranchFinished();
     }
 
     public void Ramp_Animation(Direction dir,int type)
@@ -180,26 +185,27 @@ public class PlayerGraphics : MonoBehaviour {
         {
             if (type == 4)
             {
-                transform.GetChild(0).rotation= Quaternion.Euler(0,0, 45);
-                z_rot = 45;
+                transform.GetChild(0).rotation= Quaternion.Euler(0,0, 0);
+                // z_rot set to 0 to change it later
+                z_rot = 0;
             }
             else
             {
-                transform.GetChild(0).rotation = Quaternion.Euler(0, 0, -45);
-                z_rot = 315;
+                transform.GetChild(0).rotation = Quaternion.Euler(0, 0, 0);
+                z_rot = 0;
             }
         }
         else
         {
             if(type == 4)
             {
-                transform.GetChild(0).rotation = Quaternion.Euler(0, 180, -45);
-                z_rot = 45;
+                transform.GetChild(0).rotation = Quaternion.Euler(0, 180, 0);
+                z_rot = 0;
             }
             else
             {
-                transform.GetChild(0).rotation = Quaternion.Euler(0,180, 45);
-                z_rot = 315;
+                transform.GetChild(0).rotation = Quaternion.Euler(0,180, 0);
+                z_rot = 0;
             }
         }
     }
@@ -267,7 +273,6 @@ public class PlayerGraphics : MonoBehaviour {
         if (player.transform.GetChild(0).rotation.y == 0)
             rot = 180;
         z_rot = -z_rot;
-        Debug.Log(z_rot);
         player.transform.GetChild(0).rotation = Quaternion.Euler(player.transform.rotation.x, rot, z_rot);
         
         api.PlayerChangeDirectionFinished(gameObject.GetComponent<Player>());

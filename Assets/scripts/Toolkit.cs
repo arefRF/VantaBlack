@@ -259,6 +259,21 @@ public sealed class Toolkit{
             return true;
         return false;
     }
+
+    public static bool IsEmptySameParent(GameObject obj,Vector2 position)
+    {
+        List<Unit>[,] units = Starter.GetDataBase().units;
+        if (units[(int)position.x, (int)position.y].Count == 0)
+            return true;
+        if (obj.transform.parent == units[(int)position.x, (int)position.y][0].transform.parent)
+        {
+            if (units[(int)position.x, (int)position.y].Count == 1 && units[(int)position.x, (int)position.y][0] is Pipe)
+                return true;
+            return false;
+        }
+        else
+            return true;
+    }
     public static bool IsdoubleRamp(Vector2 position)
     {
         List<Unit>[,] units = Starter.GetDataBase().units;
@@ -487,12 +502,13 @@ public sealed class Toolkit{
         return result;
     }
 
-    public static bool[] GetIsEmptySides(Unit unit)
+    // Empty Sides for The Same PArent
+    public static bool[] GetEmptySidesSameParent(Unit unit)
     {
         bool[] result = new bool[4];
         for(int i = 0; i < 4; i++)
         {
-           result[i] = IsEmpty(VectorSum(unit.position , NumberToDirection(i + 1)));
+           result[i] = IsEmptySameParent(unit.gameObject,VectorSum(unit.position , NumberToDirection(i + 1)));
         }
 
         return result;

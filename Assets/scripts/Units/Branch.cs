@@ -135,7 +135,7 @@ public class Branch : Unit {
 
     private void Setentrance()
     {
-        bool[] isEmptySides = Toolkit.GetIsEmptySides(this);
+        bool[] isEmptySides = Toolkit.GetEmptySidesSameParent(this);
         for(int i = 0; i < 4; i++)
         {
             if (isEmptySides[i])
