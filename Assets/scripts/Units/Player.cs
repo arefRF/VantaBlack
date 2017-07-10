@@ -763,12 +763,22 @@ public class Player : Unit
     public void MoveToBranchFinished()
     {
         SetState(PlayerState.Idle);
+        int counter = 0;
+        for(int i = 0; i < 4; i++)
+        {
+            Direction dir = Toolkit.NumberToDirection(i + 1);
+            if (Toolkit.HasBranch(Toolkit.VectorSum(position, dir)))
+                counter++;
+        }
+        if (counter != 1)
+            return;
         for (int i = 0; i < 4; i++)
         {
             Direction dir = Toolkit.NumberToDirection(i + 1);
             if (Toolkit.HasBranch(Toolkit.VectorSum(position, dir)))
             {
                 SetState(PlayerState.Busy);
+                api.engine.apigraphic.BranchLight(false, Toolkit.GetBranch(position));
                 Toolkit.GetBranch(Toolkit.VectorSum(position, dir)).PlayerMove(Toolkit.ReverseDirection(dir), this);
                 return;
             }
