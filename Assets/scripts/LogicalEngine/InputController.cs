@@ -15,6 +15,8 @@ public class InputController {
 
     public void PlayerMoveAction(Player player, Direction direction)
     {
+        if (player.state == PlayerState.Busy)
+            return;
         if (player.state == PlayerState.Idle)
         {
             IdlePLayerMove(player, direction);
@@ -308,7 +310,12 @@ public class InputController {
                 else
                 {
                     engine.apiinput.leanlock = false;
-                    player.SetState(PlayerState.Moving);
+                    if (Toolkit.HasBranch(player.position))
+                    {
+                        player.SetState(PlayerState.Busy);
+                    }
+                    else
+                        player.SetState(PlayerState.Moving);
                 }
             }
             else
