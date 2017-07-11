@@ -771,6 +771,8 @@ public class Player : Unit
             if (Toolkit.IsEmptySameParent(gameObject, Toolkit.VectorSum(position, dir)))
                 emptycounter++;
         }
+        Debug.Log(counter);
+        Debug.Log(emptycounter);
         if (counter != 1 || emptycounter > 1)
         {
             api.engine.apigraphic.BranchLight(true, Toolkit.GetBranch(position));
