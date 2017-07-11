@@ -15,6 +15,7 @@ public class AnimationEvents : MonoBehaviour {
 
     private void InTheBranch()
     {
+
         transform.localScale = new Vector2(1, 1);
         transform.parent.GetComponent<Player>().MoveToBranchFinished();
     }
