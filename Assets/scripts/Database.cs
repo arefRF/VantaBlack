@@ -12,7 +12,9 @@ public class Database {
         functionalCon = new List<FunctionalContainer>();
         drainers = new List<Drainer>();
         lasers = new List<Laser>();
+        bots = new List<Bot>();
     }
+    public List<Bot> bots;
     public List<Unit> pipes;
     public List<Player> player;
     public readonly int numberOfSnapshot = 5;

@@ -671,6 +671,15 @@ public class LogicalEngine {
         {
             inputcontroller.PlayerMoveAction(database.player[i], direction);
         }
+        if (direction == Direction.Up || direction == Direction.Down) {
+            for (int i = 0; i < database.bots.Count; i++)
+            {
+                if(database.bots[i] is MockingBot)
+                {
+                    (database.bots[i] as MockingBot).FakeLean(direction);
+                }
+            }
+        }
     }
 
     
