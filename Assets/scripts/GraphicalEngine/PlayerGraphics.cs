@@ -194,9 +194,8 @@ public class PlayerGraphics : MonoBehaviour {
             yield return new WaitForSeconds(0.001f);
         }
         yield return new WaitForSeconds(0.2f);
-        if (enter)
-            player.MoveToBranchFinished();
-        else
+        if (!enter)
+            //player.MoveToBranchFinished();
             player.MoveOutOfBranchFinished();
     }
 

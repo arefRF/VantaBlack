@@ -762,27 +762,29 @@ public class Player : Unit
 
     public void MoveToBranchFinished()
     {
-        // Get call stack
-        System.Diagnostics.StackTrace stackTrace = new System.Diagnostics.StackTrace();
-
-        // Get calling method name
-        SetState(PlayerState.Idle);
-        int counter = 0;
+        int counter = 0, emptycounter = 0;
         for(int i = 0; i < 4; i++)
         {
             Direction dir = Toolkit.NumberToDirection(i + 1);
             if (Toolkit.HasBranch(Toolkit.VectorSum(position, dir)))
-                counter++;
+            {
+                if(!Toolkit.GetBranch(Toolkit.VectorSum(position, dir)).islocked)
+                    counter++;
+            }
+            if (Toolkit.IsEmptySameParent(Toolkit.GetBranch(position).gameObject, Toolkit.VectorSum(position, dir)))
+                emptycounter++;
         }
-        if (counter != 1)
+        if (counter != 1 || emptycounter > 1)
+        {
+            api.engine.apigraphic.BranchLight(true, Toolkit.GetBranch(position));
+            SetState(PlayerState.Idle);
             return;
+        }
         for (int i = 0; i < 4; i++)
         {
             Direction dir = Toolkit.NumberToDirection(i + 1);
             if (Toolkit.HasBranch(Toolkit.VectorSum(position, dir)))
             {
-                Debug.Log(position);
-                Debug.Log(dir);
                 SetState(PlayerState.Busy);
                 api.engine.apigraphic.BranchLight(false, Toolkit.GetBranch(position));
                 Toolkit.GetBranch(Toolkit.VectorSum(position, dir)).PlayerMove(Toolkit.ReverseDirection(dir), this);
