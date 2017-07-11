@@ -2,6 +2,8 @@
 using System.Collections;
 
 public class AnimationEvents : MonoBehaviour {
+
+    public bool call;
     private void DrainFinished()
     {
         transform.parent.parent.GetComponent<PlayerGraphics>().DrainFinished();
@@ -11,15 +13,6 @@ public class AnimationEvents : MonoBehaviour {
     {
         transform.parent.parent.GetComponent<PlayerGraphics>().ChangeColorFinished();
     }
-
-
-    private void InTheBranch()
-    {
-        transform.localScale = new Vector2(1, 1);
-        
-        transform.parent.GetComponent<Player>().MoveToBranchFinished();
-    }
-
     private void LeanUndoFinished()
     {
         transform.parent.GetComponent<Player>().LeanUndoFinished();
@@ -35,5 +28,14 @@ public class AnimationEvents : MonoBehaviour {
     {
         transform.localScale = new Vector2(0, 0);
         transform.parent.transform.position = transform.parent.GetComponent<Player>().position;
+    }
+
+
+    ///  this is being called after MoveToBranch
+    private void InTheBranch()
+    {
+        transform.localScale = new Vector2(1, 1);
+        if(call)
+            transform.parent.GetComponent<Player>().MoveToBranchFinished();
     }
 }

@@ -108,18 +108,20 @@ public class PlayerGraphics : MonoBehaviour {
     {
         ResetStates();
         StopAllCoroutines();
-
+        transform.GetChild(0).GetComponent<AnimationEvents>().call = true;
         if (dir == Direction.Left || dir == Direction.Right)
             animator.SetInteger("Branch", 3);
         else if (dir == Direction.Up)
         {
             StartCoroutine(Simple_Move(player.position, 0.3f, true));
             animator.SetInteger("Branch", 1);
+            transform.GetChild(0).GetComponent<AnimationEvents>().call = false;
         }
         else
         {
             StartCoroutine(Simple_Move(player.position, 0.3f, true));
             animator.SetInteger("Branch", 1);
+            transform.GetChild(0).GetComponent<AnimationEvents>().call = false;
         }
     }
 
@@ -185,7 +187,6 @@ public class PlayerGraphics : MonoBehaviour {
     }
     private IEnumerator Simple_Move(Vector2 end, float move_time,bool enter)
     {
-        Debug.Log("Simple Move");
         Debug.Log(end);
         float remain_distance = ((Vector2)transform.position - end).sqrMagnitude;
         while (remain_distance > float.Epsilon)
@@ -197,10 +198,10 @@ public class PlayerGraphics : MonoBehaviour {
             yield return new WaitForSeconds(0.001f);
         }
         yield return new WaitForSeconds(0.2f);
-        if (!enter)
-            //player.MoveToBranchFinished();
+        if (enter)
+            player.MoveToBranchFinished();
+        else
             player.MoveOutOfBranchFinished();
-        Debug.Log("Simple Move Finish");
     }
 
     public void Ramp_Animation(Direction dir,int type)

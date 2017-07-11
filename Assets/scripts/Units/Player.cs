@@ -762,6 +762,7 @@ public class Player : Unit
 
     public void MoveToBranchFinished()
     {
+        Debug.Log("Mvoe To Branch Finished");
         int counter = 0, emptycounter = 0;
         for(int i = 0; i < 4; i++)
         {
