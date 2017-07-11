@@ -771,10 +771,12 @@ public class Player : Unit
             if (Toolkit.IsEmptySameParent(gameObject, Toolkit.VectorSum(position, dir)))
                 emptycounter++;
         }
-        if (counter != 1)
+        if (counter != 1 || emptycounter > 1)
+        {
+            api.engine.apigraphic.BranchLight(true, Toolkit.GetBranch(position));
+            SetState(PlayerState.Idle);
             return;
-        if (emptycounter > 1)
-            return;
+        }
         for (int i = 0; i < 4; i++)
         {
             Direction dir = Toolkit.NumberToDirection(i + 1);
