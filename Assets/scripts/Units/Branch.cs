@@ -124,7 +124,7 @@ public class Branch : Unit {
 
         Toolkit.GetObjectInChild(this.gameObject,"BranchBody").transform.rotation = Quaternion.Euler(0, 0, rot);
         Toolkit.GetObjectInChild(this.gameObject, "BranchBody").GetComponent<SpriteRenderer>().sprite = body;
-        Setentrance();
+        SetentranceOrJoin(connected);
 
         // SetJointOrEntrance(Direction.Up);
         //SetJointOrEntrance(Direction.Right);
@@ -133,7 +133,7 @@ public class Branch : Unit {
         api.engine.apigraphic.UnitChangeSprite(this);
     }
 
-    private void Setentrance()
+    private void SetentranceOrJoin(bool[] connected)
     {
         bool[] isEmptySides = Toolkit.GetEmptySidesSameParent(this);
         for(int i = 0; i < 4; i++)
@@ -144,7 +144,15 @@ public class Branch : Unit {
                 Toolkit.GetObjectInChild(this.gameObject, "Entrances").transform.GetChild(i).gameObject.SetActive(true);
             }
         }
-        
+        int counter = 0;
+        for(int i = 0; i < 4; i++)
+        {
+            if (connected[i])
+                counter++;
+        }
+        if(counter>2)
+            Toolkit.GetObjectInChild(this.gameObject, "Icon").SetActive(true);
+
     }
     private void SetJointOrEntrance(Direction direction)
     { /*
