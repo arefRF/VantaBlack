@@ -767,12 +767,13 @@ public class Player : Unit
         {
             Direction dir = Toolkit.NumberToDirection(i + 1);
             if (Toolkit.HasBranch(Toolkit.VectorSum(position, dir)))
-                counter++;
-            if (Toolkit.IsEmptySameParent(gameObject, Toolkit.VectorSum(position, dir)))
+            {
+                if(!Toolkit.GetBranch(Toolkit.VectorSum(position, dir)).islocked)
+                    counter++;
+            }
+            if (Toolkit.IsEmptySameParent(Toolkit.GetBranch(position).gameObject, Toolkit.VectorSum(position, dir)))
                 emptycounter++;
         }
-        Debug.Log(counter);
-        Debug.Log(emptycounter);
         if (counter != 1 || emptycounter > 1)
         {
             api.engine.apigraphic.BranchLight(true, Toolkit.GetBranch(position));
