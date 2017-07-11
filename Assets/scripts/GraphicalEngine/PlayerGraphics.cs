@@ -185,18 +185,22 @@ public class PlayerGraphics : MonoBehaviour {
     }
     private IEnumerator Simple_Move(Vector2 end, float move_time,bool enter)
     {
+        Debug.Log("Simple Move");
+        Debug.Log(end);
         float remain_distance = ((Vector2)transform.position - end).sqrMagnitude;
         while (remain_distance > float.Epsilon)
         {
            
             remain_distance = ((Vector2)transform.position - end).sqrMagnitude;
             transform.position = Vector2.MoveTowards(transform.position, end, Time.smoothDeltaTime / move_time);
+            
             yield return new WaitForSeconds(0.001f);
         }
         yield return new WaitForSeconds(0.2f);
         if (!enter)
             //player.MoveToBranchFinished();
             player.MoveOutOfBranchFinished();
+        Debug.Log("Simple Move Finish");
     }
 
     public void Ramp_Animation(Direction dir,int type)
