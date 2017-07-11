@@ -5,44 +5,48 @@ public class Branch : Unit {
 
     public bool islocked = false;
     public bool blocked = false;
+    public bool isExternal = false;
     public override void SetInitialSprite()
     {
         bool[] connected = Toolkit.GetConnectedSidesForBranch(this);
         int rot = 0;
+        int i = 0;
+        if (isExternal)
+            i = 1;
         Sprite body = null;
         if (connected[0] && connected[1] && connected[2] && connected[3])
         {
-            body = api.engine.initializer.sprite_Branch[3];
+            body = api.engine.initializer.sprite_Branch[i, 3];
         }
         // 3 way
         else if(connected[0] && connected[1] && connected[2])
         {
-            body = api.engine.initializer.sprite_Branch[2];
+            body = api.engine.initializer.sprite_Branch[i, 2];
            //transform.rotation = Quaternion.Euler(0, 0, 270);
             rot = 270;
         }
         // tekrari badan pak kon
         else if (connected[0] && connected[1] && connected[2])
         {
-            body = api.engine.initializer.sprite_Branch[2];
+            body = api.engine.initializer.sprite_Branch[i, 2];
            // transform.rotation = Quaternion.Euler(0, 0, 270);
             rot = 270;
         }
         else if (connected[0] && connected[1] && connected[3])
         {
-            body = api.engine.initializer.sprite_Branch[2];
+            body = api.engine.initializer.sprite_Branch[i, 2];
            //transform.rotation = Quaternion.Euler(0, 0, 0);
             rot = 0;
         }
         else if (connected[0] && connected[2] && connected[3])
         {
-            body = api.engine.initializer.sprite_Branch[2];
+            body = api.engine.initializer.sprite_Branch[i, 2];
            //transform.rotation = Quaternion.Euler(0, 0, 90);
             rot = 90;
         }
         else if (connected[1] && connected[2] && connected[3])
         {
-            body = api.engine.initializer.sprite_Branch[2];
+            body = api.engine.initializer.sprite_Branch[i, 2];
            //transform.rotation = Quaternion.Euler(0, 0, 180);
             rot = 180;
         }
@@ -50,7 +54,7 @@ public class Branch : Unit {
         // 2 way top bot
         else if (connected[0] && connected[2])
         {
-            body = api.engine.initializer.sprite_Branch[0];
+            body = api.engine.initializer.sprite_Branch[i, 0];
           // transform.rotation = Quaternion.Euler(0, 0, 90);
             rot = 90;
         }
@@ -58,7 +62,7 @@ public class Branch : Unit {
         // 2 way left right
         else if (connected[1] && connected[3])
         {
-            body = api.engine.initializer.sprite_Branch[0];
+            body = api.engine.initializer.sprite_Branch[i, 0];
           // transform.rotation = Quaternion.Euler(0, 0, 0);
             rot = 0;
         }
@@ -66,7 +70,7 @@ public class Branch : Unit {
         // 2 way  top right
         else if (connected[0] && connected[1])
         {
-            body = api.engine.initializer.sprite_Branch[1];
+            body = api.engine.initializer.sprite_Branch[i, 1];
            //transform.rotation = Quaternion.Euler(0, 0, 270);
             rot = 270;
         }
@@ -74,14 +78,14 @@ public class Branch : Unit {
         // 2 way  right bot
         else if (connected[1] && connected[2])
         {
-            body = api.engine.initializer.sprite_Branch[1];
+            body = api.engine.initializer.sprite_Branch[i, 1];
            //transform.rotation = Quaternion.Euler(0, 0, 180);
             rot = 180;
         }
         // 2 way  bot left
         else if (connected[2] && connected[3])
         {
-            body = api.engine.initializer.sprite_Branch[1];
+            body = api.engine.initializer.sprite_Branch[i, 1];
            //transform.rotation = Quaternion.Euler(0, 0, 90);
             rot = 90;
         }
@@ -89,7 +93,7 @@ public class Branch : Unit {
         // 2 way left top
         else if (connected[3] && connected[0])
         {
-            body = api.engine.initializer.sprite_Branch[1];
+            body = api.engine.initializer.sprite_Branch[i, 1];
           // transform.rotation = Quaternion.Euler(0, 0, 0);
             rot = 0;
         }
@@ -97,29 +101,29 @@ public class Branch : Unit {
         // 1 way top
         else if (connected[0])
         {
-            body = api.engine.initializer.sprite_Branch[3];
+            body = api.engine.initializer.sprite_Branch[i, 3];
            //transform.rotation = Quaternion.Euler(0, 0, 90);
             rot = 90;
         }
         else if (connected[1])
         {
-            body = api.engine.initializer.sprite_Branch[3];
+            body = api.engine.initializer.sprite_Branch[i, 3];
         }
         else if (connected[2])
         {
-            body = api.engine.initializer.sprite_Branch[3];
+            body = api.engine.initializer.sprite_Branch[i, 3];
           // transform.rotation = Quaternion.Euler(0, 0, 270);
             rot = 270;
         }
         else if (connected[3])
         {
-            body = api.engine.initializer.sprite_Branch[3];
+            body = api.engine.initializer.sprite_Branch[i, 3];
            //transform.rotation = Quaternion.Euler(0, 0, 180);
             rot = 180;
         }
         else
         {
-            body = api.engine.initializer.sprite_Branch[3];
+            body = api.engine.initializer.sprite_Branch[i, 3];
         }
 
         Toolkit.GetObjectInChild(this.gameObject,"BranchBody").transform.rotation = Quaternion.Euler(0, 0, rot);
