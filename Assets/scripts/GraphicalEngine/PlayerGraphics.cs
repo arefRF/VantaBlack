@@ -401,6 +401,11 @@ public class PlayerGraphics : MonoBehaviour {
             IconSpriteRenderer.color = abilitycolor;
             IconSpriteRenderer.sprite = (Sprite)Resources.Load(path, typeof(Sprite));
         }
+        for (int i = 1; i <= 4; i++)
+        {
+            GameObject light = Toolkit.GetObjectInChild(lights, "Light " + i);
+            light.SetActive(false);
+        }
         for (int i=1; i<=player.abilities.Count; i++)
         {
             GameObject light = Toolkit.GetObjectInChild(lights, "Light " + i);
