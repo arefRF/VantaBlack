@@ -362,7 +362,28 @@ public class PlayerGraphics : MonoBehaviour {
 
     public void ShowHologram()
     {
-        Toolkit.GetObjectInChild(gameObject, "Hologram").SetActive(true);
+        GameObject hologram = Toolkit.GetObjectInChild(gameObject, "Hologram");
+        GameObject lights = Toolkit.GetObjectInChild(hologram, "Lights");
+        GameObject Number = Toolkit.GetObjectInChild(hologram, "Number");
+        SpriteRenderer IconSpriteRenderer = Toolkit.GetObjectInChild(hologram, "Icon").GetComponent<SpriteRenderer>();
+        float[] color = Ability_Color(player.abilities);
+        Color abilitycolor  = new Color(color[0], color[1], color[2], color[3]);
+        IconSpriteRenderer.sprite = null;
+        Number.SetActive(false);
+        if (player.abilities.Count != 0)
+        {
+            Number.SetActive(true);
+            string path = Toolkit.Icon_Path(player.abilities[0].abilitytype);
+            IconSpriteRenderer.color = abilitycolor;
+            IconSpriteRenderer.sprite = (Sprite)Resources.Load(path, typeof(Sprite));
+        }
+        for (int i=1; i<=player.abilities.Count; i++)
+        {
+            GameObject light = Toolkit.GetObjectInChild(lights, "Light " + i);
+            light.GetComponent<SpriteRenderer>().color = abilitycolor;
+            light.SetActive(true);
+        }
+        hologram.SetActive(true);
     }
 
     public void HideHologram()

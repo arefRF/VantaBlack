@@ -37,7 +37,7 @@ public class Player : Unit
 
     private PlayerState tempstate;
 
-    public PlayerState LeanUndoNextState;
+    public PlayerState LeanUndoNextState { get; set; }
 
     public Coroutine leancoroutine {get; set;}
     public void Awake()
