@@ -151,6 +151,14 @@ public class LogicalEngine {
                 {
                     if (leanmove[i].CanMove(dir, unit.transform.parent.gameObject))
                     {
+                        Player tempplayer = leanmove[i] as Player;
+                        if(tempplayer.state == PlayerState.Lean)
+                        {
+                            if(tempplayer.LeanedTo.transform.parent != unit.transform.parent)
+                            {
+                                inputcontroller.LeanUndo(tempplayer, tempplayer.leandirection, PlayerState.Idle);
+                            }
+                        }
                         if (((FunctionalContainer)unit).firstmove)
                             snpmanager.AddToSnapShot(leanmove[i]);
                         apiunit.RemoveFromDatabase(leanmove[i]);
@@ -180,6 +188,14 @@ public class LogicalEngine {
                 }
                 if (shouldmove[i].CanMove(dir, unit.transform.parent.gameObject))
                 {
+                    Player tempplayer = shouldmove[i] as Player;
+                    if (tempplayer.state == PlayerState.Lean)
+                    {
+                        if (tempplayer.LeanedTo.transform.parent != unit.transform.parent)
+                        {
+                            inputcontroller.LeanUndo(tempplayer, tempplayer.leandirection, PlayerState.Idle);
+                        }
+                    }
                     if (((FunctionalContainer)unit).firstmove)
                         snpmanager.AddToSnapShot(shouldmove[i]);
                     apiunit.RemoveFromDatabase(shouldmove[i]);
