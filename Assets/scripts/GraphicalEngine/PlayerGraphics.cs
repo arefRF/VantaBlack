@@ -282,7 +282,24 @@ public class PlayerGraphics : MonoBehaviour {
 
         StartCoroutine(RampToBlockWait(y));
     }
+    public void LandAnimation()
+    {
+        animator.SetBool("Assemble", false);
+        animator.SetBool("Jump", false);
+        StartCoroutine(WaitForLand());
+    }
 
+
+    IEnumerator WaitForLand()
+    {
+        yield return new WaitForSeconds(0.6f);
+        api.LandFinished(player);
+    }
+    public void FallAnimation()
+    {
+        animator.SetBool("Jump", true);
+        animator.SetBool("Assemble", true);
+    }
     private IEnumerator RampToBlockWait(float y)
     {
         yield return new WaitForSeconds(0.4f);

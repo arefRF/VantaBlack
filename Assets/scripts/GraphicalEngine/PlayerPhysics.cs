@@ -4,8 +4,8 @@ using System.Collections;
 public class PlayerPhysics : MonoBehaviour
 {
     public float move_time = 0.5f;
-    public float fall_acceleration = 3;
-    public float fall_velocity = 1;
+    public float fall_acceleration = 100;
+    public float fall_velocity = 2;
     public float Jump_Acceleration = -0.01f;
     public float Jump_Velocity = 10;
     private float platform_move_time = 1;
@@ -425,7 +425,8 @@ public class PlayerPhysics : MonoBehaviour
         {
             remain_distance = ((Vector2)player_transofrm.position - end).sqrMagnitude;
             player_transofrm.position = Vector3.MoveTowards(player_transofrm.position, end, Time.deltaTime * velocity);
-            velocity += Time.deltaTime * a;
+            velocity += 0.1f * a;
+            Debug.Log(velocity);
             api.Camera_AutoMove();
             yield return null;
         }
