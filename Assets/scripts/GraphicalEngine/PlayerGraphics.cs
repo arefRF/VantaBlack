@@ -379,7 +379,7 @@ public class PlayerGraphics : MonoBehaviour {
 
     public void ShowHologram()
     {
-        GameObject hologram = Toolkit.GetObjectInChild(gameObject, "Hologram");
+        GameObject hologram = Toolkit.GetObjectInChild(gameObject.transform.GetChild(0).GetChild(0).gameObject, "Hologram");
         GameObject lights = Toolkit.GetObjectInChild(hologram, "Lights");
         GameObject Number = Toolkit.GetObjectInChild(hologram, "Number");
         SpriteRenderer IconSpriteRenderer = Toolkit.GetObjectInChild(hologram, "Icon").GetComponent<SpriteRenderer>();
@@ -405,6 +405,6 @@ public class PlayerGraphics : MonoBehaviour {
 
     public void HideHologram()
     {
-        Toolkit.GetObjectInChild(gameObject, "Hologram").SetActive(false);
+        Toolkit.GetObjectInChild(gameObject.transform.GetChild(0).GetChild(0).gameObject, "Hologram").SetActive(false);
     }
 }
