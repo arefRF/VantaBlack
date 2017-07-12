@@ -322,35 +322,17 @@ public class PlayerGraphics : MonoBehaviour {
     }
     public void ChangeColor()
     {
-        if(bodyAnimator == null)
-             bodyAnimator = transform.GetChild(0).GetComponent<Animator>();
-        if (player.abilities.Count != 0)
-        {
-            if (player.abilities[0].abilitytype == AbilityType.Fuel)
-            {
-                if (player.state == PlayerState.Lean && player.leandirection == Direction.Up)
-                {
-                    bodyAnimator.SetInteger("Ability", 2);
-                    bodyAnimator.SetBool("Lean", true);
-                }
-                else
-                    bodyAnimator.SetInteger("Ability", 1);
-            }
-            else
-            {
-                if (player.state == PlayerState.Lean && player.leandirection == Direction.Up)
-                {
-                    bodyAnimator.SetInteger("Ability", 0);
-                    
-                }
+        float[] color = Ability_Color(player.abilities);
+        // Body Color
+        transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<SpriteRenderer>().color = new Color(color[0], color[1], color[2], color[3]);
+        //Eye BAckground Color
+        transform.GetChild(0).GetChild(0).GetChild(0).GetChild(1).GetComponent<SpriteRenderer>().color = new Color(color[0], color[1], color[2], color[3]);
 
-                else
-                    bodyAnimator.SetInteger("Ability", 0);
-            }
-            
-        }
+        // Eye Color
+        if (player.abilities.Count==0)
+            transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().color = new Color(1,1,1);
         else
-            bodyAnimator.SetInteger("Ability", 0);
+            transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().color = new Color(0, 0, 0);
     }
 
     public void ChangeColorFinished()
@@ -366,7 +348,7 @@ public class PlayerGraphics : MonoBehaviour {
             switch (ability[0].abilitytype)
             {
                 case AbilityType.Key: color = new float[] { 1, 1, 1, 1 };break;
-                case AbilityType.Fuel: color = new float[] { 0, 0.941f, 0.654f, 1 };break;
+                case AbilityType.Fuel: color = new float[] { 1, 0.674f, 0.211f, 1 };break;
                 case AbilityType.Jump: color = new float[] { 0.59f, 0.78f, 1 ,1};break;
                 case AbilityType.Teleport: color = new float[] { 0.92f, 0.36f, 0.44f, 1 };break;
                 case AbilityType.Gravity: color = new float[] { 0.81f, 0.60f, 0.96f, 1 };break;
