@@ -292,7 +292,7 @@ public class PlayerGraphics : MonoBehaviour {
 
     IEnumerator WaitForLand()
     {
-        yield return new WaitForSeconds(0.6f);
+        yield return new WaitForSeconds(0.1f);
         api.LandFinished(player);
     }
     public void FallAnimation()
