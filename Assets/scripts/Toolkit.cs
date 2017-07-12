@@ -702,5 +702,17 @@ public sealed class Toolkit{
         }
         return null;
     }
+
+    public static string Icon_Path(AbilityType type)
+    {
+        string path = @"Containers\Icons\";
+        if (type == AbilityType.Fuel)
+        {
+            path += "Fuel Off";
+        }
+        else if (type == AbilityType.Key)
+            path += @"Key";
+        return path;
+    }
 }
 

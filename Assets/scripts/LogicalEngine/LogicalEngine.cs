@@ -945,5 +945,19 @@ public class LogicalEngine {
 
     }
 
-    
+    public void ShowHologram()
+    {
+        for(int i=0; i<database.player.Count; i++)
+        {
+            database.player[i].GetComponent<PlayerGraphics>().ShowHologram();
+        }
+    }
+
+    public void HideHologram()
+    {
+        for (int i = 0; i < database.player.Count; i++)
+        {
+            database.player[i].GetComponent<PlayerGraphics>().HideHologram();
+        }
+    }
 }

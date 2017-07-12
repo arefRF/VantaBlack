@@ -282,7 +282,24 @@ public class PlayerGraphics : MonoBehaviour {
 
         StartCoroutine(RampToBlockWait(y));
     }
+    public void LandAnimation()
+    {
+        animator.SetBool("Assemble", false);
+        animator.SetBool("Jump", false);
+        StartCoroutine(WaitForLand());
+    }
 
+
+    IEnumerator WaitForLand()
+    {
+        yield return new WaitForSeconds(0.1f);
+        api.LandFinished(player);
+    }
+    public void FallAnimation()
+    {
+        animator.SetBool("Jump", true);
+        animator.SetBool("Assemble", true);
+    }
     private IEnumerator RampToBlockWait(float y)
     {
         yield return new WaitForSeconds(0.4f);
@@ -300,13 +317,20 @@ public class PlayerGraphics : MonoBehaviour {
             rot = 180;
         z_rot = -z_rot;
         player.transform.GetChild(0).rotation = Quaternion.Euler(player.transform.rotation.x, rot, z_rot);
-        
-        api.PlayerChangeDirectionFinished(gameObject.GetComponent<Player>());
+        if (dir == Direction.Right)
+            animator.SetInteger("Change Direction", 1);
+        else
+            animator.SetInteger("Change Direction", 2);
+       
     }  
 
-    private void Change_Direction_Finished()
+    public void Change_Direction_Finished(Direction dir)
     {
-        api.PlayerChangeDirectionFinished(gameObject.GetComponent<Player>());
+        if (dir == player.direction)
+        {
+            animator.SetInteger("Change Direction", 0);
+            api.PlayerChangeDirectionFinished(gameObject.GetComponent<Player>());
+        }
     }
 
     public void Teleport(Vector2 pos)
@@ -360,4 +384,34 @@ public class PlayerGraphics : MonoBehaviour {
         return color;
     }
 
+    public void ShowHologram()
+    {
+        GameObject hologram = Toolkit.GetObjectInChild(gameObject.transform.GetChild(0).GetChild(0).gameObject, "Hologram");
+        GameObject lights = Toolkit.GetObjectInChild(hologram, "Lights");
+        GameObject Number = Toolkit.GetObjectInChild(hologram, "Number");
+        SpriteRenderer IconSpriteRenderer = Toolkit.GetObjectInChild(hologram, "Icon").GetComponent<SpriteRenderer>();
+        float[] color = Ability_Color(player.abilities);
+        Color abilitycolor  = new Color(color[0], color[1], color[2], color[3]);
+        IconSpriteRenderer.sprite = null;
+        Number.SetActive(false);
+        if (player.abilities.Count != 0)
+        {
+            Number.SetActive(true);
+            string path = Toolkit.Icon_Path(player.abilities[0].abilitytype);
+            IconSpriteRenderer.color = abilitycolor;
+            IconSpriteRenderer.sprite = (Sprite)Resources.Load(path, typeof(Sprite));
+        }
+        for (int i=1; i<=player.abilities.Count; i++)
+        {
+            GameObject light = Toolkit.GetObjectInChild(lights, "Light " + i);
+            light.GetComponent<SpriteRenderer>().color = abilitycolor;
+            light.SetActive(true);
+        }
+        hologram.SetActive(true);
+    }
+
+    public void HideHologram()
+    {
+        Toolkit.GetObjectInChild(gameObject.transform.GetChild(0).GetChild(0).gameObject, "Hologram").SetActive(false);
+    }
 }

@@ -169,4 +169,14 @@ public class APIInput{
             Camera.main.orthographicSize -= zoom;
         }
     }
+
+    public void ShowHologram()
+    {
+        engine.ShowHologram();
+    }
+
+    public void HideHologram()
+    {
+        engine.HideHologram();
+    }
 }

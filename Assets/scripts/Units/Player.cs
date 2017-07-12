@@ -37,7 +37,7 @@ public class Player : Unit
 
     private PlayerState tempstate;
 
-    public PlayerState LeanUndoNextState;
+    public PlayerState LeanUndoNextState { get; set; }
 
     public Coroutine leancoroutine {get; set;}
     public void Awake()
@@ -100,10 +100,6 @@ public class Player : Unit
 
     public void SetState(PlayerState state)
     {
-        System.Diagnostics.StackTrace stackTrace = new System.Diagnostics.StackTrace();
-
-        Debug.Log(stackTrace.GetFrame(1).GetMethod().Name);
-        Debug.Log(state);
         this.state = state;
         /*if (state == PlayerState.Transition)
         {

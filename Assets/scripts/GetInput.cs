@@ -105,6 +105,14 @@ public class GetInput : MonoBehaviour {
         {
             api.Zoom(-0.1f);
         }
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            api.ShowHologram();
+        }
+        if (Input.GetKeyUp(KeyCode.Tab))
+        {
+            api.HideHologram();
+        }
     }
 
     private void Get_JoyStick()

@@ -141,7 +141,7 @@ public class GraphicalEngine : MonoBehaviour {
                 }
                     
             }
-            string path = Icon_Path(container.abilities[0].abilitytype);
+            string path = Toolkit.Icon_Path(container.abilities[0].abilitytype);
             icon.sprite = (Sprite)Resources.Load(path, typeof(Sprite));
         }
         else
@@ -153,17 +153,6 @@ public class GraphicalEngine : MonoBehaviour {
 
     }
 
-    private string Icon_Path(AbilityType type)
-    {
-        string path = @"Containers\Icons\";
-        if (type == AbilityType.Fuel)
-        {
-            path += "Fuel Off";
-        }
-        else if (type == AbilityType.Key)
-            path += @"Key";
-        return path;
-    }
     public void Container_Change_Number(Container container)
     {
         Vector3 color = Ability_Color(container.abilities, false);
