@@ -30,6 +30,17 @@ public class AnimationEvents : MonoBehaviour {
         transform.parent.transform.position = transform.parent.GetComponent<Player>().position;
     }
 
+    private void ChangeDirectionToLeftFinished()
+    {
+        transform.parent.GetComponent<PlayerGraphics>().Change_Direction_Finished(Direction.Left);
+    }
+
+
+    private void ChangeDirectionToRightFinished()
+    {
+        transform.parent.GetComponent<PlayerGraphics>().Change_Direction_Finished(Direction.Right);
+
+    }
 
     ///  this is being called after MoveToBranch
     private void InTheBranch()

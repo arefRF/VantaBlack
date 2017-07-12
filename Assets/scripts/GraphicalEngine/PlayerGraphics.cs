@@ -317,13 +317,20 @@ public class PlayerGraphics : MonoBehaviour {
             rot = 180;
         z_rot = -z_rot;
         player.transform.GetChild(0).rotation = Quaternion.Euler(player.transform.rotation.x, rot, z_rot);
-        
-        api.PlayerChangeDirectionFinished(gameObject.GetComponent<Player>());
+        if (dir == Direction.Right)
+            animator.SetInteger("Change Direction", 1);
+        else
+            animator.SetInteger("Change Direction", 2);
+       
     }  
 
-    private void Change_Direction_Finished()
+    public void Change_Direction_Finished(Direction dir)
     {
-        api.PlayerChangeDirectionFinished(gameObject.GetComponent<Player>());
+        if (dir == player.direction)
+        {
+            animator.SetInteger("Change Direction", 0);
+            api.PlayerChangeDirectionFinished(gameObject.GetComponent<Player>());
+        }
     }
 
     public void Teleport(Vector2 pos)
