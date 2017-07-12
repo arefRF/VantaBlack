@@ -101,6 +101,7 @@ public class GraphicalEngine : MonoBehaviour {
     public void Simple_Container(SimpleContainer container)
     {
         Container_Change_Number(container);
+        SimpleSetCapacityIcon(container);
         Set_Icon(container);
 
     }
@@ -264,12 +265,18 @@ public class GraphicalEngine : MonoBehaviour {
             case Direction.Up: rot = 0; arrow += "Arrow Up"; break;
             case Direction.Down: rot =180; arrow += "Arrow Down"; break;
         }
+        arrow += " " + container.capacity;
         Toolkit.GetObjectInChild(container.gameObject, "Light Holder").transform.rotation = Quaternion.Euler(new Vector3(0, 0, rot));
         Toolkit.GetObjectInChild(container.gameObject, "Arrow").GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(arrow);
    
     }
 
-    
+    private void SimpleSetCapacityIcon(SimpleContainer container)
+    {
+        string circle = "Containers\\Circle " + container.capacity;
+        Toolkit.GetObjectInChild(container.gameObject, "Number").GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(circle);
+    }
+
     private bool ComplimentColor(Container container)
     {
         if (container is DynamicContainer)

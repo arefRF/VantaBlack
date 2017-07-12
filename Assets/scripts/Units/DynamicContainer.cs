@@ -24,6 +24,40 @@ public class DynamicContainer : FunctionalContainer {
 	
 	}
 
+    public override void SetCapacityLight()
+    {
+        if (capacity == 1)
+        {
+            Transform trans = transform.GetChild(1).GetChild(1).transform;
+            Vector3 temppos = trans.localPosition;
+            trans.localPosition = new Vector3(0.024f, temppos.y, temppos.z);
+        }
+        else if (capacity == 2)
+        {
+            Transform trans = transform.GetChild(1).GetChild(1).transform;
+            Vector3 temppos = trans.localPosition;
+            trans.localPosition = new Vector3(-0.368f, temppos.y, temppos.z);
+
+            trans = transform.GetChild(1).GetChild(2).transform;
+            temppos = trans.localPosition;
+            trans.localPosition = new Vector3(0.363f, temppos.y, temppos.z);
+        }
+        else if (capacity == 3)
+        {
+            Transform trans = transform.GetChild(1).GetChild(1).transform;
+            Vector3 temppos = trans.localPosition;
+            trans.localPosition = new Vector3(-0.719f, temppos.y, temppos.z);
+
+            trans = transform.GetChild(1).GetChild(2).transform;
+            temppos = trans.localPosition;
+            trans.localPosition = new Vector3(-0.017f, temppos.y, temppos.z);
+
+            trans = transform.GetChild(1).GetChild(3).transform;
+            temppos = trans.localPosition;
+            trans.localPosition = new Vector3(0.702f, temppos.y, temppos.z);
+        }
+    }
+
     public override bool PlayerMoveInto(Direction dir)
     {
         return false;

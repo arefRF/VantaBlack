@@ -23,6 +23,7 @@ public class Container : ParentContainer {
             case 3: Connected_3(connected); break;
             case 4: Connected_4(connected); break;
         }
+        SetCapacityLight();
     }
 
     private void Connected_1(bool[] connected)
@@ -96,6 +97,11 @@ public class Container : ParentContainer {
             ((FunctionalContainer)this).SetOnorOff();
             ((FunctionalContainer)this).Action_Fuel();
         }
+    }
+
+    public virtual void SetCapacityLight()
+    {
+        
     }
 
     private void PlayerAbsorbAbilities(Player player)
