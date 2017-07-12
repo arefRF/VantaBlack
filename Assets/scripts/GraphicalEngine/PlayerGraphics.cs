@@ -360,4 +360,13 @@ public class PlayerGraphics : MonoBehaviour {
         return color;
     }
 
+    public void ShowHologram()
+    {
+        Toolkit.GetObjectInChild(gameObject, "Hologram").SetActive(true);
+    }
+
+    public void HideHologram()
+    {
+        Toolkit.GetObjectInChild(gameObject, "Hologram").SetActive(false);
+    }
 }
