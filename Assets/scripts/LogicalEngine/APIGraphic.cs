@@ -172,7 +172,7 @@ public class APIGraphic{
     public void Fall(Player player, Vector2 position)
     {   
         player.GetComponent<PlayerGraphics>().StopAllCoroutines();
-       // player.GetComponent<Animator>().SetInteger("Walk", 0);
+        player.GetComponent<PlayerGraphics>().FallAnimation();
         player.GetComponent<PlayerPhysics>().Fall(position);
     }
 
@@ -185,7 +185,7 @@ public class APIGraphic{
     {
         player.GetComponent<PlayerGraphics>().StopAllCoroutines();
         player.GetComponent<PlayerPhysics>().Land(position);
-        LandFinished(player);
+        player.GetComponent<PlayerGraphics>().LandAnimation();
         
     }
 
