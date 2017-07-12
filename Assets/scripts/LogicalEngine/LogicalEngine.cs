@@ -77,10 +77,28 @@ public class LogicalEngine {
             {
                 if (Toolkit.HasBranch(Toolkit.VectorSum(unit.players[i].position, dir)))
                 {
-                    inputcontroller.LeanUndo(unit.players[i] as Player, Toolkit.ReverseDirection(dir), PlayerState.Busy);
-                    MovePlayer(unit.players[i] as Player, dir);
-                    unit.players.RemoveAt(i);
-                    continue;
+                    Branch tempbranch = Toolkit.GetBranch(Toolkit.VectorSum(unit.players[i].position, dir));
+                    if (!tempbranch.islocked)
+                    {
+                        inputcontroller.LeanUndo(unit.players[i] as Player, Toolkit.ReverseDirection(dir), PlayerState.Busy);
+                        MovePlayer(unit.players[i] as Player, dir);
+                        unit.players.RemoveAt(i);
+                        continue;
+                    }
+                    if (tempbranch.islocked)
+                    {
+                        Player tempplayer = unit.players[i] as Player;
+                        if(tempplayer.abilities.Count != 0 && tempplayer.abilities[0].abilitytype == AbilityType.Key)
+                        {
+                            tempplayer.abilities.Clear();
+                            tempbranch.islocked = false;
+                            apigraphic.UnitChangeSprite(tempbranch);
+                            inputcontroller.LeanUndo(unit.players[i] as Player, Toolkit.ReverseDirection(dir), PlayerState.Busy);
+                            MovePlayer(unit.players[i] as Player, dir);
+                            unit.players.RemoveAt(i);
+                            continue;
+                        }
+                    }
                 }
                 if (!unit.players[i].CanMove(dir, unit.transform.parent.gameObject))
                 {
@@ -498,6 +516,7 @@ public class LogicalEngine {
                                 player.position = nextpos;
                                 database.units[(int)player.position.x, (int)player.position.y].Add(player);
                                 apigraphic.MovePlayer_Branch_3(player, nextpos, ((Ramp)units[0]).type,dir);
+                                player.SetState(PlayerState.Busy);
                             }
                         }
                         else
@@ -506,6 +525,7 @@ public class LogicalEngine {
                             player.position = nextpos;
                             database.units[(int)player.position.x, (int)player.position.y].Add(player);
                             apigraphic.MovePlayer_Branch_1(player, nextpos,dir);
+                            player.SetState(PlayerState.Busy);
                         }
                     }
                     else
@@ -519,6 +539,7 @@ public class LogicalEngine {
                                 player.position = temp;
                                 database.units[(int)player.position.x, (int)player.position.y].Add(player);
                                 apigraphic.MovePlayer_Branch_3(player, player.position, ramp.type,dir);
+                                player.SetState(PlayerState.Busy);
                             }
                             else
                             {
@@ -526,6 +547,7 @@ public class LogicalEngine {
                                 player.position = nextpos;
                                 database.units[(int)player.position.x, (int)player.position.y].Add(player);
                                 apigraphic.MovePlayer_Branch_1(player, player.position, dir);
+                                player.SetState(PlayerState.Busy);
                             }
                         }
                         else
@@ -534,6 +556,7 @@ public class LogicalEngine {
                             player.position = nextpos;
                             database.units[(int)player.position.x, (int)player.position.y].Add(player);
                             apigraphic.MovePlayer_Branch_1(player, nextpos,dir);
+                            player.SetState(PlayerState.Busy);
                         }
                     }
                 }

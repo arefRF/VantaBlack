@@ -322,7 +322,7 @@ public class InputController {
                     {
                         player.SetState(PlayerState.Busy);
                     }
-                    else
+                    else if(player.state != PlayerState.Busy)
                         player.SetState(PlayerState.Moving);
                 }
             }
