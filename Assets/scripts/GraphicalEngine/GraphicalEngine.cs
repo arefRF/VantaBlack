@@ -24,6 +24,7 @@ public class GraphicalEngine : MonoBehaviour {
     public GameObject beam;
     GameObject beamParent;
     private List<MoveObject> move_objects;
+    private Texture2D BeamTexture;
     void Awake()
     {
         Application.targetFrameRate = 240;
@@ -34,17 +35,18 @@ public class GraphicalEngine : MonoBehaviour {
         database = Starter.GetDataBase();
         api = engine.apigraphic;
         move_objects = new List<MoveObject>();
-
+        BeamTexture = Resources.Load<Texture2D>("lazer\\lazer line");
     }
 
-    private void makeBeam()
+    private void makeBeam(Vector2 pos)
     {
+        Debug.Log("make beam");
         if (beamParent == null)
             beamParent = new GameObject();
         GameObject beam1 = Instantiate(beam);
-        beam1.transform.parent = beamParent.transform;
-        beam1.transform.localScale = new Vector3(7, 5, 1);
-        beam1.transform.position = new Vector3(15, 5, 0);
+        beam1.transform.position = pos;
+
+
     }
 
     public void Move_Object(GameObject obj,Unit unit, Vector2 pos)
@@ -207,7 +209,7 @@ public class GraphicalEngine : MonoBehaviour {
         /*GameObject lights = Toolkit.GetObjectInChild(fountatin.gameObject, "Lights");
         Vector3 color = Ability_Color(fountatin.ability, false);
         for (int i = 0; i < 4; i++)
-        {
+        {lean
             lights.transform.GetChild(i).gameObject.SetActive(false);
         }
         for (int i = 0; i < fountatin.count - fountatin.abilities.Count; i++)
@@ -292,8 +294,14 @@ public class GraphicalEngine : MonoBehaviour {
 
     public void AddLaser(Vector2 pos1,Vector2 pos2,Direction dir)
     {
-        makeBeam();
-        GameObject myLine = new GameObject();
+        Vector2 temppos = new Vector2(pos1.x, pos1.y);
+        if(pos1.x == pos2.x)
+            for(; temppos.y <= pos2.y; temppos.y++)
+                makeBeam(temppos);
+        else
+            for (; temppos.x <= pos2.x; temppos.x++)
+                makeBeam(temppos);
+        /*GameObject myLine = new GameObject();
         myLine.tag = "LaserUI";
         myLine.transform.position = pos1;
         myLine.AddComponent<LineRenderer>();
@@ -310,7 +318,7 @@ public class GraphicalEngine : MonoBehaviour {
         }
         render.SetPosition(0, pos1);
         render.SetPosition(1, pos2);
-
+        */
     }
 
     public void RemoveLasers()
