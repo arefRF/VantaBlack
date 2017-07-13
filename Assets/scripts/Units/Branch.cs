@@ -286,7 +286,14 @@ public class Branch : Unit {
             {
                 if(hastbranch[i] && Toolkit.DirectionToNumber(CameFrom)-1 != i)
                 {
-                    Toolkit.GetBranch(Toolkit.VectorSum(position, Toolkit.NumberToDirection(i + 1))).PlayerMove(Toolkit.ReverseDirection(Toolkit.NumberToDirection(i + 1)), player);
+                    Branch tempbranch = Toolkit.GetBranch(Toolkit.VectorSum(position, Toolkit.NumberToDirection(i + 1)));
+                    if (tempbranch.islocked)
+                    {
+                        Debug.Log("locked");
+                        player.SetState(PlayerState.Idle);
+                        return;
+                    }
+                    tempbranch.PlayerMove(Toolkit.ReverseDirection(Toolkit.NumberToDirection(i + 1)), player);
                     return;
                 }
             }
