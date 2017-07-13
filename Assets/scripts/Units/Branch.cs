@@ -218,7 +218,7 @@ public class Branch : Unit {
             if (player.abilities.Count != 0 && player.abilities[0] is Key)
             {
                 islocked = false;
-                player.abilities.Clear();
+                player.abilities.RemoveAt(0);
                 player._setability();
                 api.engine.apigraphic.Absorb(player, null);
                 api.engine.apigraphic.UnitChangeSprite(this);

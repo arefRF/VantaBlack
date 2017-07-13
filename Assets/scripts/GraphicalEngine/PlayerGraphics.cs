@@ -259,12 +259,12 @@ public class PlayerGraphics : MonoBehaviour {
         {
             if(type == 4)
             {
-                transform.GetChild(0).rotation = Quaternion.Euler(0, 180, 0);
+                transform.GetChild(0).rotation = Quaternion.Euler(0, 180, zrot);
                 z_rot = 0;
             }
             else
             {
-                transform.GetChild(0).rotation = Quaternion.Euler(0,180, 0);
+                transform.GetChild(0).rotation = Quaternion.Euler(0,180, zrot);
                 z_rot = 0;
             }
         }
@@ -343,7 +343,12 @@ public class PlayerGraphics : MonoBehaviour {
     private IEnumerator RampToBlockWait(float y)
     {
         yield return new WaitForSeconds(0.4f);
-        transform.GetChild(0).rotation = Quaternion.Euler(0, y, 0);
+        int zrot = 0;
+        if(player.GetGravity() == Direction.Up)
+        {
+            zrot = 180;
+        }
+        transform.GetChild(0).rotation = Quaternion.Euler(0, y, zrot);
         z_rot = 0;
     }
     public void Move_Finished()
