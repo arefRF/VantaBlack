@@ -762,7 +762,6 @@ public class Player : Unit
 
     public void MoveToBranchFinished()
     {
-        Debug.Log("Mvoe To Branch Finished");
         int counter = 0, emptycounter = 0;
         for(int i = 0; i < 4; i++)
         {
@@ -774,8 +773,6 @@ public class Player : Unit
             if (Toolkit.IsEmptySameParent(Toolkit.GetBranch(position).gameObject, Toolkit.VectorSum(position, dir)))
                 emptycounter++;
         }
-        Debug.Log(counter);
-        Debug.Log(emptycounter);
         if (counter != 1 || emptycounter > 1)
         {
             api.engine.apigraphic.BranchLight(true, Toolkit.GetBranch(position));
