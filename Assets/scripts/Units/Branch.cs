@@ -218,7 +218,7 @@ public class Branch : Unit {
             if (player.abilities.Count != 0 && player.abilities[0] is Key)
             {
                 islocked = false;
-                player.abilities.Clear();
+                player.abilities.RemoveAt(0);
                 player._setability();
                 api.engine.apigraphic.Absorb(player, null);
                 api.engine.apigraphic.UnitChangeSprite(this);
@@ -286,7 +286,14 @@ public class Branch : Unit {
             {
                 if(hastbranch[i] && Toolkit.DirectionToNumber(CameFrom)-1 != i)
                 {
-                    Toolkit.GetBranch(Toolkit.VectorSum(position, Toolkit.NumberToDirection(i + 1))).PlayerMove(Toolkit.ReverseDirection(Toolkit.NumberToDirection(i + 1)), player);
+                    Branch tempbranch = Toolkit.GetBranch(Toolkit.VectorSum(position, Toolkit.NumberToDirection(i + 1)));
+                    if (tempbranch.islocked)
+                    {
+                        Debug.Log("locked");
+                        player.SetState(PlayerState.Idle);
+                        return;
+                    }
+                    tempbranch.PlayerMove(Toolkit.ReverseDirection(Toolkit.NumberToDirection(i + 1)), player);
                     return;
                 }
             }

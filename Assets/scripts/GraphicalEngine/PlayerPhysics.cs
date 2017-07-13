@@ -426,7 +426,6 @@ public class PlayerPhysics : MonoBehaviour
             remain_distance = ((Vector2)player_transofrm.position - end).sqrMagnitude;
             player_transofrm.position = Vector3.MoveTowards(player_transofrm.position, end, Time.deltaTime * velocity);
             velocity += 0.1f * a;
-            Debug.Log(velocity);
             api.Camera_AutoMove();
             yield return null;
         }
