@@ -290,6 +290,7 @@ public class Branch : Unit {
                     if (tempbranch.islocked)
                     {
                         Debug.Log("locked");
+                        api.engine.apigraphic.BranchLight(true, Toolkit.GetBranch(player.position));
                         player.SetState(PlayerState.Idle);
                         return;
                     }

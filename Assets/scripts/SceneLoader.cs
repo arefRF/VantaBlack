@@ -6,9 +6,10 @@ public class SceneLoader : MonoBehaviour{
     private bool loadScene = false;
     private string scene;
     private float loadtime;
-
+    public GameObject LoadScreen;
     public void Load(string scene, float loadtime)
     {
+        LoadScreen.SetActive(true);
         this.scene = scene;
         this.loadtime = loadtime;
         // If the player has pressed the space bar and a new scene is not loading yet...
