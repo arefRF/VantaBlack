@@ -1,7 +1,13 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Resources/Player/Death.meta
 guid: 9b037b2146a204447be8807bed4594b7
 folderAsset: yes
 timeCreated: 1500119998
+=======
+guid: 346068c45b2685546acbfdd7867be7d9
+folderAsset: yes
+timeCreated: 1500120551
+>>>>>>> 000e5639d3ffb3795366337d3cee71b7767caef7:Assets/Resources/Player/Death.meta
 licenseType: Pro
 DefaultImporter:
   userData: 

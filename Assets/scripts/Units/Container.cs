@@ -82,6 +82,8 @@ public class Container : ParentContainer {
     {
         if (abilities.Count > 4)
             return;
+        if (player.abilities.Count > capacity)
+            return;
         List<Ability> temp = new List<Ability>();
         for (int i = 0; i < abilities.Count; i++)
             temp.Add(abilities[i].ConvertContainerAbilityToPlayer(player));
