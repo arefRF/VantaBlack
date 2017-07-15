@@ -652,4 +652,22 @@ public class InputController {
         yield return new WaitForSeconds(f);
         player.SetState(PlayerState.Idle);
     }
+
+    public void AbsorbReleaseController(Direction direction)
+    {
+        for(int i=0; i<database.player.Count; i++)
+        {
+            if(database.player[i].state == PlayerState.Lean)
+            {
+                if(direction == database.player[i].leandirection)
+                {
+                    Release();
+                }
+                else if (Toolkit.ReverseDirection(direction) == database.player[i].leandirection)
+                {
+                    Absorb();
+                }
+            }
+        }
+    }
 }

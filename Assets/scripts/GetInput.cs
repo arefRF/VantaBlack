@@ -113,6 +113,22 @@ public class GetInput : MonoBehaviour {
         {
             api.HideHologram();
         }
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            api.AbsorbReleaseController(Direction.Up);
+        }
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            api.AbsorbReleaseController(Direction.Right);
+        }
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            api.AbsorbReleaseController(Direction.Left);
+        }
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            api.AbsorbReleaseController(Direction.Down);
+        }
     }
 
     private void Get_JoyStick()
@@ -217,25 +233,25 @@ public class GetInput : MonoBehaviour {
     // Get Arrows if Ability needs it
     private void Get_Space_Arrows()
     {
-        if (Input.GetKeyDown(KeyCode.RightArrow))
+        if (Input.GetKeyDown(KeyCode.D))
            api.Action_Key(Direction.Right);
-        else if (Input.GetKeyDown(KeyCode.LeftArrow))
+        else if (Input.GetKeyDown(KeyCode.A))
             api.Action_Key(Direction.Left);
-        else if (Input.GetKeyDown(KeyCode.DownArrow))
+        else if (Input.GetKeyDown(KeyCode.S))
             api.Action_Key(Direction.Down);
-        else if (Input.GetKeyDown(KeyCode.UpArrow))
+        else if (Input.GetKeyDown(KeyCode.W))
             api.Action_Key(Direction.Up);
     }
 
     private void Get_Lean_Undo()
     {
-        if (Input.GetKeyUp(KeyCode.RightArrow))
+        if (Input.GetKeyUp(KeyCode.D))
             api.ArrowRelease(Direction.Right);
-        else if (Input.GetKeyUp(KeyCode.LeftArrow))
+        else if (Input.GetKeyUp(KeyCode.A))
             api.ArrowRelease(Direction.Left);
-        else if (Input.GetKeyUp(KeyCode.DownArrow))
+        else if (Input.GetKeyUp(KeyCode.S))
             api.ArrowRelease(Direction.Down);
-        else if (Input.GetKeyUp(KeyCode.UpArrow))
+        else if (Input.GetKeyUp(KeyCode.W))
             api.ArrowRelease(Direction.Up);
     }
 
@@ -247,38 +263,38 @@ public class GetInput : MonoBehaviour {
     {
         if (getOnce)
         {
-            if (Input.GetKeyDown(KeyCode.RightArrow))
+            if (Input.GetKeyDown(KeyCode.D))
                 api.MovePressed(Direction.Right);
-            if (Input.GetKeyDown(KeyCode.LeftArrow))
+            if (Input.GetKeyDown(KeyCode.A))
                 api.MovePressed(Direction.Left);
-            if (Input.GetKeyDown(KeyCode.DownArrow))
+            if (Input.GetKeyDown(KeyCode.S))
                 api.MovePressed(Direction.Down);
-            if (Input.GetKeyDown(KeyCode.UpArrow))
+            if (Input.GetKeyDown(KeyCode.W))
                 api.MovePressed(Direction.Up);
         }
         else
         {
             //Take Arrows to move or lean
-            if (Input.GetKey(KeyCode.RightArrow))
+            if (Input.GetKey(KeyCode.D))
                 api.MovePressed(Direction.Right);
-            if (Input.GetKey(KeyCode.LeftArrow))
+            if (Input.GetKey(KeyCode.A))
                 api.MovePressed(Direction.Left);
-            if (Input.GetKey(KeyCode.DownArrow))
+            if (Input.GetKey(KeyCode.S))
                 api.MovePressed(Direction.Down);
-            if (Input.GetKey(KeyCode.UpArrow))
+            if (Input.GetKey(KeyCode.W))
                 api.MovePressed(Direction.Up);
         }
     }
 
     private void Get_Move_Once()
     {
-        if (Input.GetKeyDown(KeyCode.RightArrow))
+        if (Input.GetKeyDown(KeyCode.D))
             api.MovePressed(Direction.Right);
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        if (Input.GetKeyDown(KeyCode.A))
             api.MovePressed(Direction.Left);
-        if (Input.GetKeyDown(KeyCode.DownArrow))
+        if (Input.GetKeyDown(KeyCode.S))
             api.MovePressed(Direction.Down);
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (Input.GetKeyDown(KeyCode.W))
             api.MovePressed(Direction.Up);
     }
 
@@ -294,32 +310,32 @@ public class GetInput : MonoBehaviour {
         return Input.GetKey(KeyCode.F);
     }
 
-    public bool isArrowKeyDown(Direction direction)
+    public bool isMoveKeyDown(Direction direction)
     {
         switch (direction)
         {
-            case Direction.Up: return Input.GetKey(KeyCode.UpArrow);
-            case Direction.Right: return Input.GetKey(KeyCode.RightArrow);
-            case Direction.Left: return Input.GetKey(KeyCode.LeftArrow);
-            case Direction.Down: return Input.GetKey(KeyCode.DownArrow);
+            case Direction.Up: return Input.GetKey(KeyCode.W);
+            case Direction.Right: return Input.GetKey(KeyCode.D);
+            case Direction.Left: return Input.GetKey(KeyCode.A);
+            case Direction.Down: return Input.GetKey(KeyCode.S);
             default: return false;
         }
     }
 
-    public bool isAnyArrowKeyDown()
+    public bool isAnyAnyKeyDown()
     {
-        return (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.DownArrow));
+        return (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S));
     }
 
-    public Direction GetArrowKeyDown()
+    public Direction GetMoveKeyDown()
     {
-        if (Input.GetKey(KeyCode.UpArrow))
+        if (Input.GetKey(KeyCode.W))
             return Direction.Up;
-        if (Input.GetKey(KeyCode.RightArrow))
+        if (Input.GetKey(KeyCode.D))
             return Direction.Right;
-        if (Input.GetKey(KeyCode.LeftArrow))
+        if (Input.GetKey(KeyCode.A))
             return Direction.Left;
-        if (Input.GetKey(KeyCode.DownArrow))
+        if (Input.GetKey(KeyCode.S))
             return Direction.Down;
         Debug.Log("error error big error");
         return Direction.Up;

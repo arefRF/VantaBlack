@@ -145,17 +145,17 @@ public class APIInput{
 
     public bool isArrowKeyDown(Direction direction)
     {
-        return input.isArrowKeyDown(direction);
+        return input.isMoveKeyDown(direction);
     }
 
     public bool isAnyArrowKeyDown()
     {
-        return input.isAnyArrowKeyDown();
+        return input.isAnyAnyKeyDown();
     }
 
     public Direction GetArrowKeyDown()
     {
-        return input.GetArrowKeyDown();
+        return input.GetMoveKeyDown();
     }
 
     public void Zoom(float zoom)
@@ -178,5 +178,10 @@ public class APIInput{
     public void HideHologram()
     {
         engine.HideHologram();
+    }
+
+    public void AbsorbReleaseController(Direction direction)
+    {
+        engine.inputcontroller.AbsorbReleaseController(direction);
     }
 }
