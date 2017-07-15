@@ -152,6 +152,7 @@ public class GetInput : MonoBehaviour {
         else if (Input.GetButtonDown("Release"))
             api.Release();
 
+
         if (Input.GetButtonDown("Jump"))
             api.Jump();
         if (Input.GetButtonDown("Action"))
