@@ -156,7 +156,13 @@ public class Branch : Unit {
         }
         if(counter>2)
             Toolkit.GetObjectInChild(this.gameObject, "Icon").SetActive(true);
-
+        //new code for corner test
+        if (counter == 2) {
+            if (!(connected[0] && connected[2]) && (connected[0] || connected[2]))
+                Toolkit.GetObjectInChild(this.gameObject, "Icon").SetActive(true);
+            if (!(connected[1] && connected[3]) && (connected[1] || connected[3]))
+                Toolkit.GetObjectInChild(this.gameObject, "Icon").SetActive(true);
+        }
     }
     private void SetJointOrEntrance(Direction direction)
     { /*
@@ -244,6 +250,16 @@ public class Branch : Unit {
     }
     public void PlayerMove(Direction CameFrom, Player player)
     {
+        if(Toolkit.GetObjectInChild(gameObject, "Icon").activeSelf == true)
+        {
+            api.RemoveFromDatabase(player);
+            player.position = position;
+            player.transform.position = position;
+            api.AddToDatabase(player);
+            api.engine.apigraphic.BranchLight(true, Toolkit.GetBranch(player.position));
+            StartCoroutine(Wait(0.3f, player));
+            return;
+        }
         bool[] hastbranch = new bool[4];
         int branchcounter = 0;
         int counter = 0;
@@ -282,7 +298,7 @@ public class Branch : Unit {
         }
         else if(branchcounter == 2)
         {
-            for(int i=0; i<4; i++)
+            for (int i=0; i<4; i++)
             {
                 if(hastbranch[i] && Toolkit.DirectionToNumber(CameFrom)-1 != i)
                 {
