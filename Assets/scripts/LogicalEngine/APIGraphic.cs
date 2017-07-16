@@ -313,7 +313,6 @@ public class APIGraphic{
 
     public void LeanStickMove(Player player,Vector2 pos)
     {
-
         player.GetComponent<PlayerPhysics>().Lean_Stick_Move(pos);
     }
 
