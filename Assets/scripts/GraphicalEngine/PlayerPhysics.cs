@@ -141,6 +141,7 @@ public class PlayerPhysics : MonoBehaviour
 
     public void Adjust(Vector2 pos,Direction dir, System.Action<Player, Direction> passingmethod)
     {
+        Debug.Log("Adjust");
         StartCoroutine(AdjustCo(pos,dir,passingmethod));
     }
 
@@ -249,12 +250,13 @@ public class PlayerPhysics : MonoBehaviour
     }
     public void Simple_Move(Vector2 pos)
     {
+        Debug.Log(pos);
         set_percent = true;
         if (last_co != null)
             StopCoroutine(last_co);
-            Rotate_On_Block();
-            move_type = MoveType.BlockToBlock;
-            last_co = StartCoroutine(Constant_Move(pos, move_time, true));
+        
+        move_type = MoveType.BlockToBlock;
+        last_co = StartCoroutine(Constant_Move(pos, move_time, true));
 
     }
 
