@@ -339,4 +339,18 @@ public class GetInput : MonoBehaviour {
         Debug.Log("error error big error");
         return Direction.Up;
     }
+
+    public int MoveKeysDownCount()
+    {
+        int count = 0;
+        if (Input.GetKey(KeyCode.W))
+            count++;
+        if (Input.GetKey(KeyCode.D))
+            count++;
+        if (Input.GetKey(KeyCode.A))
+            count++;
+        if (Input.GetKey(KeyCode.S))
+            count++;
+        return count;
+    }
 }

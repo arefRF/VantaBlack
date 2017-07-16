@@ -31,6 +31,8 @@ public class APIInput{
 
     public void MovePressed(Direction dir)
     {
+        if (input.MoveKeysDownCount() > 1)
+            return;
         if (mode == GameMode.Play)
             engine.Input_Move(dir);
         else if (mode == GameMode.Portal)
