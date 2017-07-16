@@ -80,7 +80,6 @@ public class GraphicalEngine : MonoBehaviour {
      
     private IEnumerator Move_Object_Coroutine(GameObject obj, Unit unit,Vector2 end)
     {
-        Debug.Log("Move Object Co");
         float remain_distance = ((Vector2)obj.transform.position - end).sqrMagnitude;
         float move_time = 1f;
         while (remain_distance > float.Epsilon)

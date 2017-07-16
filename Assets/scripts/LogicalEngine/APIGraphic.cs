@@ -68,10 +68,12 @@ public class APIGraphic{
     //  Block to Block
     public void MovePlayer_Simple_1(Player player, Vector2 position)
     {
+        Debug.Log("Block to Block");
         //player.gameObject.GetComponent<PlayerGraphics>().Player_Move(player.gameObject, position);
         player.GetComponent<PlayerGraphics>().StopAllCoroutines();
-        player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
         player.gameObject.GetComponent<PlayerGraphics>().Move_Animation(player.direction);
+        player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
+        
     }
 
 
@@ -116,8 +118,9 @@ public class APIGraphic{
     public void MovePlayer_Simple_4(Player player, Vector2 position)
     {
         player.GetComponent<PlayerGraphics>().StopAllCoroutines();
-        player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
         player.gameObject.GetComponent<PlayerGraphics>().Move_Animation(player.direction);
+        player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
+       
     }
     
     // Block to Ramp (tekrari)
@@ -313,7 +316,6 @@ public class APIGraphic{
 
     public void LeanStickMove(Player player,Vector2 pos)
     {
-
         player.GetComponent<PlayerPhysics>().Lean_Stick_Move(pos);
     }
 
