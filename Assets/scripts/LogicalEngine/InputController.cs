@@ -51,7 +51,6 @@ public class InputController {
             {
                 if (!Toolkit.IsEmpty(Toolkit.VectorSum(player.position, player.GetGravity())))
                 {
-                    Debug.Log("check");
                     LeanUndo(player, player.leandirection, PlayerState.Idle);
                     if (direction == player.direction)
                     {
@@ -67,9 +66,14 @@ public class InputController {
                 }
                 else
                 {
-                    LeanUndo(player, player.leandirection, PlayerState.Jumping);
-                    player.direction = direction;
-                    JumpingPlayerMove(player, direction);
+                    if (direction == Toolkit.ReverseDirection(player.GetGravity()))
+                        LeanUndo(player, player.direction, PlayerState.Idle);
+                    else
+                    {
+                        LeanUndo(player, player.leandirection, PlayerState.Jumping);
+                        player.direction = direction;
+                        JumpingPlayerMove(player, direction);
+                    }
                 }
             }
             else
@@ -238,7 +242,7 @@ public class InputController {
             if (player.state == PlayerState.Lean)
                 direction = Toolkit.ReverseDirection(player.leandirection);
             else
-                direction = Toolkit.ReverseDirection(player.GetGravity());
+                direction = Toolkit.ReverseDirection(player.gravity);
             if(!Toolkit.IsInsideBranch(player) && !Toolkit.HasBranch(Toolkit.VectorSum(player.position, direction)))
             {
                 player.isonejumping = true;
@@ -511,7 +515,7 @@ public class InputController {
     {
         if (player.state != PlayerState.Lean)
         {
-            if (Toolkit.IsEmpty(Toolkit.VectorSum(player.position, player.GetGravity())))
+            if (Toolkit.IsEmpty(Toolkit.VectorSum(player.position, player.gravity)))
             {
                 LeanOnAir(player, direction);
                 return;
