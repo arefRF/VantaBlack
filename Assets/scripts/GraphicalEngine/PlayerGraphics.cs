@@ -244,9 +244,10 @@ public class PlayerGraphics : MonoBehaviour {
             zrot = 180;
         else if (player.gravity == Direction.Left)
             zrot = 270;
+        else if (player.gravity == Direction.Right)
+            zrot = 90;
         animator.SetInteger("Branch", 0);
         Vector2 pos = On_Ramp_Pos(ramp_type) + player.position;
-        Debug.Log("wtf is going on");
         if (dir == Direction.Right)
         {
             if (player.gravity == Direction.Up)
@@ -256,12 +257,13 @@ public class PlayerGraphics : MonoBehaviour {
         }
         else if (dir == Direction.Left)
         {
-            if (player.gravity == Direction.Up && player.gravity == Direction.Left)
+            if (player.gravity == Direction.Up)
                 transform.GetChild(0).rotation = Quaternion.Euler(0, 0, zrot);
-            else
+            else if(player.gravity == Direction.Left || player.gravity == Direction.Right)
+                transform.GetChild(0).rotation = Quaternion.Euler(180, 0, zrot);
+            else 
                 transform.GetChild(0).rotation = Quaternion.Euler(0, 180, zrot);
         }
-        Debug.Log(dir);
         if (dir == Direction.Left || dir == Direction.Right)
             animator.SetInteger("Branch", 4);
         // for later change
