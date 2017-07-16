@@ -192,6 +192,7 @@ public class PlayerGraphics : MonoBehaviour {
 
     public void ResetStates()
     {
+        // Get call stack
        // animator.SetBool("Jump", false);
         animator.SetInteger("Walk", 0);
        // animator.SetBool("Transition", false);
@@ -392,6 +393,7 @@ public class PlayerGraphics : MonoBehaviour {
         yield return new WaitForSeconds(0.1f);
         api.LandFinished(player);
     }
+
     public void FallAnimation()
     {
         animator.SetBool("Jump", true);
