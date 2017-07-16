@@ -41,7 +41,7 @@ public class InputController {
     {
         if (player.leandirection == direction)
             return;
-        if(player.leandirection == Toolkit.ReverseDirection(direction) || (direction == player.GetGravity()))
+        if(player.leandirection == Toolkit.ReverseDirection(direction) || (direction == player.gravity))
         {
             LeanUndo(player, player.leandirection, PlayerState.Idle);
         }
@@ -49,9 +49,8 @@ public class InputController {
         {
             if (Toolkit.IsEmpty(Toolkit.VectorSum(player.position, direction)))
             {
-                if (!Toolkit.IsEmpty(Toolkit.VectorSum(player.position, player.GetGravity())))
+                if (!Toolkit.IsEmpty(Toolkit.VectorSum(player.position, player.gravity)))
                 {
-                    Debug.Log("check");
                     LeanUndo(player, player.leandirection, PlayerState.Idle);
                     if (direction == player.direction)
                     {
@@ -67,9 +66,14 @@ public class InputController {
                 }
                 else
                 {
-                    LeanUndo(player, player.leandirection, PlayerState.Jumping);
-                    player.direction = direction;
-                    JumpingPlayerMove(player, direction);
+                    if (direction == Toolkit.ReverseDirection(player.gravity))
+                        LeanUndo(player, player.direction, PlayerState.Idle);
+                    else
+                    {
+                        LeanUndo(player, player.leandirection, PlayerState.Jumping);
+                        player.direction = direction;
+                        JumpingPlayerMove(player, direction);
+                    }
                 }
             }
             else
@@ -238,7 +242,7 @@ public class InputController {
             if (player.state == PlayerState.Lean)
                 direction = Toolkit.ReverseDirection(player.leandirection);
             else
-                direction = Toolkit.ReverseDirection(player.GetGravity());
+                direction = Toolkit.ReverseDirection(player.gravity);
             if(!Toolkit.IsInsideBranch(player) && !Toolkit.HasBranch(Toolkit.VectorSum(player.position, direction)))
             {
                 player.isonejumping = true;
@@ -317,7 +321,6 @@ public class InputController {
                 }
                 else
                 {
-                    engine.apiinput.leanlock = false;
                     if (Toolkit.HasBranch(player.position))
                     {
                         player.SetState(PlayerState.Busy);
@@ -512,7 +515,7 @@ public class InputController {
     {
         if (player.state != PlayerState.Lean)
         {
-            if (Toolkit.IsEmpty(Toolkit.VectorSum(player.position, player.GetGravity())))
+            if (Toolkit.IsEmpty(Toolkit.VectorSum(player.position, player.gravity)))
             {
                 LeanOnAir(player, direction);
                 return;
@@ -550,7 +553,6 @@ public class InputController {
                 player.SetState(PlayerState.Lean);
                 player.leandirection = direction;
                 player.currentAbility = null;
-                engine.apiinput.leanlock = true;
                 engine.apigraphic.Lean(player);
             }
             else
@@ -597,7 +599,6 @@ public class InputController {
                 player.SetState(PlayerState.Lean);
                 player.leandirection = direction;
                 player.currentAbility = null;
-                engine.apiinput.leanlock = true;
                 engine.apigraphic.Lean_On_Air(player);
             } 
             else
@@ -651,5 +652,23 @@ public class InputController {
     {
         yield return new WaitForSeconds(f);
         player.SetState(PlayerState.Idle);
+    }
+
+    public void AbsorbReleaseController(Direction direction)
+    {
+        for(int i=0; i<database.player.Count; i++)
+        {
+            if(database.player[i].state == PlayerState.Lean)
+            {
+                if(direction == database.player[i].leandirection)
+                {
+                    Release();
+                }
+                else if (Toolkit.ReverseDirection(direction) == database.player[i].leandirection)
+                {
+                    Absorb();
+                }
+            }
+        }
     }
 }

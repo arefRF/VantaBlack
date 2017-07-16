@@ -14,9 +14,14 @@ public class Col_GravityChanger : MonoBehaviour {
                 Player player = col.gameObject.GetComponent<Player>();
                 Starter.GetDataBase().SetGravity(GravityDirection);
                 int zrot = 0;
-                if (player.GetGravity() == Direction.Up)
+                if (player.gravity == Direction.Up)
                     zrot = 180;
-                player.transform.rotation = Quaternion.Euler(player.transform.rotation.x, player.transform.rotation.y, zrot);
+                else if (player.gravity == Direction.Right)
+                    zrot = 90;
+                else if (player.gravity == Direction.Left)
+                    zrot = 270;
+                GameObject obj = Toolkit.GetObjectInChild(player.gameObject, "Sprite Holder");
+                obj.transform.rotation = Quaternion.Euler(obj.transform.rotation.x, obj.transform.rotation.y, zrot);
                 Starter.GetEngine().Applygravity();
             }
         }

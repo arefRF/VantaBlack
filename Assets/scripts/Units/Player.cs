@@ -19,7 +19,7 @@ public class Player : Unit
     public Direction leandirection { get; set; }
     public Unit LeanedTo { get; set; }
     public bool onramp { get; set; }
-    private Direction gravity { get; set; }
+    public Direction gravity { get; private set; }
 
     public Vector2 nextpos { get; set; }
 
@@ -62,10 +62,6 @@ public class Player : Unit
             //Debug.Log(state);
             tempstate = state;
         }
-    }
-
-    public Direction GetGravity(){
-        return gravity;
     }
 
     public void SetGravity(Direction dir)
@@ -185,7 +181,7 @@ public class Player : Unit
             if (temp[i] is Ramp)
             {
                 ramp = (Ramp)temp[i];
-                if (ramp.IsOnRampSide(Toolkit.ReverseDirection(GetGravity())))
+                if (ramp.IsOnRampSide(Toolkit.ReverseDirection(gravity)))
                 {
                     onramp = true;
                 }
@@ -193,7 +189,7 @@ public class Player : Unit
         }
         if (onramp)
         {
-            Direction gravitydirection = GetGravity();
+            Direction gravitydirection = gravity;
             switch (gravitydirection)
             {
                 case Direction.Down:
@@ -251,7 +247,7 @@ public class Player : Unit
             if (temp[i] is Ramp)
             {
                 ramp = (Ramp)temp[i];
-                if (ramp.IsOnRampSide(Toolkit.ReverseDirection(GetGravity())))
+                if (ramp.IsOnRampSide(Toolkit.ReverseDirection(gravity)))
                 {
                     onramp = true;
                 }
@@ -259,7 +255,7 @@ public class Player : Unit
         }
         if (onramp)
         {
-            Direction gravitydirection = GetGravity();
+            Direction gravitydirection = gravity;
             switch (gravitydirection)
             {
                 case Direction.Down:
@@ -292,7 +288,7 @@ public class Player : Unit
                     break;
             }
             if (goingup)
-                units = api.engine_GetUnits(Toolkit.VectorSum(Toolkit.VectorSum(Toolkit.DirectiontoVector(Toolkit.ReverseDirection(GetGravity())), Toolkit.DirectiontoVector(dir)), position));
+                units = api.engine_GetUnits(Toolkit.VectorSum(Toolkit.VectorSum(Toolkit.DirectiontoVector(Toolkit.ReverseDirection(gravity)), Toolkit.DirectiontoVector(dir)), position));
         }
         for (int i = 0; i < units.Count; i++)
         {
@@ -762,7 +758,7 @@ public class Player : Unit
 
     public void MoveToBranchFinished()
     {
-        int counter = 0, emptycounter = 0;
+        /*int counter = 0, emptycounter = 0;
         for(int i = 0; i < 4; i++)
         {
             Direction dir = Toolkit.NumberToDirection(i + 1);
@@ -789,7 +785,8 @@ public class Player : Unit
                 Toolkit.GetBranch(Toolkit.VectorSum(position, dir)).PlayerMove(Toolkit.ReverseDirection(dir), this);
                 return;
             }
-        }
+        }*/
+        SetState(PlayerState.Idle);
     }
 
     public void MoveOutOfBranchFinished()
@@ -802,7 +799,6 @@ public class Player : Unit
     {
         if (state == PlayerState.Lean)
             return;
-        api.engine.apiinput.leanlock = false;
         SetState(LeanUndoNextState);
         if (LeanUndoNextState == PlayerState.Idle)
             ApplyGravity();
@@ -873,7 +869,7 @@ public class CloneablePlayer : CloneableUnit
         state = player.state;
         leandirection = player.leandirection;
         onramp = player.onramp;
-        gravity = player.GetGravity();
+        gravity = player.gravity;
         nextpos = new Vector2(player.nextpos.x, player.nextpos.y);
     }
 

@@ -99,7 +99,7 @@ public class Jump : Ability {
     {
         if (!Toolkit.IsEmpty(Toolkit.VectorSum(player.position, direction)) && !Toolkit.HasBranch(Toolkit.VectorSum(player.position, direction)))
             return false;
-        Vector2 pos = Toolkit.VectorSum(Toolkit.VectorSum(player.position, direction), player.GetGravity());
+        Vector2 pos = Toolkit.VectorSum(Toolkit.VectorSum(player.position, direction), player.gravity);
         if (Toolkit.IsEmpty(pos) && !Toolkit.HasBranch(Toolkit.VectorSum(player.position, direction)))
             return false;
         player.direction = direction;
@@ -147,7 +147,7 @@ public class Jump : Ability {
             for (int i = 0; i < 4; i++)
             {
                 Vector2 temppos = Toolkit.VectorSum(player.position, Toolkit.NumberToDirection(i + 1));
-                if (Toolkit.NumberToDirection(i + 1) != player.GetGravity())
+                if (Toolkit.NumberToDirection(i + 1) != player.gravity)
                     if (!Toolkit.IsEmpty(temppos))
                         if (Toolkit.GetUnit(temppos).isLeanable())
                         {
