@@ -97,8 +97,13 @@ public class PlayerPhysics : MonoBehaviour
     
     public void Land(Vector2 position)
     {
-        Rotate_On_Block();
+        StartCoroutine(WaitToLandRotate());
+    }
 
+    private IEnumerator WaitToLandRotate()
+    {
+        yield return new WaitForSeconds(0.3f);
+        Rotate_On_Block();
     }
     public void Land_On_Ramp(Vector2 position,int type)
     {
@@ -230,8 +235,22 @@ public class PlayerPhysics : MonoBehaviour
         StopAllCoroutines();
         move_type = MoveType.Falling;
         last_co  = StartCoroutine(Accelerated_Move(pos,fall_velocity,fall_acceleration,true));
+        StartCoroutine(FallRotation());
     }
 
+    private IEnumerator FallRotation()
+    {
+        Debug.Log("Start of Couroutine");
+        float y = transform.GetChild(0).rotation.y;
+        float degree = 0;
+        while(degree > -30)
+        {
+            transform.GetChild(0).rotation = Quaternion.Euler(0, y, degree);
+            degree -= 1;
+            yield return null;
+        }
+        Debug.Log(transform.GetChild(0).rotation);
+    }
     public void Fall_Die(Vector2 pos)
     {
         Camera.main.GetComponent<CameraController>().auto_move = false;
@@ -522,9 +541,21 @@ public class PlayerPhysics : MonoBehaviour
     }
     private void Rotate_On_Block()
     {
-
+        
+        StartCoroutine(RotateOnBlockCouroutine());
     }
 
+    private IEnumerator RotateOnBlockCouroutine()
+    {
+        float y = transform.GetChild(0).rotation.y;
+        float degree = -30;
+        while (degree < 0)
+        {
+            degree += 0.5f;
+            transform.GetChild(0).rotation = Quaternion.Euler(0, y, degree);
+            yield return null;
+        }
+    }
    private void Rotate_On_Ramp(int type)
     {
 
