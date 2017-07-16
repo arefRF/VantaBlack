@@ -29,34 +29,64 @@ public class PlayerGraphics : MonoBehaviour {
     public void Lean_Right(bool on_air)
     {
         ResetStates();
-        int zrot = 0, yrot = 0;
+        int zrot = 0, yrot = 0, xrot = 0;
+        int num = 3;
         if (player.GetGravity() == Direction.Up)
         {
             zrot = 180;
             yrot = 180;
         }
-        transform.GetChild(0).rotation = Quaternion.Euler(0, yrot, zrot);
+        else if (player.GetGravity() == Direction.Right)
+        {
+            zrot = 90;
+            if (player.direction == Direction.Down)
+                xrot = 180;
+            num = 2;
+        }
+        else if (player.GetGravity() == Direction.Left)
+        {
+            zrot = 270;
+            if (player.direction == Direction.Up)
+                xrot = 180;
+            num = 1;
+        }
+        transform.GetChild(0).rotation = Quaternion.Euler(xrot, yrot, zrot);
         if (on_air)
-            animator.SetInteger("Lean Air", 3);
+            animator.SetInteger("Lean Air", num);
         else
-            animator.SetInteger("Lean", 3);
+            animator.SetInteger("Lean", num);
 
     }
 
     public void Lean_Left(bool on_air)
     {
         ResetStates();
-        int zrot = 0, yrot = 180;
+        int zrot = 0, yrot = 180, xrot = 0;
+        int num = 3;
         if (player.GetGravity() == Direction.Up)
         {
             zrot = 180;
             yrot = 0;
         }
-        transform.GetChild(0).rotation = Quaternion.Euler(0, yrot, zrot);
+        else if (player.GetGravity() == Direction.Right)
+        {
+            zrot = 270;
+            if (player.direction == Direction.Up)
+                xrot = 180;
+            num = 1;
+        }
+        else if (player.GetGravity() == Direction.Left)
+        {
+            zrot = 90;
+            if (player.direction == Direction.Down)
+                xrot = 180;
+            num = 2;
+        }
+        transform.GetChild(0).rotation = Quaternion.Euler(xrot, yrot, zrot);
         if (on_air)
-            animator.SetInteger("Lean Air", 3);
+            animator.SetInteger("Lean Air", num);
         else
-            animator.SetInteger("Lean", 3);
+            animator.SetInteger("Lean", num);
 
     }
 
@@ -65,9 +95,15 @@ public class PlayerGraphics : MonoBehaviour {
         int num = 1;
         if (player.GetGravity() == Direction.Up)
             num = 2;
+        else if (player.GetGravity() == Direction.Right)
+            num = 3;
+        else if (player.GetGravity() == Direction.Left)
+            num = 3;
         ResetStates();
-        animator.SetInteger("Lean", num);
-
+        if (on_air)
+            animator.SetInteger("Lean Air", num);
+        else
+            animator.SetInteger("Lean", num);
     }
 
     public void Lean_Down(bool on_air)
@@ -75,9 +111,15 @@ public class PlayerGraphics : MonoBehaviour {
         int num = 2;
         if (player.GetGravity() == Direction.Up)
             num = 1;
+        else if (player.GetGravity() == Direction.Right)
+            num = 3;
+        else if (player.GetGravity() == Direction.Left)
+            num = 3;
         ResetStates();
-        animator.SetInteger("Lean", num);
-  
+        if (on_air)
+            animator.SetInteger("Lean Air", num);
+        else
+            animator.SetInteger("Lean", num);
     }
 
     public void FakeLean_Down()
@@ -292,9 +334,24 @@ public class PlayerGraphics : MonoBehaviour {
             zrot = 180;
             dir = Toolkit.ReverseDirection(dir);
         }
+        else if(player.GetGravity() == Direction.Right)
+        {
+            zrot = 270;
+            //dir = Toolkit.ReverseDirection(dir);
+        }
+        else if(player.GetGravity() == Direction.Left)
+        {
+            zrot = 90;
+            dir = Toolkit.ReverseDirection(dir);
+        }
         if (dir == Direction.Right)
         {
             transform.GetChild(0).rotation = Quaternion.Euler(0, 0, zrot);
+            animator.SetInteger("Walk", 1);
+        }
+        else if(dir == Direction.Up)
+        {
+            transform.GetChild(0).rotation = Quaternion.Euler(180,180, zrot);
             animator.SetInteger("Walk", 1);
         }
         else
@@ -357,13 +414,29 @@ public class PlayerGraphics : MonoBehaviour {
     }
     public void Player_Change_Direction(Player player,Direction dir)
     {
-        int rot = 0;
+        int yrot = 0, zrot = 0; ;
+        float xrot = player.transform.rotation.x;
         if (player.transform.GetChild(0).rotation.y == 0)
-            rot = 180;
-        int zrot = 0;
+            yrot = 180;
         if (player.GetGravity() == Direction.Up)
+        {
             zrot = 180;
-        player.transform.GetChild(0).rotation = Quaternion.Euler(player.transform.rotation.x, rot, zrot);
+        }
+        else if (player.GetGravity() == Direction.Right)
+        {
+            yrot = 0;
+            zrot = 90;
+            if (dir == Direction.Down)
+                xrot = 180;
+        }
+        else if(player.GetGravity() == Direction.Left)
+        {
+            yrot = 0;
+            zrot = 270;
+            if (dir == Direction.Up)
+                xrot = 180;
+        }
+        player.transform.GetChild(0).rotation = Quaternion.Euler(xrot, yrot, zrot);
         if (dir == Direction.Right)
             animator.SetInteger("Change Direction", 1);
         else

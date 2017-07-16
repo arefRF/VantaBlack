@@ -317,7 +317,6 @@ public class InputController {
                 }
                 else
                 {
-                    engine.apiinput.leanlock = false;
                     if (Toolkit.HasBranch(player.position))
                     {
                         player.SetState(PlayerState.Busy);
@@ -550,7 +549,6 @@ public class InputController {
                 player.SetState(PlayerState.Lean);
                 player.leandirection = direction;
                 player.currentAbility = null;
-                engine.apiinput.leanlock = true;
                 engine.apigraphic.Lean(player);
             }
             else
@@ -597,7 +595,6 @@ public class InputController {
                 player.SetState(PlayerState.Lean);
                 player.leandirection = direction;
                 player.currentAbility = null;
-                engine.apiinput.leanlock = true;
                 engine.apigraphic.Lean_On_Air(player);
             } 
             else

@@ -802,7 +802,6 @@ public class Player : Unit
     {
         if (state == PlayerState.Lean)
             return;
-        api.engine.apiinput.leanlock = false;
         SetState(LeanUndoNextState);
         if (LeanUndoNextState == PlayerState.Idle)
             ApplyGravity();

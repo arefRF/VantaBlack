@@ -916,6 +916,7 @@ public class LogicalEngine {
     }
     public bool AdjustPlayer(Player player,Direction direction , Action<Player, Direction> passingmethod)
     {
+        return false;
         if (player.transform.position.x == player.position.x && player.transform.position.y == player.position.y)
             return false;
         if (Toolkit.HasRamp(player.position) && !Toolkit.IsdoubleRamp(player.position) && Toolkit.GetRamp(player.position).IsOnRampSide(Toolkit.ReverseDirection(database.gravity_direction)))
