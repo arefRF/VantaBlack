@@ -240,7 +240,7 @@ public class Branch : Unit {
                 player.SetState(PlayerState.Lean);
                 player.leandirection = direction;
                 player.currentAbility = null;
-                if (Toolkit.IsEmpty(Toolkit.VectorSum(player.position, player.GetGravity())))
+                if (Toolkit.IsEmpty(Toolkit.VectorSum(player.position, player.gravity)))
                     api.engine.apigraphic.Lean_On_Air(player);
                 else
                     api.engine.apigraphic.Lean(player);

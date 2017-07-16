@@ -68,14 +68,14 @@ public class PlayerGraphics : MonoBehaviour {
             zrot = 180;
             yrot = 0;
         }
-        else if (player.GetGravity() == Direction.Right)
+        else if (player.gravity == Direction.Right)
         {
             zrot = 270;
             if (player.direction == Direction.Up)
                 xrot = 180;
             num = 1;
         }
-        else if (player.GetGravity() == Direction.Left)
+        else if (player.gravity == Direction.Left)
         {
             zrot = 90;
             if (player.direction == Direction.Down)
@@ -93,11 +93,11 @@ public class PlayerGraphics : MonoBehaviour {
     public void Lean_Up(bool on_air)
     {
         int num = 1;
-        if (player.GetGravity() == Direction.Up)
+        if (player.gravity == Direction.Up)
             num = 2;
-        else if (player.GetGravity() == Direction.Right)
+        else if (player.gravity == Direction.Right)
             num = 3;
-        else if (player.GetGravity() == Direction.Left)
+        else if (player.gravity == Direction.Left)
             num = 3;
         ResetStates();
         if (on_air)
@@ -109,7 +109,7 @@ public class PlayerGraphics : MonoBehaviour {
     public void Lean_Down(bool on_air)
     {
         int num = 2;
-        if (player.GetGravity() == Direction.Up)
+        if (player.gravity == Direction.Up)
             num = 1;
         else if (player.gravity == Direction.Right)
             num = 3;
