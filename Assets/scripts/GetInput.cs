@@ -55,10 +55,8 @@ public class GetInput : MonoBehaviour {
             Get_Space_Arrows();
         else
         {
-            if (!api.leanlock)
-                Get_Move();
-            else
-                Get_Move_Once();
+            //risky
+            Get_Move();
         }
 
         if (Input.GetKeyDown(KeyCode.F))
