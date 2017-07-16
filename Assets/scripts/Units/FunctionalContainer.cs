@@ -9,7 +9,7 @@ public class FunctionalContainer : Container
     public int currentState { get; set; }
     public int nextState { get; set; }
     public bool firstmove { get; set; }
-
+    private AudioSource audio_source;
     public override bool PlayerMoveInto(Direction dir)
     {
         return false;
@@ -50,6 +50,9 @@ public class FunctionalContainer : Container
             on = false;
         else
             on = !on;
+
+        if (audio_source == null)
+            audio_source = GetComponent<AudioSource>();
         api.engine.apigraphic.UnitChangeSprite(this);
         if (!on)
             nextState = 0;
