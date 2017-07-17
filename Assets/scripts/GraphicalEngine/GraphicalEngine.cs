@@ -194,18 +194,17 @@ public class GraphicalEngine : MonoBehaviour {
 
     public void Fountatin(Fountain fountatin)
     {
-        Debug.Log("fountain code commented in graphical engine!!! click here");
-        /*GameObject lights = Toolkit.GetObjectInChild(fountatin.gameObject, "Lights");
+        GameObject lights = Toolkit.GetObjectInChild(fountatin.gameObject, "Lights");
         Vector3 color = Ability_Color(fountatin.ability, false);
         for (int i = 0; i < 4; i++)
-        {lean
+        {
             lights.transform.GetChild(i).gameObject.SetActive(false);
         }
         for (int i = 0; i < fountatin.count - fountatin.abilities.Count; i++)
         {
             lights.transform.GetChild(i).GetComponent<SpriteRenderer>().color = new Color(color.x,color.y,color.z,1);
             lights.transform.GetChild(i).gameObject.SetActive(true);
-        }*/
+        }
     }
     private Vector3 Ability_Color(List<Ability> ability,bool compliment)
     {
@@ -295,6 +294,7 @@ public class GraphicalEngine : MonoBehaviour {
         else
             for (; temppos.x <= pos2.x; temppos.x++)
                 makeBeam(temppos);
+
         /*GameObject myLine = new GameObject();
         myLine.tag = "LaserUI";
         myLine.transform.position = pos1;

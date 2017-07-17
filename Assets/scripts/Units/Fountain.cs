@@ -30,12 +30,24 @@ public class Fountain : Unit {
             else
             {
                 Vector2 pos = Toolkit.VectorSum(position, Toolkit.NumberToDirection(i + 1));
-                if(Toolkit.HasBranch(pos) || Toolkit.HasLaser(pos))
+                if (Toolkit.HasBranch(pos) || Toolkit.HasLaser(pos))
                     transform.GetChild(i).GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Fountain[i + 4];
                 else
                     transform.GetChild(i).GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Fountain[i];
             }
         }
+       /* for(int i =0;i<4;i++)
+            if (!connected[i])
+            {
+                switch (i)
+                {
+                    case 0: transform.GetChild(i).localPosition = new Vector2(0, 1.37f); break;
+                    case 1: transform.GetChild(i).localPosition = new Vector2(1.37f, 0f); break;
+                    case 2: transform.GetChild(i).localPosition = new Vector2(0, -1.37f); break;
+                    case 3: transform.GetChild(i).localPosition = new Vector2(-1.37f, 0); break;
+                        
+                }
+            } */
     }
 
     public void Action(Player player)
