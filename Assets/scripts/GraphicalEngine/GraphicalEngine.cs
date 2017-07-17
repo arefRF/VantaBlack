@@ -286,7 +286,6 @@ public class GraphicalEngine : MonoBehaviour {
 
     }
 
-
     public void AddLaser(Vector2 pos1,Vector2 pos2,Direction dir)
     {
         Vector2 temppos = new Vector2(pos1.x, pos1.y);

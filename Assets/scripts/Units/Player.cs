@@ -391,7 +391,7 @@ public class Player : Unit
         isonejumping = false;
         if (api.engine.drainercontroller.Check(this))
             return false;
-        SetState(PlayerState.Idle);
+        
         api.engine.lasercontroller.CollisionCheck(position);
 
         // to avoid exception
@@ -428,6 +428,7 @@ public class Player : Unit
         if (api.engine.drainercontroller.Check(this))
             return false;
         api.engine.lasercontroller.CollisionCheck(position);
+        SetState(PlayerState.Idle);
         while (IsInBound(position) && NewFall())
         {
             if (api.engine.drainercontroller.Check(this))
