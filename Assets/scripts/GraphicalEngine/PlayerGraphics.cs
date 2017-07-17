@@ -12,6 +12,7 @@ public class PlayerGraphics : MonoBehaviour {
     private Animator bodyAnimator;
     private Player player;
     private int z_rot;
+    private AudioSource audio;
     void Start()
     {
         z_rot = 0;
@@ -23,6 +24,7 @@ public class PlayerGraphics : MonoBehaviour {
         player = GetComponent<Player>();
         engine.apigraphic.Absorb(player, null);
         bodyAnimator = transform.GetChild(0).GetComponent<Animator>();
+        audio = GetComponent<AudioSource>();
     }
 
 
@@ -211,6 +213,8 @@ public class PlayerGraphics : MonoBehaviour {
 
     public void ResetStates()
     {
+        Debug.Log("ResetStates");
+        audio.Stop();
         // Get call stack
        // animator.SetBool("Jump", false);
         animator.SetInteger("Walk", 0);
@@ -396,8 +400,10 @@ public class PlayerGraphics : MonoBehaviour {
     }
     public void Move_Animation(Direction dir)
     {
-        //animator.SetInteger("Ramp", 0);
-        // animator.SetBool("Transition", false);
+        if (!audio.isPlaying)
+        {
+            audio.Play();
+        }
         int zrot = 0;
         if (player.gravity == Direction.Up)
         {
