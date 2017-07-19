@@ -26,7 +26,11 @@ public class GraphicalEngine : MonoBehaviour {
     void Awake()
     {
         Application.targetFrameRate = 240;
-        lasergraphics = GetComponent<LaserGraphics>();
+        try
+        {
+            lasergraphics = GetComponent<LaserGraphics>();
+        }
+        catch { }
     }
     void Start()
     {

@@ -394,6 +394,7 @@ public class Container : ParentContainer {
             if (player.abilities.Count != 0)
                 player.abilitytype = player.abilities[0].abilitytype;
             api.engine.apigraphic.Absorb(player, null);
+            player._setability();
         }
     }
     

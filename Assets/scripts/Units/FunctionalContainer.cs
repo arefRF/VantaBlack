@@ -58,7 +58,7 @@ public class FunctionalContainer : Container
             nextState = 0;
         else
             nextState = abilities.Count;
-        api.RemoveFromStuckList(this);
+       // api.RemoveFromStuckList(this);
         for(int i=0; i<sameContainer.Count; i++)
         {
             ((FunctionalContainer)sameContainer[i]).on = on;

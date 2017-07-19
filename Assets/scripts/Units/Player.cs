@@ -659,6 +659,7 @@ public class Player : Unit
         }
         else
             abilitycount = 0;
+        GetComponent<PlayerGraphics>().UpdateHologram();
         api.engine.apigraphic.Absorb(this, null);
     }
 
