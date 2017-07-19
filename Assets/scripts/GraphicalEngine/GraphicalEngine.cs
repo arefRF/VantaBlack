@@ -180,6 +180,8 @@ public class GraphicalEngine : MonoBehaviour {
     public void BranchLight(Branch branch,bool on)
     {
         Toolkit.GetObjectInChild(branch.gameObject, "Icon").transform.GetChild(0).gameObject.SetActive(on);
+        if(on)
+            branch.GetComponent<AudioSource>().Play();
     }
     public void Stop_All_Co()
     {
