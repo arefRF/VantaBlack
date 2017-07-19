@@ -53,6 +53,11 @@ public class FunctionalContainer : Container
 
         if (audio_source == null)
             audio_source = GetComponent<AudioSource>();
+
+        // for Sound Effect
+       // if (on)
+           // audio_source.Play();
+
         api.engine.apigraphic.UnitChangeSprite(this);
         if (!on)
             nextState = 0;
