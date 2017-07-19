@@ -239,11 +239,10 @@ public class PlayerPhysics : MonoBehaviour
         if (player.direction == Direction.Right || player.direction == Direction.Up)
             rotate_to -= 30;
         else
-            rotate_to += 30;
-
-        if (rotate_to < 0)
-            rotate_to += 360;
-        StartCoroutine(FallRotation(rotate_to));
+            rotate_to -= 30;
+        float y = transform.GetChild(0).rotation.eulerAngles.y;
+        transform.GetChild(0).rotation = Quaternion.Euler(0, y, rotate_to);
+        //StartCoroutine(FallRotation(rotate_to));
     }
 
 
@@ -252,8 +251,8 @@ public class PlayerPhysics : MonoBehaviour
         switch (dir)
         {
             case (Direction.Right):return 90;
-            case (Direction.Left): return 270; 
-            case (Direction.Down): return 0;
+            case (Direction.Left): return 90; 
+            case (Direction.Down): return 270;
             case (Direction.Up): return 180;
             default:return 0;
         }
@@ -583,7 +582,9 @@ public class PlayerPhysics : MonoBehaviour
     private void Rotate_On_Block()
     {
         float target = GetRotationGravity(player.gravity);
-        StartCoroutine(FallRotation(target));
+        float y = transform.GetChild(0).rotation.eulerAngles.y;
+        transform.GetChild(0).rotation = Quaternion.Euler(0, y, target);
+        //StartCoroutine(FallRotation(target));
     }
 
     private IEnumerator RotateOnBlockCouroutine()
