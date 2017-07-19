@@ -471,11 +471,11 @@ public sealed class Toolkit{
 
     public static Player GetPlayer(Vector2 position)
     {
-        List<Unit>[,] units = Starter.GetDataBase().units;
-        for (int i = 0; i < units[(int)position.x, (int)position.y].Count; i++)
+        List<Player> units = Starter.GetDataBase().player;
+        for (int i = 0; i < units.Count; i++)
         {
-            if (units[(int)position.x, (int)position.y][i] is Player)
-                return (Player)units[(int)position.x, (int)position.y][i];
+            if (units[i].position.x == position.x && units[i].position.y == position.y)
+                return units[i];
         }
         return null;
     }
