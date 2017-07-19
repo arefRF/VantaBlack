@@ -22,7 +22,7 @@ public class GraphicalEngine : MonoBehaviour {
     private Coroutine object_co;
     private string[] simple_objects_off = new string[] { "Direction", "Glass", "Switches", "Border", "Icon Holder", "Glow" };
     private List<MoveObject> move_objects;
-    public LaserGraphics lasergraphics;
+    public LaserGraphics lasergraphics { get; set; }
     void Awake()
     {
         Application.targetFrameRate = 240;
