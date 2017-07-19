@@ -348,6 +348,14 @@ public class GraphicalEngine : MonoBehaviour {
         }
     }
 
+    public void LaserDieAnimation(Player player)
+    {
+        GameObject die = Toolkit.GetObjectInChild(GameObject.Find("Special Effects"), "Dying");
+        die.transform.position = player.transform.position;
+        die.GetComponent<Animator>().SetTrigger("Die");
+        player.transform.GetChild(0).gameObject.SetActive(false);
+    }
+
     public void EnterPortalMode(List<Unit> containers,Container container)
     {
         for(int i = 0; i < containers.Count; i++)
