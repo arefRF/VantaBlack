@@ -43,6 +43,7 @@ public class Laser : Unit {
                 flag = true;
                 finalpos = Toolkit.VectorSum(finalpos, direction);
             }
+            finalpos = Toolkit.VectorSum(finalpos, Toolkit.ReverseDirection(direction));
             DynamicContainer container = Toolkit.GetContainer(finalpos) as DynamicContainer;
             if (container != null && !api.engine.lasercontroller.containers.Contains(container))
             {
@@ -73,6 +74,7 @@ public class Laser : Unit {
                 flag = true;
                 finalpos = Toolkit.VectorSum(finalpos, direction);
             }
+            finalpos = Toolkit.VectorSum(finalpos, Toolkit.ReverseDirection(direction));
             DynamicContainer container = Toolkit.GetContainer(finalpos) as DynamicContainer;
             if (container != null && !api.engine.lasercontroller.containers.Contains(container))
             {
@@ -103,6 +105,7 @@ public class Laser : Unit {
                 flag = true;
                 finalpos = Toolkit.VectorSum(finalpos, direction);
             }
+            finalpos = Toolkit.VectorSum(finalpos, Toolkit.ReverseDirection(direction));
             DynamicContainer container = Toolkit.GetContainer(finalpos) as DynamicContainer;
             if (container != null && !api.engine.lasercontroller.containers.Contains(container))
             {
@@ -133,6 +136,7 @@ public class Laser : Unit {
                 flag = true;
                 finalpos = Toolkit.VectorSum(finalpos, direction);
             }
+            finalpos = Toolkit.VectorSum(finalpos, Toolkit.ReverseDirection(direction));
             DynamicContainer container = Toolkit.GetContainer(finalpos) as DynamicContainer;
             if (container != null && !api.engine.lasercontroller.containers.Contains(container))
             {
