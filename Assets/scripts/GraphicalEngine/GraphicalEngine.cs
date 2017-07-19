@@ -42,7 +42,7 @@ public class GraphicalEngine : MonoBehaviour {
     {
         Debug.Log("make beam");
         if (beamParent == null)
-            beamParent = new GameObject();
+            beamParent = new GameObject("Laser Beams");
         GameObject beam1 = Instantiate(beam);
         beam1.transform.SetParent(beamParent.transform);
         beam1.transform.position = pos;
@@ -289,7 +289,7 @@ public class GraphicalEngine : MonoBehaviour {
 
     public void AddLaser(Vector2 pos1,Vector2 pos2,Direction dir)
     {
-        if(pos1.x == pos2.x && pos1.y > pos2.y)
+        /*if(pos1.x == pos2.x && pos1.y > pos2.y)
         {
             AddLaser(pos2, pos1, dir);
             return;
@@ -306,7 +306,8 @@ public class GraphicalEngine : MonoBehaviour {
         else
             for (; temppos.x <= pos2.x; temppos.x++)
                 makeBeam(temppos);
-        /*GameObject myLine = new GameObject();
+        */
+        GameObject myLine = new GameObject();
         myLine.tag = "LaserUI";
         myLine.transform.position = pos1;
         myLine.AddComponent<LineRenderer>();
@@ -323,7 +324,6 @@ public class GraphicalEngine : MonoBehaviour {
         }
         render.SetPosition(0, pos1);
         render.SetPosition(1, pos2);
-        */
     }
 
     public void RemoveLasers()
