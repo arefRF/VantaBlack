@@ -39,7 +39,9 @@ public class Player : Unit
 
     public PlayerState LeanUndoNextState { get; set; }
 
-    public Coroutine leancoroutine {get; set;}
+    public Coroutine leancoroutine { get; set;}
+
+    public Container movedbycontainer { get; set; }
     public void Awake()
     {
         abilities = new List<Ability>();
@@ -787,6 +789,7 @@ public class Player : Unit
                 return;
             }
         }*/
+        api.engine.apigraphic.BranchLight(true, Toolkit.GetBranch(position));
         SetState(PlayerState.Idle);
     }
 

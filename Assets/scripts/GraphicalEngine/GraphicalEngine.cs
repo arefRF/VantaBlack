@@ -44,6 +44,7 @@ public class GraphicalEngine : MonoBehaviour {
         if (beamParent == null)
             beamParent = new GameObject();
         GameObject beam1 = Instantiate(beam);
+        beam1.transform.SetParent(beamParent.transform);
         beam1.transform.position = pos;
 
 
@@ -202,9 +203,10 @@ public class GraphicalEngine : MonoBehaviour {
         }
         for (int i = 0; i < fountatin.count - fountatin.abilities.Count; i++)
         {
-            lights.transform.GetChild(i).GetComponent<SpriteRenderer>().color = new Color(color.x,color.y,color.z,1);
+            lights.transform.GetChild(i).GetComponent<SpriteRenderer>().color = new Color(color.x, color.y, color.z, 1);
             lights.transform.GetChild(i).gameObject.SetActive(true);
         }
+       
     }
     private Vector3 Ability_Color(List<Ability> ability,bool compliment)
     {
@@ -287,6 +289,16 @@ public class GraphicalEngine : MonoBehaviour {
 
     public void AddLaser(Vector2 pos1,Vector2 pos2,Direction dir)
     {
+        if(pos1.x == pos2.x && pos1.y > pos2.y)
+        {
+            AddLaser(pos2, pos1, dir);
+            return;
+        }
+        if(pos1.y == pos2.y && pos1.x > pos2.x)
+        {
+            AddLaser(pos2, pos1, dir);
+            return;
+        }
         Vector2 temppos = new Vector2(pos1.x, pos1.y);
         if(pos1.x == pos2.x)
             for(; temppos.y <= pos2.y; temppos.y++)

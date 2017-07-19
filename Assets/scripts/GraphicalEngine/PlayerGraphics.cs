@@ -228,7 +228,7 @@ public class PlayerGraphics : MonoBehaviour {
         {
             int num = Toolkit.DirectionToNumber(dir);
             num ++;
-            if (num >= 5)
+            if (num == 5)
                 num = 1;
             dir = Toolkit.NumberToDirection(num);
 
@@ -326,21 +326,48 @@ public class PlayerGraphics : MonoBehaviour {
 
     public void Ramp_Animation(Direction dir,int type)
     {
+        Debug.Log("askcvjskldijkasdvaHUI L");
+        if (player.gravity == Direction.Right)
+        {
+            int num = Toolkit.DirectionToNumber(dir);
+            num++;
+            type = 4;
+            if (num == 5)
+                num = 1;
+            if (type == 5)
+                type = 1;
+            dir = Toolkit.NumberToDirection(num);
+
+        }
+        else if (player.gravity == Direction.Left)
+        {
+            int num = Toolkit.DirectionToNumber(dir);
+            num--;
+            if (num == 0)
+                num = 4;
+            dir = Toolkit.NumberToDirection(num);
+
+        }
         animator.SetInteger("Walk", 1);
-        int zrot = 0;
+        int zrot = 0, xrot = 0;
         if (player.gravity == Direction.Up)
             zrot = 180;
+        if (player.gravity == Direction.Right)
+        {
+            zrot = 90;
+            //xrot = 180;
+        }
         if (dir == Direction.Right)
         {
             if (type == 4)
             {
-                transform.GetChild(0).rotation= Quaternion.Euler(0,0, zrot);
+                transform.GetChild(0).rotation= Quaternion.Euler(xrot,0, zrot);
                 // z_rot set to 0 to change it later
                 z_rot = 0;
             }
             else
             {
-                transform.GetChild(0).rotation = Quaternion.Euler(0, 0, zrot);
+                transform.GetChild(0).rotation = Quaternion.Euler(xrot, 0, zrot);
                 z_rot = 0;
             }
         }
@@ -348,12 +375,12 @@ public class PlayerGraphics : MonoBehaviour {
         {
             if(type == 4)
             {
-                transform.GetChild(0).rotation = Quaternion.Euler(0, 180, zrot);
+                transform.GetChild(0).rotation = Quaternion.Euler(xrot, 180, zrot);
                 z_rot = 0;
             }
             else
             {
-                transform.GetChild(0).rotation = Quaternion.Euler(0,180, zrot);
+                transform.GetChild(0).rotation = Quaternion.Euler(xrot,180, zrot);
                 z_rot = 0;
             }
         }

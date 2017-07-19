@@ -167,9 +167,9 @@ public class LogicalEngine {
                 }
                 if (!flag)
                 {
-                    if (leanmove[i].CanMove(dir, unit.transform.parent.gameObject))
+                    Player tempplayer = leanmove[i] as Player;
+                    if (tempplayer.CanMove(dir, unit.transform.parent.gameObject))
                     {
-                        Player tempplayer = leanmove[i] as Player;
                         if(tempplayer.state == PlayerState.Lean)
                         {
                             if(tempplayer.LeanedTo.transform.parent != unit.transform.parent)
@@ -178,17 +178,16 @@ public class LogicalEngine {
                             }
                         }
                         if (((FunctionalContainer)unit).firstmove)
-                            snpmanager.AddToSnapShot(leanmove[i]);
-                        apiunit.RemoveFromDatabase(leanmove[i]);
-                        leanmove[i].position = Toolkit.VectorSum(leanmove[i].position, Toolkit.DirectiontoVector(dir));
-                        apiunit.AddToDatabase(leanmove[i]);
+                            snpmanager.AddToSnapShot(tempplayer);
+                        apiunit.RemoveFromDatabase(tempplayer);
+                        tempplayer.position = Toolkit.VectorSum(tempplayer.position, Toolkit.DirectiontoVector(dir));
+                        apiunit.AddToDatabase(tempplayer);
                         //((Player)leanmove[i]).nextpos = Toolkit.VectorSum(leanmove[i].position, Toolkit.DirectiontoVector(dir));
-                        apigraphic.Player_Co_Stop(((Player)leanmove[i]));
-                        apigraphic.LeanStickMove((Player)leanmove[i], ((Player)leanmove[i]).position);
+                        apigraphic.Player_Co_Stop(tempplayer);
+                        apigraphic.LeanStickMove(tempplayer, tempplayer.position);
                     }
                     else
                     {
-                        Player tempplayer = leanmove[i] as Player;
                         inputcontroller.LeanUndo(tempplayer, tempplayer.leandirection, PlayerState.Idle);
                         inputcontroller.FakeLeanUndo(tempplayer, tempplayer.leandirection);
                     }

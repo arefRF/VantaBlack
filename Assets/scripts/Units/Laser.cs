@@ -103,6 +103,9 @@ public class Laser : Unit {
                 flag = true;
                 finalpos = Toolkit.VectorSum(finalpos, direction);
             }
+            Debug.Log(pos);
+            Debug.Log(finalpos);
+            Debug.Log(flag);
             DynamicContainer container = Toolkit.GetContainer(finalpos) as DynamicContainer;
             if (container != null && !api.engine.lasercontroller.containers.Contains(container))
             {
