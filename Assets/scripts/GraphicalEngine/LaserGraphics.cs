@@ -23,7 +23,7 @@ public class LaserGraphics : MonoBehaviour {
 
     public void AddLaser(Vector2 pos1, Vector2 pos2)
     {
-        Debug.Log("addlaser");
+        Debug.Log(pos1 + "  "  + pos2);
         float rotation = 0;
         if (pos1.x == pos2.x)
         {
@@ -33,20 +33,20 @@ public class LaserGraphics : MonoBehaviour {
             }
             else
             {
-                rotation = 0;
+                rotation = 90;
             }
             
         }
-        else if (pos1.y == pos2.y && pos1.x > pos2.x)
+        else if (pos1.y == pos2.y)
         {
-            if (pos1.y > pos2.y)
+            if (pos1.x > pos2.x)
             {
                 AddLaser(pos2, pos1);
                 return;
             }
             else
             {
-                rotation = 90;
+                rotation = 0;
             }
         }
         Vector2 temppos = new Vector2(pos1.x, pos1.y);
@@ -71,6 +71,7 @@ public class LaserGraphics : MonoBehaviour {
 
     private void makeBeam(Vector2 pos, float rotation)
     {
+//        Debug.Log(rotation);
         GameObject beamcolon;
         if (BeamObjectPool.Count == 0)
         {
