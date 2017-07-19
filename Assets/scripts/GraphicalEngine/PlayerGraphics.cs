@@ -213,7 +213,6 @@ public class PlayerGraphics : MonoBehaviour {
 
     public void ResetStates()
     {
-        Debug.Log("ResetStates");
         audio.Stop();
         // Get call stack
        // animator.SetBool("Jump", false);
