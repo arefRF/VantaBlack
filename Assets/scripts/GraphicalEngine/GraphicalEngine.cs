@@ -20,14 +20,13 @@ public class GraphicalEngine : MonoBehaviour {
     private float lean_move = 0.2f;
     private bool finish_lock;
     private Coroutine object_co;
-    private string[] simple_objects_off = new string[] { "Direction","Glass","Switches","Border","Icon Holder","Glow"};
-    public GameObject beam;
-    GameObject beamParent;
+    private string[] simple_objects_off = new string[] { "Direction", "Glass", "Switches", "Border", "Icon Holder", "Glow" };
     private List<MoveObject> move_objects;
-    private Texture2D BeamTexture;
+    public LaserGraphics lasergraphics;
     void Awake()
     {
         Application.targetFrameRate = 240;
+        lasergraphics = GetComponent<LaserGraphics>();
     }
     void Start()
     {
@@ -35,20 +34,10 @@ public class GraphicalEngine : MonoBehaviour {
         database = Starter.GetDataBase();
         api = engine.apigraphic;
         move_objects = new List<MoveObject>();
-        BeamTexture = Resources.Load<Texture2D>("lazer\\lazer line");
+        
     }
 
-    private void makeBeam(Vector2 pos)
-    {
-        Debug.Log("make beam");
-        if (beamParent == null)
-            beamParent = new GameObject("Laser Beams");
-        GameObject beam1 = Instantiate(beam);
-        beam1.transform.SetParent(beamParent.transform);
-        beam1.transform.position = pos;
 
-
-    }
 
     public void Move_Object(GameObject obj,Unit unit, Vector2 pos)
     {
@@ -326,20 +315,7 @@ public class GraphicalEngine : MonoBehaviour {
         render.SetPosition(1, pos2);
     }
 
-    public void RemoveLasers()
-    {
-        try {
-            GameObject[] lasers = GameObject.FindGameObjectsWithTag("LaserUI");
-            for (int i = 0; i < lasers.Length; i++)
-            {
-                Destroy(lasers[i]);
-            }
-        }
-        catch
-        {
-            
-        }
-    }
+    
 
     public void StaticContainer(StaticContainer container)
     {

@@ -10,6 +10,7 @@ public class APIGraphic{
     {
         this.logicalengine = logicalengine;
         graphicalengine = GameObject.Find("Graphical").GetComponent<GraphicalEngine>();
+     //   graphicalengine.lasergraphics = graphicalengine.gameObject.GetComponent<LaserGraphics>();
     }
 
     //Ramp to Ramp
@@ -426,12 +427,12 @@ public class APIGraphic{
 
     public void AddLaser(Vector2 pos1,Vector2 pos2,Direction dir)
     {
-        graphicalengine.AddLaser(pos1, pos2,dir);
+        graphicalengine.lasergraphics.AddLaser(pos1, pos2);
     }
 
     public void RemoveLaser()
     {
-        graphicalengine.RemoveLasers();
+        graphicalengine.lasergraphics.RemoveLasers();
     }
 
     public void AdjustPlayer(Player player, Vector2 pos, Direction direction, System.Action<Player, Direction> passingmethod)
