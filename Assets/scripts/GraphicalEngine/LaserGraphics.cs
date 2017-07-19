@@ -23,7 +23,6 @@ public class LaserGraphics : MonoBehaviour {
 
     public void AddLaser(Vector2 pos1, Vector2 pos2)
     {
-        Debug.Log(pos1 + "  "  + pos2);
         float rotation = 0;
         if (pos1.x == pos2.x)
         {
@@ -71,7 +70,6 @@ public class LaserGraphics : MonoBehaviour {
 
     private void makeBeam(Vector2 pos, float rotation)
     {
-//        Debug.Log(rotation);
         GameObject beamcolon;
         if (BeamObjectPool.Count == 0)
         {

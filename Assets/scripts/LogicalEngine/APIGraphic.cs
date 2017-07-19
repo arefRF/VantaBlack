@@ -439,4 +439,9 @@ public class APIGraphic{
     {
         player.GetComponent<PlayerPhysics>().Adjust(pos, direction, passingmethod);
     }
+
+    public void Laser_Player_Died(Player player)
+    {
+        Debug.Log("laser player died");
+    }
 }

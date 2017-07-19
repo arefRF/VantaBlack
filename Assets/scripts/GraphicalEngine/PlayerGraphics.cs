@@ -118,7 +118,6 @@ public class PlayerGraphics : MonoBehaviour {
         else if (player.gravity == Direction.Left)
             num = 3;
         ResetStates();
-        Debug.Log(num);
         if (on_air)
             animator.SetInteger("Lean Air", num);
         else

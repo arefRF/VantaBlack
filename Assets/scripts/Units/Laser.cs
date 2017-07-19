@@ -177,7 +177,7 @@ public class Laser : Unit {
                 {
                     if (IsBetween(pos.x, beamPositions[i][0].x, beamPositions[i][1].x))
                     {
-                        Debug.Log("beam collision");
+                        engine.apigraphic.Laser_Player_Died(Toolkit.GetPlayer(pos));
                         return true;
                     }
                 }
