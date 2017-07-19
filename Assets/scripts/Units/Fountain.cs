@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 
 public class Fountain : Unit {
@@ -7,6 +8,7 @@ public class Fountain : Unit {
     public int count;
     public List<Ability> abilities;
     private Animator animator;
+    private bool[] connected;
     public override void Run()
     {
         abilities = new List<Ability>();
@@ -22,7 +24,7 @@ public class Fountain : Unit {
 
     public override void SetInitialSprite()
     {
-        bool[] connected = Toolkit.GetConnectedSidesForLaser(this);
+        connected = Toolkit.GetConnectedSidesForLaser(this);
         for(int i=0; i<4; i++)
         {
             if (!connected[i])
@@ -36,18 +38,7 @@ public class Fountain : Unit {
                     transform.GetChild(i).GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Fountain[i];
             }
         }
-       /* for(int i =0;i<4;i++)
-            if (!connected[i])
-            {
-                switch (i)
-                {
-                    case 0: transform.GetChild(i).localPosition = new Vector2(0, 1.37f); break;
-                    case 1: transform.GetChild(i).localPosition = new Vector2(1.37f, 0f); break;
-                    case 2: transform.GetChild(i).localPosition = new Vector2(0, -1.37f); break;
-                    case 3: transform.GetChild(i).localPosition = new Vector2(-1.37f, 0); break;
-                        
-                }
-            } */
+      
     }
 
     public void Action(Player player)
@@ -85,7 +76,7 @@ public class Fountain : Unit {
         api.engine.apigraphic.UnitChangeSprite(this);
     }
 
-    private bool UndoAbilities(Player player)
+    private bool ResetFountatin(Player player)
     {
         if (abilities.Count == 0)
             return false;
@@ -132,16 +123,54 @@ public class Fountain : Unit {
         api.engine.apigraphic.Player_Co_Stop(player);
         player.currentAbility = null;
         api.engine.apigraphic.Lean(player);
-        if (UndoAbilities(player))
+        // Reseting the Abilities
+        if (ResetFountatin(player))
         {
-            animator.SetBool("Open", false);
+            CloseFountatin();
             api.engine.apigraphic.UnitChangeSprite(this);
         }
     }
-    
+
+    private void CloseFountatin()
+    {
+        for(int i = 0; i < 4; i++)
+            switch (i)
+            {
+                case 0: StartCoroutine(SmoothMove(transform.GetChild(i), new Vector2(0, 1.25f))); break;
+                case 1: StartCoroutine(SmoothMove(transform.GetChild(i), new Vector2(1.25f, 0f))); break;
+                case 2: StartCoroutine(SmoothMove(transform.GetChild(i), new Vector2(0, -1.25f))); break;
+                case 3: StartCoroutine(SmoothMove(transform.GetChild(i), new Vector2(-1.25f, 0))); break;
+            }
+    }
     public void PlayerLeanUndo(Player player)
     {
-        if(abilities.Count > 0 )
-            animator.SetBool("Open", true);
+        if (abilities.Count > 0)
+        {
+            // To see what part of the Fountatin Should go up
+            for (int i = 0; i < 4; i++)
+                if (!connected[i])
+                {
+                    switch (i)
+                    {
+                        case 0: StartCoroutine(SmoothMove(transform.GetChild(i), new Vector2(0, 1.37f))); break;
+                        case 1: StartCoroutine(SmoothMove(transform.GetChild(i), new Vector2(1.37f, 0f))); break;
+                        case 2: StartCoroutine(SmoothMove(transform.GetChild(i), new Vector2(0, -1.37f))); break;
+                        case 3: StartCoroutine(SmoothMove(transform.GetChild(i), new Vector2(-1.37f, 0))); break;
+                    }
+                }
+        }
     }
+
+    private IEnumerator SmoothMove(Transform obj,Vector2 target)
+    {
+        float remain = ((Vector2)obj.localPosition - target).sqrMagnitude;
+        while (remain > float.Epsilon)
+        {
+            remain = ((Vector2)obj.localPosition - target).sqrMagnitude;
+            obj.localPosition = Vector2.MoveTowards(obj.localPosition, target, Time.deltaTime / 5);
+            yield return null;
+        }
+
+    }
+
 }

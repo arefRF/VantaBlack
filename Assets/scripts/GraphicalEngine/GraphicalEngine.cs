@@ -206,7 +206,10 @@ public class GraphicalEngine : MonoBehaviour {
             lights.transform.GetChild(i).GetComponent<SpriteRenderer>().color = new Color(color.x, color.y, color.z, 1);
             lights.transform.GetChild(i).gameObject.SetActive(true);
         }
-       
+
+        //Change the Color of the Icon
+        GameObject Icon = Toolkit.GetObjectInChild(fountatin.gameObject, "Icon");
+        Icon.GetComponent<SpriteRenderer>().color = new Color(color.x, color.y, color.z, 1);
     }
     private Vector3 Ability_Color(List<Ability> ability,bool compliment)
     {
