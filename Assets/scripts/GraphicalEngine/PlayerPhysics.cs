@@ -240,8 +240,8 @@ public class PlayerPhysics : MonoBehaviour
             rotate_to -= 30;
         else
             rotate_to -= 30;
-        float y = transform.GetChild(0).rotation.eulerAngles.y;
-        transform.GetChild(0).rotation = Quaternion.Euler(0, y, rotate_to);
+          float y = transform.GetChild(0).rotation.eulerAngles.y;
+         transform.GetChild(0).rotation = Quaternion.Euler(0, y, rotate_to);
         //StartCoroutine(FallRotation(rotate_to));
     }
 
@@ -287,6 +287,8 @@ public class PlayerPhysics : MonoBehaviour
 
     private float MoveToward(float current,float target,float delta)
     {
+        Debug.Log("current "+ current);
+        Debug.Log("target " + target);
         if(current > 0 && target > 0)
         {
             if (current < target)
