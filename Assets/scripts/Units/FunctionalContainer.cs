@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System;
+using System.Runtime.CompilerServices;
+using System.Collections;
 
 public class FunctionalContainer : Container
 {
@@ -10,14 +12,18 @@ public class FunctionalContainer : Container
     public int nextState { get; set; }
     public bool firstmove { get; set; }
     private AudioSource audio_source;
+    private bool actionlock = false;
     public override bool PlayerMoveInto(Direction dir)
     {
         return false;
     }
 
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public override void Action(Player player, Direction dir)
     {
         if (gameObject.transform.parent.gameObject.GetComponent<ParentScript>().movelock)
+            return;
+        if (actionlock)
             return;
         if (abilities.Count == 0)
             return;
@@ -30,6 +36,7 @@ public class FunctionalContainer : Container
             case AbilityType.Teleport: ((Teleport)abilities[0]).Action_Container(player,dir,this);break;
             case AbilityType.Gravity: ((Gravity)abilities[0]).Action_Container(this);break;
         }
+        actionlock = false;
     }
 
     public void ActionKeyDown(Player player,Direction dir)
@@ -73,24 +80,29 @@ public class FunctionalContainer : Container
 
     public void Action_Fuel()
     {
+        if (actionlock)
+            return;
+        actionlock = true;
         api.engine.Applygravity();
         if (currentState == nextState)
         {
             api.engine.pipecontroller.CheckPipes();
+            actionlock = false;
             return;
         }
         if (!MoveContainer(GetMoveDirection()))
         {
             api.AddToStuckList(this);
             api.engine.pipecontroller.CheckPipes();
+            actionlock = false;
             return;
         }
         api.CheckstuckedList(this);
         SetCurrentState();
         if (firstmove)
             firstmove = false;
+        actionlock = false;
     }
-
     private void SetCurrentState()
     {
         if (currentState > nextState)
@@ -136,5 +148,11 @@ public class FunctionalContainer : Container
         {
             ((FunctionalContainer)sameContainer[i]).nextState = nextState;
         }
+    }
+
+    private IEnumerator _ActionLockWait(float time)
+    {
+        yield return new WaitForSeconds(time);
+        actionlock = false;
     }
 }
