@@ -4,6 +4,18 @@ using System.Collections;
 public class AnimationEvents : MonoBehaviour {
 
     public bool call;
+    private Vector2 pos;
+    private Jump ability;
+    private Direction dir;
+    private bool hit;
+
+    public void SetJumpCordinates(Vector2 pos1, Jump ability1, Direction dir1, bool hit1)
+    {
+        pos = pos1;
+        ability = ability1;
+        dir = dir1;
+        hit = hit1;
+    }
     private void DrainFinished()
     {
         transform.parent.parent.GetComponent<PlayerGraphics>().DrainFinished();
@@ -30,23 +42,16 @@ public class AnimationEvents : MonoBehaviour {
         transform.parent.transform.position = transform.parent.GetComponent<Player>().position;
     }
 
-    private void ChangeDirectionToLeftFinished()
-    {
-        transform.parent.GetComponent<PlayerGraphics>().Change_Direction_Finished(Direction.Left);
-    }
-
-
-    private void ChangeDirectionToRightFinished()
-    {
-        transform.parent.GetComponent<PlayerGraphics>().Change_Direction_Finished(Direction.Right);
-
-    }
-
     ///  this is being called after MoveToBranch
     private void InTheBranch()
     {
         transform.localScale = new Vector2(1, 1);
         if(call)
             transform.parent.GetComponent<Player>().MoveToBranchFinished();
+    }
+
+    private void NowJump()
+    {
+        transform.parent.GetComponent<PlayerPhysics>().Jump(pos, ability, dir, hit);
     }
 }

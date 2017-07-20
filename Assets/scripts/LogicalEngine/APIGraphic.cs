@@ -180,6 +180,17 @@ public class APIGraphic{
         player.GetComponent<PlayerPhysics>().Fall(position);
     }
 
+
+    public void FallGraphics(Player player,Vector2 position,int height)
+    {
+
+    }
+
+    public void FallAfterOneJump(Player player,Vector2 position)
+    {
+
+    }
+
     public void Fall_Finish(Player player)
     {
         player.FallFinished();
@@ -217,7 +228,8 @@ public class APIGraphic{
     public void Jump(Player player,Ability jump_ability, Vector2 position,Direction dir)
     {
         player.GetComponent<PlayerGraphics>().Jump(dir);
-        player.GetComponent<PlayerPhysics>().Jump(position, (Jump)jump_ability,dir,false);
+        player.transform.GetChild(0).GetComponent<AnimationEvents>().SetJumpCordinates(position, (Jump)jump_ability, dir, false);
+        //player.GetComponent<PlayerPhysics>().Jump(position, (Jump)jump_ability,dir,false);
     }
 
     public void Jump_Finish(Player player, Vector2 finalpos, Jump jump)

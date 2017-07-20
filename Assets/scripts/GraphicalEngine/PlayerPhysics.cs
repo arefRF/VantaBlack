@@ -241,7 +241,7 @@ public class PlayerPhysics : MonoBehaviour
         else
             rotate_to -= 30;
           float y = transform.GetChild(0).rotation.eulerAngles.y;
-         transform.GetChild(0).rotation = Quaternion.Euler(0, y, rotate_to);
+        // transform.GetChild(0).rotation = Quaternion.Euler(0, y, rotate_to);
         //StartCoroutine(FallRotation(rotate_to));
     }
 

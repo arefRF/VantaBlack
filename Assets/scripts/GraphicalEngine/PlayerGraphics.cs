@@ -216,6 +216,7 @@ public class PlayerGraphics : MonoBehaviour {
         // Get call stack
         // animator.SetBool("Jump", false);
         animator.SetInteger("Walk", 0);
+        animator.SetBool("Jump", false);
         // animator.SetBool("Transition", false);
         //  animator.SetInteger("Ramp", 0);
 
@@ -512,21 +513,10 @@ public class PlayerGraphics : MonoBehaviour {
                 xrot = 180;
         }
         player.transform.GetChild(0).rotation = Quaternion.Euler(xrot, yrot, zrot);
-        if (dir == Direction.Right)
-            animator.SetInteger("Change Direction", 1);
-        else
-            animator.SetInteger("Change Direction", 2);
+
 
     }
 
-    public void Change_Direction_Finished(Direction dir)
-    {
-        if (dir == player.direction)
-        {
-            animator.SetInteger("Change Direction", 0);
-            api.PlayerChangeDirectionFinished(gameObject.GetComponent<Player>());
-        }
-    }
 
     public void Teleport(Vector2 pos)
     {
