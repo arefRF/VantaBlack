@@ -21,13 +21,19 @@ public class LaserGraphics : MonoBehaviour {
 	    
 	}
 
-    public void AddLaser(Vector2 pos1, Vector2 pos2)
+    public void AddLaser(Vector2 pos1, Vector2 pos2, Direction direction)
     {
         float rotation = 0;
-        if (pos1.x == pos2.x)
+        if(pos1.x == pos2.x && pos1.y == pos2.y)
         {
+             if(direction == Direction.Up || direction == Direction.Down)
+                rotation = 90;
+        }
+        else if (pos1.x == pos2.x)
+        {
+            Debug.Log(pos1);
             if (pos1.y > pos2.y) {
-                AddLaser(pos2, pos1);
+                AddLaser(pos2, pos1, direction);
                 return;
             }
             else
@@ -38,9 +44,10 @@ public class LaserGraphics : MonoBehaviour {
         }
         else if (pos1.y == pos2.y)
         {
+            Debug.Log(pos1);
             if (pos1.x > pos2.x)
             {
-                AddLaser(pos2, pos1);
+                AddLaser(pos2, pos1, direction);
                 return;
             }
             else
@@ -62,8 +69,8 @@ public class LaserGraphics : MonoBehaviour {
     {
         for(int i=0;  UsedBeams.Count > 0;i++)
         {
-            UsedBeams[i].transform.position = new Vector3(-1, -1, 0);
-            BeamObjectPool.Add(UsedBeams[i]);
+            UsedBeams[0].transform.position = new Vector3(-1, -1, 0);
+            BeamObjectPool.Add(UsedBeams[0]);
             UsedBeams.RemoveAt(0);
         }
     }
