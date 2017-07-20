@@ -183,7 +183,7 @@ public class APIGraphic{
 
     public void FallGraphics(Player player,Vector2 position,int height)
     {
-
+        Debug.Log(height);
     }
 
     public void FallAfterOneJump(Player player,Vector2 position)

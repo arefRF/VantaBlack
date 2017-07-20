@@ -52,6 +52,7 @@ public class AnimationEvents : MonoBehaviour {
 
     private void NowJump()
     {
+        Debug.Log("Jump");
         transform.parent.GetComponent<PlayerPhysics>().Jump(pos, ability, dir, hit);
     }
 }

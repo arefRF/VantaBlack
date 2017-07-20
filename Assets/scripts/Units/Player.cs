@@ -431,6 +431,7 @@ public class Player : Unit
             return false;
         api.engine.lasercontroller.CollisionCheck(position);
         SetState(PlayerState.Idle);
+        int height = 1;
         while (IsInBound(position) && NewFall())
         {
             if (api.engine.drainercontroller.Check(this))
@@ -439,9 +440,10 @@ public class Player : Unit
             position = Toolkit.VectorSum(position,gravity);
             api.engine.lasercontroller.CollisionCheck(position);
             api.AddToDatabase(this);
+            height++;
         }
         SetState(PlayerState.Falling);
-        api.graphicalengine_Fall(this, FallPos());
+        api.graphicalengine_Fall(this, FallPos(),height);
 
         return true;
           
