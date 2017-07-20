@@ -10,6 +10,7 @@ public class APIGraphic{
     {
         this.logicalengine = logicalengine;
         graphicalengine = GameObject.Find("Graphical").GetComponent<GraphicalEngine>();
+     //   graphicalengine.lasergraphics = graphicalengine.gameObject.GetComponent<LaserGraphics>();
     }
 
     //Ramp to Ramp
@@ -412,12 +413,18 @@ public class APIGraphic{
 
     public void Crush_Player_Died(Player player)
     {
-        Debug.Log("crush player died");
+        graphicalengine.StartCoroutine(LeanWait(0.15f, player));
         player.SetState(PlayerState.Gir);
         //GameObject.Find("UI").GetComponent<Get>().inMenu_Show();
     }
 
-    
+
+    private IEnumerator LeanWait(float f, Player player)
+    {
+        yield return new WaitForSeconds(f);
+        graphicalengine.LaserDieAnimation(player);
+    }
+
     public void Fake_Lean_Undo(Player player)
     {
         PlayerGraphics gl = player.GetComponent<PlayerGraphics>();
@@ -426,16 +433,24 @@ public class APIGraphic{
 
     public void AddLaser(Vector2 pos1,Vector2 pos2,Direction dir)
     {
-        graphicalengine.AddLaser(pos1, pos2,dir);
+        if(graphicalengine.lasergraphics != null)
+            graphicalengine.lasergraphics.AddLaser(pos1, pos2, dir);
     }
 
     public void RemoveLaser()
     {
-        graphicalengine.RemoveLasers();
+        if(graphicalengine.lasergraphics != null)
+            graphicalengine.lasergraphics.RemoveLasers();
     }
 
     public void AdjustPlayer(Player player, Vector2 pos, Direction direction, System.Action<Player, Direction> passingmethod)
     {
         player.GetComponent<PlayerPhysics>().Adjust(pos, direction, passingmethod);
+    }
+
+    public void Laser_Player_Died(Player player)
+    {
+        Debug.Log("laser player died");
+        graphicalengine.LaserDieAnimation(player);
     }
 }

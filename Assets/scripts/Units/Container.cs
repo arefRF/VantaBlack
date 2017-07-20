@@ -22,6 +22,8 @@ public class Container : ParentContainer {
             case 2: Connected_2(connected); break;
             case 3: Connected_3(connected); break;
             case 4: Connected_4(connected); break;
+
+
         }
         SetCapacityLight();
     }
@@ -392,6 +394,7 @@ public class Container : ParentContainer {
             if (player.abilities.Count != 0)
                 player.abilitytype = player.abilities[0].abilitytype;
             api.engine.apigraphic.Absorb(player, null);
+            player._setability();
         }
     }
     

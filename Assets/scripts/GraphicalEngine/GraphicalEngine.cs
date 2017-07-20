@@ -20,14 +20,17 @@ public class GraphicalEngine : MonoBehaviour {
     private float lean_move = 0.2f;
     private bool finish_lock;
     private Coroutine object_co;
-    private string[] simple_objects_off = new string[] { "Direction","Glass","Switches","Border","Icon Holder","Glow"};
-    public GameObject beam;
-    GameObject beamParent;
+    private string[] simple_objects_off = new string[] { "Direction", "Glass", "Switches", "Border", "Icon Holder", "Glow" };
     private List<MoveObject> move_objects;
-    private Texture2D BeamTexture;
+    public LaserGraphics lasergraphics { get; set; }
     void Awake()
     {
         Application.targetFrameRate = 240;
+        try
+        {
+            lasergraphics = GetComponent<LaserGraphics>();
+        }
+        catch { }
     }
     void Start()
     {
@@ -35,20 +38,10 @@ public class GraphicalEngine : MonoBehaviour {
         database = Starter.GetDataBase();
         api = engine.apigraphic;
         move_objects = new List<MoveObject>();
-        BeamTexture = Resources.Load<Texture2D>("lazer\\lazer line");
+        
     }
 
-    private void makeBeam(Vector2 pos)
-    {
-        Debug.Log("make beam");
-        if (beamParent == null)
-            beamParent = new GameObject();
-        GameObject beam1 = Instantiate(beam);
-        beam1.transform.SetParent(beamParent.transform);
-        beam1.transform.position = pos;
 
-
-    }
 
     public void Move_Object(GameObject obj,Unit unit, Vector2 pos)
     {
@@ -187,6 +180,8 @@ public class GraphicalEngine : MonoBehaviour {
     public void BranchLight(Branch branch,bool on)
     {
         Toolkit.GetObjectInChild(branch.gameObject, "Icon").transform.GetChild(0).gameObject.SetActive(on);
+        if(on)
+            branch.GetComponent<AudioSource>().Play();
     }
     public void Stop_All_Co()
     {
@@ -195,18 +190,21 @@ public class GraphicalEngine : MonoBehaviour {
 
     public void Fountatin(Fountain fountatin)
     {
-        Debug.Log("fountain code commented in graphical engine!!! click here");
-        /*GameObject lights = Toolkit.GetObjectInChild(fountatin.gameObject, "Lights");
+        GameObject lights = Toolkit.GetObjectInChild(fountatin.gameObject, "Lights");
         Vector3 color = Ability_Color(fountatin.ability, false);
         for (int i = 0; i < 4; i++)
-        {lean
+        {
             lights.transform.GetChild(i).gameObject.SetActive(false);
         }
         for (int i = 0; i < fountatin.count - fountatin.abilities.Count; i++)
         {
-            lights.transform.GetChild(i).GetComponent<SpriteRenderer>().color = new Color(color.x,color.y,color.z,1);
+            lights.transform.GetChild(i).GetComponent<SpriteRenderer>().color = new Color(color.x, color.y, color.z, 1);
             lights.transform.GetChild(i).gameObject.SetActive(true);
-        }*/
+        }
+
+        //Change the Color of the Icon
+        GameObject Icon = Toolkit.GetObjectInChild(fountatin.gameObject, "Icon");
+        Icon.GetComponent<SpriteRenderer>().color = new Color(color.x, color.y, color.z, 1);
     }
     private Vector3 Ability_Color(List<Ability> ability,bool compliment)
     {
@@ -289,7 +287,7 @@ public class GraphicalEngine : MonoBehaviour {
 
     public void AddLaser(Vector2 pos1,Vector2 pos2,Direction dir)
     {
-        if(pos1.x == pos2.x && pos1.y > pos2.y)
+        /*if(pos1.x == pos2.x && pos1.y > pos2.y)
         {
             AddLaser(pos2, pos1, dir);
             return;
@@ -306,6 +304,9 @@ public class GraphicalEngine : MonoBehaviour {
         else
             for (; temppos.x <= pos2.x; temppos.x++)
                 makeBeam(temppos);
+
+        GameObject myLine = new GameObject();
+
         /*GameObject myLine = new GameObject();
         myLine.tag = "LaserUI";
         myLine.transform.position = pos1;
@@ -326,20 +327,7 @@ public class GraphicalEngine : MonoBehaviour {
         */
     }
 
-    public void RemoveLasers()
-    {
-        try {
-            GameObject[] lasers = GameObject.FindGameObjectsWithTag("LaserUI");
-            for (int i = 0; i < lasers.Length; i++)
-            {
-                Destroy(lasers[i]);
-            }
-        }
-        catch
-        {
-            
-        }
-    }
+    
 
     public void StaticContainer(StaticContainer container)
     {
@@ -364,6 +352,16 @@ public class GraphicalEngine : MonoBehaviour {
             Vector3 color = Ability_Color(container.abilities, false);
             Toolkit.GetObjectInChild(container.gameObject, "Light Holder").transform.GetChild(0).GetComponent<SpriteRenderer>().color = new Color(1,1, 1, 1);
         }
+    }
+
+    public void LaserDieAnimation(Player player)
+    {
+        GameObject die = Toolkit.GetObjectInChild(GameObject.Find("Special Effects"), "Dying");
+        Debug.Log(die);
+        Debug.Log(player);
+        die.transform.position = player.transform.position;
+        die.GetComponent<Animator>().SetTrigger("Die");
+        player.transform.GetChild(0).gameObject.SetActive(false);
     }
 
     public void EnterPortalMode(List<Unit> containers,Container container)

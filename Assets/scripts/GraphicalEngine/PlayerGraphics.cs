@@ -118,7 +118,6 @@ public class PlayerGraphics : MonoBehaviour {
         else if (player.gravity == Direction.Left)
             num = 3;
         ResetStates();
-        Debug.Log(num);
         if (on_air)
             animator.SetInteger("Lean Air", num);
         else
@@ -127,23 +126,23 @@ public class PlayerGraphics : MonoBehaviour {
 
     public void FakeLean_Down()
     {
-       // animator.SetInteger("Lean", 3);
+        // animator.SetInteger("Lean", 3);
 
     }
 
     public void FakeLean_Right()
     {
-     //   animator.SetInteger("Lean", 2);
+        //   animator.SetInteger("Lean", 2);
 
     }
     public void FakeLean_Left()
-    { 
-      //  animator.SetInteger("Lean", 4); 
+    {
+        //  animator.SetInteger("Lean", 4); 
 
     }
     public void FakeLean_Up()
-    { 
-       // animator.SetInteger("Lean", 1);
+    {
+        // animator.SetInteger("Lean", 1);
 
     }
 
@@ -169,7 +168,7 @@ public class PlayerGraphics : MonoBehaviour {
 
     public void MoveToBranch(Direction dir)
     {
-        if(player.gravity == Direction.Right)
+        if (player.gravity == Direction.Right)
         {
             int num = Toolkit.DirectionToNumber(dir);
             num++;
@@ -215,18 +214,18 @@ public class PlayerGraphics : MonoBehaviour {
     {
         audio.Stop();
         // Get call stack
-       // animator.SetBool("Jump", false);
+        // animator.SetBool("Jump", false);
         animator.SetInteger("Walk", 0);
-       // animator.SetBool("Transition", false);
-      //  animator.SetInteger("Ramp", 0);
-       
+        // animator.SetBool("Transition", false);
+        //  animator.SetInteger("Ramp", 0);
+
     }
-    public void BranchExit(Direction dir,int ramp_type)
+    public void BranchExit(Direction dir, int ramp_type)
     {
         if (player.gravity == Direction.Right)
         {
             int num = Toolkit.DirectionToNumber(dir);
-            num ++;
+            num++;
             if (num == 5)
                 num = 1;
             dir = Toolkit.NumberToDirection(num);
@@ -262,9 +261,9 @@ public class PlayerGraphics : MonoBehaviour {
         {
             if (player.gravity == Direction.Up)
                 transform.GetChild(0).rotation = Quaternion.Euler(0, 0, zrot);
-            else if(player.gravity == Direction.Left || player.gravity == Direction.Right)
+            else if (player.gravity == Direction.Left || player.gravity == Direction.Right)
                 transform.GetChild(0).rotation = Quaternion.Euler(180, 0, zrot);
-            else 
+            else
                 transform.GetChild(0).rotation = Quaternion.Euler(0, 180, zrot);
         }
         if (dir == Direction.Left || dir == Direction.Right)
@@ -287,7 +286,7 @@ public class PlayerGraphics : MonoBehaviour {
             yield return new WaitForSeconds(0.001f);
         }
         yield return new WaitForSeconds(0.2f);
-            player.MoveOutOfBranchFinished();
+        player.MoveOutOfBranchFinished();
     }
     private Vector2 On_Ramp_Pos(int type)
     {
@@ -304,16 +303,16 @@ public class PlayerGraphics : MonoBehaviour {
         animator.SetTrigger("Hit");
         eyeAnimator.SetTrigger("Hit");
     }
-    private IEnumerator Simple_Move(Vector2 end, float move_time,bool enter)
+    private IEnumerator Simple_Move(Vector2 end, float move_time, bool enter)
     {
         Debug.Log(end);
         float remain_distance = ((Vector2)transform.position - end).sqrMagnitude;
         while (remain_distance > float.Epsilon)
         {
-           
+
             remain_distance = ((Vector2)transform.position - end).sqrMagnitude;
             transform.position = Vector2.MoveTowards(transform.position, end, Time.smoothDeltaTime / move_time);
-            
+
             yield return new WaitForSeconds(0.001f);
         }
         yield return new WaitForSeconds(0.2f);
@@ -323,7 +322,7 @@ public class PlayerGraphics : MonoBehaviour {
             player.MoveOutOfBranchFinished();
     }
 
-    public void Ramp_Animation(Direction dir,int type)
+    public void Ramp_Animation(Direction dir, int type)
     {
         Debug.Log("askcvjskldijkasdvaHUI L");
         if (player.gravity == Direction.Right)
@@ -360,7 +359,7 @@ public class PlayerGraphics : MonoBehaviour {
         {
             if (type == 4)
             {
-                transform.GetChild(0).rotation= Quaternion.Euler(xrot,0, zrot);
+                transform.GetChild(0).rotation = Quaternion.Euler(xrot, 0, zrot);
                 // z_rot set to 0 to change it later
                 z_rot = 0;
             }
@@ -372,14 +371,14 @@ public class PlayerGraphics : MonoBehaviour {
         }
         else
         {
-            if(type == 4)
+            if (type == 4)
             {
                 transform.GetChild(0).rotation = Quaternion.Euler(xrot, 180, zrot);
                 z_rot = 0;
             }
             else
             {
-                transform.GetChild(0).rotation = Quaternion.Euler(xrot,180, zrot);
+                transform.GetChild(0).rotation = Quaternion.Euler(xrot, 180, zrot);
                 z_rot = 0;
             }
         }
@@ -409,12 +408,12 @@ public class PlayerGraphics : MonoBehaviour {
             zrot = 180;
             dir = Toolkit.ReverseDirection(dir);
         }
-        else if(player.gravity == Direction.Right)
+        else if (player.gravity == Direction.Right)
         {
             zrot = 270;
             //dir = Toolkit.ReverseDirection(dir);
         }
-        else if(player.gravity == Direction.Left)
+        else if (player.gravity == Direction.Left)
         {
             zrot = 90;
             dir = Toolkit.ReverseDirection(dir);
@@ -424,9 +423,9 @@ public class PlayerGraphics : MonoBehaviour {
             transform.GetChild(0).rotation = Quaternion.Euler(0, 0, zrot);
             animator.SetInteger("Walk", 1);
         }
-        else if(dir == Direction.Up)
+        else if (dir == Direction.Up)
         {
-            transform.GetChild(0).rotation = Quaternion.Euler(180,180, zrot);
+            transform.GetChild(0).rotation = Quaternion.Euler(180, 180, zrot);
             animator.SetInteger("Walk", 1);
         }
         else
@@ -477,7 +476,7 @@ public class PlayerGraphics : MonoBehaviour {
     {
         yield return new WaitForSeconds(0.4f);
         int zrot = 0;
-        if(player.gravity == Direction.Up)
+        if (player.gravity == Direction.Up)
         {
             zrot = 180;
         }
@@ -488,7 +487,7 @@ public class PlayerGraphics : MonoBehaviour {
     {
         animator.SetInteger("Walk", 0);
     }
-    public void Player_Change_Direction(Player player,Direction dir)
+    public void Player_Change_Direction(Player player, Direction dir)
     {
         int yrot = 0, zrot = 0; ;
         float xrot = player.transform.rotation.x;
@@ -505,7 +504,7 @@ public class PlayerGraphics : MonoBehaviour {
             if (dir == Direction.Down)
                 xrot = 180;
         }
-        else if(player.gravity == Direction.Left)
+        else if (player.gravity == Direction.Left)
         {
             yrot = 0;
             zrot = 270;
@@ -517,8 +516,8 @@ public class PlayerGraphics : MonoBehaviour {
             animator.SetInteger("Change Direction", 1);
         else
             animator.SetInteger("Change Direction", 2);
-       
-    }  
+
+    }
 
     public void Change_Direction_Finished(Direction dir)
     {
@@ -549,15 +548,15 @@ public class PlayerGraphics : MonoBehaviour {
         transform.GetChild(0).GetChild(0).GetChild(0).GetChild(1).GetComponent<SpriteRenderer>().color = new Color(color[0], color[1], color[2], color[3]);
 
         // Eye Color
-        if (player.abilities.Count==0)
-            transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().color = new Color(1,1,1);
+        if (player.abilities.Count == 0)
+            transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().color = new Color(1, 1, 1);
         else
             transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().color = new Color(0, 0, 0);
     }
 
     public void ChangeColorFinished()
     {
-       
+
     }
 
     private float[] Ability_Color(List<Ability> ability)
@@ -567,16 +566,16 @@ public class PlayerGraphics : MonoBehaviour {
         {
             switch (ability[0].abilitytype)
             {
-                case AbilityType.Key: color = new float[] { 1, 1, 1, 1 };break;
-                case AbilityType.Fuel: color = new float[] { 1, 0.674f, 0.211f, 1 };break;
-                case AbilityType.Jump: color = new float[] { 0.59f, 0.78f, 1 ,1};break;
-                case AbilityType.Teleport: color = new float[] { 0.92f, 0.36f, 0.44f, 1 };break;
-                case AbilityType.Gravity: color = new float[] { 0.81f, 0.60f, 0.96f, 1 };break;
-                case AbilityType.Rope: color = new float[] { 1, 0.60f, 0.30f, 1 };break;
+                case AbilityType.Key: color = new float[] { 1, 1, 1, 1 }; break;
+                case AbilityType.Fuel: color = new float[] { 1, 0.674f, 0.211f, 1 }; break;
+                case AbilityType.Jump: color = new float[] { 0.59f, 0.78f, 1, 1 }; break;
+                case AbilityType.Teleport: color = new float[] { 0.92f, 0.36f, 0.44f, 1 }; break;
+                case AbilityType.Gravity: color = new float[] { 0.81f, 0.60f, 0.96f, 1 }; break;
+                case AbilityType.Rope: color = new float[] { 1, 0.60f, 0.30f, 1 }; break;
             }
         }
         else
-            color = new float[] { 1,1,1,0};
+            color = new float[] { 1, 1, 1, 0 };
         return color;
     }
 
@@ -587,12 +586,10 @@ public class PlayerGraphics : MonoBehaviour {
         GameObject Number = Toolkit.GetObjectInChild(hologram, "Number");
         SpriteRenderer IconSpriteRenderer = Toolkit.GetObjectInChild(hologram, "Icon").GetComponent<SpriteRenderer>();
         float[] color = Ability_Color(player.abilities);
-        Color abilitycolor  = new Color(color[0], color[1], color[2], color[3]);
+        Color abilitycolor = new Color(color[0], color[1], color[2], color[3]);
         IconSpriteRenderer.sprite = null;
-        Number.SetActive(false);
         if (player.abilities.Count != 0)
         {
-            Number.SetActive(true);
             string path = Toolkit.Icon_Path(player.abilities[0].abilitytype);
             IconSpriteRenderer.color = abilitycolor;
             IconSpriteRenderer.sprite = (Sprite)Resources.Load(path, typeof(Sprite));
@@ -602,7 +599,7 @@ public class PlayerGraphics : MonoBehaviour {
             GameObject light = Toolkit.GetObjectInChild(lights, "Light " + i);
             light.SetActive(false);
         }
-        for (int i=1; i<=player.abilities.Count; i++)
+        for (int i = 1; i <= player.abilities.Count; i++)
         {
             GameObject light = Toolkit.GetObjectInChild(lights, "Light " + i);
             light.GetComponent<SpriteRenderer>().color = abilitycolor;
@@ -615,4 +612,11 @@ public class PlayerGraphics : MonoBehaviour {
     {
         Toolkit.GetObjectInChild(gameObject.transform.GetChild(0).GetChild(0).gameObject, "Hologram").SetActive(false);
     }
+
+    public void UpdateHologram()
+    {
+        if (Toolkit.GetObjectInChild(gameObject.transform.GetChild(0).GetChild(0).gameObject, "Hologram").activeSelf)
+            ShowHologram();
+    }
+
 }

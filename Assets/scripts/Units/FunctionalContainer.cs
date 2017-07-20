@@ -53,12 +53,17 @@ public class FunctionalContainer : Container
 
         if (audio_source == null)
             audio_source = GetComponent<AudioSource>();
+
+        // for Sound Effect
+       // if (on)
+           // audio_source.Play();
+
         api.engine.apigraphic.UnitChangeSprite(this);
         if (!on)
             nextState = 0;
         else
             nextState = abilities.Count;
-        api.RemoveFromStuckList(this);
+       // api.RemoveFromStuckList(this);
         for(int i=0; i<sameContainer.Count; i++)
         {
             ((FunctionalContainer)sameContainer[i]).on = on;

@@ -223,6 +223,7 @@ public class Branch : Unit {
         {
             if (player.abilities.Count != 0 && player.abilities[0] is Key)
             {
+                Debug.Log("here");
                 islocked = false;
                 player.abilities.RemoveAt(0);
                 player._setability();
