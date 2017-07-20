@@ -250,9 +250,9 @@ public class PlayerPhysics : MonoBehaviour
     {
         switch (dir)
         {
-            case (Direction.Right):return 90;
+            case (Direction.Right):return 270;
             case (Direction.Left): return 90; 
-            case (Direction.Down): return 270;
+            case (Direction.Down): return 0;
             case (Direction.Up): return 180;
             default:return 0;
         }
