@@ -44,7 +44,6 @@ public class LaserGraphics : MonoBehaviour {
         }
         else if (pos1.y == pos2.y)
         {
-            Debug.Log(pos1);
             if (pos1.x > pos2.x)
             {
                 AddLaser(pos2, pos1, direction);
