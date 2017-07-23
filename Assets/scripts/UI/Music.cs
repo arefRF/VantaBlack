@@ -17,7 +17,7 @@ public class Music : MonoBehaviour {
             instance = this;
             source = GetComponent<AudioSource>();
             Load_Musics();
-            int i = Random.Range(0, 4);
+            int i = Random.Range(0, 3);
             Music.instance.source.PlayOneShot(Music.instance.sounds[i]);
         }
         DontDestroyOnLoad(this.gameObject);

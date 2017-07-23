@@ -235,27 +235,36 @@ public class PlayerPhysics : MonoBehaviour
         StopAllCoroutines();
         move_type = MoveType.Falling;
         last_co  = StartCoroutine(Accelerated_Move(pos,fall_velocity,fall_acceleration,true));
-        float rotate_to = GetRotationGravity(player.gravity);
+        float rotate_to = GetRotationGravity(player.gravity,player.direction);
         if (player.direction == Direction.Right || player.direction == Direction.Up)
             rotate_to -= 30;
         else
-            rotate_to += 30;
-
-        if (rotate_to < 0)
-            rotate_to += 360;
-        StartCoroutine(FallRotation(rotate_to));
+            rotate_to -= 30;
+          float y = transform.GetChild(0).rotation.eulerAngles.y;
+        // transform.GetChild(0).rotation = Quaternion.Euler(0, y, rotate_to);
+        //StartCoroutine(FallRotation(rotate_to));
     }
 
 
-    private float GetRotationGravity(Direction dir)
+    private float GetRotationGravity(Direction gravity_dir,Direction player_dir)
     {
-        switch (dir)
+        if (gravity_dir == Direction.Down)
+            return 0;
+        else if (gravity_dir == Direction.Up)
+            return 180;
+        else if(gravity_dir == Direction.Right)
         {
-            case (Direction.Right):return 90;
-            case (Direction.Left): return 270; 
-            case (Direction.Down): return 0;
-            case (Direction.Up): return 180;
-            default:return 0;
+            if (player_dir == Direction.Up)
+                return 90;
+            else
+                return 270;
+        }
+        else
+        {
+            if (player_dir == Direction.Up)
+                return 90;
+            else
+                return 270;
         }
     }
 
@@ -278,6 +287,8 @@ public class PlayerPhysics : MonoBehaviour
 
     private float MoveToward(float current,float target,float delta)
     {
+        Debug.Log("current "+ current);
+        Debug.Log("target " + target);
         if(current > 0 && target > 0)
         {
             if (current < target)
@@ -582,8 +593,10 @@ public class PlayerPhysics : MonoBehaviour
     }
     private void Rotate_On_Block()
     {
-        float target = GetRotationGravity(player.gravity);
-        StartCoroutine(FallRotation(target));
+        float target = GetRotationGravity(player.gravity,player.direction);
+        float y = transform.GetChild(0).rotation.eulerAngles.y;
+        transform.GetChild(0).rotation = Quaternion.Euler(0, y, target);
+        //StartCoroutine(FallRotation(target));
     }
 
     private IEnumerator RotateOnBlockCouroutine()

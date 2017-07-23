@@ -41,7 +41,17 @@ public class InputController {
     {
         if (player.leandirection == direction)
             return;
-        if(player.leandirection == Toolkit.ReverseDirection(direction) || (direction == player.gravity))
+        if (player.leandirection == Toolkit.ReverseDirection(direction))
+        {
+            if(Toolkit.IsEmpty(Toolkit.VectorSum(player.position, player.gravity)))
+            {
+                LeanUndo(player, player.leandirection, PlayerState.Busy);
+                Lean(player, direction);
+            }
+            else
+                LeanUndo(player, player.leandirection, PlayerState.Idle);
+        }
+        else if((direction == player.gravity))
         {
             LeanUndo(player, player.leandirection, PlayerState.Idle);
         }
@@ -56,7 +66,7 @@ public class InputController {
                     {
                         IdlePLayerMove(player, direction);
                     }
-                    else if(direction == Toolkit.ReverseDirection(player.direction))
+                    else if (direction == Toolkit.ReverseDirection(player.direction))
                     {
                         Direction olddir = player.direction;
                         player.direction = direction;
@@ -81,10 +91,10 @@ public class InputController {
                 List<Unit> units = engine.GetUnits(Toolkit.VectorSum(player.position, direction));
                 if (units[0].isLeanable())
                 {
-                    LeanUndo(player, player.leandirection, PlayerState.Busy);
-                    Lean(player, direction);
+                    LeanUndo(player, player.leandirection, PlayerState.Idle);
+                    engine.apiinput.input.StartCoroutine(LeanWait(0.3f, player, direction));
                 }
-                else if(units[0] is Branch)
+                else if (units[0] is Branch)
                 {
                     LeanUndo(player, player.leandirection, PlayerState.Busy);
                     player.api.RemoveFromDatabase(player);
@@ -652,6 +662,13 @@ public class InputController {
     {
         yield return new WaitForSeconds(f);
         player.SetState(PlayerState.Idle);
+    }
+
+    private IEnumerator LeanWait(float f, Player player, Direction direction)
+    {
+        yield return new WaitForSeconds(f);
+        Debug.Log(":=?????");
+        Lean(player, direction);
     }
 
     public void AbsorbReleaseController(Direction direction)

@@ -481,10 +481,10 @@ public class Player : Unit
         {
             if (gravity == Direction.Down || gravity == Direction.Up)
             {
-                return Mathf.Abs(obj.transform.position.x - transform.position.x) < 0.5;
+                return Mathf.Abs(obj.transform.position.x - transform.position.x) <= 0.5;
             }
             else
-                return Mathf.Abs(obj.transform.position.y - transform.position.y) < 0.5;
+                return Mathf.Abs(obj.transform.position.y - transform.position.y) <= 0.5;
         }
     }
     private List<Unit> GetUnderUnits()
@@ -659,6 +659,7 @@ public class Player : Unit
         }
         else
             abilitycount = 0;
+        GetComponent<PlayerGraphics>().UpdateHologram();
         api.engine.apigraphic.Absorb(this, null);
     }
 

@@ -103,7 +103,6 @@ public class LogicalEngine {
                 if (!unit.players[i].CanMove(dir, unit.transform.parent.gameObject))
                 {
                     apigraphic.Crush_Player_Died(unit.players[i] as Player);
-                    return false;
                 }
                 unit.players.AddRange(unit.players[i].players);
 
@@ -129,7 +128,6 @@ public class LogicalEngine {
                     if (!unit.ConnectedUnits[i].players[j].CanMove(dir, unit.ConnectedUnits[i].transform.parent.gameObject))
                     {
                         apigraphic.Crush_Player_Died(unit.ConnectedUnits[i].players[j] as Player);
-                        return false;
                     }
                     unit.ConnectedUnits[i].players.AddRange(unit.ConnectedUnits[i].players[j].players);
                 }
