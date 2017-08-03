@@ -388,7 +388,11 @@ public class Player : Unit
 
     public override bool ApplyGravity()
     {
-        transform.position = position;
+        if(gravity == Direction.Down || gravity == Direction.Up)
+            transform.position.Set(transform.position.x, position.y, transform.position.z);
+        else
+            transform.position.Set(position.x, transform.position.y, transform.position.z);
+
         if (state == PlayerState.Gir)
             return false;
         if (mode == GameMode.Real)
