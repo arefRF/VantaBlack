@@ -388,6 +388,7 @@ public class Player : Unit
 
     public override bool ApplyGravity()
     {
+        transform.position = position;
         if (state == PlayerState.Gir)
             return false;
         if (mode == GameMode.Real)
@@ -441,7 +442,17 @@ public class Player : Unit
                 return false;
             api.RemoveFromDatabase(this);
             position = Toolkit.VectorSum(position,gravity);
-            api.engine.lasercontroller.CollisionCheck(position);
+            if (api.engine.lasercontroller.CollisionCheck(position))
+            {
+                if ((Vector2)transform.position != position)
+                {
+                    SetState(PlayerState.Falling);
+                    api.graphicalengine_Fall(this, FallPos());
+
+                    return true;    
+                }
+            }
+            
             api.AddToDatabase(this);
         }
         SetState(PlayerState.Falling);
@@ -549,6 +560,10 @@ public class Player : Unit
         if(position.x <= 0 || position.y <= 0)
         {
             api.engine.apigraphic.Fall_Player_Died(this);
+            return;
+        }
+        if (api.engine.lasercontroller.CollisionCheck(position))
+        {
             return;
         }
         Vector2 pos = Toolkit.VectorSum(position, Starter.GetGravityDirection());
