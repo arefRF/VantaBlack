@@ -41,6 +41,8 @@ public class Player : Unit
 
     public Coroutine leancoroutine { get; set;}
 
+    public  int gravitynum = 0;
+
     public Container movedbycontainer { get; set; }
     public void Awake()
     {
@@ -55,6 +57,8 @@ public class Player : Unit
         oneJump = new Jump(1);
         state = PlayerState.Idle;
         tempstate = state;
+        if (gravitynum != 0)
+            gravity = Toolkit.NumberToDirection(gravitynum);
     }
 
     public void Update()
