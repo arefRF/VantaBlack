@@ -436,6 +436,7 @@ public class Player : Unit
             return false;
         api.engine.lasercontroller.CollisionCheck(position);
         SetState(PlayerState.Idle);
+        int height = 1;
         while (IsInBound(position) && NewFall())
         {
             if (api.engine.drainercontroller.Check(this))
@@ -447,16 +448,17 @@ public class Player : Unit
                 if ((Vector2)transform.position != position)
                 {
                     SetState(PlayerState.Falling);
-                    api.graphicalengine_Fall(this, FallPos());
+                    api.graphicalengine_Fall(this, FallPos(), height);
 
                     return true;    
                 }
             }
             
             api.AddToDatabase(this);
+            height++;
         }
         SetState(PlayerState.Falling);
-        api.graphicalengine_Fall(this, FallPos());
+        api.graphicalengine_Fall(this, FallPos(),height);
 
         return true;
           
@@ -496,10 +498,10 @@ public class Player : Unit
         {
             if (gravity == Direction.Down || gravity == Direction.Up)
             {
-                return Mathf.Abs(obj.transform.position.x - transform.position.x) <= 0.5;
+                return Mathf.Abs(obj.transform.position.x - transform.position.x) < 0.5;
             }
             else
-                return Mathf.Abs(obj.transform.position.y - transform.position.y) <= 0.5;
+                return Mathf.Abs(obj.transform.position.y - transform.position.y) < 0.5;
         }
     }
     private List<Unit> GetUnderUnits()
@@ -543,6 +545,7 @@ public class Player : Unit
         {
             if (IsOnObject(under[i]))
             {
+                
                 return false;
             }
         }

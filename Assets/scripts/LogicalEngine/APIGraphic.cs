@@ -172,7 +172,8 @@ public class APIGraphic{
     {
         logicalengine.graphic_PlayerMoveAnimationFinished(player_obj.GetComponent<Player>());
         player_obj.GetComponent<PlayerGraphics>().Move_Finished();   
-    }    
+    }  
+      
     public void Fall(Player player, Vector2 position)
     {   
         player.GetComponent<PlayerGraphics>().StopAllCoroutines();
@@ -183,7 +184,7 @@ public class APIGraphic{
 
     public void FallGraphics(Player player,Vector2 position,int height)
     {
-
+        Debug.Log(height);
     }
 
     public void FallAfterOneJump(Player player,Vector2 position)
