@@ -48,8 +48,8 @@ public class APIUnit {
 
     public void graphicalengine_Fall(Player player, Vector2 fallposition,int height)
     {
-        //engine.apigraphic.Fall((Player)unit, fallposition);
-        engine.apigraphic.FallGraphics(player, fallposition,height);
+        engine.apigraphic.Fall((Player)player, fallposition);
+        //engine.apigraphic.FallGraphics(player, fallposition,height);
     }
     public void unit_Move(Unit unit, Direction dir)
     {

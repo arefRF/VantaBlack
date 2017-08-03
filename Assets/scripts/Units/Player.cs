@@ -384,6 +384,7 @@ public class Player : Unit
 
     public override bool ApplyGravity()
     {
+        
         if (state == PlayerState.Gir)
             return false;
         if (mode == GameMode.Real)
@@ -483,10 +484,10 @@ public class Player : Unit
         {
             if (gravity == Direction.Down || gravity == Direction.Up)
             {
-                return Mathf.Abs(obj.transform.position.x - transform.position.x) <= 0.5;
+                return Mathf.Abs(obj.transform.position.x - transform.position.x) < 0.5;
             }
             else
-                return Mathf.Abs(obj.transform.position.y - transform.position.y) <= 0.5;
+                return Mathf.Abs(obj.transform.position.y - transform.position.y) < 0.5;
         }
     }
     private List<Unit> GetUnderUnits()
@@ -530,6 +531,7 @@ public class Player : Unit
         {
             if (IsOnObject(under[i]))
             {
+                
                 return false;
             }
         }
