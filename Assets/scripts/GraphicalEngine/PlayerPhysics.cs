@@ -232,6 +232,7 @@ public class PlayerPhysics : MonoBehaviour
     //fall 
     public void Fall(Vector2 pos)
     {
+
         StopAllCoroutines();
         move_type = MoveType.Falling;
         last_co  = StartCoroutine(Accelerated_Move(pos,fall_velocity,fall_acceleration,true));
@@ -484,6 +485,7 @@ public class PlayerPhysics : MonoBehaviour
     // For Moves that have Acceleration Like Gravity
     private IEnumerator Accelerated_Move(Vector2 end,float velocity, float a,bool call_finish)
     {
+
         float remain_distance = 0;
         try
         {

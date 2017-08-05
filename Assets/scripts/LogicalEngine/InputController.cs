@@ -365,7 +365,8 @@ public class InputController {
                 {
                     return;
                 }
-                if (!player.ApplyGravity()){
+                if (!player.ApplyGravity())
+                {
                     if (!player.Move(direction))
                     {
                         /*Debug.Log("here");

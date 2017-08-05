@@ -41,6 +41,8 @@ public class Player : Unit
 
     public Coroutine leancoroutine { get; set;}
 
+    public  int gravitynum = 0;
+
     public Container movedbycontainer { get; set; }
     public void Awake()
     {
@@ -55,6 +57,8 @@ public class Player : Unit
         oneJump = new Jump(1);
         state = PlayerState.Idle;
         tempstate = state;
+        if (gravitynum != 0)
+            gravity = Toolkit.NumberToDirection(gravitynum);
     }
 
     public void Update()
@@ -384,6 +388,11 @@ public class Player : Unit
 
     public override bool ApplyGravity()
     {
+        if(gravity == Direction.Down || gravity == Direction.Up)
+            transform.position.Set(transform.position.x, position.y, transform.position.z);
+        else
+            transform.position.Set(position.x, transform.position.y, transform.position.z);
+
         if (state == PlayerState.Gir)
             return false;
         if (mode == GameMode.Real)
@@ -431,17 +440,29 @@ public class Player : Unit
             return false;
         api.engine.lasercontroller.CollisionCheck(position);
         SetState(PlayerState.Idle);
+        int height = 1;
         while (IsInBound(position) && NewFall())
         {
             if (api.engine.drainercontroller.Check(this))
                 return false;
             api.RemoveFromDatabase(this);
             position = Toolkit.VectorSum(position,gravity);
-            api.engine.lasercontroller.CollisionCheck(position);
+            if (api.engine.lasercontroller.CollisionCheck(position))
+            {
+                if ((Vector2)transform.position != position)
+                {
+                    SetState(PlayerState.Falling);
+                    api.graphicalengine_Fall(this, FallPos(), height);
+
+                    return true;    
+                }
+            }
+            
             api.AddToDatabase(this);
+            height++;
         }
         SetState(PlayerState.Falling);
-        api.graphicalengine_Fall(this, FallPos());
+        api.graphicalengine_Fall(this, FallPos(),height);
 
         return true;
           
@@ -481,10 +502,10 @@ public class Player : Unit
         {
             if (gravity == Direction.Down || gravity == Direction.Up)
             {
-                return Mathf.Abs(obj.transform.position.x - transform.position.x) <= 0.5;
+                return Mathf.Abs(obj.transform.position.x - transform.position.x) < 0.5;
             }
             else
-                return Mathf.Abs(obj.transform.position.y - transform.position.y) <= 0.5;
+                return Mathf.Abs(obj.transform.position.y - transform.position.y) < 0.5;
         }
     }
     private List<Unit> GetUnderUnits()
@@ -528,6 +549,7 @@ public class Player : Unit
         {
             if (IsOnObject(under[i]))
             {
+                
                 return false;
             }
         }
@@ -545,6 +567,10 @@ public class Player : Unit
         if(position.x <= 0 || position.y <= 0)
         {
             api.engine.apigraphic.Fall_Player_Died(this);
+            return;
+        }
+        if (api.engine.lasercontroller.CollisionCheck(position))
+        {
             return;
         }
         Vector2 pos = Toolkit.VectorSum(position, Starter.GetGravityDirection());
