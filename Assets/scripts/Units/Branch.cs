@@ -209,7 +209,7 @@ public class Branch : Unit {
 
     public override bool PlayerMoveInto(Direction dir)
     {
-        return !islocked;
+        return !islocked && !blocked;
     }
 
     public override CloneableUnit Clone()
@@ -319,14 +319,14 @@ public class Branch : Unit {
 
     public override bool isLeanable()
     {
-        return islocked;
+        return islocked || blocked;
     }
 
     private IEnumerator Wait(float f, Player player)
     {
         yield return new WaitForSeconds(f);
         player.SetState(PlayerState.Idle);
-    }
+    } 
 }
 
 public class CloneableBranch : CloneableUnit
