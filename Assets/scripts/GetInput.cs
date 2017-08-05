@@ -46,7 +46,7 @@ public class GetInput : MonoBehaviour {
 
         Get_Lean_Undo();
         // Directional Abilities use
-        if (Input.GetKeyUp(KeyCode.F))
+        if (Input.GetKeyUp(KeyCode.Space))
         {
             api.Action_Key(true);
             is_space = false;
@@ -59,19 +59,19 @@ public class GetInput : MonoBehaviour {
             Get_Move();
         }
 
-        if (Input.GetKeyDown(KeyCode.F))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             api.Action_Key(false);
             is_space = true;
         }
-        if (Input.GetKeyDown(KeyCode.Space))
+        /*if (Input.GetKeyDown(KeyCode.Space))
         {
             api.Jump();
-        }
+        }*/
         if (is_space)
             Get_Space_Arrows();
 
-        if (Input.GetKeyDown(KeyCode.Q))
+        /*if (Input.GetKeyDown(KeyCode.Q))
         {
             is_holding = true;
             if (last_co != null)
@@ -84,8 +84,8 @@ public class GetInput : MonoBehaviour {
             if (last_co != null)
                 StopCoroutine(last_co);
             StartCoroutine(Wait_For_Release_Hold());
-        }
-        if (Input.GetKeyUp(KeyCode.E))
+        }*/
+        /*if (Input.GetKeyUp(KeyCode.E))
         {
             api.Release();
             is_holding = false;
@@ -94,7 +94,7 @@ public class GetInput : MonoBehaviour {
         {
             api.Absorb();
             is_holding = false;
-        }
+        }*/
         if (Input.GetKey(KeyCode.Equals))
         {
             api.Zoom(0.1f);
@@ -306,7 +306,7 @@ public class GetInput : MonoBehaviour {
 
     public bool isFunctionKeyDown()
     {
-        return Input.GetKey(KeyCode.F);
+        return Input.GetKey(KeyCode.Space);
     }
 
     public bool isMoveKeyDown(Direction direction)

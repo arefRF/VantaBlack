@@ -407,6 +407,7 @@ public class LogicalEngine {
                                 database.units[(int)player.position.x, (int)player.position.y].Remove(player);
                                 player.position = nextpos;
                                 database.units[(int)player.position.x, (int)player.position.y].Add(player);
+                            Debug.Log("1");
                                 apigraphic.MovePlayer_Simple_1(player, player.position);
                             }
                             else if (Toolkit.CanplayerGoOnRampSideFromRamp(Toolkit.GetRamp(nextpos), database.gravity_direction, dir))
@@ -569,7 +570,8 @@ public class LogicalEngine {
                             database.units[(int)player.position.x, (int)player.position.y].Remove(player);
                             player.position = nextpos;
                             database.units[(int)player.position.x, (int)player.position.y].Add(player);
-                            apigraphic.MovePlayer_Simple_1(player, nextpos);
+                        Debug.Log("1");
+                        apigraphic.MovePlayer_Simple_1(player, nextpos);
                         }
 
                         if (units[0] is Branch)
@@ -623,7 +625,8 @@ public class LogicalEngine {
                                 {
                                     player.position = nextpos;
                                     database.units[(int)player.position.x, (int)player.position.y].Add(player);
-                                    apigraphic.MovePlayer_Simple_1(player, nextpos);
+                                Debug.Log("1");
+                                apigraphic.MovePlayer_Simple_1(player, nextpos);
                                 }
 
                                 else if (Toolkit.CanplayerGoOnRampSideFromFromNoneRamp(units[0] as Ramp, database.gravity_direction, Toolkit.ReverseDirection(dir)))
@@ -645,7 +648,8 @@ public class LogicalEngine {
                                 database.units[(int)player.position.x, (int)player.position.y].Remove(player);
                                 player.position = nextpos;
                                 database.units[(int)player.position.x, (int)player.position.y].Add(player);
-                                apigraphic.MovePlayer_Simple_1(player, nextpos);
+                            Debug.Log("1");
+                            apigraphic.MovePlayer_Simple_1(player, nextpos);
                             }
                         }
                         else
