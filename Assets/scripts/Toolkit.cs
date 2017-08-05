@@ -517,10 +517,10 @@ public sealed class Toolkit{
     public static bool[] GetConnectedSides(Unit unit)
     {
         bool[] result = new bool[4];
-        result[0] = !IsConnectedFromPosition(unit, VectorSum(unit.position, Direction.Up));
-        result[1] = !IsConnectedFromPosition(unit, VectorSum(unit.position, Direction.Right));
-        result[2] = !IsConnectedFromPosition(unit, VectorSum(unit.position, Direction.Down));
-        result[3] = !IsConnectedFromPosition(unit, VectorSum(unit.position, Direction.Left));
+        result[0] = !IsConnectedFromPosition(unit, Direction.Up);
+        result[1] = !IsConnectedFromPosition(unit, Direction.Right);
+        result[2] = !IsConnectedFromPosition(unit, Direction.Down);
+        result[3] = !IsConnectedFromPosition(unit, Direction.Left);
         
         return result;
     }
@@ -547,7 +547,6 @@ public sealed class Toolkit{
             result[2] = IsConnectedFromPositionForRamp(ramp, VectorSum(ramp.position, Direction.Down));
         if (ramp.type == 1 || ramp.type == 2)
             result[3] = IsConnectedFromPositionForRamp(ramp, VectorSum(ramp.position, Direction.Left));
-
         return result;
     }
 
@@ -561,8 +560,9 @@ public sealed class Toolkit{
         return result;
     }
 
-    public static bool IsConnectedFromPosition(Unit unit, Vector2 pos)
+    public static bool IsConnectedFromPosition(Unit unit, Direction direction)
     {
+        Vector2 pos = VectorSum(unit.position, direction);
         for (int i = 0; i < database.units[(int)pos.x, (int)pos.y].Count; i++)
         {
             Unit u = database.units[(int)pos.x, (int)pos.y][i];
@@ -570,6 +570,13 @@ public sealed class Toolkit{
             {
                 if (u is Gate || u is Branch || u is Laser)
                     return false;
+                if (u is Ramp)
+                {
+                    if (!IsdoubleRamp(u.position) && ((Ramp)u).IsOnRampSide(ReverseDirection(direction)))
+                    {
+                        return false;
+                    }
+                }
                 return true;
             }
         }         
