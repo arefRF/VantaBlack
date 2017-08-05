@@ -8,7 +8,7 @@ public class PlayerPhysics : MonoBehaviour
     public float fall_velocity = 2;
     public float Jump_Acceleration = -0.01f;
     public float Jump_Velocity = 10;
-    private float platform_move_time = 1;
+    private float platform_move_time = 0.59f;
     private APIGraphic api;
     private LogicalEngine engine;
     private int sharp_type;
