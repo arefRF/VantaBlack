@@ -721,5 +721,15 @@ public sealed class Toolkit{
             path += @"Key";
         return path;
     }
+
+    public static bool isVertical(Direction direction)
+    {
+        return direction == Direction.Up || direction == Direction.Down;
+    }
+
+    public static bool isHorizontal(Direction direction)
+    {
+        return direction == Direction.Right || direction == Direction.Left;
+    }
 }
 

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Threading;
 using System.Runtime.CompilerServices;
 using System.Collections.Generic;
-
+using UnityEngine.SceneManagement;
 public class GraphicalEngine : MonoBehaviour {
 
     public Database database { get; set; }
@@ -362,6 +362,13 @@ public class GraphicalEngine : MonoBehaviour {
         die.transform.position = player.transform.position;
         die.GetComponent<Animator>().SetTrigger("Die");
         player.transform.GetChild(0).gameObject.SetActive(false);
+        StartCoroutine(DieLevelReset(1));
+    }
+
+    private IEnumerator DieLevelReset(float f)
+    {
+        yield return new WaitForSeconds(f);
+        Starter.GetSceneLoader().Load(SceneManager.GetActiveScene().name, 0.5f);
     }
 
     public void EnterPortalMode(List<Unit> containers,Container container)

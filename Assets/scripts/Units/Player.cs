@@ -102,21 +102,20 @@ public class Player : Unit
 
     public void SetState(PlayerState state)
     {
-        System.Diagnostics.StackTrace stackTrace = new System.Diagnostics.StackTrace();
-        Debug.Log(stackTrace.GetFrame(1).GetMethod().Name);
-        Debug.Log(state);
         this.state = state;
         /*if (state == PlayerState.Transition)
         {
             GetComponent<PlayerGraphics>().TransitionAnimation();
         }*/
         if (state == PlayerState.Idle)
+        {
             GetComponent<PlayerGraphics>().ResetStates();
-        else if(state == PlayerState.Lean)
+        }
+        else if (state == PlayerState.Lean)
         {
             //api.engine.apigraphic.Lean(this);
         }
-        else if(state == PlayerState.Gir)
+        else if (state == PlayerState.Gir)
         {
             state = PlayerState.Gir;
         }
@@ -391,7 +390,7 @@ public class Player : Unit
 
     public override bool ApplyGravity()
     {
-        if(gravity == Direction.Down || gravity == Direction.Up)
+        if (gravity == Direction.Down || gravity == Direction.Up)
             transform.position.Set(transform.position.x, position.y, transform.position.z);
         else
             transform.position.Set(position.x, transform.position.y, transform.position.z);
@@ -405,7 +404,19 @@ public class Player : Unit
         isonejumping = false;
         if (api.engine.drainercontroller.Check(this))
             return false;
-        api.engine.lasercontroller.CollisionCheck(position);
+        if (api.engine.lasercontroller.CollisionCheck(position))
+        {
+            if ((Vector2)transform.position != position)
+            {
+                SetState(PlayerState.Falling);
+                int h = Math.Abs((int)(transform.position.y - position.y));
+                if (Toolkit.isHorizontal(gravity))
+                    h = Math.Abs((int)(transform.position.x - position.x));
+                api.graphicalengine_Fall(this, FallPos(), h);
+
+                return true;
+            }
+        }
 
         // to avoid exception
         if (position.x <= 0 || position.y <= 0)
@@ -437,10 +448,25 @@ public class Player : Unit
                 return false;
         }
         if (!NewFall())
+        {
+            SetState(PlayerState.Idle);
             return false;
+        }
         if (api.engine.drainercontroller.Check(this))
             return false;
-        api.engine.lasercontroller.CollisionCheck(position);
+        if (api.engine.lasercontroller.CollisionCheck(position))
+        {
+            if ((Vector2)transform.position != position)
+            {
+                SetState(PlayerState.Falling);
+                int h = Math.Abs((int)(transform.position.y - position.y));
+                if (Toolkit.isHorizontal(gravity))
+                    h = Math.Abs((int)(transform.position.x - position.x));
+                api.graphicalengine_Fall(this, FallPos(), h);
+
+                return true;
+            }
+        }
         SetState(PlayerState.Idle);
         int height = 1;
         while (IsInBound(position) && NewFall())
@@ -835,8 +861,6 @@ public class Player : Unit
         SetState(LeanUndoNextState);
         if (LeanUndoNextState == PlayerState.Idle)
             ApplyGravity();
-        Debug.Log(state);
-        Debug.Log(LeanUndoNextState);
         if(LeanUndoNextState == PlayerState.Busy)
         {
             ApplyGravity();
