@@ -109,7 +109,12 @@ public class InputController {
                     player.api.RemoveFromDatabase(player);
                     player.position = units[0].position;
                     player.api.AddToDatabase(player);
-                    Debug.Log(direction);
+                    if (direction != player.direction)
+                    {
+                        Direction olddir = player.direction;
+                        player.direction = direction;
+                        engine.apigraphic.PlayerChangeDirection(player, olddir, player.direction);
+                    }
                     engine.apigraphic.MovePlayer_Simple_2(player, player.position, direction);
                 }
             }
