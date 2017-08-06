@@ -135,6 +135,15 @@ public class Branch : Unit {
         //  SetJointOrEntrance(Direction.Down);
         //  SetJointOrEntrance(Direction.Left);
         api.engine.apigraphic.UnitChangeSprite(this);
+        if (blocked)
+        {
+            GameObject obj = Toolkit.GetObjectInChild(gameObject, "Icon").transform.GetChild(0).gameObject;
+            obj.SetActive(true);
+            obj.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Branch\\Light Glass-DONT");
+            //Debug.Log(obj.GetComponent<SpriteRenderer>().sprite);
+            //obj.GetComponent<SpriteRenderer>().color = new Color(0.27f, 0, 0, 1f);
+            
+        }
     }
 
     private void SetentranceOrJoin(bool[] connected)
