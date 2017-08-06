@@ -83,7 +83,7 @@ public class FunctionalContainer : Container
         if (actionlock)
             return;
         actionlock = true;
-        api.engine.Applygravity();
+        //api.engine.Applygravity();
         if (currentState == nextState)
         {
             api.engine.pipecontroller.CheckPipes();

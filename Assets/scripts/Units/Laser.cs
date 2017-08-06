@@ -182,7 +182,7 @@ public class Laser : Unit {
                     if (IsBetween(pos.x, beamPositions[i][0].x, beamPositions[i][1].x))
                     {
                         Player player = Toolkit.GetPlayer(pos);
-                        if ((Vector2)player.transform.position != player.position)
+                        if (player.transform.position.y != player.position.y)
                         {
                             player.SetState(PlayerState.Busy);  
                         }

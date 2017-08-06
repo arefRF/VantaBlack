@@ -299,6 +299,7 @@ public class InputController {
     {
         if (player.state == PlayerState.Idle)
         {
+            player.movepercentage = 0;
             if (Toolkit.IsInsideBranch(player))
             {
                 if (Toolkit.HasBranch(Toolkit.VectorSum(player.position, direction)))
