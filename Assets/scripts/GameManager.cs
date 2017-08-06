@@ -22,22 +22,24 @@ public class GameManager : MonoBehaviour {
             manager = this;
         }
         DontDestroyOnLoad(gameObject);
-        if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name.Equals("Menu V2")  ) 
+
+       /* if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name.Equals("Menu V2")  ) 
         {
             if(File.Exists(Application.persistentDataPath + "save.bin"))
                 GameObject.Find("Menu").GetComponent<Menu>().Continue();
             return;
-        }
-        if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name.Equals("Intro"))
-            return;
+        } */
+
+      //  if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name.Equals("Intro"))
+        //    return;
 
 
 
-        GameObject.Find("GetInput").GetComponent<GetInput>().joystick = manager.controller;
+      //  GameObject.Find("GetInput").GetComponent<GetInput>().joystick = manager.controller;
 
-        database = Starter.GetDataBase();
-        engine = Starter.GetEngine();
-        if (File.Exists(Application.persistentDataPath + "save.bin"))
+        //database = Starter.GetDataBase();
+       // engine = Starter.GetEngine();
+       /* if (File.Exists(Application.persistentDataPath + "save.bin"))
         {
             BinaryFormatter bf = new BinaryFormatter();
             file = File.Open(Application.persistentDataPath + "save.bin", FileMode.Open);
@@ -56,7 +58,7 @@ public class GameManager : MonoBehaviour {
         else
         {
 
-        } 
+        } */
     }
 
     public void SetPlayer(SaveSerialize saveserialize)
@@ -76,7 +78,7 @@ public class GameManager : MonoBehaviour {
     public void NewGame()
     {
         manager.shouldload = true;
-        UnityEngine.SceneManagement.SceneManager.LoadScene("Part-0");
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Puzzle-001");
     }
 
     public void Continue()

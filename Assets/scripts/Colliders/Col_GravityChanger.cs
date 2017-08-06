@@ -12,7 +12,8 @@ public class Col_GravityChanger : MonoBehaviour {
             if ((Vector2)col.transform.position == col.gameObject.GetComponent<Unit>().position)
             {
                 Player player = col.gameObject.GetComponent<Player>();
-                Starter.GetDataBase().SetGravity(GravityDirection);
+                player.SetGravity(GravityDirection);
+                //Starter.GetDataBase().SetGravity(GravityDirection);
                 int zrot = 0;
                 if (player.gravity == Direction.Up)
                     zrot = 180;

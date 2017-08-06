@@ -110,6 +110,7 @@ public class Player : Unit
         if (state == PlayerState.Idle)
         {
             GetComponent<PlayerGraphics>().ResetStates();
+            movepercentage = 0;
         }
         else if (state == PlayerState.Lean)
         {
@@ -490,6 +491,19 @@ public class Player : Unit
             height++;
         }
         SetState(PlayerState.Falling);
+        Debug.Log(position);
+        if (Toolkit.HasPlayer(Toolkit.VectorSum(position, gravity)) && Toolkit.GetPlayerNumberInDatabase(this) < Toolkit.GetPlayerNumberInDatabase(Toolkit.GetPlayer(Toolkit.VectorSum(position, gravity))))
+        {
+            Debug.Log("this part should be changed after demo");
+            height /= 2;
+            api.RemoveFromDatabase(this);
+            for (int i = 0; i < height; i++)
+            {
+                position = Toolkit.VectorSum(position, Toolkit.ReverseDirection(gravity));
+            }
+            api.AddToDatabase(this);
+        }
+        Debug.Log(position);
         api.graphicalengine_Fall(this, FallPos(),height);
 
         return true;
