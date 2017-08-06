@@ -102,6 +102,9 @@ public class Player : Unit
 
     public void SetState(PlayerState state)
     {
+        System.Diagnostics.StackTrace stackTrace = new System.Diagnostics.StackTrace();
+        Debug.Log(stackTrace.GetFrame(1).GetMethod().Name);
+        Debug.Log(state);
         this.state = state;
         /*if (state == PlayerState.Transition)
         {
@@ -402,7 +405,6 @@ public class Player : Unit
         isonejumping = false;
         if (api.engine.drainercontroller.Check(this))
             return false;
-        
         api.engine.lasercontroller.CollisionCheck(position);
 
         // to avoid exception
@@ -833,6 +835,19 @@ public class Player : Unit
         SetState(LeanUndoNextState);
         if (LeanUndoNextState == PlayerState.Idle)
             ApplyGravity();
+        Debug.Log(state);
+        Debug.Log(LeanUndoNextState);
+        if(LeanUndoNextState == PlayerState.Busy)
+        {
+            ApplyGravity();
+            return;
+            Debug.Log("asdsadasd");
+            if (!Toolkit.IsEmpty(Toolkit.VectorSum(position, gravity)))
+            {
+                Debug.Log("xdcfvgbhnjmk");
+                SetState(PlayerState.Idle);
+            }
+        }
     }
 
     public void AdjustPlayerFinshed(Direction direction, Action<Player, Direction> passingmethod)

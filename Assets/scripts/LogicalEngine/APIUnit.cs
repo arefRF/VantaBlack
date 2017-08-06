@@ -10,7 +10,7 @@ public class APIUnit {
 
     public void engine_Move(Unit unit, Direction dir)
     {
-        if(unit is Player)
+        if (unit is Player)
         {
             engine.MovePlayer((Player)unit, dir);
         }
