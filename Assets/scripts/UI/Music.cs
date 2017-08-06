@@ -20,6 +20,7 @@ public class Music : MonoBehaviour {
             int i = Random.Range(0, 3);
             Music.instance.source.PlayOneShot(Music.instance.sounds[i]);
         }
+
         DontDestroyOnLoad(this.gameObject);
     }
 
