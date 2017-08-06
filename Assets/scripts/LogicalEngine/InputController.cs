@@ -82,8 +82,11 @@ public class InputController {
                 }
                 else
                 {
+                    Debug.Log("should change after demo");
+                    LeanUndo(player, player.leandirection   , PlayerState.Idle);
+                    return;
                     if (direction == Toolkit.ReverseDirection(player.gravity))
-                        LeanUndo(player, player.direction, PlayerState.Idle);
+                        LeanUndo(player, player.leandirection, PlayerState.Idle);
                     else
                     {
                         LeanUndo(player, player.leandirection, PlayerState.Jumping);
@@ -106,7 +109,12 @@ public class InputController {
                     player.api.RemoveFromDatabase(player);
                     player.position = units[0].position;
                     player.api.AddToDatabase(player);
-                    Debug.Log(direction);
+                    if (direction != player.direction)
+                    {
+                        Direction olddir = player.direction;
+                        player.direction = direction;
+                        engine.apigraphic.PlayerChangeDirection(player, olddir, player.direction);
+                    }
                     engine.apigraphic.MovePlayer_Simple_2(player, player.position, direction);
                 }
             }
