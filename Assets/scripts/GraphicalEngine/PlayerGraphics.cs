@@ -272,7 +272,7 @@ public class PlayerGraphics : MonoBehaviour {
         // for later change
         else
             animator.SetInteger("branch", 4);
-        StartCoroutine(Branch_Exit(pos, 0.65f));
+        StartCoroutine(Branch_Exit(pos, 0.4f));
     }
 
 
@@ -283,7 +283,7 @@ public class PlayerGraphics : MonoBehaviour {
         while (remain_distance > float.Epsilon)
         {
             remain_distance = ((Vector2)transform.position - end).sqrMagnitude;
-            transform.position = Vector2.MoveTowards(transform.position, end, Time.smoothDeltaTime * speed);
+            transform.position = Vector2.MoveTowards(transform.position, end, Time.smoothDeltaTime / move_time);
             yield return new WaitForSeconds(0.001f);
         }
         yield return new WaitForSeconds(0.2f);
