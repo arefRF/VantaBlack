@@ -78,7 +78,8 @@ public class Menu : MonoBehaviour {
     }
     public void Back()
     {
-        animator.SetBool("Levels", false);
+        levels.SetActive(false);
+        menutexts.SetActive(true);
     }
     public void Quit()
     {

@@ -21,9 +21,9 @@ public class InMenu : MonoBehaviour {
         GameObject.Find("UI").GetComponent<Get>().inMenu_Show();
     }
 
-    public void Quit()
+    public void MainMenu()
     {
-        Application.Quit();
+        SceneManager.LoadScene("Menu V2");
     }
 
     public void Undo()
