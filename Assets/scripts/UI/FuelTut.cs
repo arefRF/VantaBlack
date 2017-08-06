@@ -4,35 +4,34 @@ using System.Collections;
 public class FuelTut : MonoBehaviour {
     private bool show;
     private string par_name;
-    private Animator animator;
+    private GameObject space;
 
     void Start()
     {
-        animator = GameObject.Find("TutorialAnimation").GetComponent<Animator>();
+        space = GameObject.Find("space");
     }
 
     void OnTriggerStay2D(Collider2D col)
     {
+
         if (col.gameObject.tag == "Dynamic Container")
         {
             if (col.GetComponent<DynamicContainer>().abilities.Count != 0)
                 show = true;
             else
                 show = false;
+            space.SetActive(show);
         }
-        else if(col.gameObject.tag == "Player")
+        if(col.gameObject.tag == "Player")
         {
-            if(show)
-                animator.SetBool("Space", true);
-            else
-                animator.SetBool("Space", false);
+            space.SetActive(show);
         }
     }
     void OnTriggerExit2D(Collider2D col)
     {
         if (col.gameObject.tag == "Player")
         {
-          animator.SetBool("Space", false);
+            space.SetActive(false);
         }
     }
 }
