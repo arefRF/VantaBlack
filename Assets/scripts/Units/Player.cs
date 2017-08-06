@@ -102,6 +102,9 @@ public class Player : Unit
 
     public void SetState(PlayerState state)
     {
+        System.Diagnostics.StackTrace stackTrace = new System.Diagnostics.StackTrace();
+        Debug.Log(stackTrace.GetFrame(1).GetMethod().Name);
+        Debug.Log(state);
         this.state = state;
         /*if (state == PlayerState.Transition)
         {
@@ -388,7 +391,11 @@ public class Player : Unit
 
     public override bool ApplyGravity()
     {
-        
+        if(gravity == Direction.Down || gravity == Direction.Up)
+            transform.position.Set(transform.position.x, position.y, transform.position.z);
+        else
+            transform.position.Set(position.x, transform.position.y, transform.position.z);
+
         if (state == PlayerState.Gir)
             return false;
         if (mode == GameMode.Real)
@@ -398,7 +405,6 @@ public class Player : Unit
         isonejumping = false;
         if (api.engine.drainercontroller.Check(this))
             return false;
-        
         api.engine.lasercontroller.CollisionCheck(position);
 
         // to avoid exception
@@ -443,7 +449,17 @@ public class Player : Unit
                 return false;
             api.RemoveFromDatabase(this);
             position = Toolkit.VectorSum(position,gravity);
-            api.engine.lasercontroller.CollisionCheck(position);
+            if (api.engine.lasercontroller.CollisionCheck(position))
+            {
+                if ((Vector2)transform.position != position)
+                {
+                    SetState(PlayerState.Falling);
+                    api.graphicalengine_Fall(this, FallPos(), height);
+
+                    return true;    
+                }
+            }
+            
             api.AddToDatabase(this);
             height++;
         }
@@ -553,6 +569,10 @@ public class Player : Unit
         if(position.x <= 0 || position.y <= 0)
         {
             api.engine.apigraphic.Fall_Player_Died(this);
+            return;
+        }
+        if (api.engine.lasercontroller.CollisionCheck(position))
+        {
             return;
         }
         Vector2 pos = Toolkit.VectorSum(position, Starter.GetGravityDirection());
@@ -815,6 +835,19 @@ public class Player : Unit
         SetState(LeanUndoNextState);
         if (LeanUndoNextState == PlayerState.Idle)
             ApplyGravity();
+        Debug.Log(state);
+        Debug.Log(LeanUndoNextState);
+        if(LeanUndoNextState == PlayerState.Busy)
+        {
+            ApplyGravity();
+            return;
+            Debug.Log("asdsadasd");
+            if (!Toolkit.IsEmpty(Toolkit.VectorSum(position, gravity)))
+            {
+                Debug.Log("xdcfvgbhnjmk");
+                SetState(PlayerState.Idle);
+            }
+        }
     }
 
     public void AdjustPlayerFinshed(Direction direction, Action<Player, Direction> passingmethod)

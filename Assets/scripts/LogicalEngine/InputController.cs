@@ -43,13 +43,19 @@ public class InputController {
             return;
         if (player.leandirection == Toolkit.ReverseDirection(direction))
         {
-            if(Toolkit.IsEmpty(Toolkit.VectorSum(player.position, player.gravity)))
+            if (Toolkit.IsEmpty(Toolkit.VectorSum(player.position, player.gravity)))
             {
                 LeanUndo(player, player.leandirection, PlayerState.Busy);
-                Lean(player, direction);
+                if (Toolkit.IsEmpty(Toolkit.VectorSum(player.position, direction)))
+                    player.ApplyGravity();
+                else
+                    Lean(player, direction);
             }
             else
+            {
                 LeanUndo(player, player.leandirection, PlayerState.Idle);
+                player.ApplyGravity();
+            }
         }
         else if((direction == player.gravity))
         {
@@ -293,6 +299,7 @@ public class InputController {
     {
         if (player.state == PlayerState.Idle)
         {
+            player.movepercentage = 0;
             if (Toolkit.IsInsideBranch(player))
             {
                 if (Toolkit.HasBranch(Toolkit.VectorSum(player.position, direction)))
@@ -359,7 +366,8 @@ public class InputController {
                 {
                     return;
                 }
-                if (!player.ApplyGravity()){
+                if (!player.ApplyGravity())
+                {
                     if (!player.Move(direction))
                     {
                         /*Debug.Log("here");

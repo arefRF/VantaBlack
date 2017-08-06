@@ -181,7 +181,13 @@ public class Laser : Unit {
                 {
                     if (IsBetween(pos.x, beamPositions[i][0].x, beamPositions[i][1].x))
                     {
-                        engine.apigraphic.Laser_Player_Died(Toolkit.GetPlayer(pos));
+                        Player player = Toolkit.GetPlayer(pos);
+                        if (player.transform.position.y != player.position.y)
+                        {
+                            player.SetState(PlayerState.Busy);  
+                        }
+                        else
+                            engine.apigraphic.Laser_Player_Died(player);
                         return true;
                     }
                 }

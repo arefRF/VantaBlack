@@ -29,7 +29,7 @@ public class Ramp : Unit {
             GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Ramp[0, 3];
         else if (connected[2])
             GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Ramp[0, 1];
-        else if (connected[2] && connected[3])
+        else if (connected[3])
             GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Ramp[0, 2];
         else
             GetComponent<SpriteRenderer>().sprite = api.engine.initializer.sprite_Ramp[0, 0];

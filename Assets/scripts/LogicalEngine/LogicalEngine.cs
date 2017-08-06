@@ -258,7 +258,7 @@ public class LogicalEngine {
     public void MovePlayer(Player player, Direction dir)
     {
         //try {
-            Vector2 nextpos;
+        Vector2 nextpos;
             //snpmanager.AddToSnapShot(player);
             if (player.onramp && player.state != PlayerState.Jumping) //ramp move
             {
@@ -675,7 +675,7 @@ public class LogicalEngine {
 
     public void Applygravity()
     {
-        for(int i=0; i<database.player.Count; i++)
+        for (int i=0; i<database.player.Count; i++)
         {
             database.player[i].ApplyGravity();
         }
