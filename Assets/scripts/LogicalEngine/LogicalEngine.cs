@@ -846,7 +846,6 @@ public class LogicalEngine {
     }
     public void graphic_AbsorbReleaseFinished(Player player)
     {
-
     }
 
     public void graphic_PlayerChangeDirectionFinished(Player player)

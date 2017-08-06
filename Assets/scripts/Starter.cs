@@ -11,6 +11,7 @@ public class Starter : MonoBehaviour{
     public bool BlocksInvis = false;
     public static bool Blockinvis;
     public static GameManager gamemanager;
+    public static SceneLoader sceneloader;
     void Awake()
     {
         Blockinvis = BlocksInvis;
@@ -34,6 +35,7 @@ public class Starter : MonoBehaviour{
         staticengine = logicalengine;
         GameObject.Find("Graphical").GetComponent<GraphicalEngine>().database = database;
         Toolkit.database = database;
+        sceneloader = GameObject.Find("SceneLoader").GetComponent<SceneLoader>();
         //gamemanager = GameObject.Find("GameManager").GetComponent<GameManager>();
         logicalengine.Run();
     }
@@ -59,5 +61,10 @@ public class Starter : MonoBehaviour{
     public static GameManager GetGameManager()
     {
         return gamemanager;
+    }
+
+    public static SceneLoader GetSceneLoader()
+    {
+        return sceneloader;
     }
 }

@@ -82,8 +82,11 @@ public class InputController {
                 }
                 else
                 {
+                    Debug.Log("should change after demo");
+                    LeanUndo(player, player.leandirection   , PlayerState.Idle);
+                    return;
                     if (direction == Toolkit.ReverseDirection(player.gravity))
-                        LeanUndo(player, player.direction, PlayerState.Idle);
+                        LeanUndo(player, player.leandirection, PlayerState.Idle);
                     else
                     {
                         LeanUndo(player, player.leandirection, PlayerState.Jumping);
