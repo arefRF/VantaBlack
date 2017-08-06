@@ -16,7 +16,6 @@ public class SpecialTut : MonoBehaviour
         if (col.tag == "Player")
         {
             Player player = col.GetComponent<Player>();
-            Debug.Log(player.state);
             if (player.abilities.Count == 0 && player.state == PlayerState.Lean)
             {
                 animator.SetInteger("Tut", number);

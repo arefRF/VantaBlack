@@ -491,7 +491,6 @@ public class Player : Unit
             height++;
         }
         SetState(PlayerState.Falling);
-        Debug.Log(position);
         if (Toolkit.HasPlayer(Toolkit.VectorSum(position, gravity)) && Toolkit.GetPlayerNumberInDatabase(this) < Toolkit.GetPlayerNumberInDatabase(Toolkit.GetPlayer(Toolkit.VectorSum(position, gravity))))
         {
             Debug.Log("this part should be changed after demo");

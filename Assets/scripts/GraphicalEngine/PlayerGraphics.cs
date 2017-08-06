@@ -306,7 +306,6 @@ public class PlayerGraphics : MonoBehaviour {
     }
     private IEnumerator Simple_Move(Vector2 end, float move_time, bool enter)
     {
-        Debug.Log(end);
         float remain_distance = ((Vector2)transform.position - end).sqrMagnitude;
         while (remain_distance > float.Epsilon)
         {
