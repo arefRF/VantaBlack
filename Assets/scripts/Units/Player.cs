@@ -502,7 +502,6 @@ public class Player : Unit
             }
             api.AddToDatabase(this);
         }
-        Debug.Log(position);
         api.graphicalengine_Fall(this, FallPos(),height);
 
         return true;

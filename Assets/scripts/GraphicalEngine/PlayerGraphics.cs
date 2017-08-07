@@ -325,7 +325,6 @@ public class PlayerGraphics : MonoBehaviour {
 
     public void Ramp_Animation(Direction dir, int type)
     {
-        Debug.Log("askcvjskldijkasdvaHUI L");
         if (player.gravity == Direction.Right)
         {
             int num = Toolkit.DirectionToNumber(dir);

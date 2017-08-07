@@ -18,7 +18,6 @@ public class Music : MonoBehaviour {
             source = GetComponent<AudioSource>();
             Load_Musics();
             int i = 2;
-            Debug.Log(Music.instance.sounds[i].length);
             Music.instance.source.PlayOneShot(Music.instance.sounds[i]);
             StartCoroutine(MusicShuffle(Music.instance.sounds[i].length));
         }
