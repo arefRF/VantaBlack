@@ -217,6 +217,7 @@ public class PlayerGraphics : MonoBehaviour {
         // animator.SetBool("Jump", false);
         animator.SetInteger("Walk", 0);
         animator.SetBool("Jump", false);
+
         // animator.SetBool("Transition", false);
         //  animator.SetInteger("Ramp", 0);
 
