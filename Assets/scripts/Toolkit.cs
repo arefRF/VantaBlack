@@ -731,6 +731,16 @@ public sealed class Toolkit{
     {
         return direction == Direction.Right || direction == Direction.Left;
     }
+
+    public static int GetPlayerNumberInDatabase(Player player)
+    {
+        for(int i=0; i<database.player.Count; i++)
+        {
+            if (player == database.player[i])
+                return i;
+        }
+        return -1;
+    }
 }
 
 
