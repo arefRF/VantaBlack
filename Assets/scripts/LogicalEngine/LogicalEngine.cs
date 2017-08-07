@@ -800,10 +800,6 @@ public class LogicalEngine {
             return;
         if (!player.ApplyGravity())
             player.SetState(PlayerState.Idle);
-        for (int i = 0; i < database.player.Count; i++)
-        {
-            database.player[i].ApplyGravity();
-        }
 
     }
 
