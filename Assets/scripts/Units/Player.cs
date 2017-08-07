@@ -110,6 +110,7 @@ public class Player : Unit
         if (state == PlayerState.Idle)
         {
             GetComponent<PlayerGraphics>().ResetStates();
+            movepercentage = 0;
         }
         else if (state == PlayerState.Lean)
         {
