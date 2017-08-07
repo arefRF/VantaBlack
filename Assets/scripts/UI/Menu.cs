@@ -3,6 +3,8 @@ using System.Collections;
 using UnityEngine.SceneManagement;
 public class Menu : MonoBehaviour {
     private Animator animator;
+    public GameObject levels;
+    public GameObject menutexts;
 
     void Awake()
     {
@@ -39,8 +41,27 @@ public class Menu : MonoBehaviour {
     }
     public void Levels()
     {
-        animator.SetBool("Levels", true);
+        menutexts.SetActive(false);
+        levels.gameObject.SetActive(true);
     }
+
+    public void Disable(int child_number) {
+        GameObject.Find("Level Sections").transform.GetChild(child_number).gameObject.SetActive(false);
+      
+    }
+
+    public void LevelSections(int child_number)
+    {
+        levels.SetActive(false);
+        GameObject.Find("Level Sections").transform.GetChild(child_number).gameObject.SetActive(true);
+    }
+
+    public void BacktoLevels(int child_number)
+    {
+        GameObject.Find("Level Sections").transform.GetChild(child_number).gameObject.SetActive(false);
+        levels.SetActive(true);
+    }
+
     public void Controls()
     {
         transform.GetChild(2).gameObject.SetActive(true);
