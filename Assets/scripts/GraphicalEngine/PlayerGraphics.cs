@@ -541,7 +541,7 @@ public class PlayerGraphics : MonoBehaviour {
         if (player.abilities.Count == 0)
             transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().color = color;
         else
-            transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().color = color;
+            transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().color = Color.black;
     }
 
     public void ChangeColorFinished()
