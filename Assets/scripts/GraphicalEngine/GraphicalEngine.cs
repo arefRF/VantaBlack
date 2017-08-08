@@ -179,8 +179,10 @@ public class GraphicalEngine : MonoBehaviour {
 
     public void BranchLight(Branch branch,bool on)
     {
+        GameObject glass;
         Toolkit.GetObjectInChild(branch.gameObject, "Icon").transform.GetChild(0).gameObject.SetActive(on);
-        if(on)
+       // Toolkit.GetObjectInChild(branch.gameObject, "Icon").transform.GetChild(0).GetComponent<SpriteRenderer>().color = Toolkit.Ability_Color();
+        if (on)
             branch.GetComponent<AudioSource>().Play();
     }
     public void Stop_All_Co()

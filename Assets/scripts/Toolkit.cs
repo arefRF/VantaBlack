@@ -514,6 +514,26 @@ public sealed class Toolkit{
         return result;
     }
 
+    public static Color Ability_Color(List<Ability> ability)
+    {
+        float[] color = new float[4];
+        if (ability.Count != 0)
+        {
+            switch (ability[0].abilitytype)
+            {
+                case AbilityType.Key: color = new float[] { 1, 1, 1, 1 }; break;
+                case AbilityType.Fuel: color = new float[] { 1, 0.674f, 0.211f, 1 }; break;
+                case AbilityType.Jump: color = new float[] { 0.59f, 0.78f, 1, 1 }; break;
+                case AbilityType.Teleport: color = new float[] { 0.92f, 0.36f, 0.44f, 1 }; break;
+                case AbilityType.Gravity: color = new float[] { 0.81f, 0.60f, 0.96f, 1 }; break;
+                case AbilityType.Rope: color = new float[] { 1, 0.60f, 0.30f, 1 }; break;
+            }
+        }
+        else
+            color = new float[] { 1, 1, 1, 0 };
+        return new Color(color[0], color[1], color[2], color[3]);
+    }
+
     public static bool[] GetConnectedSides(Unit unit)
     {
         bool[] result = new bool[4];
