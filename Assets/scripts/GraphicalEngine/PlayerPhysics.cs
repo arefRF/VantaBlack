@@ -89,9 +89,10 @@ public class PlayerPhysics : MonoBehaviour
         move_type = MoveType.BlockToRamp;
         if(last_co != null)
             StopCoroutine(last_co);
-        Vector2 end1 = pos + Block_To_Ramp_Pos(type);
+        Vector2 end1 = (Vector2)pos + Block_To_Ramp_Pos(type);
         Vector2 end2 = (Vector2)pos + On_Ramp_Pos(type);
         last_co = StartCoroutine(Ramp_To_Block_Coroutine(end1,end2,move_time,true));
+
         
     }
     
@@ -245,8 +246,6 @@ public class PlayerPhysics : MonoBehaviour
         // transform.GetChild(0).rotation = Quaternion.Euler(0, y, rotate_to);
         //StartCoroutine(FallRotation(rotate_to));
     }
-
-
     private float GetRotationGravity(Direction gravity_dir,Direction player_dir)
     {
         if (gravity_dir == Direction.Down)
@@ -614,7 +613,8 @@ public class PlayerPhysics : MonoBehaviour
     }
    private void Rotate_On_Ramp(int type)
     {
-
+        Debug.Log("Rotate on ramp");
+        Rotate_On_Block();
     }
 
 

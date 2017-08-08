@@ -27,7 +27,8 @@ public class APIGraphic{
 
             player.GetComponent<PlayerGraphics>().StopAllCoroutines();
             player.GetComponent<PlayerPhysics>().Ramp_To_Block_Move(position, type);
-        player.gameObject.GetComponent<PlayerGraphics>().Ramp_To_Block_Animation(player.direction);
+        //player.gameObject.GetComponent<PlayerGraphics>().Ramp_To_Block_Animation(player.direction);
+        player.gameObject.GetComponent<PlayerGraphics>().Move_Animation(player.direction);
     }
 
     //Ramp to fall
@@ -104,7 +105,8 @@ public class APIGraphic{
     {
         player.GetComponent<PlayerGraphics>().StopAllCoroutines();
         player.GetComponent<PlayerPhysics>().Block_To_Ramp_Move(position,ramptype);
-        player.gameObject.GetComponent<PlayerGraphics>().Ramp_Animation(player.direction, ramptype);
+        //player.gameObject.GetComponent<PlayerGraphics>().Ramp_Animation(player.direction, ramptype);
+        player.gameObject.GetComponent<PlayerGraphics>().Move_Animation(player.direction);
 
     }
 
@@ -127,7 +129,8 @@ public class APIGraphic{
     {
         player.GetComponent<PlayerGraphics>().StopAllCoroutines();
         player.GetComponent<PlayerPhysics>().Block_To_Ramp_Move(position,ramptype);
-        player.gameObject.GetComponent<PlayerGraphics>().Ramp_Animation(player.direction, ramptype);
+        // player.gameObject.GetComponent<PlayerGraphics>().Ramp_Animation(player.direction, ramptype);
+        player.gameObject.GetComponent<PlayerGraphics>().Move_Animation(player.direction);
 
     }
 
