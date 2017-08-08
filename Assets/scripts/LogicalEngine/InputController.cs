@@ -413,39 +413,33 @@ public class InputController {
         }
     }
 
-    public void Absorb()
+    public void Absorb(Player player)
     {
-        for (int i = 0; i < engine.database.player.Count; i++)
+        if (player.state == PlayerState.Gir)
+            return;
+        if (player.state == PlayerState.Lean) //for release
         {
-            if (engine.database.player[i].state == PlayerState.Gir)
-                continue;
-            if (engine.database.player[i].state == PlayerState.Lean) //for release
+            if (player.LeanedTo is Container)
             {
-                if (database.player[i].LeanedTo is Container)
-                {
-                    engine.database.player[i].Absorb((Container)database.player[i].LeanedTo);
-                }
-                else if (database.player[i].LeanedTo is Fountain)
-                {
-                    ((Fountain)database.player[i].LeanedTo).Action(database.player[i]);
-                }
+                player.Absorb((Container)player.LeanedTo);
+            }
+            else if (player.LeanedTo is Fountain)
+            {
+                ((Fountain)player.LeanedTo).Action(player);
             }
         }
     }
 
-    public void Release()
+    public void Release(Player player)
     {
-        for (int i = 0; i < engine.database.player.Count; i++)
+        if (player.state == PlayerState.Gir)
+            return;
+        if (player.state == PlayerState.Lean) //for release
         {
-            if (engine.database.player[i].state == PlayerState.Gir)
-                continue;
-            if (engine.database.player[i].state == PlayerState.Lean) //for release
-            {
-                    if (database.player[i].LeanedTo is Container)
-                    {
-                        engine.database.player[i].Release((Container)database.player[i].LeanedTo);
-                    }
-            }
+                if (player.LeanedTo is Container)
+                {
+                    player.Release((Container)player.LeanedTo);
+                }
         }
     }
 
@@ -695,11 +689,11 @@ public class InputController {
             {
                 if(direction == database.player[i].leandirection)
                 {
-                    Release();
+                    Release(database.player[i]);
                 }
                 else if (Toolkit.ReverseDirection(direction) == database.player[i].leandirection)
                 {
-                    Absorb();
+                    Absorb(database.player[i]);
                 }
             }
         }

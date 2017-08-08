@@ -120,7 +120,6 @@ public class Container : ParentContainer {
             }
             api.ChangeSprite(this);
             _setability(player);
-            SetNextState();
             if(this is FunctionalContainer)
             {
                 if (((FunctionalContainer)this).on)
