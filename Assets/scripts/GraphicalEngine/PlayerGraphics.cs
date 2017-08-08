@@ -530,17 +530,18 @@ public class PlayerGraphics : MonoBehaviour {
     }
     public void ChangeColor()
     {
-        float[] color = Ability_Color(player.abilities);
+        Color color = Ability_Color(player.abilities);
         // Body Color
-        transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<SpriteRenderer>().color = new Color(color[0], color[1], color[2], color[3]);
+        transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<SpriteRenderer>().color = color;
         //Eye BAckground Color
-        transform.GetChild(0).GetChild(0).GetChild(0).GetChild(1).GetComponent<SpriteRenderer>().color = new Color(color[0], color[1], color[2], color[3]);
+        transform.GetChild(0).GetChild(0).GetChild(0).GetChild(1).GetComponent<SpriteRenderer>().color = color;
 
         // Eye Color
+        color = new Color(color.r, color.g, color.b, 1);
         if (player.abilities.Count == 0)
-            transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().color = new Color(1, 1, 1);
+            transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().color = color;
         else
-            transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().color = new Color(0, 0, 0);
+            transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().color = color;
     }
 
     public void ChangeColorFinished()
@@ -548,7 +549,7 @@ public class PlayerGraphics : MonoBehaviour {
 
     }
 
-    private float[] Ability_Color(List<Ability> ability)
+    private Color Ability_Color(List<Ability> ability)
     {
         float[] color = new float[4];
         if (ability.Count != 0)
@@ -565,7 +566,7 @@ public class PlayerGraphics : MonoBehaviour {
         }
         else
             color = new float[] { 1, 1, 1, 0 };
-        return color;
+        return new Color(color[0], color[1], color[2], color[3]);
     }
 
     public void ShowHologram()
@@ -574,8 +575,7 @@ public class PlayerGraphics : MonoBehaviour {
         GameObject lights = Toolkit.GetObjectInChild(hologram, "Lights");
         GameObject Number = Toolkit.GetObjectInChild(hologram, "Number");
         SpriteRenderer IconSpriteRenderer = Toolkit.GetObjectInChild(hologram, "Icon").GetComponent<SpriteRenderer>();
-        float[] color = Ability_Color(player.abilities);
-        Color abilitycolor = new Color(color[0], color[1], color[2], color[3]);
+        Color abilitycolor = Ability_Color(player.abilities); ;
         IconSpriteRenderer.sprite = null;
         if (player.abilities.Count != 0)
         {
