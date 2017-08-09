@@ -3,15 +3,16 @@ using System.Collections.Generic;
 
 public class LaserGraphics : MonoBehaviour {
 
-    List<GameObject> BeamObjectPool;
-    List<GameObject> UsedBeams;
-    public GameObject beam;
+    List<GameObject> BeamObjectPool, UsedBeams, PartialBeamObjectPool, PartialUsedBeams;
+    public GameObject Beam, PartialBeam;
     GameObject beamParent;
     private Texture2D BeamTexture;
     // Use this for initialization
     void Awake () {
         BeamObjectPool = new List<GameObject>();
         UsedBeams = new List<GameObject>();
+        PartialBeamObjectPool = new List<GameObject>();
+        PartialUsedBeams = new List<GameObject>();
         BeamTexture = Resources.Load<Texture2D>("lazer\\lazer line");
         beamParent = new GameObject("Laser Beams");
     }
@@ -31,7 +32,6 @@ public class LaserGraphics : MonoBehaviour {
         }
         else if (pos1.x == pos2.x)
         {
-            Debug.Log(pos1);
             if (pos1.y > pos2.y) {
                 AddLaser(pos2, pos1, direction);
                 return;
@@ -64,6 +64,17 @@ public class LaserGraphics : MonoBehaviour {
 
     }
 
+    public void AddPartialLaser(Vector2 pos, Direction direction)
+    {
+        float rot = 0;
+        if (direction == Direction.Right)
+            rot = 270;
+        else if (direction == Direction.Down)
+            rot = 180;
+        else if (direction == Direction.Left)
+            rot = 90;
+        makePartialBeam(pos, rot);
+    }
     public void RemoveLasers()
     {
         for(int i=0;  UsedBeams.Count > 0;i++)
@@ -79,7 +90,7 @@ public class LaserGraphics : MonoBehaviour {
         GameObject beamcolon;
         if (BeamObjectPool.Count == 0)
         {
-            beamcolon = Instantiate(beam);
+            beamcolon = Instantiate(Beam);
             beamcolon.transform.SetParent(beamParent.transform);
             UsedBeams.Add(beamcolon);
         }
@@ -90,8 +101,27 @@ public class LaserGraphics : MonoBehaviour {
             UsedBeams.Add(beamcolon);
         }
         beamcolon.transform.position = pos;
-        beamcolon.transform.rotation = Quaternion.Euler(beam.transform.rotation.x, beam.transform.rotation.y, rotation);
+        beamcolon.transform.rotation = Quaternion.Euler(Beam.transform.rotation.x, Beam.transform.rotation.y, rotation);
 
 
+    }
+
+    private void makePartialBeam(Vector2 pos, float rotation)
+    {
+        GameObject beamcolon;
+        if (PartialBeamObjectPool.Count == 0)
+        {
+            beamcolon = Instantiate(PartialBeam);
+            beamcolon.transform.SetParent(beamParent.transform);
+            PartialUsedBeams.Add(beamcolon);
+        }
+        else
+        {
+            beamcolon = PartialBeamObjectPool[0];
+            PartialBeamObjectPool.RemoveAt(0);
+            PartialUsedBeams.Add(beamcolon);
+        }
+        beamcolon.transform.position = pos;
+        beamcolon.transform.rotation = Quaternion.Euler(PartialBeam.transform.rotation.x, PartialBeam.transform.rotation.y, rotation);
     }
 }
