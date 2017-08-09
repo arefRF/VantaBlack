@@ -462,6 +462,11 @@ public class APIGraphic{
             graphicalengine.lasergraphics.RemoveLasers();
     }
 
+    public void UnlockBranchLaser(Branch branch)
+    {
+
+    }
+
     public void AdjustPlayer(Player player, Vector2 pos, Direction direction, System.Action<Player, Direction> passingmethod)
     {
         player.GetComponent<PlayerPhysics>().Adjust(pos, direction, passingmethod);

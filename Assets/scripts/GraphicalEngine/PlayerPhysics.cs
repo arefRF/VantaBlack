@@ -637,7 +637,6 @@ public class PlayerPhysics : MonoBehaviour
     }
    private void Rotate_On_Ramp(int type)
     {
-        Debug.Log("Rotate on ramp");
         Rotate_On_Block();
     }
 
