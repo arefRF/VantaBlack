@@ -856,7 +856,7 @@ public class Player : Unit
                 return;
             }
         }*/
-        api.engine.apigraphic.BranchLight(true, Toolkit.GetBranch(position));
+        api.engine.apigraphic.BranchLight(true, Toolkit.GetBranch(position),this);
         SetState(PlayerState.Idle);
     }
 

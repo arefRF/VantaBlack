@@ -89,7 +89,7 @@ public class APIGraphic{
 
     public void BranchLight(bool on,Branch branch,Player player)
     {
-        graphicalengine.BranchLight(branch, on);
+        graphicalengine.BranchLight(branch, on,player);
     }
     // Block to Branch
     public void MovePlayer_Simple_2(Player player, Vector2 position,Direction direction)
