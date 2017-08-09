@@ -6,15 +6,19 @@ public class Opacity : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         GetComponent<Renderer>().material.SetFloat("_Cutoff",1f);
-        StartCoroutine(fill());
+   
 	}
 	
+    public void LaserHit()
+    {
+        StartCoroutine(fill());
+    }
     IEnumerator fill()
     {
         while (opa > 0)
         {
             GetComponent<Renderer>().material.SetFloat("_Cutoff", opa);
-            opa = opa - 0.001f;
+            opa = opa - 0.005f;
             yield return null;
         }
     }

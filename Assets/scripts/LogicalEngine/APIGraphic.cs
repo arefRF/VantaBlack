@@ -94,7 +94,7 @@ public class APIGraphic{
 
     public void LaserHitDynamic(DynamicContainer container)
     {
-
+        graphicalengine.LaserHit(container);
     }
 
     public void LaserUnHitDynamic(DynamicContainer container)
