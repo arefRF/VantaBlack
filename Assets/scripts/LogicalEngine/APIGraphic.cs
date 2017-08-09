@@ -87,7 +87,7 @@ public class APIGraphic{
         player.gameObject.GetComponent<PlayerGraphics>().Move_Animation(player.direction);
     }
 
-    public void BranchLight(bool on,Branch branch)
+    public void BranchLight(bool on,Branch branch,Player player)
     {
         graphicalengine.BranchLight(branch, on);
     }
