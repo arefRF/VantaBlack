@@ -181,7 +181,9 @@ public class GraphicalEngine : MonoBehaviour {
     {
         GameObject glass;
         Toolkit.GetObjectInChild(branch.gameObject, "Icon").transform.GetChild(0).gameObject.SetActive(on);
-        Toolkit.GetObjectInChild(branch.gameObject, "Icon").transform.GetChild(0).GetComponent<SpriteRenderer>().color = Toolkit.Ability_Color(player.abilities);
+        Color color = Toolkit.Ability_Color(player.abilities);
+        color = new Color(color.r, color.g, color.b, 1);
+        Toolkit.GetObjectInChild(branch.gameObject, "Icon").transform.GetChild(0).GetComponent<SpriteRenderer>().color = color;
         if (on)
             branch.GetComponent<AudioSource>().Play();
     }
