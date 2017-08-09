@@ -800,6 +800,7 @@ public class LogicalEngine {
             return;
         if (!player.ApplyGravity())
             player.SetState(PlayerState.Idle);
+
     }
 
     public void graphic_LeanStickMoveFinished(Player player)

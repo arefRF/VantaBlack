@@ -217,6 +217,7 @@ public class PlayerGraphics : MonoBehaviour {
         // animator.SetBool("Jump", false);
         animator.SetInteger("Walk", 0);
         animator.SetBool("Jump", false);
+
         // animator.SetBool("Transition", false);
         //  animator.SetInteger("Ramp", 0);
 
@@ -324,7 +325,6 @@ public class PlayerGraphics : MonoBehaviour {
 
     public void Ramp_Animation(Direction dir, int type)
     {
-        Debug.Log("askcvjskldijkasdvaHUI L");
         if (player.gravity == Direction.Right)
         {
             int num = Toolkit.DirectionToNumber(dir);
