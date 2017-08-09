@@ -464,7 +464,7 @@ public class APIGraphic{
 
     public void UnlockBranchLaser(Branch branch)
     {
-
+        
     }
 
     public void AdjustPlayer(Player player, Vector2 pos, Direction direction, System.Action<Player, Direction> passingmethod)
