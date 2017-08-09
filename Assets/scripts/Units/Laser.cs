@@ -87,6 +87,7 @@ public class Laser : Unit {
     private void SetLaser(Direction direction, Vector2 pos, Vector2 finalpos, bool flag)
     {
         DynamicContainer container = Toolkit.GetContainer(finalpos) as DynamicContainer;
+        Branch branch = Toolkit.GetBranch(finalpos) as Branch;
         Unit unit = Toolkit.GetUnitIncludingPlayer(finalpos);
         if (unit != null)
         {
@@ -107,7 +108,6 @@ public class Laser : Unit {
         }
         else
         {
-            Branch branch = Toolkit.GetBranch(finalpos) as Branch;
             if (branch != null && branch.islocked)
             {
                 engine.apigraphic.UnlockBranchLaser(branch);
