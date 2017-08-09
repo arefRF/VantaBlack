@@ -443,7 +443,6 @@ public class APIGraphic{
         PlayerGraphics gl = player.GetComponent<PlayerGraphics>();
         gl.FakeLean_Finished();
     }
-
     public void AddLaser(Vector2 pos1,Vector2 pos2,Direction dir)
     {
         if(graphicalengine.lasergraphics != null)
@@ -460,6 +459,11 @@ public class APIGraphic{
     {
         if(graphicalengine.lasergraphics != null)
             graphicalengine.lasergraphics.RemoveLasers();
+    }
+
+    public void UnlockBranchLaser(Branch branch)
+    {
+        graphicalengine.UnlockBranchLaser(branch);
     }
 
     public void AdjustPlayer(Player player, Vector2 pos, Direction direction, System.Action<Player, Direction> passingmethod)

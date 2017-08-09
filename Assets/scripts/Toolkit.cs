@@ -447,6 +447,14 @@ public sealed class Toolkit{
         }
         return null;
     }
+
+    public static Unit GetUnitIncludingPlayer(Vector2 position)
+    {
+        List<Unit>[,] units = Starter.GetDataBase().units;
+        if (units[(int)position.x, (int)position.y].Count != 0)
+            return units[(int)position.x, (int)position.y][0];
+        return null;
+    }
     public static Ramp GetRamp(Vector2 position)
     {
         List<Unit>[,] units = Starter.GetDataBase().units;
@@ -625,7 +633,7 @@ public sealed class Toolkit{
             Unit u = database.units[(int)pos.x, (int)pos.y][i];
             if (u.gameObject.transform.parent == unit.gameObject.transform.parent)
             {
-                if (u is Gate || u is Branch)
+                if (u is Gate || u is Branch || u is Laser)
                     return false;
                 return true;
             }
@@ -760,6 +768,15 @@ public sealed class Toolkit{
                 return i;
         }
         return -1;
+    }
+
+    public static bool AreNeighbours(Unit unit1, Unit unit2)
+    {
+        if (unit1.position.x == unit2.position.x && Mathf.Abs(unit1.position.y - unit2.position.y) == 1)
+            return true;
+        if (unit1.position.y == unit2.position.y && Mathf.Abs(unit1.position.x - unit2.position.x) == 1)
+            return true;
+        return false;
     }
 }
 

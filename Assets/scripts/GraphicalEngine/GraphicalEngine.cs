@@ -190,6 +190,13 @@ public class GraphicalEngine : MonoBehaviour {
         StopAllCoroutines();
     }
 
+
+    public void UnlockBranchLaser(Branch branch)
+    {
+        GameObject icon_holder = Toolkit.GetObjectInChild(branch.gameObject, "Icon");
+        branch.GetComponent<Animator>().SetTrigger("Unlock");
+        branch.BranchUnlockAnimationFinished();
+    }
     public void Fountatin(Fountain fountatin)
     {
         GameObject lights = Toolkit.GetObjectInChild(fountatin.gameObject, "Lights");

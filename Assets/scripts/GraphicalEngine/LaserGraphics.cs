@@ -83,6 +83,12 @@ public class LaserGraphics : MonoBehaviour {
             BeamObjectPool.Add(UsedBeams[0]);
             UsedBeams.RemoveAt(0);
         }
+        for(int i=0; PartialUsedBeams.Count > 0; i++)
+        {
+            PartialUsedBeams[0].transform.position = new Vector3(-1, -1, 0);
+            PartialBeamObjectPool.Add(PartialUsedBeams[0]);
+            PartialUsedBeams.RemoveAt(0);
+        }
     }
 
     private void makeBeam(Vector2 pos, float rotation)
