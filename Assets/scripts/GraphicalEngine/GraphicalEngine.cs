@@ -194,7 +194,8 @@ public class GraphicalEngine : MonoBehaviour {
     public void UnlockBranchLaser(Branch branch)
     {
         GameObject icon_holder = Toolkit.GetObjectInChild(branch.gameObject, "Icon");
-        icon_holder.transform.GetChild(1).gameObject.SetActive(false);
+        branch.GetComponent<Animator>().SetTrigger("Unlock");
+        branch.BranchUnlockAnimationFinished();
     }
     public void Fountatin(Fountain fountatin)
     {
