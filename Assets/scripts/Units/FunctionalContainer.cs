@@ -136,6 +136,8 @@ public class FunctionalContainer : Container
         return api.MoveUnit(this, dir);
     }
 
+
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public override void SetNextState()
     {
         if (abilities.Count == 0)

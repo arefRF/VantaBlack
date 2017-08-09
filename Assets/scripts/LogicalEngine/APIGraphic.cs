@@ -447,6 +447,12 @@ public class APIGraphic{
             graphicalengine.lasergraphics.AddLaser(pos1, pos2, dir);
     }
 
+    public void AddPartialLaser(Vector2 pos, Direction dir)
+    {
+        if (graphicalengine.lasergraphics != null)
+            graphicalengine.lasergraphics.AddPartialLaser(pos, dir);
+    }
+
     public void RemoveLaser()
     {
         if(graphicalengine.lasergraphics != null)
