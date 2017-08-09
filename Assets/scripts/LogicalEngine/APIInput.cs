@@ -74,8 +74,9 @@ public class APIInput{
     {
         if (mode == GameMode.Play)
         {
-            engine.inputcontroller.Absorb();
-            engine.pipecontroller.CheckPipes();
+            Debug.Log("joystick have problems in absorb and relese");
+            //engine.inputcontroller.Absorb();
+            //engine.pipecontroller.CheckPipes();
         }
     }
 
@@ -83,8 +84,9 @@ public class APIInput{
     {
         if (mode == GameMode.Play)
         {
-            engine.inputcontroller.Release();
-            engine.pipecontroller.CheckPipes();
+            Debug.Log("joystick have problems in absorb and relese");
+            //engine.inputcontroller.Release();
+            //engine.pipecontroller.CheckPipes();
         }
     }
 
