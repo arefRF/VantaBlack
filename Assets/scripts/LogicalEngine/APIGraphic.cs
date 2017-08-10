@@ -91,6 +91,16 @@ public class APIGraphic{
     {
         graphicalengine.BranchLight(branch, on,player);
     }
+
+    public void LaserHitDynamic(DynamicContainer container)
+    {
+
+    }
+
+    public void LaserUnHitDynamic(DynamicContainer container)
+    {
+
+    }
     // Block to Branch
     public void MovePlayer_Simple_2(Player player, Vector2 position,Direction direction)
     {
