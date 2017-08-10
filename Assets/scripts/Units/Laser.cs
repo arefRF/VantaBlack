@@ -92,7 +92,7 @@ public class Laser : Unit {
         if (unit != null)
         {
             if (unit.isLeanable())
-                api.engine.apigraphic.AddPartialLaser(finalpos, Toolkit.ReverseDirection(direction));
+                api.engine.apigraphic.AddPartialLaser(finalpos, Toolkit.ReverseDirection(direction), unit.gameObject);
             else if (unit is Player)
             {
                 engine.apigraphic.Laser_Player_Died(unit as Player);
@@ -105,7 +105,8 @@ public class Laser : Unit {
             if (!(container.ConnectedUnits.Contains(this) && Toolkit.AreNeighbours(container, this)))
             {
                 api.engine.lasercontroller.containers.Add(container);
-                api.engine.apigraphic.AddPartialLaser(container.position, container.direction);
+                api.engine.apigraphic.AddPartialLaser(container.position, container.direction, container.gameObject);
+                //api.engine.apigraphic.lasehi
                 SetLaserInDirection(container.direction, container.position);
             }
         }
@@ -119,7 +120,7 @@ public class Laser : Unit {
         if (flag)
         {
             beamPositions.Add(new Vector2[] { pos, finalpos });
-            api.engine.apigraphic.AddLaser(pos, finalpos, direction);
+            api.engine.apigraphic.AddLaser(pos, finalpos, direction, gameObject);
         }
     }
 
