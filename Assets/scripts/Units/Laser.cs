@@ -110,7 +110,7 @@ public class Laser : Unit {
             Branch branch = Toolkit.GetBranch(finalpos) as Branch;
             if (branch != null && branch.islocked)
             {
-                branch.islocked = false;
+                engine.apigraphic.UnlockBranchLaser(branch);
             }
         }
         if (flag)

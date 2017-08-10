@@ -123,6 +123,8 @@ public class PlayerPhysics : MonoBehaviour
                 return new Vector2(0f, 0.8f);
             else if (player.direction == Direction.Right)
                 return new Vector2(-0.5f, 0.2f);
+            else if (player.direction == Direction.Up)
+                return new Vector2(-0.9f,0);
         }
         else if(type == 1)
         {
@@ -130,6 +132,24 @@ public class PlayerPhysics : MonoBehaviour
                 return new Vector2(0.5f, 0);
             else if (player.direction == Direction.Right)
                 return new Vector2(-0.3f, 0.9f);
+            else if (player.direction == Direction.Up)
+                return new Vector2(1, -0.9f);
+            else if (player.direction == Direction.Down)
+                return new Vector2(0, 0.9f) ;
+        }
+        else if(type == 3)
+        {
+            if (player.direction == Direction.Up)
+                return new Vector2(0, -0.8f);
+            else if (player.direction == Direction.Down)
+                return new Vector2(-1, 0);
+        }
+        else if(type == 2)
+        {
+            if (player.direction == Direction.Down)
+                return new Vector2(1, 0.9f);
+            else if (player.direction == Direction.Up)
+                return new Vector2(0,-0.9f);
         }
         return new Vector2(0, 0);
     }
@@ -588,7 +608,11 @@ public class PlayerPhysics : MonoBehaviour
         if (type == 4)
             return new Vector2(-0.35f, 0.4f);
         else if (type == 1)
-            return new Vector2(0.35f,0.4f);
+            return new Vector2(0.35f, 0.4f);
+        else if (type == 3)
+            return new Vector2(-0.5f, -0.1f);
+        else if (type == 2)
+            return new Vector2(0.6f, -0.1f);
 
         return new Vector2(0, 0);
     }
@@ -613,7 +637,6 @@ public class PlayerPhysics : MonoBehaviour
     }
    private void Rotate_On_Ramp(int type)
     {
-        Debug.Log("Rotate on ramp");
         Rotate_On_Block();
     }
 

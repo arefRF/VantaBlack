@@ -326,6 +326,11 @@ public class Branch : Unit {
         }
     }
 
+    public void BranchUnlockAnimationFinished()
+    {
+        islocked = false;
+    }
+
     public override bool isLeanable()
     {
         return false;

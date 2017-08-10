@@ -292,10 +292,13 @@ public class PlayerGraphics : MonoBehaviour {
     }
     private Vector2 On_Ramp_Pos(int type)
     {
+        Debug.Log("ON Ramp POs");
         if (type == 4)
             return new Vector2(-0.22f, 0.2f);
         else if (type == 1)
             return new Vector2(0.19f, 0.25f);
+        else if (type == 3)
+            return new Vector2(-0.19f, 0.25f);
 
         return new Vector2(0, 0);
     }
