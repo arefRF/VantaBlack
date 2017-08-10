@@ -837,7 +837,7 @@ public class LogicalEngine {
         if(unit is FunctionalContainer)
         {
             apiunit.GameObjectAnimationFinished((FunctionalContainer)unit);
-            lasercontroller.SetLasers();
+            //lasercontroller.SetLasers();
             for(int i=0; i<database.player.Count; i++)
             {
                 lasercontroller.CollisionCheck(database.player[i].position);
