@@ -769,6 +769,15 @@ public sealed class Toolkit{
         }
         return -1;
     }
+
+    public static bool AreNeighbours(Unit unit1, Unit unit2)
+    {
+        if (unit1.position.x == unit2.position.x && Mathf.Abs(unit1.position.y - unit2.position.y) == 1)
+            return true;
+        if (unit1.position.y == unit2.position.y && Mathf.Abs(unit1.position.x - unit2.position.x) == 1)
+            return true;
+        return false;
+    }
 }
 
 

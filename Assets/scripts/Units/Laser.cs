@@ -102,9 +102,12 @@ public class Laser : Unit {
         finalpos = Toolkit.VectorSum(finalpos, Toolkit.ReverseDirection(direction));
         if (container != null && !api.engine.lasercontroller.containers.Contains(container))
         {
-            api.engine.lasercontroller.containers.Add(container);
-            api.engine.apigraphic.AddPartialLaser(container.position, container.direction);
-            SetLaserInDirection(container.direction, container.position);
+            if (!(container.ConnectedUnits.Contains(this) && Toolkit.AreNeighbours(container, this)))
+            {
+                api.engine.lasercontroller.containers.Add(container);
+                api.engine.apigraphic.AddPartialLaser(container.position, container.direction);
+                SetLaserInDirection(container.direction, container.position);
+            }
         }
         else
         {
