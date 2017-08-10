@@ -106,7 +106,7 @@ public class Laser : Unit {
             {
                 api.engine.lasercontroller.containers.Add(container);
                 api.engine.apigraphic.AddPartialLaser(container.position, container.direction, container.gameObject);
-                //api.engine.apigraphic.lasehi
+                api.engine.apigraphic.LaserHitDynamic(container);
                 SetLaserInDirection(container.direction, container.position);
             }
         }
