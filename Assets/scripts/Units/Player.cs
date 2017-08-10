@@ -919,6 +919,11 @@ public class Player : Unit
         return false;
     }
 
+    public override bool isLeanable()
+    {
+        return false;
+    }
+
     public override CloneableUnit Clone()
     {
         return new CloneablePlayer(this);

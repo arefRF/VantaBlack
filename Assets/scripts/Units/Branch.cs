@@ -328,6 +328,7 @@ public class Branch : Unit {
 
     public override bool isLeanable()
     {
+        return false;
         return islocked || blocked;
     }
 
