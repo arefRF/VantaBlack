@@ -91,6 +91,16 @@ public class APIGraphic{
     {
         graphicalengine.BranchLight(branch, on,player);
     }
+
+    public void LaserHitDynamic(DynamicContainer container)
+    {
+        graphicalengine.LaserHit(container);
+    }
+
+    public void LaserUnHitDynamic(DynamicContainer container)
+    {
+
+    }
     // Block to Branch
     public void MovePlayer_Simple_2(Player player, Vector2 position,Direction direction)
     {
@@ -443,16 +453,16 @@ public class APIGraphic{
         PlayerGraphics gl = player.GetComponent<PlayerGraphics>();
         gl.FakeLean_Finished();
     }
-    public void AddLaser(Vector2 pos1,Vector2 pos2,Direction dir)
+    public void AddLaser(Vector2 pos1,Vector2 pos2,Direction dir, GameObject parent)
     {
         if(graphicalengine.lasergraphics != null)
-            graphicalengine.lasergraphics.AddLaser(pos1, pos2, dir);
+            graphicalengine.lasergraphics.AddLaser(pos1, pos2, dir, parent);
     }
 
-    public void AddPartialLaser(Vector2 pos, Direction dir)
+    public void AddPartialLaser(Vector2 pos, Direction dir, GameObject parent)
     {
         if (graphicalengine.lasergraphics != null)
-            graphicalengine.lasergraphics.AddPartialLaser(pos, dir);
+            graphicalengine.lasergraphics.AddPartialLaser(pos, dir, parent);
     }
 
     public void RemoveLaser()

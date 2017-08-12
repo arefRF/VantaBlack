@@ -176,6 +176,10 @@ public class GraphicalEngine : MonoBehaviour {
             Toolkit.GetObjectInChild(branch.gameObject, "Icon").transform.GetChild(1).gameObject.SetActive(false);
     }
 
+    public void LaserHit(DynamicContainer container)
+    {
+        container.transform.GetChild(1).GetChild(6).GetComponent<Opacity>().LaserHit();
+    }
 
     public void BranchLight(Branch branch,bool on,Player player)
     {

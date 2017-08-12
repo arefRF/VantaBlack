@@ -22,7 +22,7 @@ public class LaserGraphics : MonoBehaviour {
 	    
 	}
 
-    public void AddLaser(Vector2 pos1, Vector2 pos2, Direction direction)
+    public void AddLaser(Vector2 pos1, Vector2 pos2, Direction direction, GameObject parent)
     {
         float rotation = 0;
         if(pos1.x == pos2.x && pos1.y == pos2.y)
@@ -33,7 +33,7 @@ public class LaserGraphics : MonoBehaviour {
         else if (pos1.x == pos2.x)
         {
             if (pos1.y > pos2.y) {
-                AddLaser(pos2, pos1, direction);
+                AddLaser(pos2, pos1, direction, parent);
                 return;
             }
             else
@@ -46,7 +46,7 @@ public class LaserGraphics : MonoBehaviour {
         {
             if (pos1.x > pos2.x)
             {
-                AddLaser(pos2, pos1, direction);
+                AddLaser(pos2, pos1, direction, parent);
                 return;
             }
             else
@@ -57,14 +57,14 @@ public class LaserGraphics : MonoBehaviour {
         Vector2 temppos = new Vector2(pos1.x, pos1.y);
         if (pos1.x == pos2.x)
             for (; temppos.y <= pos2.y; temppos.y++)
-                makeBeam(temppos, rotation);
+                makeBeam(temppos, rotation, parent);
         else
             for (; temppos.x <= pos2.x; temppos.x++)
-                makeBeam(temppos, rotation);
+                makeBeam(temppos, rotation, parent);
 
     }
 
-    public void AddPartialLaser(Vector2 pos, Direction direction)
+    public void AddPartialLaser(Vector2 pos, Direction direction, GameObject parent)
     {
         float rot = 0;
         if (direction == Direction.Right)
@@ -73,7 +73,7 @@ public class LaserGraphics : MonoBehaviour {
             rot = 180;
         else if (direction == Direction.Left)
             rot = 90;
-        makePartialBeam(pos, rot);
+        makePartialBeam(pos, rot, parent);
     }
     public void RemoveLasers()
     {
@@ -91,7 +91,7 @@ public class LaserGraphics : MonoBehaviour {
         }
     }
 
-    private void makeBeam(Vector2 pos, float rotation)
+    private void makeBeam(Vector2 pos, float rotation, GameObject parent)
     {
         GameObject beamcolon;
         if (BeamObjectPool.Count == 0)
@@ -112,7 +112,7 @@ public class LaserGraphics : MonoBehaviour {
 
     }
 
-    private void makePartialBeam(Vector2 pos, float rotation)
+    private void makePartialBeam(Vector2 pos, float rotation, GameObject parent)
     {
         GameObject beamcolon;
         if (PartialBeamObjectPool.Count == 0)
