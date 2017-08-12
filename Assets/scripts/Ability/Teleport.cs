@@ -90,7 +90,7 @@ public class Teleport : Ability {
         {
             player.SetState(PlayerState.Idle);
             player.LeanUndoPortal();
-            api_input.QuitPortalMode();
+            api_graphic.QuitPortalMode(portals);
         }
     }
 
