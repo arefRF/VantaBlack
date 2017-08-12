@@ -122,6 +122,21 @@ public class Player : Unit
         }
     }
 
+    // After TP Mode cancelation this works to stop player being moved while it is undoing lean
+    // Preventing Slide Bug
+    public void LeanUndoPortal()
+    {
+        SetState(PlayerState.Busy);
+        StartCoroutine(WaitForLeanUndo());
+  
+    }
+
+    public IEnumerator WaitForLeanUndo()
+    {
+        yield return new WaitForSeconds(1f);
+        SetState(PlayerState.Idle);
+        api.engine.apiinput.QuitPortalMode();
+    }
     public bool Should_Change_Direction(Direction dir)
     {
         for (int i = 0; i < move_direction.Count; i++)
@@ -598,7 +613,8 @@ public class Player : Unit
 
     public void TeleportFinished()
     {
-        state = PlayerState.Idle;
+        SetState(PlayerState.Lean);
+        api.engine.apigraphic.Lean(this);
         currentAbility = null;
         ApplyGravity();
     }
@@ -877,10 +893,8 @@ public class Player : Unit
         {
             ApplyGravity();
             return;
-            Debug.Log("asdsadasd");
             if (!Toolkit.IsEmpty(Toolkit.VectorSum(position, gravity)))
             {
-                Debug.Log("xdcfvgbhnjmk");
                 SetState(PlayerState.Idle);
             }
         }

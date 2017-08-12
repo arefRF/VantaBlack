@@ -64,6 +64,7 @@ public class Teleport : Ability {
         for (int i = 0; i < portals.Count; i++)
             if (portals[i] == container)
                 current = i;
+
         api_graphic.EnterPortalMode(portals,container);
         api_input.EnterPortalMode(this);
 
@@ -82,8 +83,21 @@ public class Teleport : Ability {
         api_graphic.ProtalHighlight(portals[current], portals[pre]);
     }
 
+    // Quit Portal Mode by Walking
+    public void Detach()
+    {
+        if (player.state == PlayerState.Lean)
+        {
+            player.SetState(PlayerState.Idle);
+            player.LeanUndoPortal();
+            api_input.QuitPortalMode();
+        }
+    }
+
+    
     public void Port()
     {
+        player.SetState(PlayerState.Busy);
         Vector2 pos = portals[current].position + Toolkit.DirectiontoVector(dir);
         int x = (int)pos.x;
         int y = (int)pos.y;
@@ -91,9 +105,10 @@ public class Teleport : Ability {
         {
             api_unit.RemoveFromDatabase(player);
             player.position = portals[current].position + Toolkit.DirectiontoVector(dir);
+            player.leandirection = Toolkit.ReverseDirection(dir);
             api_unit.AddToDatabase(player);
             api_graphic.Teleport(player, pos);
-            api_graphic.QuitPOrtalMode(portals);
+            api_graphic.QuitPortalMode(portals);
             api_input.QuitPortalMode();
         }
     }

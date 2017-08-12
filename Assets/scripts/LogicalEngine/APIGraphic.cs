@@ -395,7 +395,7 @@ public class APIGraphic{
         graphicalengine.EnterPortalMode(portals,container);
     }
 
-    public void QuitPOrtalMode(List<Unit> portals)
+    public void QuitPortalMode(List<Unit> portals)
     {
         graphicalengine.QuitPortalMode(portals);
     }

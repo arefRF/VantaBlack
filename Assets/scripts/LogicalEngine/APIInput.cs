@@ -36,7 +36,7 @@ public class APIInput{
         if (mode == GameMode.Play)
             engine.Input_Move(dir);
         else if (mode == GameMode.Portal)
-            portal.ArrowKeyPressed(dir);
+            portal.Detach();
         else if (mode == GameMode.Real)
         {
             for (int i = 0; i < engine.database.player.Count; i++)
@@ -185,6 +185,9 @@ public class APIInput{
 
     public void AbsorbReleaseController(Direction direction)
     {
-        engine.inputcontroller.AbsorbReleaseController(direction);
+        if(mode == GameMode.Play)
+            engine.inputcontroller.AbsorbReleaseController(direction);
+        else if(mode == GameMode.Portal)
+            portal.ArrowKeyPressed(direction);
     }
 }

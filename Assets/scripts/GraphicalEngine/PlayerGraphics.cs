@@ -213,13 +213,9 @@ public class PlayerGraphics : MonoBehaviour {
     public void ResetStates()
     {
         audio.Stop();
-        // Get call stack
-        // animator.SetBool("Jump", false);
         animator.SetInteger("Walk", 0);
         animator.SetBool("Jump", false);
-
-        // animator.SetBool("Transition", false);
-        //  animator.SetInteger("Ramp", 0);
+        animator.SetInteger("Lean", 0);
 
     }
     public void BranchExit(Direction dir, int ramp_type)
