@@ -260,6 +260,36 @@ public sealed class Toolkit{
         return false;
     }
 
+    public static bool IsEmptyIncludingTransform(Vector2 position)
+    {
+        List<Unit>[,] units = Starter.GetDataBase().units;
+        if (units[(int)position.x, (int)position.y].Count != 0)
+            return false;
+        for(int i=0; i<4; i++)
+        {
+            Vector2 temppos = VectorSum(position, NumberToDirection(i + 1));
+            for(int j=0; j<database.units[(int)temppos.x, (int)temppos.y].Count; j++)
+            {
+                Vector2 temppos2 = RoundVector(database.units[(int)temppos.x, (int)temppos.y][j].transform.position);
+                Debug.Log(temppos);
+                Debug.Log(temppos2);
+                if (temppos2.x == position.x && temppos2.y == temppos.y)
+                    return false;
+            }
+        }
+        return true;
+    }
+
+    public static bool IsEmptyExcludingLaser(Vector2 position)
+    {
+        List<Unit>[,] units = Starter.GetDataBase().units;
+        if (units[(int)position.x, (int)position.y].Count == 0)
+            return true;
+        else if (units[(int)position.x, (int)position.y].Count == 1 && units[(int)position.x, (int)position.y][0] is Laser)
+            return true;
+        return false;
+    }
+
     public static bool IsEmptySameParent(GameObject obj,Vector2 position)
     {
         List<Unit>[,] units = Starter.GetDataBase().units;
@@ -521,7 +551,7 @@ public sealed class Toolkit{
 
         return result;
     }
-
+    
     public static Color Ability_Color(List<Ability> ability)
     {
         float[] color = new float[4];
@@ -689,7 +719,45 @@ public sealed class Toolkit{
                     case Direction.Down: if (result[i].position.y > result[j].position.y) { Unit temp = result[i]; result[i] = result[j];result[j] = temp;  } break;
                     case Direction.Up: if (result[i].position.y < result[j].position.y) { Unit temp = result[i]; result[i] = result[j]; result[j] = temp; } break;
                     case Direction.Right: if (result[i].position.x < result[j].position.x) { Unit temp = result[i]; result[i] = result[j]; result[j] = temp; } break;
-                    case Direction.Left:if (result[i].position.x > result[j].position.x) { Unit temp = result[i]; result[i] = result[j]; result[j] = temp; } break;
+                    case Direction.Left: if (result[i].position.x > result[j].position.x) { Unit temp = result[i]; result[i] = result[j]; result[j] = temp; } break;
+                }
+            }
+        }
+        if (result.Count != units.Count)
+            throw new System.Exception();
+        return result;
+    }
+    public static List<Unit> SortByDirectionNearest(List<Unit> units, Direction direction,Unit unit)
+    {
+        List<Unit> result = new List<Unit>();
+        result.AddRange(units);
+        for (int i = 0; i < result.Count; i++)
+        {
+            for (int j = i + 1; j < result.Count; j++)
+            {
+                switch (direction)
+                {
+                    case Direction.Down: if (result[i].position.y > result[j].position.y) { Unit temp = result[i]; result[i] = result[j]; result[j] = temp; } break;
+                    case Direction.Up: if (result[i].position.y < result[j].position.y) { Unit temp = result[i]; result[i] = result[j]; result[j] = temp; } break;
+                    case Direction.Right:
+                        if (result[i].position.x < result[j].position.x)
+                        { Unit temp = result[i]; result[i] = result[j]; result[j] = temp; }
+                        else if((result[i].position.x == result[j].position.x))
+                            if(Mathf.Abs(result[i].position.y -  unit.position.y) < Mathf.Abs(result[j].position.y - unit.position.y))
+                            {
+                                Unit temp = result[i]; result[i] = result[j]; result[j] = temp;
+                            }
+                        break;
+                    case Direction.Left:
+                        if (result[i].position.x > result[j].position.x) {
+                            Unit temp = result[i]; result[i] = result[j]; result[j] = temp;
+                        }
+                        else if ((result[i].position.x == result[j].position.x))
+                            if (Mathf.Abs(result[i].position.y - unit.position.y) > Mathf.Abs(result[j].position.y - unit.position.y))
+                            {
+                                Unit temp = result[i]; result[i] = result[j]; result[j] = temp;
+                            }
+                        break;
                 }
             }
         }
@@ -777,6 +845,11 @@ public sealed class Toolkit{
         if (unit1.position.y == unit2.position.y && Mathf.Abs(unit1.position.x - unit2.position.x) == 1)
             return true;
         return false;
+    }
+
+    public static Vector3 RoundVector(Vector3 vector)
+    {
+        return new Vector3(Mathf.Round(vector.x), Mathf.Round(vector.y), Mathf.Round(vector.z));
     }
 }
 

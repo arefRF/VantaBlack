@@ -815,7 +815,7 @@ public class LogicalEngine {
             player.SetState(PlayerState.Idle);
     }
 
-    public void graphic_GameObjectMoveAnimationFinished(GameObject gameobject, Unit unit)
+    public void graphic_GameObjectMoveAnimationFinished_90percent(GameObject gameobject, Unit unit)
     {
         if (unit is Player)
         {

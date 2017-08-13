@@ -231,9 +231,14 @@ public class APIGraphic{
     {
         graphicalengine.Move_Object(obj,unit, pos);
     }
-    public void MoveGameObjectFinished(GameObject obj, Unit unit)
+    public void MoveGameObjectFinished_90percent(GameObject obj, Unit unit)
     {
-        logicalengine.graphic_GameObjectMoveAnimationFinished(obj, unit);
+        logicalengine.graphic_GameObjectMoveAnimationFinished_90percent(obj, unit);
+    }
+
+    public void MoveGameObjectFinished_50percent(GameObject obj, Unit unit)
+    {
+        //logicalengine.lasercontroller.SetLasers();
     }
 
     public void Jump(Player player,Ability jump_ability, Vector2 position,Direction dir)
@@ -390,7 +395,7 @@ public class APIGraphic{
         graphicalengine.EnterPortalMode(portals,container);
     }
 
-    public void QuitPOrtalMode(List<Unit> portals)
+    public void QuitPortalMode(List<Unit> portals)
     {
         graphicalengine.QuitPortalMode(portals);
     }
@@ -401,6 +406,12 @@ public class APIGraphic{
     public void Teleport(Player player,Vector2 pos)
     {
         player.GetComponent<PlayerGraphics>().Teleport(pos);
+    }
+
+    // Portal calls this
+    public void Port(Player player,Vector2 pos)
+    {
+        player.GetComponent<PlayerGraphics>().Portal(pos);
     }
     public void Undo_Objects()
     {

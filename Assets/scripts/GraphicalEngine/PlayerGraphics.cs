@@ -213,13 +213,9 @@ public class PlayerGraphics : MonoBehaviour {
     public void ResetStates()
     {
         audio.Stop();
-        // Get call stack
-        // animator.SetBool("Jump", false);
         animator.SetInteger("Walk", 0);
         animator.SetBool("Jump", false);
-
-        // animator.SetBool("Transition", false);
-        //  animator.SetInteger("Ramp", 0);
+        animator.SetInteger("Lean", 0);
 
     }
     public void BranchExit(Direction dir, int ramp_type)
@@ -548,13 +544,25 @@ public class PlayerGraphics : MonoBehaviour {
     }
 
 
+    public void Portal(Vector2 pos)
+    {
+        player.transform.position = pos;
+        StartCoroutine(PtFinish());
+    }
+
     public void Teleport(Vector2 pos)
     {
         player.transform.position = pos;
-        StartCoroutine(TPFinish());
+        StartCoroutine(TpFinish());
     }
 
-    private IEnumerator TPFinish()
+    private IEnumerator PtFinish()
+    {
+        yield return new WaitForSeconds(0.1f);
+        player.PortalFinished();
+    }
+
+    private IEnumerator TpFinish()
     {
         yield return new WaitForSeconds(0.1f);
         player.TeleportFinished();

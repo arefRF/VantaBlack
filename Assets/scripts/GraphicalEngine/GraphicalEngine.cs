@@ -18,7 +18,7 @@ public class GraphicalEngine : MonoBehaviour {
     private APIGraphic api;
     private LogicalEngine engine;
     private float lean_move = 0.2f;
-    private bool finish_lock;
+    private bool finish_lock_90percent, finish_lock_50percent;
     private Coroutine object_co;
     private string[] simple_objects_off = new string[] { "Direction", "Glass", "Switches", "Border", "Icon Holder", "Glow" };
     private List<MoveObject> move_objects;
@@ -45,7 +45,8 @@ public class GraphicalEngine : MonoBehaviour {
 
     public void Move_Object(GameObject obj,Unit unit, Vector2 pos)
     {
-        finish_lock = true;
+        finish_lock_90percent = true;
+        finish_lock_50percent = true;
         StopSameCo(unit);
         MoveObject move = new MoveObject();
         move.code = unit.codeNumber;
@@ -81,14 +82,19 @@ public class GraphicalEngine : MonoBehaviour {
             remain_distance = ((Vector2)obj.transform.position - end).sqrMagnitude;
             Vector3 new_pos = Vector3.MoveTowards(obj.transform.position, end, Time.deltaTime * 1 / move_time);
             obj.transform.position = new_pos;
-            if (remain_distance < 0.01 && finish_lock)
+            if (remain_distance < 0.01 && finish_lock_90percent)
             {
-                finish_lock = false;
-                api.MoveGameObjectFinished(obj,unit);
+                finish_lock_90percent = false;
+                api.MoveGameObjectFinished_90percent(obj,unit);
             }
-            
+            if (remain_distance < 0.2 && finish_lock_50percent)
+            {
+                finish_lock_50percent = false;
+                api.MoveGameObjectFinished_50percent(obj, unit);
+            }
             yield return null;
         }
+
     }
 
     public void Simple_Container(SimpleContainer container)

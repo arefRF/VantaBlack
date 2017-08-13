@@ -15,6 +15,7 @@ public class LaserController{
     
     public void SetLasers()
     {
+        Debug.Log("SetLasers");
         if (engine == null)
             engine = Starter.GetEngine();
         engine.apigraphic.RemoveLaser();

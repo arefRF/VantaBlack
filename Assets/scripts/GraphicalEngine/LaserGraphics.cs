@@ -16,11 +16,6 @@ public class LaserGraphics : MonoBehaviour {
         BeamTexture = Resources.Load<Texture2D>("lazer\\lazer line");
         beamParent = new GameObject("Laser Beams");
     }
-	
-	// Update is called once per frame
-	void Update () {
-	    
-	}
 
     public void AddLaser(Vector2 pos1, Vector2 pos2, Direction direction, GameObject parent)
     {
@@ -79,6 +74,7 @@ public class LaserGraphics : MonoBehaviour {
     {
         for(int i=0;  UsedBeams.Count > 0;i++)
         {
+            UsedBeams[0].transform.SetParent(beamParent.transform);
             UsedBeams[0].transform.position = new Vector3(-1, -1, 0);
             BeamObjectPool.Add(UsedBeams[0]);
             UsedBeams.RemoveAt(0);
@@ -87,6 +83,7 @@ public class LaserGraphics : MonoBehaviour {
         {
             PartialUsedBeams[0].transform.position = new Vector3(-1, -1, 0);
             PartialBeamObjectPool.Add(PartialUsedBeams[0]);
+            PartialUsedBeams[0].transform.SetParent(beamParent.transform);
             PartialUsedBeams.RemoveAt(0);
         }
     }
@@ -97,16 +94,16 @@ public class LaserGraphics : MonoBehaviour {
         if (BeamObjectPool.Count == 0)
         {
             beamcolon = Instantiate(Beam);
-            beamcolon.transform.SetParent(beamParent.transform);
-            UsedBeams.Add(beamcolon);
         }
         else
         {
             beamcolon = BeamObjectPool[0];
             BeamObjectPool.RemoveAt(0);
-            UsedBeams.Add(beamcolon);
         }
+        beamcolon.transform.SetParent(parent.transform);
+        UsedBeams.Add(beamcolon);
         beamcolon.transform.position = pos;
+        beamcolon.transform.localPosition = new Vector3(Mathf.Round(beamcolon.transform.localPosition.x), Mathf.Round(beamcolon.transform.localPosition.y), Mathf.Round(beamcolon.transform.localPosition.z));
         beamcolon.transform.rotation = Quaternion.Euler(Beam.transform.rotation.x, Beam.transform.rotation.y, rotation);
 
 
@@ -118,16 +115,17 @@ public class LaserGraphics : MonoBehaviour {
         if (PartialBeamObjectPool.Count == 0)
         {
             beamcolon = Instantiate(PartialBeam);
-            beamcolon.transform.SetParent(beamParent.transform);
-            PartialUsedBeams.Add(beamcolon);
         }
         else
         {
             beamcolon = PartialBeamObjectPool[0];
             PartialBeamObjectPool.RemoveAt(0);
-            PartialUsedBeams.Add(beamcolon);
         }
+
+        beamcolon.transform.SetParent(parent.transform);
+        PartialUsedBeams.Add(beamcolon);
         beamcolon.transform.position = pos;
+        beamcolon.transform.localPosition = new Vector3(Mathf.Round(beamcolon.transform.localPosition.x), Mathf.Round(beamcolon.transform.localPosition.y), Mathf.Round(beamcolon.transform.localPosition.z));
         beamcolon.transform.rotation = Quaternion.Euler(PartialBeam.transform.rotation.x, PartialBeam.transform.rotation.y, rotation);
     }
 }
