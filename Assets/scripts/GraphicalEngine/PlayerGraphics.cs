@@ -544,13 +544,25 @@ public class PlayerGraphics : MonoBehaviour {
     }
 
 
+    public void Portal(Vector2 pos)
+    {
+        player.transform.position = pos;
+        StartCoroutine(PtFinish());
+    }
+
     public void Teleport(Vector2 pos)
     {
         player.transform.position = pos;
-        StartCoroutine(TPFinish());
+        StartCoroutine(TpFinish());
     }
 
-    private IEnumerator TPFinish()
+    private IEnumerator PtFinish()
+    {
+        yield return new WaitForSeconds(0.1f);
+        player.PortalFinished();
+    }
+
+    private IEnumerator TpFinish()
     {
         yield return new WaitForSeconds(0.1f);
         player.TeleportFinished();

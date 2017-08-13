@@ -60,7 +60,7 @@ public class Teleport : Ability {
                 if (functionalContainers[i].abilities[0].abilitytype == AbilityType.Teleport)
                     portals.Add(functionalContainers[i]);
         }
-        portals = Toolkit.SortByDirection(portals, Direction.Left);
+        portals = Toolkit.SortByDirectionNearest(portals, Direction.Left,container);
         for (int i = 0; i < portals.Count; i++)
             if (portals[i] == container)
                 current = i;
@@ -107,7 +107,7 @@ public class Teleport : Ability {
             player.position = portals[current].position + Toolkit.DirectiontoVector(dir);
             player.leandirection = Toolkit.ReverseDirection(dir);
             api_unit.AddToDatabase(player);
-            api_graphic.Teleport(player, pos);
+            api_graphic.Port(player, pos);
             api_graphic.QuitPortalMode(portals);
             api_input.QuitPortalMode();
         }

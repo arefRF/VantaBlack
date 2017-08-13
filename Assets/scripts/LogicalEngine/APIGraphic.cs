@@ -407,6 +407,12 @@ public class APIGraphic{
     {
         player.GetComponent<PlayerGraphics>().Teleport(pos);
     }
+
+    // Portal calls this
+    public void Port(Player player,Vector2 pos)
+    {
+        player.GetComponent<PlayerGraphics>().Portal(pos);
+    }
     public void Undo_Objects()
     {
         graphicalengine.StopAllCoroutines();

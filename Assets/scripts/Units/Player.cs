@@ -133,7 +133,7 @@ public class Player : Unit
 
     public IEnumerator WaitForLeanUndo()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.3f);
         SetState(PlayerState.Idle);
         api.engine.apiinput.QuitPortalMode();
     }
@@ -611,10 +611,17 @@ public class Player : Unit
         return true;
     }
 
-    public void TeleportFinished()
+    public void PortalFinished()
     {
         SetState(PlayerState.Lean);
         api.engine.apigraphic.Lean(this);
+        currentAbility = null;
+        ApplyGravity();
+    }
+
+    public void TeleportFinished()
+    {
+        SetState(PlayerState.Idle);
         currentAbility = null;
         ApplyGravity();
     }
