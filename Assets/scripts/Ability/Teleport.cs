@@ -42,6 +42,7 @@ public class Teleport : Ability {
     private void SetFunctionalCons()
     {
         functionalContainers = Starter.GetDataBase().functionalCon;
+        engine = Starter.GetEngine();
         api_graphic = engine.apigraphic;
         api_input = engine.apiinput;
         api_unit = engine.apiunit;
