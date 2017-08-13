@@ -20,7 +20,7 @@ public class PlayerGraphics : MonoBehaviour {
         engine = Starter.GetEngine();
         api = engine.apigraphic;
         animator = transform.GetChild(0).GetChild(0).GetComponent<Animator>();
-        eyeAnimator = transform.GetChild(0).GetChild(0).GetChild(0).GetChild(5).GetComponent<Animator>();
+        eyeAnimator = transform.GetChild(0).GetChild(0).GetChild(0).GetChild(6).GetComponent<Animator>();
         player = GetComponent<Player>();
         engine.apigraphic.Absorb(player, null);
         bodyAnimator = transform.GetChild(0).GetComponent<Animator>();
@@ -272,7 +272,15 @@ public class PlayerGraphics : MonoBehaviour {
         StartCoroutine(Branch_Exit(pos, 0.4f));
     }
 
+    public void OpenEye()
+    {
+        eyeAnimator.SetInteger("Eye", 1);
+    }
 
+    public void ResetEye()
+    {
+        eyeAnimator.SetInteger("Eye", 0);
+    }
     private IEnumerator Branch_Exit(Vector2 end, float move_time)
     {
         float remain_distance = ((Vector2)transform.position - end).sqrMagnitude;

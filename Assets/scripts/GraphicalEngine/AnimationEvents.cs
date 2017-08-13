@@ -16,6 +16,17 @@ public class AnimationEvents : MonoBehaviour {
         dir = dir1;
         hit = hit1;
     }
+
+
+    private void OpenEye()
+    {
+        transform.parent.parent.GetComponent<PlayerGraphics>().OpenEye();
+    }
+
+    private void ResetEye()
+    {
+        transform.parent.parent.GetComponent<PlayerGraphics>().ResetEye();
+    }
     private void DrainFinished()
     {
         transform.parent.parent.GetComponent<PlayerGraphics>().DrainFinished();
