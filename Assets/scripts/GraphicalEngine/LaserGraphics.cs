@@ -16,11 +16,6 @@ public class LaserGraphics : MonoBehaviour {
         BeamTexture = Resources.Load<Texture2D>("lazer\\lazer line");
         beamParent = new GameObject("Laser Beams");
     }
-	
-	// Update is called once per frame
-	void Update () {
-	    
-	}
 
     public void AddLaser(Vector2 pos1, Vector2 pos2, Direction direction, GameObject parent)
     {
@@ -100,16 +95,16 @@ public class LaserGraphics : MonoBehaviour {
         {
             beamcolon = Instantiate(Beam);
             beamcolon.transform.SetParent(parent.transform);
-            UsedBeams.Add(beamcolon);
         }
         else
         {
             beamcolon = BeamObjectPool[0];
             BeamObjectPool.RemoveAt(0);
-            UsedBeams.Add(beamcolon);
             beamcolon.transform.SetParent(parent.transform);
         }
+        UsedBeams.Add(beamcolon);
         beamcolon.transform.position = pos;
+        beamcolon.transform.localPosition = new Vector3(Mathf.Round(beamcolon.transform.localPosition.x), Mathf.Round(beamcolon.transform.localPosition.y), Mathf.Round(beamcolon.transform.localPosition.z));
         beamcolon.transform.rotation = Quaternion.Euler(Beam.transform.rotation.x, Beam.transform.rotation.y, rotation);
 
 

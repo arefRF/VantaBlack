@@ -778,6 +778,11 @@ public sealed class Toolkit{
             return true;
         return false;
     }
+
+    public static Vector3 RoundVector(Vector3 vector)
+    {
+        return new Vector3(Mathf.Round(vector.x), Mathf.Round(vector.y), Mathf.Round(vector.z));
+    }
 }
 
 

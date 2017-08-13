@@ -12,7 +12,6 @@ public class Laser : Unit {
         base.Run();
     }
 
-
     public override void SetInitialSprite()
     {
         bool[] connected = Toolkit.GetConnectedSidesForLaser(this);
