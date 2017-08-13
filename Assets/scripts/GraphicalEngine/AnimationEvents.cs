@@ -27,7 +27,7 @@ public class AnimationEvents : MonoBehaviour {
     }
     private void LeanUndoFinished()
     {
-        transform.parent.GetComponent<Player>().LeanUndoFinished();
+        transform.parent.parent.GetComponent<Player>().LeanUndoFinished();
     }
 
     private void BranchExitFinished()

@@ -19,8 +19,8 @@ public class PlayerGraphics : MonoBehaviour {
         unmoved_pos = transform.position;
         engine = Starter.GetEngine();
         api = engine.apigraphic;
-        animator = transform.GetChild(0).GetComponent<Animator>();
-        eyeAnimator = transform.GetChild(0).GetChild(2).GetComponent<Animator>();
+        animator = transform.GetChild(0).GetChild(0).GetComponent<Animator>();
+        eyeAnimator = transform.GetChild(0).GetChild(0).GetChild(0).GetChild(5).GetComponent<Animator>();
         player = GetComponent<Player>();
         engine.apigraphic.Absorb(player, null);
         bodyAnimator = transform.GetChild(0).GetComponent<Animator>();
@@ -163,7 +163,7 @@ public class PlayerGraphics : MonoBehaviour {
     {
         animator.SetInteger("Lean", 0);
         animator.SetInteger("Lean Air", 0);
-        bodyAnimator.SetBool("Lean", false);
+       // bodyAnimator.SetBool("Lean", false);
     }
 
     public void MoveToBranch(Direction dir)
@@ -570,17 +570,13 @@ public class PlayerGraphics : MonoBehaviour {
     public void ChangeColor()
     {
         Color color = Ability_Color(player.abilities);
-        // Body Color
-        transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<SpriteRenderer>().color = color;
-        //Eye BAckground Color
-        transform.GetChild(0).GetChild(0).GetChild(0).GetChild(1).GetComponent<SpriteRenderer>().color = color;
 
         // Eye Color
         color = new Color(color.r, color.g, color.b, 1);
-        if (player.abilities.Count == 0)
-            transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().color = color;
-        else
-            transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().color = Color.black;
+    //    if (player.abilities.Count == 0)
+         //   transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().color = color;
+     //   else
+          //  transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().color = Color.black;
     }
 
     public void ChangeColorFinished()
