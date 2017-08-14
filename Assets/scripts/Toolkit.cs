@@ -700,6 +700,8 @@ public sealed class Toolkit{
                         return false;
                     }
                 }
+                else if (u is Laser || u is Branch)
+                    return false;
                 return true;
             }
         }
