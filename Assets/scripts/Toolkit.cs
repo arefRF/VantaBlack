@@ -260,6 +260,36 @@ public sealed class Toolkit{
         return false;
     }
 
+    public static bool IsEmptyIncludingTransform(Vector2 position)
+    {
+        List<Unit>[,] units = Starter.GetDataBase().units;
+        if (units[(int)position.x, (int)position.y].Count != 0)
+            return false;
+        for(int i=0; i<4; i++)
+        {
+            Vector2 temppos = VectorSum(position, NumberToDirection(i + 1));
+            for(int j=0; j<database.units[(int)temppos.x, (int)temppos.y].Count; j++)
+            {
+                Vector2 temppos2 = RoundVector(database.units[(int)temppos.x, (int)temppos.y][j].transform.position);
+                Debug.Log(temppos);
+                Debug.Log(temppos2);
+                if (temppos2.x == position.x && temppos2.y == temppos.y)
+                    return false;
+            }
+        }
+        return true;
+    }
+
+    public static bool IsEmptyExcludingLaser(Vector2 position)
+    {
+        List<Unit>[,] units = Starter.GetDataBase().units;
+        if (units[(int)position.x, (int)position.y].Count == 0)
+            return true;
+        else if (units[(int)position.x, (int)position.y].Count == 1 && units[(int)position.x, (int)position.y][0] is Laser)
+            return true;
+        return false;
+    }
+
     public static bool IsEmptySameParent(GameObject obj,Vector2 position)
     {
         List<Unit>[,] units = Starter.GetDataBase().units;

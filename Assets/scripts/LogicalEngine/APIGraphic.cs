@@ -238,7 +238,7 @@ public class APIGraphic{
 
     public void MoveGameObjectFinished_50percent(GameObject obj, Unit unit)
     {
-        logicalengine.lasercontroller.SetLasers();
+        //logicalengine.lasercontroller.SetLasers();
     }
 
     public void Jump(Player player,Ability jump_ability, Vector2 position,Direction dir)
