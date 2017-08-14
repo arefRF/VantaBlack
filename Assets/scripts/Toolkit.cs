@@ -768,10 +768,16 @@ public sealed class Toolkit{
 
     public static GameObject GetObjectInChild(GameObject parent, string name)
     {
-        for (int i = 0; i < parent.transform.childCount; i++)
+        List<GameObject> objects = new List<GameObject>();
+        objects.Add(parent);
+        while (objects.Count != 0)
         {
-            if (parent.transform.GetChild(i).name == name)
-                return parent.transform.GetChild(i).gameObject;
+            GameObject u = objects[0];
+            objects.RemoveAt(0);
+            if (u.name == name)
+                return u;
+            for (int i = 0; i < u.transform.GetChildCount(); i++)
+                objects.Insert(objects.Count, u.transform.GetChild(i).gameObject);
         }
         return null;
     }

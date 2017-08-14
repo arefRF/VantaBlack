@@ -188,14 +188,14 @@ public class PlayerGraphics : MonoBehaviour {
         }
         ResetStates();
         StopAllCoroutines();
-        transform.GetChild(0).GetComponent<AnimationEvents>().call = true;
+        transform.GetChild(0).GetChild(0).GetComponent<AnimationEvents>().call = true;
         if (dir == Direction.Left || dir == Direction.Right)
             animator.SetInteger("Branch", 3);
         else if (dir == Direction.Up)
         {
             StartCoroutine(Simple_Move(player.position, 0.3f, true));
             animator.SetInteger("Branch", 1);
-            transform.GetChild(0).GetComponent<AnimationEvents>().call = false;
+            transform.GetChild(0).GetChild(0).GetComponent<AnimationEvents>().call = false;
         }
         else
         {
@@ -614,7 +614,7 @@ public class PlayerGraphics : MonoBehaviour {
 
     public void ShowHologram()
     {
-        GameObject hologram = Toolkit.GetObjectInChild(gameObject.transform.GetChild(0).GetChild(0).gameObject, "Hologram");
+        GameObject hologram = Toolkit.GetObjectInChild(gameObject.transform.GetChild(0).GetChild(0).GetChild(0).gameObject, "Hologram");
         GameObject lights = Toolkit.GetObjectInChild(hologram, "Lights");
         GameObject Number = Toolkit.GetObjectInChild(hologram, "Number");
         SpriteRenderer IconSpriteRenderer = Toolkit.GetObjectInChild(hologram, "Icon").GetComponent<SpriteRenderer>();
@@ -642,12 +642,12 @@ public class PlayerGraphics : MonoBehaviour {
 
     public void HideHologram()
     {
-        Toolkit.GetObjectInChild(gameObject.transform.GetChild(0).GetChild(0).gameObject, "Hologram").SetActive(false);
+        Toolkit.GetObjectInChild(gameObject.transform.GetChild(0).GetChild(0).GetChild(0).gameObject, "Hologram").SetActive(false);
     }
 
     public void UpdateHologram()
     {
-        if (Toolkit.GetObjectInChild(gameObject.transform.GetChild(0).GetChild(0).gameObject, "Hologram").activeSelf)
+        if (Toolkit.GetObjectInChild(gameObject.transform.GetChild(0).GetChild(0).GetChild(0).gameObject, "Hologram").activeSelf)
             ShowHologram();
     }
 
