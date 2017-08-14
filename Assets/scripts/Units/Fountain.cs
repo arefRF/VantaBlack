@@ -102,6 +102,16 @@ public class Fountain : Unit {
 
                 api.ChangeSprite(abilities[i].owner);
             }
+            if(abilities[i] is Key)
+            {
+                Key temp = abilities[i] as Key;
+                if (temp.branch != null)
+                {
+                    temp.branch.islocked = true;
+                    api.engine.apigraphic.UnitChangeSprite(temp.branch);
+                    temp.branch = null;
+                }
+            }
 
         }
         for (int i = 0; i < abilities.Count; i++)
