@@ -395,7 +395,7 @@ public class APIGraphic{
         graphicalengine.EnterPortalMode(portals,container);
     }
 
-    public void QuitPOrtalMode(List<Unit> portals)
+    public void QuitPortalMode(List<Unit> portals)
     {
         graphicalengine.QuitPortalMode(portals);
     }
@@ -406,6 +406,12 @@ public class APIGraphic{
     public void Teleport(Player player,Vector2 pos)
     {
         player.GetComponent<PlayerGraphics>().Teleport(pos);
+    }
+
+    // Portal calls this
+    public void Port(Player player,Vector2 pos)
+    {
+        player.GetComponent<PlayerGraphics>().Portal(pos);
     }
     public void Undo_Objects()
     {

@@ -551,7 +551,7 @@ public sealed class Toolkit{
 
         return result;
     }
-
+    
     public static Color Ability_Color(List<Ability> ability)
     {
         float[] color = new float[4];
@@ -719,7 +719,45 @@ public sealed class Toolkit{
                     case Direction.Down: if (result[i].position.y > result[j].position.y) { Unit temp = result[i]; result[i] = result[j];result[j] = temp;  } break;
                     case Direction.Up: if (result[i].position.y < result[j].position.y) { Unit temp = result[i]; result[i] = result[j]; result[j] = temp; } break;
                     case Direction.Right: if (result[i].position.x < result[j].position.x) { Unit temp = result[i]; result[i] = result[j]; result[j] = temp; } break;
-                    case Direction.Left:if (result[i].position.x > result[j].position.x) { Unit temp = result[i]; result[i] = result[j]; result[j] = temp; } break;
+                    case Direction.Left: if (result[i].position.x > result[j].position.x) { Unit temp = result[i]; result[i] = result[j]; result[j] = temp; } break;
+                }
+            }
+        }
+        if (result.Count != units.Count)
+            throw new System.Exception();
+        return result;
+    }
+    public static List<Unit> SortByDirectionNearest(List<Unit> units, Direction direction,Unit unit)
+    {
+        List<Unit> result = new List<Unit>();
+        result.AddRange(units);
+        for (int i = 0; i < result.Count; i++)
+        {
+            for (int j = i + 1; j < result.Count; j++)
+            {
+                switch (direction)
+                {
+                    case Direction.Down: if (result[i].position.y > result[j].position.y) { Unit temp = result[i]; result[i] = result[j]; result[j] = temp; } break;
+                    case Direction.Up: if (result[i].position.y < result[j].position.y) { Unit temp = result[i]; result[i] = result[j]; result[j] = temp; } break;
+                    case Direction.Right:
+                        if (result[i].position.x < result[j].position.x)
+                        { Unit temp = result[i]; result[i] = result[j]; result[j] = temp; }
+                        else if((result[i].position.x == result[j].position.x))
+                            if(Mathf.Abs(result[i].position.y -  unit.position.y) < Mathf.Abs(result[j].position.y - unit.position.y))
+                            {
+                                Unit temp = result[i]; result[i] = result[j]; result[j] = temp;
+                            }
+                        break;
+                    case Direction.Left:
+                        if (result[i].position.x > result[j].position.x) {
+                            Unit temp = result[i]; result[i] = result[j]; result[j] = temp;
+                        }
+                        else if ((result[i].position.x == result[j].position.x))
+                            if (Mathf.Abs(result[i].position.y - unit.position.y) > Mathf.Abs(result[j].position.y - unit.position.y))
+                            {
+                                Unit temp = result[i]; result[i] = result[j]; result[j] = temp;
+                            }
+                        break;
                 }
             }
         }
