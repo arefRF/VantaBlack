@@ -103,8 +103,9 @@ public class Fountain : Unit {
                 if (abilities[i].owner is FunctionalContainer)
                     if (ability == AbilityType.Fuel)
                     {
-                        ((FunctionalContainer)abilities[i].owner).SetOnorOff();
-                        ((FunctionalContainer)abilities[i].owner).firstmove = true; ;
+                        if ((abilities[i].owner as FunctionalContainer).abilities.Count == 0)
+                            ((FunctionalContainer)abilities[i].owner).SetOnorOff();
+                        ((FunctionalContainer)abilities[i].owner).firstmove = true;
                         ((FunctionalContainer)abilities[i].owner).Action_Fuel();
                     }
         }
