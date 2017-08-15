@@ -3,19 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 public class PlayerGraphics : MonoBehaviour {
     public float move_time = 0.5f;
-    private APIGraphic api;
-    private LogicalEngine engine;
-    private Vector2 unmoved_pos;
-    private Animator animator;
-    private Animator eyeAnimator;
-    private Animator bodyAnimator;
-    private Player player;
-    private int z_rot;
-    private AudioSource audio;
+    protected APIGraphic api;
+    protected LogicalEngine engine;
+    protected Animator animator;
+    protected Animator eyeAnimator;
+    protected Animator bodyAnimator;
+    protected Player player;
+    protected int z_rot;
+    protected AudioSource audio;
     void Start()
     {
         z_rot = 0;
-        unmoved_pos = transform.position;
         engine = Starter.GetEngine();
         api = engine.apigraphic;
         animator = Toolkit.GetObjectInChild(gameObject,"Sprite Holder").GetComponent<Animator>();
@@ -173,7 +171,7 @@ public class PlayerGraphics : MonoBehaviour {
        // bodyAnimator.SetBool("Lean", false);
     }
 
-    public void MoveToBranch(Direction dir)
+    public virtual void MoveToBranch(Direction dir)
     {
         if (player.gravity == Direction.Right)
         {
@@ -319,7 +317,7 @@ public class PlayerGraphics : MonoBehaviour {
         animator.SetTrigger("Hit");
         eyeAnimator.SetTrigger("Hit");
     }
-    private IEnumerator Simple_Move(Vector2 end, float move_time, bool enter)
+    protected IEnumerator Simple_Move(Vector2 end, float move_time, bool enter)
     {
         float remain_distance = ((Vector2)transform.position - end).sqrMagnitude;
         while (remain_distance > float.Epsilon)
@@ -430,10 +428,7 @@ public class PlayerGraphics : MonoBehaviour {
     {
         animator.SetTrigger("Drain");
     }
-    public void TransitionAnimation()
-    {
-        animator.SetBool("Transition", true);
-    }
+ 
     public void Ramp_Exit()
     {
         animator.SetInteger("Ramp", 0);
@@ -554,8 +549,6 @@ public class PlayerGraphics : MonoBehaviour {
                 xrot = 180;
         }
         player.transform.GetChild(0).rotation = Quaternion.Euler(xrot, yrot, zrot);
-
-
     }
 
 
