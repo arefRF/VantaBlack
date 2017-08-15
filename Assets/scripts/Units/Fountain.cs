@@ -75,7 +75,14 @@ public class Fountain : Unit {
         }
         api.engine.apigraphic.UnitChangeSprite(this);
     }
-
+    public void Reset(Player player)
+    {
+        if (ResetFountatin(player))
+        {
+            CloseFountatin();
+            api.engine.apigraphic.UnitChangeSprite(this);
+        }
+    }
     private bool ResetFountatin(Player player)
     {
         if (abilities.Count == 0)
@@ -124,12 +131,6 @@ public class Fountain : Unit {
         api.engine.apigraphic.Player_Co_Stop(player);
         player.currentAbility = null;
         api.engine.apigraphic.Lean(player);
-        // Reseting the Abilities
-        if (ResetFountatin(player))
-        {
-            CloseFountatin();
-            api.engine.apigraphic.UnitChangeSprite(this);
-        }
     }
 
     private void CloseFountatin()
