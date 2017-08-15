@@ -18,9 +18,12 @@ public class SmoothCamera : MonoBehaviour {
     public bool auto = true;
     // Use this for initialization
     void Start () {
+        if (target == null)
+            target = Starter.GetDataBase().player[0].transform;
         m_LastTargetPosition = target.position;
         m_OffsetZ = (transform.position - target.position).z;
         transform.parent = null;
+
     }
 	
 	// Update is called once per frame

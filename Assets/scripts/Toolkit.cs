@@ -774,13 +774,17 @@ public sealed class Toolkit{
         {
             GameObject u = objects[0];
             objects.RemoveAt(0);
+
             if (u.name == name)
                 return u;
-            for (int i = 0; i < u.transform.GetChildCount(); i++)
+            for (int i = 0; i < u.transform.childCount; i++)
+            {
                 objects.Insert(objects.Count, u.transform.GetChild(i).gameObject);
+            }
         }
         return null;
     }
+
 
     public static string Icon_Path(AbilityType type)
     {

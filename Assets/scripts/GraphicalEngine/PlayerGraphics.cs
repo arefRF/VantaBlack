@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-
 public class PlayerGraphics : MonoBehaviour {
     public float move_time = 0.5f;
     private APIGraphic api;
@@ -19,8 +18,16 @@ public class PlayerGraphics : MonoBehaviour {
         unmoved_pos = transform.position;
         engine = Starter.GetEngine();
         api = engine.apigraphic;
-        animator = transform.GetChild(0).GetChild(0).GetComponent<Animator>();
-        eyeAnimator = transform.GetChild(0).GetChild(0).GetChild(0).GetChild(6).GetComponent<Animator>();
+        animator = Toolkit.GetObjectInChild(gameObject,"Sprite Holder").GetComponent<Animator>();
+        try
+        {
+            eyeAnimator = Toolkit.GetObjectInChild(transform.GetChild(0).gameObject, "Eyes").GetComponent<Animator>();
+        }
+        catch (System.NullReferenceException e)
+        {
+            Debug.Log("There is no object named eyes");
+            eyeAnimator = null;
+        }
         player = GetComponent<Player>();
         engine.apigraphic.Absorb(player, null);
         bodyAnimator = transform.GetChild(0).GetComponent<Animator>();
@@ -614,7 +621,7 @@ public class PlayerGraphics : MonoBehaviour {
 
     public void ShowHologram()
     {
-        GameObject hologram = Toolkit.GetObjectInChild(gameObject.transform.GetChild(0).GetChild(0).GetChild(0).gameObject, "Hologram");
+        GameObject hologram = Toolkit.GetObjectInChild(gameObject, "Hologram");
         GameObject lights = Toolkit.GetObjectInChild(hologram, "Lights");
         GameObject Number = Toolkit.GetObjectInChild(hologram, "Number");
         SpriteRenderer IconSpriteRenderer = Toolkit.GetObjectInChild(hologram, "Icon").GetComponent<SpriteRenderer>();
@@ -642,12 +649,12 @@ public class PlayerGraphics : MonoBehaviour {
 
     public void HideHologram()
     {
-        Toolkit.GetObjectInChild(gameObject.transform.GetChild(0).GetChild(0).GetChild(0).gameObject, "Hologram").SetActive(false);
+        Toolkit.GetObjectInChild(gameObject, "Hologram").SetActive(false);
     }
 
     public void UpdateHologram()
     {
-        if (Toolkit.GetObjectInChild(gameObject.transform.GetChild(0).GetChild(0).GetChild(0).gameObject, "Hologram").activeSelf)
+        if (Toolkit.GetObjectInChild(gameObject, "Hologram").activeSelf)
             ShowHologram();
     }
 
