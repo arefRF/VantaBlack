@@ -94,14 +94,13 @@ public class LaserGraphics : MonoBehaviour {
         if (BeamObjectPool.Count == 0)
         {
             beamcolon = Instantiate(Beam);
-            beamcolon.transform.SetParent(parent.transform);
         }
         else
         {
             beamcolon = BeamObjectPool[0];
             BeamObjectPool.RemoveAt(0);
-            beamcolon.transform.SetParent(parent.transform);
         }
+        beamcolon.transform.SetParent(parent.transform);
         UsedBeams.Add(beamcolon);
         beamcolon.transform.position = pos;
         beamcolon.transform.localPosition = new Vector3(Mathf.Round(beamcolon.transform.localPosition.x), Mathf.Round(beamcolon.transform.localPosition.y), Mathf.Round(beamcolon.transform.localPosition.z));
@@ -116,17 +115,17 @@ public class LaserGraphics : MonoBehaviour {
         if (PartialBeamObjectPool.Count == 0)
         {
             beamcolon = Instantiate(PartialBeam);
-            beamcolon.transform.SetParent(parent.transform);
-            PartialUsedBeams.Add(beamcolon);
         }
         else
         {
             beamcolon = PartialBeamObjectPool[0];
             PartialBeamObjectPool.RemoveAt(0);
-            PartialUsedBeams.Add(beamcolon);
-            beamcolon.transform.SetParent(parent.transform);
         }
+
+        beamcolon.transform.SetParent(parent.transform);
+        PartialUsedBeams.Add(beamcolon);
         beamcolon.transform.position = pos;
+        beamcolon.transform.localPosition = new Vector3(Mathf.Round(beamcolon.transform.localPosition.x), Mathf.Round(beamcolon.transform.localPosition.y), Mathf.Round(beamcolon.transform.localPosition.z));
         beamcolon.transform.rotation = Quaternion.Euler(PartialBeam.transform.rotation.x, PartialBeam.transform.rotation.y, rotation);
     }
 }

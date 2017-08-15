@@ -758,6 +758,13 @@ public class LogicalEngine {
                                 ((Leanable)database.player[i].LeanedTo).LeanedAction(database.player[i], Toolkit.ReverseDirection(database.player[i].leandirection));
                             }
                         }
+                        else if(database.player[i].LeanedTo is Fountain)
+                        {
+                            if (!KeyUp)
+                            {
+                                (database.player[i].LeanedTo as Fountain).Reset(database.player[i]);
+                            }
+                        }
                     }
                     else
                     {

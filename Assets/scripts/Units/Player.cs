@@ -57,8 +57,6 @@ public class Player : Unit
         oneJump = new Jump(1);
         state = PlayerState.Idle;
         tempstate = state;
-        if (gravitynum != 0)
-            gravity = Toolkit.NumberToDirection(gravitynum);
     }
 
     public void Update()
@@ -93,7 +91,6 @@ public class Player : Unit
 
     void Start()
     {
-        gravity = Starter.GetGravityDirection();
         units = Starter.GetDataBase().units;
         x_bound = GameObject.Find("Starter").GetComponent<Starter>().x;
         y_bound = GameObject.Find("Starter").GetComponent<Starter>().y;

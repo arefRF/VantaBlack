@@ -87,10 +87,10 @@ public class GraphicalEngine : MonoBehaviour {
                 finish_lock_90percent = false;
                 api.MoveGameObjectFinished_90percent(obj,unit);
             }
-            if (remain_distance < 0.5 && finish_lock_50percent)
+            if (remain_distance < 0.2 && finish_lock_50percent)
             {
                 finish_lock_50percent = false;
-                //api.MoveGameObjectFinished_50percent(obj, unit);
+                api.MoveGameObjectFinished_50percent(obj, unit);
             }
             yield return null;
         }
