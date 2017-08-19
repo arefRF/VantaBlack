@@ -193,14 +193,14 @@ public class PlayerGraphics : MonoBehaviour {
         }
         ResetStates();
         StopAllCoroutines();
-        transform.GetChild(0).GetChild(0).GetComponent<AnimationEvents>().call = true;
+        transform.GetChild(0).GetComponent<AnimationEvents>().call = true;
         if (dir == Direction.Left || dir == Direction.Right)
             animator.SetInteger("Branch", 3);
         else if (dir == Direction.Up)
         {
             StartCoroutine(Simple_Move(player.position, 0.3f, true));
             animator.SetInteger("Branch", 1);
-            transform.GetChild(0).GetChild(0).GetComponent<AnimationEvents>().call = false;
+            transform.GetChild(0).GetComponent<AnimationEvents>().call = false;
         }
         else
         {
@@ -575,7 +575,8 @@ public class PlayerGraphics : MonoBehaviour {
         yield return new WaitForSeconds(0.1f);
         player.TeleportFinished();
     }
-    public void ChangeColor()
+
+    public virtual void ChangeColor()
     {
         Color color = Ability_Color(player.abilities);
 
@@ -587,12 +588,13 @@ public class PlayerGraphics : MonoBehaviour {
           //  transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().color = Color.black;
     }
 
+
     public void ChangeColorFinished()
     {
 
     }
 
-    private Color Ability_Color(List<Ability> ability)
+    protected Color Ability_Color(List<Ability> ability)
     {
         float[] color = new float[4];
         if (ability.Count != 0)
