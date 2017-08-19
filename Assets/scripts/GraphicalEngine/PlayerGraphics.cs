@@ -582,10 +582,17 @@ public class PlayerGraphics : MonoBehaviour {
 
         // Eye Color
         color = new Color(color.r, color.g, color.b, 1);
-    //    if (player.abilities.Count == 0)
-         //   transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().color = color;
-     //   else
-          //  transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().color = Color.black;
+        if (player.abilities.Count == 0)
+        {
+            transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().color = color;
+            transform.GetChild(0).GetChild(0).GetChild(0).GetChild(1).GetComponent<SpriteRenderer>().color = new Color(0,0,0,0);
+        }
+        else
+        {
+            transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().color = Color.black;
+            transform.GetChild(0).GetChild(0).GetChild(0).GetChild(1).GetComponent<SpriteRenderer>().color = color;
+        }
+        
     }
 
 
