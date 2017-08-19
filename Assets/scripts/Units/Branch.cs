@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Branch : Unit {
 
@@ -324,6 +325,32 @@ public class Branch : Unit {
                 }
             }
         }
+    }
+
+    public bool PlayerForcePushIntoBranch(Player player, Direction direction)
+    {
+        if(islocked)
+        {
+            if (player.abilities.Count == 0 || player.abilities[0].abilitytype != AbilityType.Key)
+                return false;
+            (player.abilities[0] as Key).branch = this;
+            player.abilities.RemoveAt(0);
+            islocked = false;
+            api.engine.apigraphic.UnitChangeSprite(player);
+            api.engine.apigraphic.UnitChangeSprite(this);
+        }
+        if(player.state == PlayerState.Lean)
+            api.engine.inputcontroller.LeanUndo(player, player.leandirection, PlayerState.Idle);
+        player.SetState(PlayerState.Gir);
+        api.engine.MovePlayer(player, direction);
+        return true;
+    }
+
+
+    public void UnlockBranch()
+    {
+        islocked = false;
+        api.engine.apigraphic.UnitChangeSprite(this);
     }
 
     public void BranchUnlockAnimationFinished()

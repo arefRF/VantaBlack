@@ -310,8 +310,16 @@ public class InputController {
             player.movepercentage = 0;
             if (Toolkit.IsInsideBranch(player))
             {
-                if (Toolkit.HasBranch(Toolkit.VectorSum(player.position, direction)))
+                Branch tempbranch = Toolkit.GetBranch(Toolkit.VectorSum(player.position, direction));
+                if (tempbranch != null)
                 {
+                    if (tempbranch.islocked)
+                    {
+                        if (!player.HasAbility(AbilityType.Key))
+                            return;
+                        player.abilities.RemoveAt(0);
+                        engine.apigraphic.UnitChangeSprite(player);
+                    }
                     player.SetState(PlayerState.Busy);
                     engine.apigraphic.BranchLight(false, Toolkit.GetBranch(player.position),player);
                     Toolkit.GetBranch(Toolkit.VectorSum(player.position, direction)).PlayerMove (Toolkit.ReverseDirection(direction), player);

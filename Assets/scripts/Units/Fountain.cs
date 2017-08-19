@@ -43,7 +43,8 @@ public class Fountain : Unit {
 
     public void Action(Player player)
     {
-        
+        if (abilities.Count != 0)
+            return;
         if(player.abilities.Count == 0)
         {
             
