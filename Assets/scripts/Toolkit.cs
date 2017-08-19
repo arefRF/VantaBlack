@@ -2,7 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public sealed class Toolkit{
+public sealed class Toolkit
+{
     public static Database database;
     public static Vector2 VectorSum(Vector2 a, Vector2 b)
     {
@@ -31,7 +32,7 @@ public sealed class Toolkit{
         return Direction.Down;
     }
 
-   
+
 
     public static Direction ReverseDirection(Direction d)
     {
@@ -59,11 +60,11 @@ public sealed class Toolkit{
 
     public static Unit GetUnitByCodeNumber(long codenumber)
     {
-        for (int i=0; i<database.units.GetLength(0); i++)
+        for (int i = 0; i < database.units.GetLength(0); i++)
         {
-            for(int j=0; j<database.units.GetLength(1); j++)
+            for (int j = 0; j < database.units.GetLength(1); j++)
             {
-                for(int k=0; k<database.units[i,j].Count; k++)
+                for (int k = 0; k < database.units[i, j].Count; k++)
                 {
                     if (codenumber == database.units[i, j][k].codeNumber)
                         return database.units[i, j][k];
@@ -146,7 +147,7 @@ public sealed class Toolkit{
 
     public static Unit GetUnitToFallOn(List<Unit> units, Direction dir)
     {
-        if(units[0] is Ramp && units[1] is Ramp)
+        if (units[0] is Ramp && units[1] is Ramp)
         {
             switch (dir)
             {
@@ -169,15 +170,15 @@ public sealed class Toolkit{
                 default: return units[0];
             }
         }
-        else if(units[0] is Branch && units[1] is Player)
+        else if (units[0] is Branch && units[1] is Player)
         {
             return units[0];
         }
-        else if(units[1] is Branch && units[0] is Player)
+        else if (units[1] is Branch && units[0] is Player)
         {
             return units[1];
         }
-        else if(units[0] is Ramp && units[1] is Player)
+        else if (units[0] is Ramp && units[1] is Player)
         {
             switch (dir)
             {
@@ -232,7 +233,7 @@ public sealed class Toolkit{
 
     public static bool IsInsideBranch(Player player)
     {
-        for (int i=0; i<database.units[(int)player.position.x, (int)player.position.y].Count; i++)
+        for (int i = 0; i < database.units[(int)player.position.x, (int)player.position.y].Count; i++)
         {
             if (database.units[(int)player.position.x, (int)player.position.y][i] is Branch)
                 return true;
@@ -249,7 +250,7 @@ public sealed class Toolkit{
         return false;
     }
 
-    
+
     public static bool IsEmpty(Vector2 position)
     {
         List<Unit>[,] units = Starter.GetDataBase().units;
@@ -265,10 +266,10 @@ public sealed class Toolkit{
         List<Unit>[,] units = Starter.GetDataBase().units;
         if (units[(int)position.x, (int)position.y].Count != 0)
             return false;
-        for(int i=0; i<4; i++)
+        for (int i = 0; i < 4; i++)
         {
             Vector2 temppos = VectorSum(position, NumberToDirection(i + 1));
-            for(int j=0; j<database.units[(int)temppos.x, (int)temppos.y].Count; j++)
+            for (int j = 0; j < database.units[(int)temppos.x, (int)temppos.y].Count; j++)
             {
                 Vector2 temppos2 = RoundVector(database.units[(int)temppos.x, (int)temppos.y][j].transform.position);
                 Debug.Log(temppos);
@@ -290,7 +291,7 @@ public sealed class Toolkit{
         return false;
     }
 
-    public static bool IsEmptySameParent(GameObject obj,Vector2 position)
+    public static bool IsEmptySameParent(GameObject obj, Vector2 position)
     {
         List<Unit>[,] units = Starter.GetDataBase().units;
         if (units[(int)position.x, (int)position.y].Count == 0)
@@ -321,7 +322,7 @@ public sealed class Toolkit{
     public static bool HasRamp(Vector2 position)
     {
         List<Unit>[,] units = Starter.GetDataBase().units;
-        for (int i=0; i<units[(int)position.x, (int)position.y].Count; i++)
+        for (int i = 0; i < units[(int)position.x, (int)position.y].Count; i++)
         {
             if (units[(int)position.x, (int)position.y][i] is Ramp)
                 return true;
@@ -544,14 +545,14 @@ public sealed class Toolkit{
     public static bool[] GetEmptySidesSameParent(Unit unit)
     {
         bool[] result = new bool[4];
-        for(int i = 0; i < 4; i++)
+        for (int i = 0; i < 4; i++)
         {
-           result[i] = IsEmptySameParent(unit.gameObject,VectorSum(unit.position , NumberToDirection(i + 1)));
+            result[i] = IsEmptySameParent(unit.gameObject, VectorSum(unit.position, NumberToDirection(i + 1)));
         }
 
         return result;
     }
-    
+
     public static Color Ability_Color(List<Ability> ability)
     {
         float[] color = new float[4];
@@ -579,7 +580,7 @@ public sealed class Toolkit{
         result[1] = !IsConnectedFromPosition(unit, Direction.Right);
         result[2] = !IsConnectedFromPosition(unit, Direction.Down);
         result[3] = !IsConnectedFromPosition(unit, Direction.Left);
-        
+
         return result;
     }
 
@@ -597,7 +598,7 @@ public sealed class Toolkit{
     public static bool[] GetConnectedSidesForRamp(Ramp ramp)
     {
         bool[] result = new bool[4];
-        if(ramp.type == 2 || ramp.type == 3)
+        if (ramp.type == 2 || ramp.type == 3)
             result[0] = IsConnectedFromPositionForRamp(ramp, VectorSum(ramp.position, Direction.Up));
         if (ramp.type == 3 || ramp.type == 4)
             result[1] = IsConnectedFromPositionForRamp(ramp, VectorSum(ramp.position, Direction.Right));
@@ -637,7 +638,7 @@ public sealed class Toolkit{
                 }
                 return true;
             }
-        }         
+        }
         return false;
     }
 
@@ -712,13 +713,13 @@ public sealed class Toolkit{
     {
         List<Unit> result = new List<Unit>();
         result.AddRange(units);
-        for (int i=0; i<result.Count; i++)
+        for (int i = 0; i < result.Count; i++)
         {
-            for (int j = i+1; j < result.Count; j++)
+            for (int j = i + 1; j < result.Count; j++)
             {
                 switch (direction)
                 {
-                    case Direction.Down: if (result[i].position.y > result[j].position.y) { Unit temp = result[i]; result[i] = result[j];result[j] = temp;  } break;
+                    case Direction.Down: if (result[i].position.y > result[j].position.y) { Unit temp = result[i]; result[i] = result[j]; result[j] = temp; } break;
                     case Direction.Up: if (result[i].position.y < result[j].position.y) { Unit temp = result[i]; result[i] = result[j]; result[j] = temp; } break;
                     case Direction.Right: if (result[i].position.x < result[j].position.x) { Unit temp = result[i]; result[i] = result[j]; result[j] = temp; } break;
                     case Direction.Left: if (result[i].position.x > result[j].position.x) { Unit temp = result[i]; result[i] = result[j]; result[j] = temp; } break;
@@ -729,7 +730,7 @@ public sealed class Toolkit{
             throw new System.Exception();
         return result;
     }
-    public static List<Unit> SortByDirectionNearest(List<Unit> units, Direction direction,Unit unit)
+    public static List<Unit> SortByDirectionNearest(List<Unit> units, Direction direction, Unit unit)
     {
         List<Unit> result = new List<Unit>();
         result.AddRange(units);
@@ -744,14 +745,15 @@ public sealed class Toolkit{
                     case Direction.Right:
                         if (result[i].position.x < result[j].position.x)
                         { Unit temp = result[i]; result[i] = result[j]; result[j] = temp; }
-                        else if((result[i].position.x == result[j].position.x))
-                            if(Mathf.Abs(result[i].position.y -  unit.position.y) < Mathf.Abs(result[j].position.y - unit.position.y))
+                        else if ((result[i].position.x == result[j].position.x))
+                            if (Mathf.Abs(result[i].position.y - unit.position.y) < Mathf.Abs(result[j].position.y - unit.position.y))
                             {
                                 Unit temp = result[i]; result[i] = result[j]; result[j] = temp;
                             }
                         break;
                     case Direction.Left:
-                        if (result[i].position.x > result[j].position.x) {
+                        if (result[i].position.x > result[j].position.x)
+                        {
                             Unit temp = result[i]; result[i] = result[j]; result[j] = temp;
                         }
                         else if ((result[i].position.x == result[j].position.x))
@@ -795,7 +797,7 @@ public sealed class Toolkit{
             case 4: return Direction.Left;
             default: throw new System.Exception();
         }
-        
+
     }
 
     public static GameObject GetObjectInChild(GameObject parent, string name)
@@ -842,7 +844,7 @@ public sealed class Toolkit{
 
     public static int GetPlayerNumberInDatabase(Player player)
     {
-        for(int i=0; i<database.player.Count; i++)
+        for (int i = 0; i < database.player.Count; i++)
         {
             if (player == database.player[i])
                 return i;
@@ -864,5 +866,3 @@ public sealed class Toolkit{
         return new Vector3(Mathf.Round(vector.x), Mathf.Round(vector.y), Mathf.Round(vector.z));
     }
 }
-
-
