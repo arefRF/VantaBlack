@@ -244,8 +244,8 @@ public class APIGraphic{
     public void Jump(Player player,Ability jump_ability, Vector2 position,Direction dir)
     {
         player.GetComponent<PlayerGraphics>().Jump(dir);
-        player.transform.GetChild(0).GetComponent<AnimationEvents>().SetJumpCordinates(position, (Jump)jump_ability, dir, false);
-        //player.GetComponent<PlayerPhysics>().Jump(position, (Jump)jump_ability,dir,false);
+        //player.transform.GetChild(0).GetComponent<AnimationEvents>().SetJumpCordinates(position, (Jump)jump_ability, dir, false);
+        player.GetComponent<PlayerPhysics>().Jump(position, (Jump)jump_ability,dir,false);
     }
 
     public void Jump_Finish(Player player, Vector2 finalpos, Jump jump)
