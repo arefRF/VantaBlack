@@ -575,24 +575,33 @@ public class PlayerGraphics : MonoBehaviour {
         yield return new WaitForSeconds(0.1f);
         player.TeleportFinished();
     }
-    public void ChangeColor()
+
+    public virtual void ChangeColor()
     {
         Color color = Ability_Color(player.abilities);
 
         // Eye Color
         color = new Color(color.r, color.g, color.b, 1);
-    //    if (player.abilities.Count == 0)
-         //   transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().color = color;
-     //   else
-          //  transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().color = Color.black;
+        if (player.abilities.Count == 0)
+        {
+            transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().color = color;
+            transform.GetChild(0).GetChild(0).GetChild(0).GetChild(1).GetComponent<SpriteRenderer>().color = new Color(0,0,0,0);
+        }
+        else
+        {
+            transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().color = Color.black;
+            transform.GetChild(0).GetChild(0).GetChild(0).GetChild(1).GetComponent<SpriteRenderer>().color = color;
+        }
+        
     }
+
 
     public void ChangeColorFinished()
     {
 
     }
 
-    private Color Ability_Color(List<Ability> ability)
+    protected Color Ability_Color(List<Ability> ability)
     {
         float[] color = new float[4];
         if (ability.Count != 0)
