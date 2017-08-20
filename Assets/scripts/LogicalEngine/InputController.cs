@@ -27,8 +27,6 @@ public class InputController {
         }
         else if (player.state == PlayerState.Jumping)
         {
-            if (player.jumpdirection == Toolkit.ReverseDirection(direction))
-                return;
             JumpingPlayerMove(player, direction);
         }
         else if(player.state == PlayerState.Lean)
@@ -194,7 +192,9 @@ public class InputController {
             if(direction == player.gravity)
             {
                 player.SetState(PlayerState.Idle);
+                Debug.Log("farda avazesh kon");
                 player.ApplyGravity();
+                return;
             }
             if (player.Can_Move_Direction(direction))
             {
