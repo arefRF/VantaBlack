@@ -193,14 +193,14 @@ public class PlayerGraphics : MonoBehaviour {
         }
         ResetStates();
         StopAllCoroutines();
-        transform.GetChild(0).GetChild(0).GetComponent<AnimationEvents>().call = true;
+        transform.GetChild(0).GetComponent<AnimationEvents>().call = true;
         if (dir == Direction.Left || dir == Direction.Right)
             animator.SetInteger("Branch", 3);
         else if (dir == Direction.Up)
         {
             StartCoroutine(Simple_Move(player.position, 0.3f, true));
             animator.SetInteger("Branch", 1);
-            transform.GetChild(0).GetChild(0).GetComponent<AnimationEvents>().call = false;
+            transform.GetChild(0).GetComponent<AnimationEvents>().call = false;
         }
         else
         {

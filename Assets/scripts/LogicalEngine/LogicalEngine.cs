@@ -62,6 +62,7 @@ public class LogicalEngine {
     {
         shouldmove = new List<Unit>();
         leanmove = new List<Unit>();
+        List<Unit> playerinbranchmove = new List<Unit>();
         if (!(unit is Box))
         {
             snpmanager.CloneStuckList();
@@ -112,6 +113,12 @@ public class LogicalEngine {
             }
             for (int i = 0; i < unit.ConnectedUnits.Count; i++)
             {
+                if(unit.ConnectedUnits[i] is Branch)
+                {
+                    Player tempplayer = Toolkit.GetPlayer(unit.ConnectedUnits[i].position);
+                    if (tempplayer != null)
+                        playerinbranchmove.Add(tempplayer);
+                }
                 bound = unit.ConnectedUnits[i].players.Count;
                 shouldmove.AddRange(unit.ConnectedUnits[i].EffectedUnits(Toolkit.ReverseDirection(Starter.GetDataBase().gravity_direction)));
                 shouldmove.AddRange(unit.ConnectedUnits[i].players);
@@ -165,7 +172,16 @@ public class LogicalEngine {
             apiunit.RemoveFromDatabase(unit);
             unit.position = Toolkit.VectorSum(unit.position, Toolkit.DirectiontoVector(dir));
             apiunit.AddToDatabase(unit);
-
+            for(int i=0; i<playerinbranchmove.Count; i++)
+            {
+                leanmove.Remove(playerinbranchmove[i]);
+                shouldmove.Remove(playerinbranchmove[i]);
+                apiunit.RemoveFromDatabase(playerinbranchmove[i]);
+                playerinbranchmove[i].position = Toolkit.VectorSum(playerinbranchmove[i].position, Toolkit.DirectiontoVector(dir)); ;
+                apiunit.AddToDatabase(playerinbranchmove[i]);
+                apigraphic.Player_Co_Stop((Player)playerinbranchmove[i]);
+                apigraphic.MovePlayerOnPlatform((Player)playerinbranchmove[i], ((Player)playerinbranchmove[i]).position);
+            }
             for (int i=0; i<leanmove.Count; i++)
             {
                 bool flag = false;
@@ -861,6 +877,7 @@ public class LogicalEngine {
             {
                 lasercontroller.CollisionCheck(database.player[i].position);
             }
+            (unit as FunctionalContainer).CheckNextMove();
         }
         //CheckStuckedUnit(unit);
     }

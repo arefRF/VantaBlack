@@ -127,12 +127,14 @@ public class Container : ParentContainer {
                     if (abilities.Count == 0)
                     {
                         ((FunctionalContainer)this).SetOnorOff();
-                        ((FunctionalContainer)this).Action_Fuel();
+                        (this as FunctionalContainer).CheckNextMove();
+                        //((FunctionalContainer)this).Action_Fuel();
                     }
                     else if (abilities[0].abilitytype == AbilityType.Fuel)
                     {
                         SetNextState();
-                        ((FunctionalContainer)this).Action_Fuel();
+                        (this as FunctionalContainer).CheckNextMove();
+                        //((FunctionalContainer)this).Action_Fuel();
                     }
                 }
             }

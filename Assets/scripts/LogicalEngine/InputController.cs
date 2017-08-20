@@ -319,6 +319,7 @@ public class InputController {
                             return;
                         player.abilities.RemoveAt(0);
                         engine.apigraphic.UnitChangeSprite(player);
+                        tempbranch.UnlockBranch();
                     }
                     player.SetState(PlayerState.Busy);
                     engine.apigraphic.BranchLight(false, Toolkit.GetBranch(player.position),player);
