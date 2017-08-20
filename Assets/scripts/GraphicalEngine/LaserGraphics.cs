@@ -32,7 +32,6 @@ public class LaserGraphics : MonoBehaviour {
              lr.SetPosition(0, pos1);
              lr.SetPosition(1, pos2);
              return lr;
-
     }
 
     public void DestroyLasers()
