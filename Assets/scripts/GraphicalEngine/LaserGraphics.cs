@@ -22,16 +22,24 @@ public class LaserGraphics : MonoBehaviour {
 
     public LineRenderer AddLaserLine(Vector2 pos1, Vector2 pos2,GameObject parent,LineRenderer lineR)
     {
-          GameObject myLine = new GameObject();
-             myLine.transform.position = pos1;
-             myLine.transform.parent = laserParent.transform;
-             myLine.AddComponent<LineRenderer>();
-             LineRenderer lr = myLine.GetComponent<LineRenderer>();
-             lr.SetColors(Color.red, Color.red);
-             lr.SetWidth(0.1f, 0.1f);
-             lr.SetPosition(0, pos1);
-             lr.SetPosition(1, pos2);
-             return lr;
+        if (lineR == null)
+        {
+            GameObject myLine = new GameObject();
+            myLine.transform.position = pos1;
+            myLine.transform.parent = laserParent.transform;
+            myLine.AddComponent<LineRenderer>();
+            lineR = myLine.GetComponent<LineRenderer>();
+            lineR.SetColors(Color.red, Color.red);
+            lineR.SetWidth(0.1f, 0.1f);
+            lineR.SetPosition(0, pos1);
+            lineR.SetPosition(1, pos2);
+        }
+        else
+        {
+            lineR.SetPosition(0, pos1);
+            lineR.SetPosition(1, pos2);
+        }
+        return lineR;
     }
 
     public void DestroyLasers()
