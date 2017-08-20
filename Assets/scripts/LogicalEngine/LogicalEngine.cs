@@ -720,7 +720,16 @@ public class LogicalEngine {
     public List<Unit> GetUnits(Vector2 position)
     {
         try {
-            return database.units[(int)position.x, (int)position.y];
+            List<Unit> tempunit = database.units[(int)position.x, (int)position.y];
+            for (int i = 0; i < tempunit.Count; i++)
+            {
+                if (tempunit[i] is Player)
+                {
+                    tempunit.RemoveAt(i);
+                    i--;
+                }
+            }
+            return tempunit;
         }
         catch
         {
