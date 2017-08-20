@@ -22,6 +22,8 @@ public class Jump : Ability {
 
     public void Action(Player player, Direction direction)
     {
+        System.Diagnostics.StackTrace stackTrace = new System.Diagnostics.StackTrace();
+        Debug.Log(stackTrace.GetFrame(1).GetMethod().Name);
         leandirection = direction;
         Vector2 playerpos = player.position;
         Vector2 playerpos2 = player.position;

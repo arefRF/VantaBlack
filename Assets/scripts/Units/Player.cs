@@ -99,6 +99,11 @@ public class Player : Unit
 
     public void SetState(PlayerState state)
     {
+        if (state == PlayerState.Idle)
+        {
+            System.Diagnostics.StackTrace stackTrace = new System.Diagnostics.StackTrace();
+            Debug.Log(stackTrace.GetFrame(1).GetMethod().Name);
+        }
         this.state = state;
         /*if (state == PlayerState.Transition)
         {

@@ -1,15 +1,25 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 
 public class Laser : Unit {
 
     LogicalEngine engine;
     public List<Vector2[]> beamPositions { get; set; }
+    LineRenderer[] linerenderers;
     public override void Run()
     {
         engine = Starter.GetEngine();
         beamPositions = new List<Vector2[]>();
         base.Run();
+        linerenderers = new LineRenderer[4];
+        StartCoroutine(SetLaserTimer(0.2f));
+    }
+
+    public void Update()
+    {
+
+        //SetLaser();
     }
 
     public override void SetInitialSprite()
@@ -24,27 +34,23 @@ public class Laser : Unit {
     public void SetLaser()
     {
         beamPositions.Clear();
-        SetLaserInDirection(Direction.Right, position);
-        SetLaserInDirection(Direction.Down, position);
-        SetLaserInDirection(Direction.Left, position);
-        SetLaserInDirection(Direction.Up, position);
+        
+        SetLaserInDirection(Direction.Right, transform.position);
+        SetLaserInDirection(Direction.Down, transform.position);
+        SetLaserInDirection(Direction.Left, transform.position);
+        SetLaserInDirection(Direction.Up, transform.position);
+        engine.apigraphic.DestroyLasers();
     }
 
     private void SetLaserInDirection(Direction direction, Vector2 startingpos)
     {
-        if(direction == Direction.Right)
-        {
-            Vector2 finalpos = Toolkit.VectorSum(startingpos, direction);
-            Vector2 pos = Toolkit.VectorSum(startingpos, direction);
-            bool flag = false;
-            while (finalpos.x < engine.sizeX - 1 && Toolkit.IsEmpty(finalpos))
-            {
-                flag = true;
-                finalpos = Toolkit.VectorSum(finalpos, direction);
-            }
-            SetLaser(direction, pos, finalpos, flag);
-        }
-        else if (direction == Direction.Down)
+        
+            Vector2 pos = Toolkit.VectorSum(startingpos, Toolkit.DirectiontoVector(direction)/2);
+            RaycastHit2D hit = Physics2D.Raycast(pos, Toolkit.DirectiontoVector(direction));
+            Vector2 finalpos = hit.point;
+            engine.apigraphic.AddLaserLine(pos, finalpos, transform.parent.gameObject, linerenderers[Toolkit.DirectionToNumber(direction) - 1]);
+            //SetLaser(direction, pos, finalpos);
+        /*else if (direction == Direction.Down)
         {
             Vector2 finalpos = Toolkit.VectorSum(startingpos, direction);
             Vector2 pos = Toolkit.VectorSum(startingpos, direction);
@@ -80,10 +86,10 @@ public class Laser : Unit {
             }
             SetLaser(direction, pos, finalpos, flag);
         }
-
+        */
     }
 
-    private void SetLaser(Direction direction, Vector2 pos, Vector2 finalpos, bool flag)
+    private void SetLaser(Direction direction, Vector2 pos, Vector2 finalpos)
     {
         DynamicContainer container = Toolkit.GetContainer(finalpos) as DynamicContainer;
         Branch branch = Toolkit.GetBranch(finalpos) as Branch;
@@ -116,11 +122,11 @@ public class Laser : Unit {
                 engine.apigraphic.UnlockBranchLaser(branch);
             }
         }
-        if (flag)
+        /*if (flag)
         {
             beamPositions.Add(new Vector2[] { pos, finalpos });
             api.engine.apigraphic.AddLaser(pos, finalpos, direction, gameObject);
-        }
+        }*/
     }
 
     public bool CollideLaser(Vector2 pos)
@@ -172,5 +178,12 @@ public class Laser : Unit {
         if (i >= s1 && i <= s2)
             return true;
         return false;
+    }
+
+    public IEnumerator SetLaserTimer(float time)
+    {
+        yield return new WaitForSeconds(time);
+        SetLaser();
+        StartCoroutine(SetLaserTimer(0.2f));
     }
 }
