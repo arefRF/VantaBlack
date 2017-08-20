@@ -624,7 +624,7 @@ public class Player : Unit
     }
     public void FallFinished()
     {
-        if(position.x <= 0 || position.y <= 0)
+        if (position.x <= 0 || position.y <= 0)
         {
             api.engine.apigraphic.Fall_Player_Died(this);
             return;
@@ -663,17 +663,6 @@ public class Player : Unit
         {
             api.graphicalengine_Land(this, position);
         }
-    }
-
-    public bool IsRelatedLean(GameObject parent)
-    {
-        List<Unit> units = api.engine_GetUnits(this, leandirection);
-        for(int i=0; i<units.Count; i++)
-        {
-            if (parent == units[i].gameObject.transform.parent.gameObject)
-                return true;
-        }
-        return false;
     }
 
     public void UseAbility(Ability ability)

@@ -312,6 +312,7 @@ public class InputController {
             {
                 if (Toolkit.HasBranch(Toolkit.VectorSum(player.position, direction)))
                 {
+                    if()
                     player.SetState(PlayerState.Busy);
                     engine.apigraphic.BranchLight(false, Toolkit.GetBranch(player.position),player);
                     Toolkit.GetBranch(Toolkit.VectorSum(player.position, direction)).PlayerMove (Toolkit.ReverseDirection(direction), player);
