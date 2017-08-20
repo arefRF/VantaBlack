@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Jump : Ability {
 
-    public int number;
+    public int number { get; set; }
     private int maxJump;
     LogicalEngine engine;
     public Coroutine coroutine;
@@ -183,7 +183,6 @@ public class Jump : Ability {
         number %= 5;
         if (number == 0)
             number = 2;
-        Debug.Log(number);
         Starter.GetDataBase().timer = GameObject.Find("GetInput").GetComponent<GetInput>().StartCoroutine(Timer());
 
     }
@@ -226,7 +225,7 @@ public class Jump : Ability {
 
     public override Ability ConvertContainerAbilityToPlayer(Player player)
     {
-        number = 2;
+        number = 1;
         owner = player;
         return this;
     }

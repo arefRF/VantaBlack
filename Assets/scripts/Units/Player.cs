@@ -51,7 +51,7 @@ public class Player : Unit
         {
             abilities.Add(Ability.GetAbilityInstance(abilitytype));
             if (abilitytype == AbilityType.Jump)
-                ((Jump)abilities[i]).number = 2;
+                ((Jump)abilities[i]).number = 1;
         }
         direction = move_direction[0];
         oneJump = new Jump(1);
@@ -762,10 +762,7 @@ public class Player : Unit
         {
             case AbilityType.Fuel: return false;
             case AbilityType.Direction: return true;
-            case AbilityType.Jump:
-                if (!Toolkit.IsInsideBranch(this))
-                    ((Jump)abilities[0]).Action(this, Toolkit.ReverseDirection(api.engine.database.gravity_direction));
-                return true;
+            case AbilityType.Jump: return true;
             case AbilityType.Teleport: return false;
             case AbilityType.Gravity: return false;
             case AbilityType.Rope: ((Rope)abilities[0]).Action(this); return true;
