@@ -15,7 +15,7 @@ public class Player : Unit
 
     public Direction direction { get; set; }
     public int movepercentage { get; set; }
-    public PlayerState state; //{ get; private set; }
+    public PlayerState state { get; private set; }
     public Direction leandirection { get; set; }
     public Unit LeanedTo { get; set; }
     public bool onramp { get; set; }
