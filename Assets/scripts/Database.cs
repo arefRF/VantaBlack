@@ -47,6 +47,12 @@ public class Database {
         gravity_direction = newdirection;
         for (int i = 0; i < player.Count; i++)
         {
+            if(player[i].gravitynum != 0)
+            {
+                player[i].SetGravity(Toolkit.NumberToDirection(player[i].gravitynum));
+                player[i].gravitynum = 0;
+                continue;
+            }
             player[i].SetGravity(newdirection);
         }
     }

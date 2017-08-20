@@ -43,7 +43,8 @@ public class Fountain : Unit {
 
     public void Action(Player player)
     {
-        
+        if (abilities.Count != 0)
+            return;
         if(player.abilities.Count == 0)
         {
             
@@ -75,7 +76,14 @@ public class Fountain : Unit {
         }
         api.engine.apigraphic.UnitChangeSprite(this);
     }
-
+    public void Reset(Player player)
+    {
+        if (ResetFountatin(player))
+        {
+            CloseFountatin();
+            api.engine.apigraphic.UnitChangeSprite(this);
+        }
+    }
     private bool ResetFountatin(Player player)
     {
         if (abilities.Count == 0)
@@ -95,6 +103,16 @@ public class Fountain : Unit {
 
                 api.ChangeSprite(abilities[i].owner);
             }
+            if(abilities[i] is Key)
+            {
+                Key temp = abilities[i] as Key;
+                if (temp.branch != null)
+                {
+                    temp.branch.islocked = true;
+                    api.engine.apigraphic.UnitChangeSprite(temp.branch);
+                    temp.branch = null;
+                }
+            }
 
         }
         for (int i = 0; i < abilities.Count; i++)
@@ -103,8 +121,9 @@ public class Fountain : Unit {
                 if (abilities[i].owner is FunctionalContainer)
                     if (ability == AbilityType.Fuel)
                     {
-                        ((FunctionalContainer)abilities[i].owner).SetOnorOff();
-                        ((FunctionalContainer)abilities[i].owner).firstmove = true; ;
+                        if ((abilities[i].owner as FunctionalContainer).abilities.Count == 0)
+                            ((FunctionalContainer)abilities[i].owner).SetOnorOff();
+                        ((FunctionalContainer)abilities[i].owner).firstmove = true;
                         ((FunctionalContainer)abilities[i].owner).Action_Fuel();
                     }
         }
@@ -123,12 +142,6 @@ public class Fountain : Unit {
         api.engine.apigraphic.Player_Co_Stop(player);
         player.currentAbility = null;
         api.engine.apigraphic.Lean(player);
-        // Reseting the Abilities
-        if (ResetFountatin(player))
-        {
-            CloseFountatin();
-            api.engine.apigraphic.UnitChangeSprite(this);
-        }
     }
 
     private void CloseFountatin()

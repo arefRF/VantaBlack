@@ -243,9 +243,9 @@ public class APIGraphic{
 
     public void Jump(Player player,Ability jump_ability, Vector2 position,Direction dir)
     {
-        player.GetComponent<PlayerGraphics>().Jump(dir);
-        player.transform.GetChild(0).GetComponent<AnimationEvents>().SetJumpCordinates(position, (Jump)jump_ability, dir, false);
-        //player.GetComponent<PlayerPhysics>().Jump(position, (Jump)jump_ability,dir,false);
+        //player.GetComponent<PlayerGraphics>().Jump(dir);
+        //player.transform.GetChild(0).GetComponent<AnimationEvents>().SetJumpCordinates(position, (Jump)jump_ability, dir, false);
+        player.GetComponent<PlayerPhysics>().Jump(position, (Jump)jump_ability,dir,false);
     }
 
     public void Jump_Finish(Player player, Vector2 finalpos, Jump jump)
@@ -287,10 +287,10 @@ public class APIGraphic{
         PlayerGraphics gl = player.GetComponent<PlayerGraphics>();
         switch (player.leandirection)
         {
-            case Direction.Right: gl.Lean_Right(true); break;
-            case Direction.Left: gl.Lean_Left(true); break;
-            case Direction.Up: gl.Lean_Up(true); break;
-            case Direction.Down: gl.Lean_Down(true); break;
+            case Direction.Right: gl.Lean_Right(false); break;
+            case Direction.Left: gl.Lean_Left(false); break;
+            case Direction.Up: gl.Lean_Up(false); break;
+            case Direction.Down: gl.Lean_Down(false); break;
         }
     }
     public void Camera_AutoMove()

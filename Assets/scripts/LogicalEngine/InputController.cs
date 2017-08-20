@@ -27,9 +27,7 @@ public class InputController {
         }
         else if (player.state == PlayerState.Jumping)
         {
-            if (player.jumpdirection == Toolkit.ReverseDirection(direction))
-                return;
-            //JumpingPlayerMove(player, direction);
+            JumpingPlayerMove(player, direction);
         }
         else if(player.state == PlayerState.Lean)
         {
@@ -191,7 +189,13 @@ public class InputController {
     {
         if (player.state == PlayerState.Jumping)
         {
-            
+            if(direction == player.gravity)
+            {
+                player.SetState(PlayerState.Idle);
+                Debug.Log("farda avazesh kon");
+                player.ApplyGravity();
+                return;
+            }
             if (player.Can_Move_Direction(direction))
             {
                 if (player.Should_Change_Direction(direction))
@@ -234,7 +238,7 @@ public class InputController {
             {
                 if (player.Can_Lean(Toolkit.VectorSum(player.position, direction)))
                 {
-                    GameObject.Find("GetInput").GetComponent<GetInput>().StopCoroutine(((Jump)player.currentAbility).coroutine);
+                    //GameObject.Find("GetInput").GetComponent<GetInput>().StopCoroutine(((Jump)player.currentAbility).coroutine);
                     if (!player.isonejumping)
                     {
                         player.UseAbility(player.abilities[0]);
@@ -310,8 +314,17 @@ public class InputController {
             player.movepercentage = 0;
             if (Toolkit.IsInsideBranch(player))
             {
-                if (Toolkit.HasBranch(Toolkit.VectorSum(player.position, direction)))
+                Branch tempbranch = Toolkit.GetBranch(Toolkit.VectorSum(player.position, direction));
+                if (tempbranch != null)
                 {
+                    if (tempbranch.islocked)
+                    {
+                        if (!player.HasAbility(AbilityType.Key))
+                            return;
+                        player.abilities.RemoveAt(0);
+                        engine.apigraphic.UnitChangeSprite(player);
+                        tempbranch.UnlockBranch();
+                    }
                     player.SetState(PlayerState.Busy);
                     engine.apigraphic.BranchLight(false, Toolkit.GetBranch(player.position),player);
                     Toolkit.GetBranch(Toolkit.VectorSum(player.position, direction)).PlayerMove (Toolkit.ReverseDirection(direction), player);
@@ -356,6 +369,10 @@ public class InputController {
             }
             else
             {
+                if(Toolkit.ReverseDirection(direction) == player.gravity && Toolkit.IsEmpty(Toolkit.VectorSum(player.position, direction)))
+                {
+                    Jump(player);
+                }
                 Lean(player, direction);
             }
         }

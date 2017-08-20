@@ -13,6 +13,7 @@ public class FunctionalContainer : Container
     public bool firstmove { get; set; }
     private AudioSource audio_source;
     private bool actionlock = false;
+    private bool IsOnMove; //if container is moving this will be true
     public override bool PlayerMoveInto(Direction dir)
     {
         return false;
@@ -88,10 +89,13 @@ public class FunctionalContainer : Container
         {
             api.engine.pipecontroller.CheckPipes();
             actionlock = false;
+            IsOnMove = false;
             return;
         }
+        IsOnMove = true;
         if (!MoveContainer(GetMoveDirection()))
         {
+            IsOnMove = false;
             api.AddToStuckList(this);
             api.engine.pipecontroller.CheckPipes();
             actionlock = false;
@@ -131,6 +135,13 @@ public class FunctionalContainer : Container
         }
     }
 
+    public void CheckNextMove()
+    {
+        if (currentState != nextState && !IsOnMove)
+        {
+            Action_Fuel();
+        }
+    }
     public bool MoveContainer(Direction dir)
     {
         return api.MoveUnit(this, dir);

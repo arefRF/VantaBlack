@@ -96,8 +96,8 @@ public class Container : ParentContainer {
         api.ChangeSprite(this);
         _setability(player);
         api.engine.apigraphic.Absorb(player, this);
-        SetNextState();
         if (this is FunctionalContainer && player.abilities.Count != 0 && player.abilities[0].abilitytype == AbilityType.Fuel && ((FunctionalContainer)this).on) { //shayad moshkel dashte bashe
+            SetNextState();
             ((FunctionalContainer)this).SetOnorOff();
             ((FunctionalContainer)this).Action_Fuel();
         }
@@ -127,12 +127,14 @@ public class Container : ParentContainer {
                     if (abilities.Count == 0)
                     {
                         ((FunctionalContainer)this).SetOnorOff();
-                        ((FunctionalContainer)this).Action_Fuel();
+                        (this as FunctionalContainer).CheckNextMove();
+                        //((FunctionalContainer)this).Action_Fuel();
                     }
                     else if (abilities[0].abilitytype == AbilityType.Fuel)
                     {
                         SetNextState();
-                        ((FunctionalContainer)this).Action_Fuel();
+                        (this as FunctionalContainer).CheckNextMove();
+                        //((FunctionalContainer)this).Action_Fuel();
                     }
                 }
             }

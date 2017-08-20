@@ -16,6 +16,17 @@ public class AnimationEvents : MonoBehaviour {
         dir = dir1;
         hit = hit1;
     }
+
+
+    private void OpenEye()
+    {
+        transform.parent.parent.GetComponent<PlayerGraphics>().OpenEye();
+    }
+
+    private void ResetEye()
+    {
+        transform.parent.parent.GetComponent<PlayerGraphics>().ResetEye();
+    }
     private void DrainFinished()
     {
         transform.parent.parent.GetComponent<PlayerGraphics>().DrainFinished();
@@ -27,7 +38,7 @@ public class AnimationEvents : MonoBehaviour {
     }
     private void LeanUndoFinished()
     {
-        transform.parent.GetComponent<Player>().LeanUndoFinished();
+        gameObject.GetComponentInParent<Player>().LeanUndoFinished();
     }
 
     private void BranchExitFinished()

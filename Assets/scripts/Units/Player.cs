@@ -57,8 +57,6 @@ public class Player : Unit
         oneJump = new Jump(1);
         state = PlayerState.Idle;
         tempstate = state;
-        if (gravitynum != 0)
-            gravity = Toolkit.NumberToDirection(gravitynum);
     }
 
     public void Update()
@@ -93,7 +91,6 @@ public class Player : Unit
 
     void Start()
     {
-        gravity = Starter.GetGravityDirection();
         units = Starter.GetDataBase().units;
         x_bound = GameObject.Find("Starter").GetComponent<Starter>().x;
         y_bound = GameObject.Find("Starter").GetComponent<Starter>().y;
@@ -172,7 +169,7 @@ public class Player : Unit
         List<Unit> units = api.engine_GetUnits(Toolkit.VectorSum(position, dir));
         for (int i = 0; i < units.Count; i++)
         {
-            if (units[i] is Container || units[i] is Fountain || (units[i] is Branch && ((Branch)units[i]).islocked) || (units[i] is Rock && ((Rock)units[i]).isleanable))
+            if (units[i].isLeanable())
                 return true;
         }
         return false;
@@ -249,13 +246,93 @@ public class Player : Unit
                 units = api.engine_GetUnits(Toolkit.VectorSum(Toolkit.VectorSum(Toolkit.DirectiontoVector(Toolkit.ReverseDirection(gravitydirection)), Toolkit.DirectiontoVector(dir)), position));
         }
         for (int i = 0; i < units.Count; i++) {
-            if (!units[i].PlayerMoveInto(Toolkit.ReverseDirection(dir)))
+            if (units[i] is Player)
+            {
+                if ((units[i] as Player).CanPlayerMoveInDirection(direction))
+                    break;
+                return false;
+
+            }
+            else if (!units[i].PlayerMoveInto(Toolkit.ReverseDirection(dir)))
             {
                 
                 return false;
             }
         }
         api.engine_Move(this, dir);
+        return true;
+    }
+
+    public bool CanPlayerMoveInDirection(Direction dir)
+    {
+        Ramp ramp = null;
+        List<Unit> units = api.engine_GetUnits(this, dir);
+        onramp = false;
+        List<Unit> temp = api.engine_GetUnits(position);
+        bool goingup = true;
+        for (int i = 0; i < temp.Count; i++)
+        {
+            if (temp[i] is Ramp)
+            {
+                ramp = (Ramp)temp[i];
+                if (ramp.IsOnRampSide(Toolkit.ReverseDirection(gravity)))
+                {
+                    onramp = true;
+                }
+            }
+        }
+        if (onramp)
+        {
+            Direction gravitydirection = gravity;
+            switch (gravitydirection)
+            {
+                case Direction.Down:
+                    switch (dir)
+                    {
+                        case Direction.Right: if (ramp.type == 1) goingup = false; break;
+                        case Direction.Left: if (ramp.type == 4) goingup = false; break;
+                    }
+                    break;
+                case Direction.Right:
+                    switch (dir)
+                    {
+                        case Direction.Up: if (ramp.type == 4) goingup = false; break;
+                        case Direction.Down: if (ramp.type == 3) goingup = false; break;
+                    }
+                    break;
+                case Direction.Up:
+                    switch (dir)
+                    {
+                        case Direction.Right: if (ramp.type == 2) goingup = false; break;
+                        case Direction.Left: if (ramp.type == 3) goingup = false; break;
+                    }
+                    break;
+                case Direction.Left:
+                    switch (dir)
+                    {
+                        case Direction.Up: if (ramp.type == 1) goingup = false; break;
+                        case Direction.Down: if (ramp.type == 2) goingup = false; break;
+                    }
+                    break;
+            }
+            if (goingup)
+                units = api.engine_GetUnits(Toolkit.VectorSum(Toolkit.VectorSum(Toolkit.DirectiontoVector(Toolkit.ReverseDirection(gravitydirection)), Toolkit.DirectiontoVector(dir)), position));
+        }
+        for (int i = 0; i < units.Count; i++)
+        {
+            if (units[i] is Player)
+            {
+                if ((units[i] as Player).CanPlayerMoveInDirection(direction))
+                    return true;
+                return false;
+
+            }
+            else if (!units[i].PlayerMoveInto(Toolkit.ReverseDirection(dir)))
+            {
+
+                return false;
+            }
+        }
         return true;
     }
 
@@ -627,7 +704,7 @@ public class Player : Unit
     }
     public void FallFinished()
     {
-        if(position.x <= 0 || position.y <= 0)
+        if (position.x <= 0 || position.y <= 0)
         {
             api.engine.apigraphic.Fall_Player_Died(this);
             return;
@@ -666,17 +743,6 @@ public class Player : Unit
         {
             api.graphicalengine_Land(this, position);
         }
-    }
-
-    public bool IsRelatedLean(GameObject parent)
-    {
-        List<Unit> units = api.engine_GetUnits(this, leandirection);
-        for(int i=0; i<units.Count; i++)
-        {
-            if (parent == units[i].gameObject.transform.parent.gameObject)
-                return true;
-        }
-        return false;
     }
 
     public void UseAbility(Ability ability)
@@ -937,6 +1003,13 @@ public class Player : Unit
                 case Direction.Down: return transform.position.y < position.y;
             }
         }
+        return false;
+    }
+
+    public bool HasAbility(AbilityType abilitytype)
+    {
+        if (abilities.Count != 0 && abilities[0].abilitytype == abilitytype)
+            return true;
         return false;
     }
 

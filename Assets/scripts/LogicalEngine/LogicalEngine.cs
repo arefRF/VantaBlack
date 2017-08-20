@@ -62,6 +62,7 @@ public class LogicalEngine {
     {
         shouldmove = new List<Unit>();
         leanmove = new List<Unit>();
+        List<Unit> playerinbranchmove = new List<Unit>();
         if (!(unit is Box))
         {
             snpmanager.CloneStuckList();
@@ -71,68 +72,92 @@ public class LogicalEngine {
             for (int i = 0; i < unit.ConnectedUnits.Count; i++)
                 if (!unit.ConnectedUnits[i].CanMove(dir, unit.transform.parent.gameObject))
                     return false;
-
+            //friction
+            shouldmove.AddRange(unit.EffectedUnits(Toolkit.ReverseDirection(Starter.GetDataBase().gravity_direction)));
+            shouldmove.AddRange(unit.players);
             int bound = unit.players.Count;
             for (int i = 0; i < bound; i++)
             {
                 if (Toolkit.HasBranch(Toolkit.VectorSum(unit.players[i].position, dir)))
                 {
-                    Branch tempbranch = Toolkit.GetBranch(Toolkit.VectorSum(unit.players[i].position, dir));
-                    if (!tempbranch.islocked)
+                    if(Toolkit.GetBranch(Toolkit.VectorSum(unit.players[i].position, dir)).PlayerForcePushIntoBranch(unit.players[i] as Player, dir))
                     {
-                        inputcontroller.LeanUndo(unit.players[i] as Player, Toolkit.ReverseDirection(dir), PlayerState.Busy);
-                        MovePlayer(unit.players[i] as Player, dir);
+                        while (shouldmove.IndexOf(unit.players[i]) != -1)
+                            shouldmove.Remove(unit.players[i]);
                         unit.players.RemoveAt(i);
+                        i--;
+                        bound--;
                         continue;
                     }
-                    if (tempbranch.islocked)
+                }
+                else if (!unit.players[i].CanMove(dir, unit.transform.parent.gameObject))
+                {
+                    if (Toolkit.HasBranch(Toolkit.VectorSum(unit.players[i].position, Toolkit.ReverseDirection(dir))))
                     {
-                        Player tempplayer = unit.players[i] as Player;
-                        if(tempplayer.abilities.Count != 0 && tempplayer.abilities[0].abilitytype == AbilityType.Key)
+                        if (Toolkit.GetBranch(Toolkit.VectorSum(unit.players[i].position, Toolkit.ReverseDirection(dir))).PlayerForcePushIntoBranch(unit.players[i] as Player, Toolkit.ReverseDirection(dir)))
                         {
-                            tempplayer.abilities.Clear();
-                            tempbranch.islocked = false;
-                            apigraphic.UnitChangeSprite(tempbranch);
-                            inputcontroller.LeanUndo(unit.players[i] as Player, Toolkit.ReverseDirection(dir), PlayerState.Busy);
-                            MovePlayer(unit.players[i] as Player, dir);
+                            while (shouldmove.IndexOf(unit.players[i]) != -1)
+                                shouldmove.Remove(unit.players[i]);
                             unit.players.RemoveAt(i);
+                            i--;
+                            bound--;
                             continue;
                         }
+
                     }
-                }
-                if (!unit.players[i].CanMove(dir, unit.transform.parent.gameObject))
-                {
-                    apigraphic.Crush_Player_Died(unit.players[i] as Player);
+                    else
+                        apigraphic.Crush_Player_Died(unit.players[i] as Player);
                 }
                 unit.players.AddRange(unit.players[i].players);
 
             }
-            //friction
-            shouldmove.AddRange(unit.EffectedUnits(Toolkit.ReverseDirection(Starter.GetDataBase().gravity_direction)));
-            shouldmove.AddRange(unit.players);
             for (int i = 0; i < unit.ConnectedUnits.Count; i++)
             {
+                if(unit.ConnectedUnits[i] is Branch)
+                {
+                    Player tempplayer = Toolkit.GetPlayer(unit.ConnectedUnits[i].position);
+                    if (tempplayer != null)
+                        playerinbranchmove.Add(tempplayer);
+                }
                 bound = unit.ConnectedUnits[i].players.Count;
+                shouldmove.AddRange(unit.ConnectedUnits[i].EffectedUnits(Toolkit.ReverseDirection(Starter.GetDataBase().gravity_direction)));
+                shouldmove.AddRange(unit.ConnectedUnits[i].players);
                 for (int j = 0; j < bound; j++)
                 {
                     if (Toolkit.HasBranch(Toolkit.VectorSum(unit.ConnectedUnits[i].players[j].position, dir)))
                     {
-                        inputcontroller.LeanUndo(unit.ConnectedUnits[i].players[j] as Player, Toolkit.ReverseDirection(dir), PlayerState.Idle);
-                        inputcontroller.FakeLeanUndo(unit.ConnectedUnits[i].players[j] as Player, Toolkit.ReverseDirection(dir));
-                        MovePlayer(unit.ConnectedUnits[i].players[j] as Player, dir);
-                        unit.ConnectedUnits[i].players.RemoveAt(j);
-                        j--;
-                        bound--;
-                        continue;
+                        if (Toolkit.GetBranch(Toolkit.VectorSum(unit.ConnectedUnits[i].players[j].position, dir)).PlayerForcePushIntoBranch(unit.ConnectedUnits[i].players[j] as Player, dir))
+                        {
+                            while (shouldmove.IndexOf(unit.ConnectedUnits[i].players[j]) != -1)
+                            {
+                                shouldmove.Remove(unit.ConnectedUnits[i].players[j]);
+                            }
+                            unit.ConnectedUnits[i].players.RemoveAt(j);
+                            j--;
+                            bound--;
+                            continue;
+                        }
                     }
                     if (!unit.ConnectedUnits[i].players[j].CanMove(dir, unit.ConnectedUnits[i].transform.parent.gameObject))
                     {
-                        apigraphic.Crush_Player_Died(unit.ConnectedUnits[i].players[j] as Player);
+                        if (Toolkit.HasBranch(Toolkit.VectorSum(unit.ConnectedUnits[i].players[j].position, Toolkit.ReverseDirection(dir))))
+                        {
+                            if (Toolkit.GetBranch(Toolkit.VectorSum(unit.ConnectedUnits[i].players[j].position, Toolkit.ReverseDirection(dir))).PlayerForcePushIntoBranch(unit.ConnectedUnits[i].players[j] as Player, Toolkit.ReverseDirection(dir)))
+                            {
+                                while (shouldmove.IndexOf(unit.ConnectedUnits[i].players[j]) != -1)
+                                    shouldmove.Remove(unit.ConnectedUnits[i].players[j]);
+                                unit.ConnectedUnits[i].players.RemoveAt(j);
+                                j--;
+                                bound--;
+                                continue;
+                            }
+
+                        }
+                        else
+                            apigraphic.Crush_Player_Died(unit.ConnectedUnits[i].players[j] as Player);
                     }
                     unit.ConnectedUnits[i].players.AddRange(unit.ConnectedUnits[i].players[j].players);
                 }
-                shouldmove.AddRange(unit.ConnectedUnits[i].EffectedUnits(Toolkit.ReverseDirection(Starter.GetDataBase().gravity_direction)));
-                shouldmove.AddRange(unit.ConnectedUnits[i].players);
             }
             for (int i = 0; i < unit.ConnectedUnits.Count; i++)
             {
@@ -142,16 +167,21 @@ public class LogicalEngine {
                 apiunit.AddToDatabase(u);
                
             }
-            if (((FunctionalContainer)unit).firstmove)
-            {
-                snpmanager.AddToSnapShot(unit);
-                snpmanager.AddToSnapShot(unit.ConnectedUnits);
-            }
             leanmove.AddRange(GetRelatedLeanedPlayers(unit.gameObject.transform.parent.gameObject));
             Vector2 tempposition = unit.position - (Vector2)unit.gameObject.transform.localPosition;
             apiunit.RemoveFromDatabase(unit);
             unit.position = Toolkit.VectorSum(unit.position, Toolkit.DirectiontoVector(dir));
             apiunit.AddToDatabase(unit);
+            for(int i=0; i<playerinbranchmove.Count; i++)
+            {
+                leanmove.Remove(playerinbranchmove[i]);
+                shouldmove.Remove(playerinbranchmove[i]);
+                apiunit.RemoveFromDatabase(playerinbranchmove[i]);
+                playerinbranchmove[i].position = Toolkit.VectorSum(playerinbranchmove[i].position, Toolkit.DirectiontoVector(dir)); ;
+                apiunit.AddToDatabase(playerinbranchmove[i]);
+                apigraphic.Player_Co_Stop((Player)playerinbranchmove[i]);
+                apigraphic.MovePlayerOnPlatform((Player)playerinbranchmove[i], ((Player)playerinbranchmove[i]).position);
+            }
             for (int i=0; i<leanmove.Count; i++)
             {
                 bool flag = false;
@@ -159,7 +189,6 @@ public class LogicalEngine {
                 {
                     if(leanmove[i] == shouldmove[j])
                     {
-                        
                         flag = true;
                     }
                 }
@@ -248,7 +277,7 @@ public class LogicalEngine {
         {
             if (database.player[i].state == PlayerState.Lean)
             {
-                if (database.player[i].IsRelatedLean(parent))
+                if (database.player[i].LeanedTo.transform.parent.gameObject == parent)
                     players.Add(database.player[i]);
             }
         }
@@ -426,7 +455,6 @@ public class LogicalEngine {
                             else
                             {
                                 database.units[(int)player.position.x, (int)player.position.y].Remove(player);
-                                Debug.Log(player.position);
                                 player.position = Toolkit.VectorSum(player.position, dir);
                                 database.units[(int)player.position.x, (int)player.position.y].Add(player);
                                 apigraphic.MovePlayer_Ramp_5(player, player.position, Toolkit.GetRamp(player.position).type);
@@ -692,7 +720,16 @@ public class LogicalEngine {
     public List<Unit> GetUnits(Vector2 position)
     {
         try {
-            return database.units[(int)position.x, (int)position.y];
+            List<Unit> tempunit = database.units[(int)position.x, (int)position.y];
+            for (int i = 0; i < tempunit.Count; i++)
+            {
+                if (tempunit[i] is Player)
+                {
+                    tempunit.RemoveAt(i);
+                    i--;
+                }
+            }
+            return tempunit;
         }
         catch
         {
@@ -756,6 +793,13 @@ public class LogicalEngine {
                             else if (database.player[i].LeanedTo is Leanable)
                             {
                                 ((Leanable)database.player[i].LeanedTo).LeanedAction(database.player[i], Toolkit.ReverseDirection(database.player[i].leandirection));
+                            }
+                        }
+                        else if(database.player[i].LeanedTo is Fountain)
+                        {
+                            if (!KeyUp)
+                            {
+                                (database.player[i].LeanedTo as Fountain).Reset(database.player[i]);
                             }
                         }
                     }
@@ -842,6 +886,7 @@ public class LogicalEngine {
             {
                 lasercontroller.CollisionCheck(database.player[i].position);
             }
+            (unit as FunctionalContainer).CheckNextMove();
         }
         //CheckStuckedUnit(unit);
     }

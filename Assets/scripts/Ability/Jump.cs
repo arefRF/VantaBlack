@@ -74,7 +74,8 @@ public class Jump : Ability {
         engine.apiunit.RemoveFromDatabase(player);
         player.position = final_pos;
         engine.apiunit.AddToDatabase(player);
-        Vector2 temppos = Toolkit.VectorSum(player.position, engine.database.gravity_direction);
+        player.SetState(PlayerState.Jumping);
+        /*Vector2 temppos = Toolkit.VectorSum(player.position, engine.database.gravity_direction);
         Ramp ramp = Toolkit.GetRamp(temppos);
         if (Toolkit.IsEmpty(Toolkit.VectorSum(player.position, engine.database.gravity_direction)) || (ramp != null && !Toolkit.IsdoubleRamp(temppos) && ramp.IsOnRampSide(Toolkit.ReverseDirection(engine.database.gravity_direction))))
         {
@@ -92,7 +93,7 @@ public class Jump : Ability {
                     player.ApplyGravity();
         }
         else
-            player.ApplyGravity();
+            player.ApplyGravity();*/
     }
 
     private bool PlayerMoveDirection(Player player, Direction direction)

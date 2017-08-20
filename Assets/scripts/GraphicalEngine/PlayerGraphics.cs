@@ -1,26 +1,31 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-
 public class PlayerGraphics : MonoBehaviour {
     public float move_time = 0.5f;
-    private APIGraphic api;
-    private LogicalEngine engine;
-    private Vector2 unmoved_pos;
-    private Animator animator;
-    private Animator eyeAnimator;
-    private Animator bodyAnimator;
-    private Player player;
-    private int z_rot;
-    private AudioSource audio;
+    protected APIGraphic api;
+    protected LogicalEngine engine;
+    protected Animator animator;
+    protected Animator eyeAnimator;
+    protected Animator bodyAnimator;
+    protected Player player;
+    protected int z_rot;
+    protected AudioSource audio;
     void Start()
     {
         z_rot = 0;
-        unmoved_pos = transform.position;
         engine = Starter.GetEngine();
         api = engine.apigraphic;
-        animator = transform.GetChild(0).GetComponent<Animator>();
-        eyeAnimator = transform.GetChild(0).GetChild(2).GetComponent<Animator>();
+        animator = Toolkit.GetObjectInChild(gameObject,"Sprite Holder").GetComponent<Animator>();
+        try
+        {
+            eyeAnimator = Toolkit.GetObjectInChild(transform.GetChild(0).gameObject, "Eyes").GetComponent<Animator>();
+        }
+        catch (System.NullReferenceException e)
+        {
+            Debug.Log("There is no object named eyes");
+            eyeAnimator = null;
+        }
         player = GetComponent<Player>();
         engine.apigraphic.Absorb(player, null);
         bodyAnimator = transform.GetChild(0).GetComponent<Animator>();
@@ -163,10 +168,10 @@ public class PlayerGraphics : MonoBehaviour {
     {
         animator.SetInteger("Lean", 0);
         animator.SetInteger("Lean Air", 0);
-        bodyAnimator.SetBool("Lean", false);
+       // bodyAnimator.SetBool("Lean", false);
     }
 
-    public void MoveToBranch(Direction dir)
+    public virtual void MoveToBranch(Direction dir)
     {
         if (player.gravity == Direction.Right)
         {
@@ -272,7 +277,15 @@ public class PlayerGraphics : MonoBehaviour {
         StartCoroutine(Branch_Exit(pos, 0.4f));
     }
 
+    public void OpenEye()
+    {
+        eyeAnimator.SetInteger("Eye", 1);
+    }
 
+    public void ResetEye()
+    {
+        eyeAnimator.SetInteger("Eye", 0);
+    }
     private IEnumerator Branch_Exit(Vector2 end, float move_time)
     {
         float remain_distance = ((Vector2)transform.position - end).sqrMagnitude;
@@ -304,7 +317,7 @@ public class PlayerGraphics : MonoBehaviour {
         animator.SetTrigger("Hit");
         eyeAnimator.SetTrigger("Hit");
     }
-    private IEnumerator Simple_Move(Vector2 end, float move_time, bool enter)
+    protected IEnumerator Simple_Move(Vector2 end, float move_time, bool enter)
     {
         float remain_distance = ((Vector2)transform.position - end).sqrMagnitude;
         while (remain_distance > float.Epsilon)
@@ -415,10 +428,7 @@ public class PlayerGraphics : MonoBehaviour {
     {
         animator.SetTrigger("Drain");
     }
-    public void TransitionAnimation()
-    {
-        animator.SetBool("Transition", true);
-    }
+ 
     public void Ramp_Exit()
     {
         animator.SetInteger("Ramp", 0);
@@ -539,8 +549,6 @@ public class PlayerGraphics : MonoBehaviour {
                 xrot = 180;
         }
         player.transform.GetChild(0).rotation = Quaternion.Euler(xrot, yrot, zrot);
-
-
     }
 
 
@@ -567,28 +575,33 @@ public class PlayerGraphics : MonoBehaviour {
         yield return new WaitForSeconds(0.1f);
         player.TeleportFinished();
     }
-    public void ChangeColor()
+
+    public virtual void ChangeColor()
     {
         Color color = Ability_Color(player.abilities);
-        // Body Color
-        transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<SpriteRenderer>().color = color;
-        //Eye BAckground Color
-        transform.GetChild(0).GetChild(0).GetChild(0).GetChild(1).GetComponent<SpriteRenderer>().color = color;
 
         // Eye Color
         color = new Color(color.r, color.g, color.b, 1);
         if (player.abilities.Count == 0)
+        {
             transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().color = color;
+            transform.GetChild(0).GetChild(0).GetChild(0).GetChild(1).GetComponent<SpriteRenderer>().color = new Color(0,0,0,0);
+        }
         else
+        {
             transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().color = Color.black;
+            transform.GetChild(0).GetChild(0).GetChild(0).GetChild(1).GetComponent<SpriteRenderer>().color = color;
+        }
+        
     }
+
 
     public void ChangeColorFinished()
     {
 
     }
 
-    private Color Ability_Color(List<Ability> ability)
+    protected Color Ability_Color(List<Ability> ability)
     {
         float[] color = new float[4];
         if (ability.Count != 0)
@@ -610,7 +623,7 @@ public class PlayerGraphics : MonoBehaviour {
 
     public void ShowHologram()
     {
-        GameObject hologram = Toolkit.GetObjectInChild(gameObject.transform.GetChild(0).GetChild(0).gameObject, "Hologram");
+        GameObject hologram = Toolkit.GetObjectInChild(gameObject, "Hologram");
         GameObject lights = Toolkit.GetObjectInChild(hologram, "Lights");
         GameObject Number = Toolkit.GetObjectInChild(hologram, "Number");
         SpriteRenderer IconSpriteRenderer = Toolkit.GetObjectInChild(hologram, "Icon").GetComponent<SpriteRenderer>();
@@ -638,12 +651,12 @@ public class PlayerGraphics : MonoBehaviour {
 
     public void HideHologram()
     {
-        Toolkit.GetObjectInChild(gameObject.transform.GetChild(0).GetChild(0).gameObject, "Hologram").SetActive(false);
+        Toolkit.GetObjectInChild(gameObject, "Hologram").SetActive(false);
     }
 
     public void UpdateHologram()
     {
-        if (Toolkit.GetObjectInChild(gameObject.transform.GetChild(0).GetChild(0).gameObject, "Hologram").activeSelf)
+        if (Toolkit.GetObjectInChild(gameObject, "Hologram").activeSelf)
             ShowHologram();
     }
 
