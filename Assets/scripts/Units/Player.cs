@@ -926,6 +926,13 @@ public class Player : Unit
         return false;
     }
 
+    public bool HasAbility(AbilityType abilitytype)
+    {
+        if (abilities.Count != 0 && abilities[0].abilitytype == abilitytype)
+            return true;
+        return false;
+    }
+
     public override bool isLeanable()
     {
         return false;
