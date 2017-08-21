@@ -47,6 +47,7 @@ public class Laser : Unit {
         
             Vector2 pos = Toolkit.VectorSum(startingpos, Toolkit.DirectiontoVector(direction)/2);
             RaycastHit2D hit = Physics2D.Raycast(pos, Toolkit.DirectiontoVector(direction), Mathf.Max(engine.sizeX, engine.sizeY));
+            //if(hit.point == new)
             Vector2 finalpos = hit.point;
             int num = Toolkit.DirectionToNumber(direction) - 1;
             linerenderers[num] =  engine.apigraphic.AddLaserLine(pos, finalpos, transform.parent.gameObject, linerenderers[num]);
