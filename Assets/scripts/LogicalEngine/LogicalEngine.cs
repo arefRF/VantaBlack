@@ -291,7 +291,7 @@ public class LogicalEngine {
             //snpmanager.AddToSnapShot(player);
             if (player.onramp && player.state != PlayerState.Jumping) //ramp move
             {
-                List<Unit> units = GetUnits(player.position);
+                List<Unit> units = GetUnits_ExcludingPlayer(player.position);
                 Ramp ramp;
                 bool goingup = true;
                 if (units[0] is Ramp)
@@ -375,10 +375,10 @@ public class LogicalEngine {
                     else
                     {
                         nextpos = Toolkit.VectorSum(player.position, Toolkit.VectorSum(Toolkit.DirectiontoVector(Toolkit.ReverseDirection(database.gravity_direction)), Toolkit.DirectiontoVector(dir)));
-                        units = GetUnits(nextpos);
+                        units = GetUnits_ExcludingPlayer(nextpos);
                         if (units.Count == 0)
                         {
-                            units = GetUnits(Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction)));
+                            units = GetUnits_ExcludingPlayer(Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction)));
                             if (units.Count == 0)
                             {
                                 database.units[(int)player.position.x, (int)player.position.y].Remove(player);
@@ -465,7 +465,7 @@ public class LogicalEngine {
                 else
                 {
                     nextpos = Toolkit.VectorSum(player.position, Toolkit.DirectiontoVector(dir));
-                    units = GetUnits(nextpos);
+                    units = GetUnits_ExcludingPlayer(nextpos);
                     if (Toolkit.HasRamp(nextpos) && Toolkit.GetRamp(nextpos).ComingOnRampSide(player.position))
                     {
                         database.units[(int)player.position.x, (int)player.position.y].Remove(player);
@@ -475,7 +475,7 @@ public class LogicalEngine {
                     }
                     else
                     {
-                        units = GetUnits(Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction)));
+                        units = GetUnits_ExcludingPlayer(Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction)));
                         database.units[(int)player.position.x, (int)player.position.y].Remove(player);
                         if (Toolkit.HasRamp(Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction))))
                         {
@@ -521,7 +521,7 @@ public class LogicalEngine {
                     apigraphic.BranchLight(false, Toolkit.GetBranch(player.position),player);
                     nextpos = Toolkit.VectorSum(player.position, Toolkit.DirectiontoVector(dir));
                     Vector2 temp = Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction));
-                    List<Unit> units = GetUnits(nextpos);
+                    List<Unit> units = GetUnits_ExcludingPlayer(nextpos);
                     if (units.Count != 0)
                     {
                         if(units[0] is Branch)
@@ -589,7 +589,7 @@ public class LogicalEngine {
                 {
                     nextpos = Toolkit.VectorSum(player.position, Toolkit.DirectiontoVector(dir));
                     Vector2 temp = Toolkit.VectorSum(nextpos, Toolkit.DirectiontoVector(database.gravity_direction));
-                    List<Unit> units = GetUnits(nextpos);
+                    List<Unit> units = GetUnits_ExcludingPlayer(nextpos);
                     if (units.Count != 0)
                     {
                         if(units[0] is Drainer)
@@ -641,7 +641,7 @@ public class LogicalEngine {
                     }
                     else
                     {
-                        units = GetUnits(temp);
+                        units = GetUnits_ExcludingPlayer(temp);
                         if (units.Count != 0)
                         {
                             if (units[0] is Ramp)
@@ -720,6 +720,19 @@ public class LogicalEngine {
     public List<Unit> GetUnits(Vector2 position)
     {
         try {
+            return database.units[(int)position.x, (int)position.y];
+        }
+        catch
+        {
+            Debug.Log("position out of range");
+            return null;
+        }
+    }
+
+    public List<Unit> GetUnits_ExcludingPlayer(Vector2 position)
+    {
+        try
+        {
             List<Unit> tempunit = database.units[(int)position.x, (int)position.y];
             for (int i = 0; i < tempunit.Count; i++)
             {
@@ -828,7 +841,7 @@ public class LogicalEngine {
     {
         for (int i = 0; i < database.player.Count; i++)
         {
-            if(database.player[i].OneJump)
+            if(database.player[i].CanJump)
                 inputcontroller.Jump(database.player[i]);
         }
     }

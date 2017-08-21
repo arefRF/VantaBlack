@@ -383,9 +383,11 @@ public class InputController {
             {
                 if(Toolkit.ReverseDirection(direction) == player.gravity && Toolkit.IsEmpty(Toolkit.VectorSum(player.position, direction)))
                 {
-                    Jump(player);
+                    if(player.CanJump)
+                        Jump(player);
                 }
-                Lean(player, direction);
+                else
+                    Lean(player, direction);
             }
         }
     }

@@ -11,7 +11,7 @@ public class Player : Unit
     public List<Direction> move_direction;
 
     //Skill locks
-    public bool OneJump;
+    public bool CanJump;
 
     public Direction direction { get; set; }
     public int movepercentage { get; set; }

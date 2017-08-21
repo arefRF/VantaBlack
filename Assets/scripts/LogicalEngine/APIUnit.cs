@@ -29,6 +29,15 @@ public class APIUnit {
         return engine.GetUnits(position);
     }
 
+    public List<Unit> engine_GetUnits_ExcludingPlayer(Vector2 position)
+    {
+        return engine.GetUnits_ExcludingPlayer(position);
+    }
+
+    public List<Unit> engine_GetUnits_ExcludingPlayer(Unit unit, Direction dir)
+    {
+        return engine.GetUnits_ExcludingPlayer(Toolkit.VectorSum(unit.position, dir));
+    }
     public void engine_Land(Unit unit, Unit laningunit, Direction landingdirection)
     {
         engine.UnitToGraphic_Land(laningunit, unit, unit.position);
