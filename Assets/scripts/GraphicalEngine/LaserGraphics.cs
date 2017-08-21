@@ -30,7 +30,8 @@ public class LaserGraphics : MonoBehaviour {
             myLine.AddComponent<LineRenderer>();
             lineR = myLine.GetComponent<LineRenderer>();
             lineR.SetColors(Color.red, Color.red);
-            lineR.SetWidth(0.1f, 0.1f);
+            lineR.material = (Material)Resources.Load("Materials\\LAserMaterial", typeof(Material));
+            lineR.SetWidth(0.05f, 0.05f);
             lineR.SetPosition(0, pos1);
             lineR.SetPosition(1, pos2);
         }
