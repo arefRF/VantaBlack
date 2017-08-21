@@ -8,6 +8,8 @@ public class LaserGraphics : MonoBehaviour {
     GameObject beamParent;
     private Texture2D BeamTexture;
     private GameObject laserParent;
+    private GameObject laserParent2;
+    private bool switcher = false;
     // Use this for initialization
     void Awake () {
         BeamObjectPool = new List<GameObject>();
@@ -26,7 +28,10 @@ public class LaserGraphics : MonoBehaviour {
             laserParent = new GameObject();
              GameObject myLine = new GameObject();
              myLine.transform.position = pos1;
-             myLine.transform.parent = laserParent.transform;
+             if(switcher)
+                myLine.transform.parent = laserParent.transform;
+             else
+                 myLine.transform.parent = laserParent2.transform;
              myLine.AddComponent<LineRenderer>();
              LineRenderer lr = myLine.GetComponent<LineRenderer>();
              lr.SetColors(Color.red, Color.red);
@@ -37,7 +42,11 @@ public class LaserGraphics : MonoBehaviour {
 
     public void DestroyLasers()
     {
-        GameObject.Destroy(laserParent);
+        if (switcher)
+            GameObject.Destroy(laserParent);
+        else
+            GameObject.Destroy(laserParent2);
+        switcher = !switcher;
     }
     public void AddLaser(Vector2 pos1, Vector2 pos2, Direction direction, GameObject parent)
     {
