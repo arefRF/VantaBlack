@@ -35,60 +35,43 @@ public class Laser : Unit {
     {
         beamPositions.Clear();
         
-        SetLaserInDirection(Direction.Right, transform.position);
-        SetLaserInDirection(Direction.Down, transform.position);
-        SetLaserInDirection(Direction.Left, transform.position);
-        SetLaserInDirection(Direction.Up, transform.position);
+        SetLaserInDirection(Direction.Right, transform.position, linerenderers[1]);
+        SetLaserInDirection(Direction.Down, transform.position, linerenderers[2]);
+        SetLaserInDirection(Direction.Left, transform.position, linerenderers[3]);
+        SetLaserInDirection(Direction.Up, transform.position, linerenderers[0]);
         //engine.apigraphic.DestroyLasers();
     }
 
-    private void SetLaserInDirection(Direction direction, Vector2 startingpos)
+    private void SetLaserInDirection(Direction direction, Vector2 startingpos, LineRenderer linerenderer)
     {
         
-            Vector2 pos = Toolkit.VectorSum(startingpos, Toolkit.DirectiontoVector(direction)/1.9f);
-            RaycastHit2D hit = Physics2D.Raycast(pos, Toolkit.DirectiontoVector(direction), Mathf.Max(engine.sizeX, engine.sizeY));
-            //if(hit.point == new)
-            Vector2 finalpos = hit.point;
-            int num = Toolkit.DirectionToNumber(direction) - 1;
-            linerenderers[num] =  engine.apigraphic.AddLaserLine(pos, finalpos, transform.parent.gameObject, linerenderers[num]);
-            //SetLaser(direction, pos, finalpos);
-        /*else if (direction == Direction.Down)
+        Vector2 pos = Toolkit.VectorSum(startingpos, Toolkit.DirectiontoVector(direction)/1.95f);
+        RaycastHit2D hit = Physics2D.Raycast(pos, Toolkit.DirectiontoVector(direction), Mathf.Max(engine.sizeX, engine.sizeY));
+        //if(hit.point == new)
+        Vector2 finalpos = hit.point;
+        if (hit.collider == null)
         {
-            Vector2 finalpos = Toolkit.VectorSum(startingpos, direction);
-            Vector2 pos = Toolkit.VectorSum(startingpos, direction);
-            bool flag = false;
-            while (finalpos.y > 0 && Toolkit.IsEmpty(finalpos))
-            {
-                flag = true;
-                finalpos = Toolkit.VectorSum(finalpos, direction);
-            }
-            SetLaser(direction, pos, finalpos, flag);
+            finalpos = pos + Toolkit.DirectiontoVector(direction) * Mathf.Max(engine.sizeX, engine.sizeY);
         }
-        else if (direction == Direction.Left)
-        {
-            Vector2 finalpos = Toolkit.VectorSum(startingpos, direction);
-            Vector2 pos = Toolkit.VectorSum(startingpos, direction);
-            bool flag = false;
-            while (finalpos.x > 0 && Toolkit.IsEmpty(finalpos))
+        else {
+            if(hit.collider.transform.gameObject.GetComponent<Unit>().isLeanable())
+                finalpos += Toolkit.DirectiontoVector(direction) / 8;
+            if (hit.collider.tag == "Dynamic Container")
             {
-                flag = true;
-                finalpos = Toolkit.VectorSum(finalpos, direction);
+                DynamicContainer container = hit.collider.transform.gameObject.GetComponent<DynamicContainer>();
+                if (!(container.ConnectedUnits.Contains(this) && Toolkit.AreNeighbours(container, this)))
+                {
+                    SetLaserInDirection(container.direction, container.transform.position, container.linerenderer);
+                }
             }
-            SetLaser(direction, pos, finalpos, flag);
-        }
-        else if (direction == Direction.Up)
-        {
-            Vector2 finalpos = Toolkit.VectorSum(startingpos, direction);
-            Vector2 pos = Toolkit.VectorSum(startingpos, direction);
-            bool flag = false;
-            while ((finalpos.y < engine.sizeY - 1 && Toolkit.IsEmpty(finalpos)))
+            else if (hit.collider.tag == "Player")
             {
-                flag = true;
-                finalpos = Toolkit.VectorSum(finalpos, direction);
+                Debug.Log("player shoud die");
             }
-            SetLaser(direction, pos, finalpos, flag);
         }
-        */
+        linerenderer =  engine.apigraphic.AddLaserLine(pos, finalpos, transform.parent.gameObject, linerenderer);
+        
+           
     }
 
     private void SetLaser(Direction direction, Vector2 pos, Vector2 finalpos)
@@ -114,7 +97,7 @@ public class Laser : Unit {
                 api.engine.lasercontroller.containers.Add(container);
                 api.engine.apigraphic.AddPartialLaser(container.position, container.direction, container.gameObject);
                 api.engine.apigraphic.LaserHitDynamic(container);
-                SetLaserInDirection(container.direction, container.position);
+                //SetLaserInDirection(container.direction, container.position);
             }
         }
         else
