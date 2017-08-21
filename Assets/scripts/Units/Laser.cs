@@ -67,7 +67,9 @@ public class Laser : Unit {
             }
             else if (hit.collider.tag == "Player")
             {
-                Debug.Log("player shoud die");
+                Player tempplayer = hit.collider.transform.gameObject.GetComponent<Player>();
+                engine.apigraphic.Laser_Player_Died(tempplayer);
+                tempplayer.transform.position = new Vector3(-1, -1, 0);
             }
             else if(hit.collider.tag == "Branch")
             {
