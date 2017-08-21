@@ -314,6 +314,11 @@ public class APIGraphic{
     {
         graphicalengine.GetComponent<LaserGraphics>().AddLaserLine(pos1, pos2, parent);
     }
+
+    public void DestroyLasers()
+    {
+        graphicalengine.GetComponent<LaserGraphics>().DestroyLasers();
+    }
     public void LeanFinished(Player player)
     {
         PlayerGraphics gl = player.GetComponent<PlayerGraphics>();
