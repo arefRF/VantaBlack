@@ -1,7 +1,11 @@
 fileFormatVersion: 2
 guid: 067c51baa43524945a1fd8d8adf34937
 folderAsset: yes
+<<<<<<< HEAD:Assets/Resources/Containers/Version 2.meta
 timeCreated: 1503307176
+=======
+timeCreated: 1500120551
+>>>>>>> 5523cdd395988525b472b781fd83c5f81fe97950:Assets/Resources/Containers/Version 2.meta
 licenseType: Pro
 DefaultImporter:
   userData: 
