@@ -309,6 +309,11 @@ public class APIGraphic{
             case Direction.Down: gl.FakeLean_Down(); break;
         }
     }
+
+    public void AddLaserLine(Vector2 pos1, Vector2 pos2, GameObject parent)
+    {
+        graphicalengine.GetComponent<LaserGraphics>().AddLaserLine(pos1, pos2, parent);
+    }
     public void LeanFinished(Player player)
     {
         PlayerGraphics gl = player.GetComponent<PlayerGraphics>();
