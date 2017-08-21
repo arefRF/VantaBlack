@@ -42,17 +42,9 @@ public class Laser : Unit {
             Vector2 pos = Toolkit.VectorSum(startingpos, Toolkit.DirectiontoVector(direction)/2);
             RaycastHit2D hit = Physics2D.Raycast(pos, Toolkit.DirectiontoVector(direction));
             Vector2 finalpos = hit.point;
-            Debug.Log(pos);
-            Debug.Log(finalpos);
-            bool flag = false;
-            while (finalpos.x < engine.sizeX - 1 && Toolkit.IsEmpty(finalpos))
-            {
-                flag = true;
-                finalpos = Toolkit.VectorSum(finalpos, direction);
-            }
-            SetLaser(direction, pos, finalpos, flag);
+            //SetLaser(direction, pos, finalpos);
         }
-        else if (direction == Direction.Down)
+        /*else if (direction == Direction.Down)
         {
             Vector2 finalpos = Toolkit.VectorSum(startingpos, direction);
             Vector2 pos = Toolkit.VectorSum(startingpos, direction);
@@ -88,10 +80,10 @@ public class Laser : Unit {
             }
             SetLaser(direction, pos, finalpos, flag);
         }
-
+        */
     }
 
-    private void SetLaser(Direction direction, Vector2 pos, Vector2 finalpos, bool flag)
+    private void SetLaser(Direction direction, Vector2 pos, Vector2 finalpos)
     {
         DynamicContainer container = Toolkit.GetContainer(finalpos) as DynamicContainer;
         Branch branch = Toolkit.GetBranch(finalpos) as Branch;

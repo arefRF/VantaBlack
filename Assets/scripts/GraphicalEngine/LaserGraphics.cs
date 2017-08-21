@@ -17,6 +17,19 @@ public class LaserGraphics : MonoBehaviour {
         beamParent = new GameObject("Laser Beams");
     }
 
+
+    public void AddLaserLine(Vector2 pos1, Vector2 pos2,GameObject parent)
+    {
+             GameObject myLine = new GameObject();
+             myLine.transform.position = pos1;
+             myLine.transform.parent = parent.transform;
+             myLine.AddComponent<LineRenderer>();
+             LineRenderer lr = myLine.GetComponent<LineRenderer>();
+             lr.SetColors(Color.red, Color.red);
+             lr.SetWidth(0.1f, 0.1f);
+             lr.SetPosition(0, pos1);
+             lr.SetPosition(1, pos2);
+    }
     public void AddLaser(Vector2 pos1, Vector2 pos2, Direction direction, GameObject parent)
     {
         float rotation = 0;
