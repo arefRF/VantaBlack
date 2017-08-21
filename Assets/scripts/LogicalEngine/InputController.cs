@@ -236,6 +236,18 @@ public class InputController {
             }
             else
             {
+                if (Toolkit.IsEmpty(Toolkit.VectorSum(player.position, direction)))
+                {
+                    if (player.isonejumping)
+                    {
+                        if (player.HasAbility(AbilityType.Jump))
+                        {
+                            player.isonejumping = false;
+                            player.currentAbility = player.abilities[0];
+                            (player.currentAbility as Jump).Action(player, Toolkit.ReverseDirection(player.gravity));
+                        }
+                    }
+                }
                 if (player.Can_Lean(Toolkit.VectorSum(player.position, direction)))
                 {
                     //GameObject.Find("GetInput").GetComponent<GetInput>().StopCoroutine(((Jump)player.currentAbility).coroutine);

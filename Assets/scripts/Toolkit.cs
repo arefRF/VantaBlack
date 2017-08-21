@@ -823,12 +823,12 @@ public sealed class Toolkit
     public static string Icon_Path(AbilityType type)
     {
         string path = @"Containers\Icons\";
-        if (type == AbilityType.Fuel)
+        switch (type)
         {
-            path += "Fuel Off";
+            case AbilityType.Fuel: path += "Fuel Off"; break;
+            case AbilityType.Key: path += @"Key"; break;
+            case AbilityType.Jump: path += "Jump off"; break;
         }
-        else if (type == AbilityType.Key)
-            path += @"Key";
         return path;
     }
 
