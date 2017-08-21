@@ -45,7 +45,7 @@ public class Laser : Unit {
     private void SetLaserInDirection(Direction direction, Vector2 startingpos)
     {
         
-            Vector2 pos = Toolkit.VectorSum(startingpos, Toolkit.DirectiontoVector(direction)/2);
+            Vector2 pos = Toolkit.VectorSum(startingpos, Toolkit.DirectiontoVector(direction)/1.9f);
             RaycastHit2D hit = Physics2D.Raycast(pos, Toolkit.DirectiontoVector(direction), Mathf.Max(engine.sizeX, engine.sizeY));
             //if(hit.point == new)
             Vector2 finalpos = hit.point;
