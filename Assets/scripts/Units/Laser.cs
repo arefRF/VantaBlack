@@ -13,12 +13,12 @@ public class Laser : Unit {
         beamPositions = new List<Vector2[]>();
         base.Run();
         linerenderers = new LineRenderer[4];
-        StartCoroutine(SetLaserTimer(0.2f));
+        //StartCoroutine(SetLaserTimer(0.05f));
     }
 
     public void Update()
     {
-
+        SetLaser();
         //SetLaser();
     }
 
@@ -39,16 +39,17 @@ public class Laser : Unit {
         SetLaserInDirection(Direction.Down, transform.position);
         SetLaserInDirection(Direction.Left, transform.position);
         SetLaserInDirection(Direction.Up, transform.position);
-        engine.apigraphic.DestroyLasers();
+        //engine.apigraphic.DestroyLasers();
     }
 
     private void SetLaserInDirection(Direction direction, Vector2 startingpos)
     {
         
             Vector2 pos = Toolkit.VectorSum(startingpos, Toolkit.DirectiontoVector(direction)/2);
-            RaycastHit2D hit = Physics2D.Raycast(pos, Toolkit.DirectiontoVector(direction));
+            RaycastHit2D hit = Physics2D.Raycast(pos, Toolkit.DirectiontoVector(direction), Mathf.Max(engine.sizeX, engine.sizeY));
             Vector2 finalpos = hit.point;
-            engine.apigraphic.AddLaserLine(pos, finalpos, transform.parent.gameObject, linerenderers[Toolkit.DirectionToNumber(direction) - 1]);
+            int num = Toolkit.DirectionToNumber(direction) - 1;
+            linerenderers[num] =  engine.apigraphic.AddLaserLine(pos, finalpos, transform.parent.gameObject, linerenderers[num]);
             //SetLaser(direction, pos, finalpos);
         /*else if (direction == Direction.Down)
         {
@@ -184,6 +185,6 @@ public class Laser : Unit {
     {
         yield return new WaitForSeconds(time);
         SetLaser();
-        StartCoroutine(SetLaserTimer(0.2f));
+        StartCoroutine(SetLaserTimer(0.05f));
     }
 }

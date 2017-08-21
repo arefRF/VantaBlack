@@ -310,9 +310,9 @@ public class APIGraphic{
         }
     }
 
-    public void AddLaserLine(Vector2 pos1, Vector2 pos2, GameObject parent,LineRenderer lineR)
+    public LineRenderer AddLaserLine(Vector2 pos1, Vector2 pos2, GameObject parent,LineRenderer lineR)
     {
-        graphicalengine.GetComponent<LaserGraphics>().AddLaserLine(pos1, pos2, parent,lineR);
+        return graphicalengine.GetComponent<LaserGraphics>().AddLaserLine(pos1, pos2, parent,lineR);
     }
 
     public void DestroyLasers()
