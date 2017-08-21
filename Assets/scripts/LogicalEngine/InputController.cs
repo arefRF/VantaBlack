@@ -192,7 +192,6 @@ public class InputController {
             if(direction == player.gravity)
             {
                 player.SetState(PlayerState.Idle);
-                Debug.Log("farda avazesh kon");
                 player.ApplyGravity();
                 return;
             }
@@ -227,6 +226,16 @@ public class InputController {
                         //player.currentAbility = null;
                         Lean(player, direction);
 
+                    }
+                    else if(Toolkit.HasBranch(Toolkit.VectorSum(player.position, direction)))
+                    {
+                        Branch tempbranch = Toolkit.GetBranch(Toolkit.VectorSum(player.position, direction));
+                        if (tempbranch.PlayerMoveInto(direction))
+                        {
+                            player.currentAbility = null;
+                            player.SetState(PlayerState.Moving);
+                            player.JumpingMove(direction);
+                        }
                     }
                     else if (Toolkit.HasBranch(player.position))
                     {
@@ -264,6 +273,7 @@ public class InputController {
                 }
                 else if (Toolkit.HasBranch(Toolkit.VectorSum(player.position, direction)))
                 {
+                    Debug.Log("asfdsfdsfdgdh");
                     player.SetState(PlayerState.Falling);
                     engine.MovePlayer(player, direction);
                 }
@@ -297,7 +307,6 @@ public class InputController {
             Direction direction = Toolkit.ReverseDirection(player.leandirection);
             if (!Toolkit.IsInsideBranch(player) && Toolkit.IsEmpty(Toolkit.VectorSum(player.position, direction)))
             {
-              
                 player.isonejumping = true;
                 player.oneJump.Action(player, direction);
             }

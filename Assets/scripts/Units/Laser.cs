@@ -12,6 +12,11 @@ public class Laser : Unit {
         base.Run();
     }
 
+    public void Update()
+    {
+
+    }
+
     public override void SetInitialSprite()
     {
         bool[] connected = Toolkit.GetConnectedSidesForLaser(this);
@@ -34,8 +39,11 @@ public class Laser : Unit {
     {
         if(direction == Direction.Right)
         {
-            Vector2 finalpos = Toolkit.VectorSum(startingpos, direction);
-            Vector2 pos = Toolkit.VectorSum(startingpos, direction);
+            Vector2 pos = Toolkit.VectorSum(startingpos, Toolkit.DirectiontoVector(direction)/2);
+            RaycastHit2D hit = Physics2D.Raycast(pos, Toolkit.DirectiontoVector(direction));
+            Vector2 finalpos = hit.point;
+            Debug.Log(pos);
+            Debug.Log(finalpos);
             bool flag = false;
             while (finalpos.x < engine.sizeX - 1 && Toolkit.IsEmpty(finalpos))
             {
