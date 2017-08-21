@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System;
 
 public class DynamicContainer : FunctionalContainer {
-
+    public LineRenderer linerenderer { get; set; }
     // Use this for initialization
     public override void Run() {
         abilities = new List<Ability>();
