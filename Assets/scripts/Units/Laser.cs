@@ -69,6 +69,12 @@ public class Laser : Unit {
             {
                 Debug.Log("player shoud die");
             }
+            else if(hit.collider.tag == "Branch")
+            {
+                Branch tempbranch = hit.collider.transform.gameObject.GetComponent<Branch>();
+                if(tempbranch.islocked)
+                    engine.apigraphic.UnlockBranchLaser(tempbranch);
+            }
         }
         linerenderer =  engine.apigraphic.AddLaserLine(pos, finalpos, transform.parent.gameObject, linerenderer);
         if (LaserSource is DynamicContainer)
