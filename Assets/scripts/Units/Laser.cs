@@ -89,13 +89,13 @@ public class Laser : Unit {
                             if (Containers[i].ContainerTimeFinished)
                             {
                                 SetLaserInDirection(tempcontainer.direction, tempcontainer.transform.position, tempcontainer.linerenderer, tempcontainer);
-                                Containers.RemoveAt(i);
+                                //Containers.RemoveAt(i);
                                 HittingContainers.Add(tempcontainer);
                             }
                             break;
                         }
                     }
-                    if (!flag /*&& !HittingContainers.Contains(tempcontainer)*/)
+                    if (!flag && !HittingContainers.Contains(tempcontainer))
                     {
                         ContainerLaser temp = new ContainerLaser();
                         temp.container = tempcontainer;
