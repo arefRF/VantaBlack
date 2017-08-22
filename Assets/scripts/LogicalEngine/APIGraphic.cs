@@ -99,7 +99,7 @@ public class APIGraphic{
 
     public void LaserUnHitDynamic(DynamicContainer container)
     {
-
+        graphicalengine.LaserUnhit(container);
     }
     // Block to Branch
     public void MovePlayer_Simple_2(Player player, Vector2 position,Direction direction)

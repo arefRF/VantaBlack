@@ -7,6 +7,8 @@ public class Laser : Unit {
     LogicalEngine engine;
     LineRenderer[] linerenderers;
     private List<LaserBranchUnlocker> Branches, tempbranchlist;
+    private List<ContainerLaser> Containers, tempcontainerlist;
+    private List<Container> HittingContainers;
     public override void Run()
     {
         engine = Starter.GetEngine();
@@ -14,6 +16,9 @@ public class Laser : Unit {
         linerenderers = new LineRenderer[4];
         Branches = new List<LaserBranchUnlocker>();
         tempbranchlist = new List<LaserBranchUnlocker>();
+        Containers = new List<ContainerLaser>();
+        tempcontainerlist = new List<ContainerLaser>();
+        HittingContainers = new List<Container>();
     }
 
     public void Update()
@@ -33,18 +38,24 @@ public class Laser : Unit {
     public void SetLaser()
     {
         tempbranchlist.AddRange(Branches);
+        tempcontainerlist.AddRange(Containers);
         SetLaserInDirection(Direction.Right, transform.position, linerenderers[1], this);
         SetLaserInDirection(Direction.Down, transform.position, linerenderers[2], this);
         SetLaserInDirection(Direction.Left, transform.position, linerenderers[3], this);
         SetLaserInDirection(Direction.Up, transform.position, linerenderers[0], this);
-        //Debug.Log(Branches.Count);
-        //Debug.Log(tempbranchlist.Count);
         for (int i = 0; i < tempbranchlist.Count; i++)
         {
             Branches.Remove(tempbranchlist[i]);
             StopCoroutine(tempbranchlist[i].LaserUnlockWaitCoroutine);
         }
+        for(int i=0; i < tempcontainerlist.Count; i++)
+        {
+            Containers.Remove(tempcontainerlist[i]);
+            HittingContainers.Remove(tempcontainerlist[i].container);
+            tempcontainerlist[i].container.LaserBeamHitting = false;
+        }
         tempbranchlist.Clear();
+        tempcontainerlist.Clear();
     }
 
     private void SetLaserInDirection(Direction direction, Vector2 startingpos, LineRenderer linerenderer, Unit LaserSource)
@@ -64,10 +75,35 @@ public class Laser : Unit {
                 finalpos += Toolkit.DirectiontoVector(direction) / 8;
             if (hit.collider.tag == "Dynamic Container")
             {
-                DynamicContainer container = hit.collider.transform.gameObject.GetComponent<DynamicContainer>();
-                if (!(container.ConnectedUnits.Contains(this) && Toolkit.AreNeighbours(container, this)))
+                DynamicContainer tempcontainer = hit.collider.transform.gameObject.GetComponent<DynamicContainer>();
+                if (!(tempcontainer.ConnectedUnits.Contains(this) && Toolkit.AreNeighbours(tempcontainer, this)))
                 {
-                    SetLaserInDirection(container.direction, container.transform.position, container.linerenderer, container);
+                    bool flag = false;
+                    for(int i=0; i<Containers.Count; i++)
+                    {
+                        if(tempcontainer == Containers[i].container)
+                        {
+                            tempcontainer.LaserBeamHitting = true;
+                            flag = true;
+                            tempcontainerlist.Remove(Containers[i]);
+                            if (Containers[i].ContainerTimeFinished)
+                            {
+                                SetLaserInDirection(tempcontainer.direction, tempcontainer.transform.position, tempcontainer.linerenderer, tempcontainer);
+                                Containers.RemoveAt(i);
+                                HittingContainers.Add(tempcontainer);
+                            }
+                            break;
+                        }
+                    }
+                    if (!flag /*&& !HittingContainers.Contains(tempcontainer)*/)
+                    {
+                        ContainerLaser temp = new ContainerLaser();
+                        temp.container = tempcontainer;
+                        temp.ContainerTimeFinished = false;
+                        Containers.Add(temp);
+                        engine.apigraphic.LaserHitDynamic(tempcontainer);
+                        temp.ContainerLaserBeginCoroutine = StartCoroutine(ContainerLaserBegin(0.95f, Containers[Containers.Count - 1]));
+                    }
                 }
             }
             else if (hit.collider.tag == "Player")
@@ -222,9 +258,22 @@ public class Laser : Unit {
         public bool LaserUnlockTimeFinished;
     }
 
+    private class ContainerLaser
+    {
+        public DynamicContainer container;
+        public bool ContainerTimeFinished;
+        public Coroutine ContainerLaserBeginCoroutine;
+    }
+
     private IEnumerator LaserUnlockWait(float f, LaserBranchUnlocker branchunlocker)
     {
         yield return new WaitForSeconds(f);
         branchunlocker.LaserUnlockTimeFinished = true;
+    }
+
+    private IEnumerator ContainerLaserBegin(float f, ContainerLaser containerlaser)
+    {
+        yield return new WaitForSeconds(f);
+        containerlaser.ContainerTimeFinished = true;
     }
 }

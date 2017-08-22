@@ -4,6 +4,7 @@ using System;
 
 public class DynamicContainer : FunctionalContainer {
     public LineRenderer linerenderer { get; set; }
+    public bool LaserBeamHitting { get; set; }
     // Use this for initialization
     public override void Run() {
         abilities = new List<Ability>();
@@ -21,7 +22,16 @@ public class DynamicContainer : FunctionalContainer {
 	
 	// Update is called once per frame
 	void Update () {
-	
+        if(linerenderer != null)
+        {
+            if (!LaserBeamHitting)
+            {
+                Debug.Log("unhit");
+                Destroy(linerenderer.gameObject);
+                linerenderer = null;
+                api.engine.apigraphic.LaserUnHitDynamic(this);
+            }
+        }
 	}
 
     public override void SetCapacityLight()

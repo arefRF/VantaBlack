@@ -187,6 +187,11 @@ public class GraphicalEngine : MonoBehaviour {
         container.transform.GetChild(1).GetChild(6).GetComponent<Opacity>().LaserHit();
     }
 
+    public void LaserUnhit(DynamicContainer container)
+    {
+        container.transform.GetChild(1).GetChild(6).GetComponent<Opacity>().LaserUnhit();
+    }
+
     public void BranchLight(Branch branch,bool on,Player player)
     {
         GameObject glass;
