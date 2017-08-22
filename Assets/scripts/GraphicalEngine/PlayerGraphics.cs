@@ -433,7 +433,7 @@ public class PlayerGraphics : MonoBehaviour {
     {
         animator.SetInteger("Ramp", 0);
     }
-    public void Move_Animation(Direction dir)
+    public virtual void Move_Animation(Direction dir)
     {
         if (!audio.isPlaying)
         {
@@ -490,7 +490,7 @@ public class PlayerGraphics : MonoBehaviour {
 
         StartCoroutine(RampToBlockWait(y));
     }
-    public void LandAnimation()
+    public virtual void LandAnimation()
     {
         animator.SetBool("Assemble", false);
         animator.SetBool("Jump", false);
@@ -504,7 +504,12 @@ public class PlayerGraphics : MonoBehaviour {
         api.LandFinished(player);
     }
 
-    public void FallAnimation()
+    public void LandFinished()
+    {
+        api.LandFinished(player);
+    }
+
+    public virtual void FallAnimation()
     {
         animator.SetBool("Jump", true);
         animator.SetBool("Assemble", true);
@@ -519,6 +524,11 @@ public class PlayerGraphics : MonoBehaviour {
         }
         transform.GetChild(0).rotation = Quaternion.Euler(0, y, zrot);
         z_rot = 0;
+    }
+
+    public virtual void BlockToFallAnimation()
+    {
+
     }
     public void Move_Finished()
     {
