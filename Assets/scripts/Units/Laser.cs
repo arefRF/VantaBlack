@@ -35,20 +35,21 @@ public class Laser : Unit {
     {
         beamPositions.Clear();
         
-        SetLaserInDirection(Direction.Right, transform.position, linerenderers[1]);
-        SetLaserInDirection(Direction.Down, transform.position, linerenderers[2]);
-        SetLaserInDirection(Direction.Left, transform.position, linerenderers[3]);
-        SetLaserInDirection(Direction.Up, transform.position, linerenderers[0]);
+        SetLaserInDirection(Direction.Right, transform.position, linerenderers[1], this);
+        SetLaserInDirection(Direction.Down, transform.position, linerenderers[2], this);
+        SetLaserInDirection(Direction.Left, transform.position, linerenderers[3], this);
+        SetLaserInDirection(Direction.Up, transform.position, linerenderers[0], this);
         //engine.apigraphic.DestroyLasers();
     }
 
-    private void SetLaserInDirection(Direction direction, Vector2 startingpos, LineRenderer linerenderer)
+    private void SetLaserInDirection(Direction direction, Vector2 startingpos, LineRenderer linerenderer, Unit LaserSource)
     {
         
         Vector2 pos = Toolkit.VectorSum(startingpos, Toolkit.DirectiontoVector(direction)/1.95f);
         RaycastHit2D hit = Physics2D.Raycast(pos, Toolkit.DirectiontoVector(direction), Mathf.Max(engine.sizeX, engine.sizeY));
-        //if(hit.point == new)
         Vector2 finalpos = hit.point;
+        if (LaserSource is DynamicContainer)
+            pos -= Toolkit.DirectiontoVector((LaserSource as DynamicContainer).direction) / 5;
         if (hit.collider == null)
         {
             finalpos = pos + Toolkit.DirectiontoVector(direction) * Mathf.Max(engine.sizeX, engine.sizeY);
@@ -61,7 +62,7 @@ public class Laser : Unit {
                 DynamicContainer container = hit.collider.transform.gameObject.GetComponent<DynamicContainer>();
                 if (!(container.ConnectedUnits.Contains(this) && Toolkit.AreNeighbours(container, this)))
                 {
-                    SetLaserInDirection(container.direction, container.transform.position, container.linerenderer);
+                    SetLaserInDirection(container.direction, container.transform.position, container.linerenderer, container);
                 }
             }
             else if (hit.collider.tag == "Player")
@@ -70,8 +71,12 @@ public class Laser : Unit {
             }
         }
         linerenderer =  engine.apigraphic.AddLaserLine(pos, finalpos, transform.parent.gameObject, linerenderer);
-        
-           
+        if (LaserSource is DynamicContainer)
+            (LaserSource as DynamicContainer).linerenderer = linerenderer;
+        else
+        {
+            linerenderers[Toolkit.DirectionToNumber(direction) - 1] = linerenderer;
+        }
     }
 
     private void SetLaser(Direction direction, Vector2 pos, Vector2 finalpos)
