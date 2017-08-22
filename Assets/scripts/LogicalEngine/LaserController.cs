@@ -28,6 +28,7 @@ public class LaserController{
 
     public bool CollisionCheck(Vector2 pos)
     {
+        return false;
         for (int i = 0; i < lasers.Count; i++)
         {
             if (lasers[i].CollideLaser(pos))

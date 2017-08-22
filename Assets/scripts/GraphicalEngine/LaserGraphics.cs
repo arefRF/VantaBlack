@@ -24,7 +24,6 @@ public class LaserGraphics : MonoBehaviour {
     {
         if (lineR == null)
         {
-            Debug.Log("null");
             GameObject myLine = new GameObject();
             myLine.transform.position = pos1;
             myLine.transform.parent = laserParent.transform;
