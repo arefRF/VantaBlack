@@ -226,6 +226,5 @@ public class Laser : Unit {
     {
         yield return new WaitForSeconds(f);
         branchunlocker.LaserUnlockTimeFinished = true;
-        branchunlocker.branch.boolean = true;
     }
 }
