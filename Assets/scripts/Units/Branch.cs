@@ -368,7 +368,7 @@ public class Branch : Unit {
     {
         yield return new WaitForSeconds(f);
         player.SetState(PlayerState.Idle);
-    } 
+    }
 }
 
 public class CloneableBranch : CloneableUnit

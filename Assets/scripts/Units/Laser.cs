@@ -5,21 +5,20 @@ using System.Collections;
 public class Laser : Unit {
 
     LogicalEngine engine;
-    public List<Vector2[]> beamPositions { get; set; }
     LineRenderer[] linerenderers;
+    private List<LaserBranchUnlocker> Branches, tempbranchlist;
     public override void Run()
     {
         engine = Starter.GetEngine();
-        beamPositions = new List<Vector2[]>();
         base.Run();
         linerenderers = new LineRenderer[4];
-        //StartCoroutine(SetLaserTimer(0.05f));
+        Branches = new List<LaserBranchUnlocker>();
+        tempbranchlist = new List<LaserBranchUnlocker>();
     }
 
     public void Update()
     {
         SetLaser();
-        //SetLaser();
     }
 
     public override void SetInitialSprite()
@@ -33,13 +32,19 @@ public class Laser : Unit {
     }
     public void SetLaser()
     {
-        beamPositions.Clear();
-        
+        tempbranchlist.AddRange(Branches);
         SetLaserInDirection(Direction.Right, transform.position, linerenderers[1], this);
         SetLaserInDirection(Direction.Down, transform.position, linerenderers[2], this);
         SetLaserInDirection(Direction.Left, transform.position, linerenderers[3], this);
         SetLaserInDirection(Direction.Up, transform.position, linerenderers[0], this);
-        //engine.apigraphic.DestroyLasers();
+        //Debug.Log(Branches.Count);
+        //Debug.Log(tempbranchlist.Count);
+        for (int i = 0; i < tempbranchlist.Count; i++)
+        {
+            Branches.Remove(tempbranchlist[i]);
+            StopCoroutine(tempbranchlist[i].LaserUnlockWaitCoroutine);
+        }
+        tempbranchlist.Clear();
     }
 
     private void SetLaserInDirection(Direction direction, Vector2 startingpos, LineRenderer linerenderer, Unit LaserSource)
@@ -74,8 +79,32 @@ public class Laser : Unit {
             else if(hit.collider.tag == "Branch")
             {
                 Branch tempbranch = hit.collider.transform.gameObject.GetComponent<Branch>();
-                if(tempbranch.islocked)
-                    engine.apigraphic.UnlockBranchLaser(tempbranch);
+                if (tempbranch.islocked)
+                {
+                    bool flag = false;
+                    for (int i = 0; i < Branches.Count; i++)
+                    {
+                        if(Branches[i].branch == tempbranch)
+                        {
+                            flag = true;
+                            tempbranchlist.Remove(Branches[i]);
+                            if (Branches[i].LaserUnlockTimeFinished)
+                            {
+                                engine.apigraphic.UnlockBranchLaser(tempbranch);
+                                Branches.RemoveAt(i);
+                            }
+                            break;
+                        }
+                    }
+                    if (!flag)
+                    {
+                        LaserBranchUnlocker temp = new LaserBranchUnlocker();
+                        temp.branch = tempbranch;
+                        temp.LaserUnlockTimeFinished = false;
+                        Branches.Add(temp);
+                        temp.LaserUnlockWaitCoroutine = StartCoroutine(LaserUnlockWait(1, Branches[Branches.Count - 1]));
+                    }
+                }
             }
         }
         linerenderer =  engine.apigraphic.AddLaserLine(pos, finalpos, transform.parent.gameObject, linerenderer);
@@ -129,7 +158,8 @@ public class Laser : Unit {
 
     public bool CollideLaser(Vector2 pos)
     {
-        for (int i=0; i<beamPositions.Count; i++)
+        return false;
+        /*for (int i=0; i<beamPositions.Count; i++)
         {
             if(beamPositions[i][0].x == beamPositions[i][1].x)
             {
@@ -165,7 +195,7 @@ public class Laser : Unit {
                 return false;
             }
         }
-        return false;
+        return false;*/
     }
 
 
@@ -183,5 +213,19 @@ public class Laser : Unit {
         yield return new WaitForSeconds(time);
         SetLaser();
         StartCoroutine(SetLaserTimer(0.05f));
+    }
+
+    private class LaserBranchUnlocker
+    {
+        public Branch branch;
+        public Coroutine LaserUnlockWaitCoroutine;
+        public bool LaserUnlockTimeFinished;
+    }
+
+    private IEnumerator LaserUnlockWait(float f, LaserBranchUnlocker branchunlocker)
+    {
+        yield return new WaitForSeconds(f);
+        branchunlocker.LaserUnlockTimeFinished = true;
+        branchunlocker.branch.boolean = true;
     }
 }
