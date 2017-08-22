@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System;
+using System.Runtime.CompilerServices;
 
 public class DynamicContainer : FunctionalContainer {
     public LineRenderer linerenderer { get; set; }
     public bool LaserBeamHitting { get; set; }
+    private bool templaserhit = false;
     // Use this for initialization
     public override void Run() {
         abilities = new List<Ability>();
@@ -22,16 +24,16 @@ public class DynamicContainer : FunctionalContainer {
 	
 	// Update is called once per frame
 	void Update () {
-        if(linerenderer != null)
+        if (!LaserBeamHitting && templaserhit)
         {
-            if (!LaserBeamHitting)
-            {
-                Debug.Log("unhit");
+            templaserhit = false;
+            if(linerenderer != null)
                 Destroy(linerenderer.gameObject);
-                linerenderer = null;
-                api.engine.apigraphic.LaserUnHitDynamic(this);
-            }
+            linerenderer = null;
+            api.engine.apigraphic.LaserUnHitDynamic(this);
         }
+        else if (LaserBeamHitting && !templaserhit)
+            templaserhit = true;
 	}
 
     public override void SetCapacityLight()
@@ -71,6 +73,12 @@ public class DynamicContainer : FunctionalContainer {
     public override bool PlayerMoveInto(Direction dir)
     {
         return false;
+    }
+
+    [MethodImpl(MethodImplOptions.Synchronized)]
+    public void ChangeLaserHitState(bool HitState)
+    {
+        LaserBeamHitting = HitState;
     }
 
     public override CloneableUnit Clone()
