@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Runtime.CompilerServices;
 
 public class Opacity : MonoBehaviour {
     float opa = 1;
     private Coroutine coroutine;
-    private bool unhit;
+    private bool hit;
 	// Use this for initialization
 	void Start () {
         GetComponent<Renderer>().material.SetFloat("_Cutoff",1f);
@@ -13,16 +14,15 @@ public class Opacity : MonoBehaviour {
 	
     public void LaserHit()
     {
-        Debug.Log("Lasda");
+        opa = 1;
+        GetComponent<Renderer>().material.SetFloat("_Cutoff", opa);
+        ChangeHitState(true);
         coroutine = StartCoroutine(fill());
-        unhit = false;
     }
 
     public void LaserUnhit()
     {
-        Debug.Log("f;kjvnfjhkbgfjhbnljfbnlgfnblngljhng ");
-        unhit = true;
-        Debug.Log(unhit);
+        ChangeHitState(false);
         opa = 1;
         GetComponent<Renderer>().material.SetFloat("_Cutoff", opa);
     }
@@ -30,10 +30,8 @@ public class Opacity : MonoBehaviour {
     {
         while (opa > 0)
         {
-            //Debug.Log(unhit);
-            if (unhit)
+            if (!hit)
             {
-                Debug.Log(":::::::::");
                 opa = 1;
                 GetComponent<Renderer>().material.SetFloat("_Cutoff", opa);
                 break;
@@ -44,4 +42,9 @@ public class Opacity : MonoBehaviour {
         }
     }
 
+    [MethodImpl(MethodImplOptions.Synchronized)]
+    private void ChangeHitState(bool hitstate)
+    {
+        hit = hitstate;
+    }
 }
