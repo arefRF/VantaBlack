@@ -95,6 +95,7 @@ public class FunctionalContainer : Container
         IsOnMove = true;
         if (!MoveContainer(GetMoveDirection()))
         {
+            Debug.Log(this);
             IsOnMove = false;
             api.AddToStuckList(this);
             api.engine.pipecontroller.CheckPipes();
