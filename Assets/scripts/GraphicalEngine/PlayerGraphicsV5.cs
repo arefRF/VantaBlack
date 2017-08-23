@@ -17,6 +17,54 @@ public class PlayerGraphicsV5 : PlayerGraphics
     {
 
     }
+
+    public override void FallAnimation()
+    {
+        animator.SetBool("Fall", true);
+    }
+
+    public override void LandAnimation()
+    {
+        animator.SetBool("Fall", false);
+        animator.SetTrigger("Land");
+    }
+
+    public override void Move_Animation(Direction dir)
+    {
+        int zrot = 0;
+        if (player.gravity == Direction.Up)
+        {
+            zrot = 180;
+            dir = Toolkit.ReverseDirection(dir);
+        }
+        else if (player.gravity == Direction.Right)
+        {
+            zrot = 270;
+            //dir = Toolkit.ReverseDirection(dir);
+        }
+        else if (player.gravity == Direction.Left)
+        {
+            zrot = 90;
+            dir = Toolkit.ReverseDirection(dir);
+        }
+        if (dir == Direction.Right)
+        {
+            transform.GetChild(0).rotation = Quaternion.Euler(0, 0, zrot);
+        }
+        else if (dir == Direction.Up)
+        {
+            transform.GetChild(0).rotation = Quaternion.Euler(180, 180, zrot);
+        }
+        else
+        {
+            transform.GetChild(0).rotation = Quaternion.Euler(0, 180, zrot);
+
+        }
+    }
+    public override void BlockToFallAnimation()
+    {
+        animator.SetTrigger("BlockToFall");
+    }
     private void ChangeSprites()
     {
         Color color = Ability_Color(player.abilities);
