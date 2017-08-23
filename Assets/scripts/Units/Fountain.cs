@@ -43,7 +43,6 @@ public class Fountain : Unit {
 
     public void Action(Player player)
     {
-        Debug.Log(":DDD");
         if (abilities.Count == count)
             return;
         if(player.abilities.Count == 0)
@@ -139,7 +138,7 @@ public class Fountain : Unit {
                         else
                             ((FunctionalContainer)abilities[i].owner).SetNextState();
                         ((FunctionalContainer)abilities[i].owner).firstmove = true;
-                        ((FunctionalContainer)abilities[i].owner).Action_Fuel();
+                        ((FunctionalContainer)abilities[i].owner).CheckNextMove();
                     }
         }
         abilities.Clear();
