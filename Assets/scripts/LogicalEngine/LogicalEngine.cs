@@ -74,10 +74,6 @@ public class LogicalEngine {
                     return false;
             //friction
             shouldmove.AddRange(unit.EffectedUnits(Toolkit.ReverseDirection(Starter.GetDataBase().gravity_direction)));
-            Debug.Log(shouldmove.Count);
-            Debug.Log(unit);
-            if (shouldmove.Count == 1)
-                Debug.Log(shouldmove[0]);
             shouldmove.AddRange(unit.players);
 
             int bound = unit.players.Count;

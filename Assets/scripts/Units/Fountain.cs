@@ -43,25 +43,38 @@ public class Fountain : Unit {
 
     public void Action(Player player)
     {
-        if (abilities.Count != 0)
+        Debug.Log(":DDD");
+        if (abilities.Count == count)
             return;
         if(player.abilities.Count == 0)
         {
-            
-            for (int i = 0; i < count; i++)
+            Ability temp = Ability.GetAbilityInstance(ability).ConvertContainerAbilityToPlayer(player);
+            abilities.Add(temp);
+            player.abilities.Add(temp);
+            player._setability();
+            api.engine.apigraphic.Absorb(player, null);
+            /*for (int i = 0; i < count; i++)
             {
                 Ability temp = Ability.GetAbilityInstance(ability).ConvertContainerAbilityToPlayer(player);
                 abilities.Add(temp);
                 player.abilities.Add(temp);
             }
             player._setability();
-            api.engine.apigraphic.Absorb(player, null);
+            api.engine.apigraphic.Absorb(player, null);*/
         }
         else
         {
             if (player.abilities[0].abilitytype == ability)
             {
-                if(player.abilities.Count < count)
+                if(player.abilities.Count < 4)
+                {
+                    Ability temp = Ability.GetAbilityInstance(ability).ConvertContainerAbilityToPlayer(player);
+                    abilities.Add(temp);
+                    player.abilities.Add(temp);
+                    player._setability();
+                    api.engine.apigraphic.Absorb(player, null);
+                }
+                /*if(player.abilities.Count < count)
                 {
                     while(player.abilities.Count < count)
                     {
@@ -71,7 +84,7 @@ public class Fountain : Unit {
                     }
                     player._setability();
                     api.engine.apigraphic.Absorb(player, null);
-                }
+                }*/
             }
         }
         api.engine.apigraphic.UnitChangeSprite(this);
@@ -123,6 +136,8 @@ public class Fountain : Unit {
                     {
                         if ((abilities[i].owner as FunctionalContainer).abilities.Count == 0)
                             ((FunctionalContainer)abilities[i].owner).SetOnorOff();
+                        else
+                            ((FunctionalContainer)abilities[i].owner).SetNextState();
                         ((FunctionalContainer)abilities[i].owner).firstmove = true;
                         ((FunctionalContainer)abilities[i].owner).Action_Fuel();
                     }
