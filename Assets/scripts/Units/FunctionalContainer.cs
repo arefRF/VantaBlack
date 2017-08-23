@@ -81,7 +81,6 @@ public class FunctionalContainer : Container
 
     public void Action_Fuel()
     {
-        //Debug.Log(this);
         if (actionlock)
             return;
         actionlock = true;

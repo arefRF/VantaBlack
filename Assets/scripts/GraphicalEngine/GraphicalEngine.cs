@@ -78,14 +78,11 @@ public class GraphicalEngine : MonoBehaviour {
         float move_time = 0.6f;
         while (remain_distance > float.Epsilon)
         {
-            if (unit.name == "Dynamic (5)")
-                Debug.Log(remain_distance);
             remain_distance = ((Vector2)obj.transform.position - end).sqrMagnitude;
             Vector3 new_pos = Vector3.MoveTowards(obj.transform.position, end, Time.deltaTime * 1 / move_time);
             obj.transform.position = new_pos;
             if (remain_distance < 0.01 && finish_lock_90percent)
             {
-                Debug.Log(unit);
                 finish_lock_90percent = false;
                 api.MoveGameObjectFinished_90percent(obj,unit);
             }
