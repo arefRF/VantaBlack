@@ -11,8 +11,10 @@ public class PlayerGraphics : MonoBehaviour {
     protected Player player;
     protected int z_rot;
     protected AudioSource audio;
+    protected GameObject hologram;
     void Start()
     {
+        hologram = Toolkit.GetObjectInChild(this.gameObject, "Hologram");
         z_rot = 0;
         engine = Starter.GetEngine();
         api = engine.apigraphic;
@@ -458,17 +460,20 @@ public class PlayerGraphics : MonoBehaviour {
         if (dir == Direction.Right)
         {
             transform.GetChild(0).rotation = Quaternion.Euler(0, 0, zrot);
+            hologram.transform.rotation =  Quaternion.Euler(0, 0, 0);
             animator.SetInteger("Walk", 1);
         }
         else if (dir == Direction.Up)
         {
             transform.GetChild(0).rotation = Quaternion.Euler(180, 180, zrot);
+            hologram.transform.rotation = Quaternion.Euler(180, 180, 0);
             animator.SetInteger("Walk", 1);
         }
         else
         {
             animator.SetInteger("Walk", 1);
             transform.GetChild(0).rotation = Quaternion.Euler(0, 180, zrot);
+            hologram.transform.localRotation = Quaternion.Euler(0, 180, 0);
 
         }
     }
@@ -559,6 +564,7 @@ public class PlayerGraphics : MonoBehaviour {
                 xrot = 180;
         }
         player.transform.GetChild(0).rotation = Quaternion.Euler(xrot, yrot, zrot);
+        hologram.transform.localRotation = Quaternion.Euler(xrot, yrot, 0);
     }
 
 
