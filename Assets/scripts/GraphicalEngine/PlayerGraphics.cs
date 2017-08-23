@@ -11,8 +11,10 @@ public class PlayerGraphics : MonoBehaviour {
     protected Player player;
     protected int z_rot;
     protected AudioSource audio;
+    protected GameObject hologram;
     void Start()
     {
+        hologram = Toolkit.GetObjectInChild(this.gameObject, "Hologram");
         z_rot = 0;
         engine = Starter.GetEngine();
         api = engine.apigraphic;
@@ -433,7 +435,7 @@ public class PlayerGraphics : MonoBehaviour {
     {
         animator.SetInteger("Ramp", 0);
     }
-    public void Move_Animation(Direction dir)
+    public virtual void Move_Animation(Direction dir)
     {
         if (!audio.isPlaying)
         {
@@ -458,17 +460,20 @@ public class PlayerGraphics : MonoBehaviour {
         if (dir == Direction.Right)
         {
             transform.GetChild(0).rotation = Quaternion.Euler(0, 0, zrot);
+            hologram.transform.rotation =  Quaternion.Euler(0, 0, 0);
             animator.SetInteger("Walk", 1);
         }
         else if (dir == Direction.Up)
         {
             transform.GetChild(0).rotation = Quaternion.Euler(180, 180, zrot);
+            hologram.transform.rotation = Quaternion.Euler(180, 180, 0);
             animator.SetInteger("Walk", 1);
         }
         else
         {
             animator.SetInteger("Walk", 1);
             transform.GetChild(0).rotation = Quaternion.Euler(0, 180, zrot);
+            hologram.transform.localRotation = Quaternion.Euler(0, 180, 0);
 
         }
     }
@@ -490,7 +495,7 @@ public class PlayerGraphics : MonoBehaviour {
 
         StartCoroutine(RampToBlockWait(y));
     }
-    public void LandAnimation()
+    public virtual void LandAnimation()
     {
         animator.SetBool("Assemble", false);
         animator.SetBool("Jump", false);
@@ -504,7 +509,12 @@ public class PlayerGraphics : MonoBehaviour {
         api.LandFinished(player);
     }
 
-    public void FallAnimation()
+    public void LandFinished()
+    {
+        api.LandFinished(player);
+    }
+
+    public virtual void FallAnimation()
     {
         animator.SetBool("Jump", true);
         animator.SetBool("Assemble", true);
@@ -519,6 +529,11 @@ public class PlayerGraphics : MonoBehaviour {
         }
         transform.GetChild(0).rotation = Quaternion.Euler(0, y, zrot);
         z_rot = 0;
+    }
+
+    public virtual void BlockToFallAnimation()
+    {
+
     }
     public void Move_Finished()
     {
@@ -549,6 +564,7 @@ public class PlayerGraphics : MonoBehaviour {
                 xrot = 180;
         }
         player.transform.GetChild(0).rotation = Quaternion.Euler(xrot, yrot, zrot);
+        hologram.transform.localRotation = Quaternion.Euler(xrot, yrot, 0);
     }
 
 

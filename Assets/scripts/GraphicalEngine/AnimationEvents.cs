@@ -61,6 +61,11 @@ public class AnimationEvents : MonoBehaviour {
             transform.parent.GetComponent<Player>().MoveToBranchFinished();
     }
 
+    private void LandFinished()
+    {
+        transform.GetComponentInParent<PlayerGraphics>().LandFinished();
+    }
+
     private void NowJump()
     {
         Debug.Log("Jump");

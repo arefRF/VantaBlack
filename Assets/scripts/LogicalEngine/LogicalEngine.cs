@@ -75,6 +75,7 @@ public class LogicalEngine {
             //friction
             shouldmove.AddRange(unit.EffectedUnits(Toolkit.ReverseDirection(Starter.GetDataBase().gravity_direction)));
             shouldmove.AddRange(unit.players);
+
             int bound = unit.players.Count;
             for (int i = 0; i < bound; i++)
             {
@@ -122,6 +123,7 @@ public class LogicalEngine {
                 bound = unit.ConnectedUnits[i].players.Count;
                 shouldmove.AddRange(unit.ConnectedUnits[i].EffectedUnits(Toolkit.ReverseDirection(Starter.GetDataBase().gravity_direction)));
                 shouldmove.AddRange(unit.ConnectedUnits[i].players);
+                
                 for (int j = 0; j < bound; j++)
                 {
                     if (Toolkit.HasBranch(Toolkit.VectorSum(unit.ConnectedUnits[i].players[j].position, dir)))

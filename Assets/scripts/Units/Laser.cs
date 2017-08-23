@@ -1,15 +1,29 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 
 public class Laser : Unit {
 
     LogicalEngine engine;
-    public List<Vector2[]> beamPositions { get; set; }
+    LineRenderer[] linerenderers;
+    private List<LaserBranchUnlocker> Branches, tempbranchlist;
+    private List<ContainerLaser> Containers, tempcontainerlist;
+    private List<Container> HittingContainers;
     public override void Run()
     {
         engine = Starter.GetEngine();
-        beamPositions = new List<Vector2[]>();
         base.Run();
+        linerenderers = new LineRenderer[4];
+        Branches = new List<LaserBranchUnlocker>();
+        tempbranchlist = new List<LaserBranchUnlocker>();
+        Containers = new List<ContainerLaser>();
+        tempcontainerlist = new List<ContainerLaser>();
+        HittingContainers = new List<Container>();
+    }
+
+    public void Update()
+    {
+        SetLaser();
     }
 
     public override void SetInitialSprite()
@@ -23,67 +37,122 @@ public class Laser : Unit {
     }
     public void SetLaser()
     {
-        beamPositions.Clear();
-        SetLaserInDirection(Direction.Right, position);
-        SetLaserInDirection(Direction.Down, position);
-        SetLaserInDirection(Direction.Left, position);
-        SetLaserInDirection(Direction.Up, position);
+        tempbranchlist.AddRange(Branches);
+        tempcontainerlist.AddRange(Containers);
+        SetLaserInDirection(Direction.Right, transform.position, linerenderers[1], this);
+        SetLaserInDirection(Direction.Down, transform.position, linerenderers[2], this);
+        SetLaserInDirection(Direction.Left, transform.position, linerenderers[3], this);
+        SetLaserInDirection(Direction.Up, transform.position, linerenderers[0], this);
+        for (int i = 0; i < tempbranchlist.Count; i++)
+        {
+            Branches.Remove(tempbranchlist[i]);
+            StopCoroutine(tempbranchlist[i].LaserUnlockWaitCoroutine);
+        }
+        for(int i=0; i < tempcontainerlist.Count; i++)
+        {
+            Containers.Remove(tempcontainerlist[i]);
+            HittingContainers.Remove(tempcontainerlist[i].container);
+            tempcontainerlist[i].container.ChangeLaserHitState(false);
+        }
+        tempbranchlist.Clear();
+        tempcontainerlist.Clear();
     }
 
-    private void SetLaserInDirection(Direction direction, Vector2 startingpos)
+    private void SetLaserInDirection(Direction direction, Vector2 startingpos, LineRenderer linerenderer, Unit LaserSource)
     {
-        if(direction == Direction.Right)
+        
+        Vector2 pos = Toolkit.VectorSum(startingpos, Toolkit.DirectiontoVector(direction)/1.95f);
+        RaycastHit2D hit = Physics2D.Raycast(pos, Toolkit.DirectiontoVector(direction), Mathf.Max(engine.sizeX, engine.sizeY));
+        Vector2 finalpos = hit.point;
+        if (LaserSource is DynamicContainer)
+            pos -= Toolkit.DirectiontoVector((LaserSource as DynamicContainer).direction) / 5;
+        if (hit.collider == null)
         {
-            Vector2 finalpos = Toolkit.VectorSum(startingpos, direction);
-            Vector2 pos = Toolkit.VectorSum(startingpos, direction);
-            bool flag = false;
-            while (finalpos.x < engine.sizeX - 1 && Toolkit.IsEmpty(finalpos))
-            {
-                flag = true;
-                finalpos = Toolkit.VectorSum(finalpos, direction);
-            }
-            SetLaser(direction, pos, finalpos, flag);
+            finalpos = pos + Toolkit.DirectiontoVector(direction) * Mathf.Max(engine.sizeX, engine.sizeY);
         }
-        else if (direction == Direction.Down)
+        else {
+            if(hit.collider.transform.gameObject.GetComponent<Unit>().isLeanable())
+                finalpos += Toolkit.DirectiontoVector(direction) / 8;
+            if (hit.collider.tag == "Dynamic Container")
+            {
+                DynamicContainer tempcontainer = hit.collider.transform.gameObject.GetComponent<DynamicContainer>();
+                if (!(tempcontainer.ConnectedUnits.Contains(this) && Toolkit.AreNeighbours(tempcontainer, this)))
+                {
+                    bool flag = false;
+                    for(int i=0; i<Containers.Count; i++)
+                    {
+                        if(tempcontainer == Containers[i].container)
+                        {
+                            tempcontainer.ChangeLaserHitState(true);
+                            flag = true;
+                            tempcontainerlist.Remove(Containers[i]);
+                            if (Containers[i].ContainerTimeFinished)
+                            {
+                                SetLaserInDirection(tempcontainer.direction, tempcontainer.transform.position, tempcontainer.linerenderer, tempcontainer);
+                                if(!HittingContainers.Contains(tempcontainer))
+                                    HittingContainers.Add(tempcontainer);
+                            }
+                            break;
+                        }
+                    }
+                    if (!flag && !HittingContainers.Contains(tempcontainer))
+                    {
+                        ContainerLaser temp = new ContainerLaser();
+                        temp.container = tempcontainer;
+                        temp.ContainerTimeFinished = false;
+                        Containers.Add(temp);
+                        engine.apigraphic.LaserHitDynamic(tempcontainer);
+                        temp.ContainerLaserBeginCoroutine = StartCoroutine(ContainerLaserBegin(0.95f, Containers[Containers.Count - 1]));
+                    }
+                }
+            }
+            else if (hit.collider.tag == "Player")
+            {
+                Player tempplayer = hit.collider.transform.gameObject.GetComponent<Player>();
+                engine.apigraphic.Laser_Player_Died(tempplayer);
+                tempplayer.transform.position = new Vector3(-1, -1, 0);
+            }
+            else if(hit.collider.tag == "Branch")
+            {
+                Branch tempbranch = hit.collider.transform.gameObject.GetComponent<Branch>();
+                if (tempbranch.islocked)
+                {
+                    bool flag = false;
+                    for (int i = 0; i < Branches.Count; i++)
+                    {
+                        if(Branches[i].branch == tempbranch)
+                        {
+                            flag = true;
+                            tempbranchlist.Remove(Branches[i]);
+                            if (Branches[i].LaserUnlockTimeFinished)
+                            {
+                                engine.apigraphic.UnlockBranchLaser(tempbranch);
+                                Branches.RemoveAt(i);
+                            }
+                            break;
+                        }
+                    }
+                    if (!flag)
+                    {
+                        LaserBranchUnlocker temp = new LaserBranchUnlocker();
+                        temp.branch = tempbranch;
+                        temp.LaserUnlockTimeFinished = false;
+                        Branches.Add(temp);
+                        temp.LaserUnlockWaitCoroutine = StartCoroutine(LaserUnlockWait(1, Branches[Branches.Count - 1]));
+                    }
+                }
+            }
+        }
+        linerenderer =  engine.apigraphic.AddLaserLine(pos, finalpos, transform.parent.gameObject, linerenderer);
+        if (LaserSource is DynamicContainer)
+            (LaserSource as DynamicContainer).linerenderer = linerenderer;
+        else
         {
-            Vector2 finalpos = Toolkit.VectorSum(startingpos, direction);
-            Vector2 pos = Toolkit.VectorSum(startingpos, direction);
-            bool flag = false;
-            while (finalpos.y > 0 && Toolkit.IsEmpty(finalpos))
-            {
-                flag = true;
-                finalpos = Toolkit.VectorSum(finalpos, direction);
-            }
-            SetLaser(direction, pos, finalpos, flag);
+            linerenderers[Toolkit.DirectionToNumber(direction) - 1] = linerenderer;
         }
-        else if (direction == Direction.Left)
-        {
-            Vector2 finalpos = Toolkit.VectorSum(startingpos, direction);
-            Vector2 pos = Toolkit.VectorSum(startingpos, direction);
-            bool flag = false;
-            while (finalpos.x > 0 && Toolkit.IsEmpty(finalpos))
-            {
-                flag = true;
-                finalpos = Toolkit.VectorSum(finalpos, direction);
-            }
-            SetLaser(direction, pos, finalpos, flag);
-        }
-        else if (direction == Direction.Up)
-        {
-            Vector2 finalpos = Toolkit.VectorSum(startingpos, direction);
-            Vector2 pos = Toolkit.VectorSum(startingpos, direction);
-            bool flag = false;
-            while ((finalpos.y < engine.sizeY - 1 && Toolkit.IsEmpty(finalpos)))
-            {
-                flag = true;
-                finalpos = Toolkit.VectorSum(finalpos, direction);
-            }
-            SetLaser(direction, pos, finalpos, flag);
-        }
-
     }
 
-    private void SetLaser(Direction direction, Vector2 pos, Vector2 finalpos, bool flag)
+    private void SetLaser(Direction direction, Vector2 pos, Vector2 finalpos)
     {
         DynamicContainer container = Toolkit.GetContainer(finalpos) as DynamicContainer;
         Branch branch = Toolkit.GetBranch(finalpos) as Branch;
@@ -106,7 +175,7 @@ public class Laser : Unit {
                 api.engine.lasercontroller.containers.Add(container);
                 api.engine.apigraphic.AddPartialLaser(container.position, container.direction, container.gameObject);
                 api.engine.apigraphic.LaserHitDynamic(container);
-                SetLaserInDirection(container.direction, container.position);
+                //SetLaserInDirection(container.direction, container.position);
             }
         }
         else
@@ -116,16 +185,17 @@ public class Laser : Unit {
                 engine.apigraphic.UnlockBranchLaser(branch);
             }
         }
-        if (flag)
+        /*if (flag)
         {
             beamPositions.Add(new Vector2[] { pos, finalpos });
             api.engine.apigraphic.AddLaser(pos, finalpos, direction, gameObject);
-        }
+        }*/
     }
 
     public bool CollideLaser(Vector2 pos)
     {
-        for (int i=0; i<beamPositions.Count; i++)
+        return false;
+        /*for (int i=0; i<beamPositions.Count; i++)
         {
             if(beamPositions[i][0].x == beamPositions[i][1].x)
             {
@@ -161,7 +231,7 @@ public class Laser : Unit {
                 return false;
             }
         }
-        return false;
+        return false;*/
     }
 
 
@@ -172,5 +242,38 @@ public class Laser : Unit {
         if (i >= s1 && i <= s2)
             return true;
         return false;
+    }
+
+    public IEnumerator SetLaserTimer(float time)
+    {
+        yield return new WaitForSeconds(time);
+        SetLaser();
+        StartCoroutine(SetLaserTimer(0.05f));
+    }
+
+    private class LaserBranchUnlocker
+    {
+        public Branch branch;
+        public Coroutine LaserUnlockWaitCoroutine;
+        public bool LaserUnlockTimeFinished;
+    }
+
+    private class ContainerLaser
+    {
+        public DynamicContainer container;
+        public bool ContainerTimeFinished;
+        public Coroutine ContainerLaserBeginCoroutine;
+    }
+
+    private IEnumerator LaserUnlockWait(float f, LaserBranchUnlocker branchunlocker)
+    {
+        yield return new WaitForSeconds(f);
+        branchunlocker.LaserUnlockTimeFinished = true;
+    }
+
+    private IEnumerator ContainerLaserBegin(float f, ContainerLaser containerlaser)
+    {
+        yield return new WaitForSeconds(f);
+        containerlaser.ContainerTimeFinished = true;
     }
 }

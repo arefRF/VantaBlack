@@ -18,7 +18,7 @@ public class GraphicalEngine : MonoBehaviour {
     private APIGraphic api;
     private LogicalEngine engine;
     private float lean_move = 0.2f;
-    private bool finish_lock_90percent, finish_lock_50percent;
+
     private Coroutine object_co;
     private string[] simple_objects_off = new string[] { "Direction", "Glass", "Switches", "Border", "Icon Holder", "Glow" };
     private List<MoveObject> move_objects;
@@ -45,8 +45,6 @@ public class GraphicalEngine : MonoBehaviour {
 
     public void Move_Object(GameObject obj,Unit unit, Vector2 pos)
     {
-        finish_lock_90percent = true;
-        finish_lock_50percent = true;
         StopSameCo(unit);
         MoveObject move = new MoveObject();
         move.code = unit.codeNumber;
@@ -75,6 +73,7 @@ public class GraphicalEngine : MonoBehaviour {
      
     private IEnumerator Move_Object_Coroutine(GameObject obj, Unit unit,Vector2 end)
     {
+        bool finish_lock_90percent = true, finish_lock_50percent = true; 
         float remain_distance = ((Vector2)obj.transform.position - end).sqrMagnitude;
         float move_time = 0.6f;
         while (remain_distance > float.Epsilon)
@@ -185,6 +184,11 @@ public class GraphicalEngine : MonoBehaviour {
     public void LaserHit(DynamicContainer container)
     {
         container.transform.GetChild(1).GetChild(6).GetComponent<Opacity>().LaserHit();
+    }
+
+    public void LaserUnhit(DynamicContainer container)
+    {
+        container.transform.GetChild(1).GetChild(6).GetComponent<Opacity>().LaserUnhit();
     }
 
     public void BranchLight(Branch branch,bool on,Player player)

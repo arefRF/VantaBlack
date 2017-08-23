@@ -20,24 +20,31 @@ public class LaserGraphics : MonoBehaviour {
     }
 
 
-    public void AddLaserLine(Vector2 pos1, Vector2 pos2,GameObject parent)
+    public LineRenderer AddLaserLine(Vector2 pos1, Vector2 pos2,GameObject parent,LineRenderer lineR)
     {
-        if (laserParent == null)
-            laserParent = new GameObject();
-             GameObject myLine = new GameObject();
-             myLine.transform.position = pos1;
-             myLine.transform.parent = laserParent.transform;
-             myLine.AddComponent<LineRenderer>();
-             LineRenderer lr = myLine.GetComponent<LineRenderer>();
-             lr.SetColors(Color.red, Color.red);
-             lr.SetWidth(0.1f, 0.1f);
-             lr.SetPosition(0, pos1);
-             lr.SetPosition(1, pos2);
+        if (lineR == null)
+        {
+            GameObject myLine = new GameObject();
+            myLine.transform.position = pos1;
+            myLine.transform.parent = laserParent.transform;
+            myLine.AddComponent<LineRenderer>();
+            lineR = myLine.GetComponent<LineRenderer>();
+            lineR.SetColors(Color.red, Color.red);
+            lineR.material = (Material)Resources.Load("Materials\\LAserMaterial", typeof(Material));
+            lineR.SetWidth(0.05f, 0.05f);
+            lineR.SetPosition(0, pos1);
+            lineR.SetPosition(1, pos2);
+        }
+        else
+        {
+            lineR.SetPosition(0, pos1);
+            lineR.SetPosition(1, pos2);
+        }
+        return lineR;
     }
 
     public void DestroyLasers()
     {
-        GameObject.Destroy(laserParent);
     }
     public void AddLaser(Vector2 pos1, Vector2 pos2, Direction direction, GameObject parent)
     {

@@ -99,7 +99,7 @@ public class APIGraphic{
 
     public void LaserUnHitDynamic(DynamicContainer container)
     {
-
+        graphicalengine.LaserUnhit(container);
     }
     // Block to Branch
     public void MovePlayer_Simple_2(Player player, Vector2 position,Direction direction)
@@ -128,6 +128,7 @@ public class APIGraphic{
     // Block to fall
     public void MovePlayer_Simple_4(Player player, Vector2 position)
     {
+        player.gameObject.GetComponent<PlayerGraphics>().BlockToFallAnimation();
         player.GetComponent<PlayerGraphics>().StopAllCoroutines();
         player.gameObject.GetComponent<PlayerGraphics>().Move_Animation(player.direction);
         player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
@@ -310,9 +311,9 @@ public class APIGraphic{
         }
     }
 
-    public void AddLaserLine(Vector2 pos1, Vector2 pos2, GameObject parent)
+    public LineRenderer AddLaserLine(Vector2 pos1, Vector2 pos2, GameObject parent,LineRenderer lineR)
     {
-        graphicalengine.GetComponent<LaserGraphics>().AddLaserLine(pos1, pos2, parent);
+        return graphicalengine.GetComponent<LaserGraphics>().AddLaserLine(pos1, pos2, parent,lineR);
     }
 
     public void DestroyLasers()

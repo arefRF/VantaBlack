@@ -88,10 +88,15 @@ public class Unit : MonoBehaviour {
         {
             if(units[i] is Player)
             {
-                if (Toolkit.HasBranch(Toolkit.VectorSum(position, dir)) || Toolkit.HasRamp(Toolkit.VectorSum(position, dir)))
+                if ((units[i] as Player).LeanedTo != null)
                     continue;
-                result.Add(units[i]);
-                result.AddRange(units[i].EffectedUnits(dir));
+                if ((units[i] as Player).gravity == Toolkit.ReverseDirection(dir))
+                {
+                    if (Toolkit.HasBranch(Toolkit.VectorSum(position, dir)) || Toolkit.HasRamp(Toolkit.VectorSum(position, dir)))
+                        continue;
+                    result.Add(units[i]);
+                    result.AddRange(units[i].EffectedUnits(dir));
+                }
             }
         }
         return result;
