@@ -817,6 +817,14 @@ public class LogicalEngine {
                                 (database.player[i].LeanedTo as Fountain).Reset(database.player[i]);
                             }
                         }
+                        else if(database.player[i].LeanedTo is Enemy)
+                        {
+                            if (KeyUp)
+                            {
+                                (database.player[i].LeanedTo as Enemy).OnOff();
+
+                            }
+                        }
                     }
                     else
                     {
