@@ -52,7 +52,7 @@ public class Laser : Unit {
         {
             Containers.Remove(tempcontainerlist[i]);
             HittingContainers.Remove(tempcontainerlist[i].container);
-            tempcontainerlist[i].container.LaserBeamHitting = false;
+            tempcontainerlist[i].container.ChangeLaserHitState(false);
         }
         tempbranchlist.Clear();
         tempcontainerlist.Clear();
@@ -83,14 +83,14 @@ public class Laser : Unit {
                     {
                         if(tempcontainer == Containers[i].container)
                         {
-                            tempcontainer.LaserBeamHitting = true;
+                            tempcontainer.ChangeLaserHitState(true);
                             flag = true;
                             tempcontainerlist.Remove(Containers[i]);
                             if (Containers[i].ContainerTimeFinished)
                             {
                                 SetLaserInDirection(tempcontainer.direction, tempcontainer.transform.position, tempcontainer.linerenderer, tempcontainer);
-                                //Containers.RemoveAt(i);
-                                HittingContainers.Add(tempcontainer);
+                                if(!HittingContainers.Contains(tempcontainer))
+                                    HittingContainers.Add(tempcontainer);
                             }
                             break;
                         }
