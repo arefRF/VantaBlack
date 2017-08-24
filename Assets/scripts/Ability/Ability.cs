@@ -21,6 +21,7 @@ public class Ability{
             case AbilityType.Teleport: return new Teleport();
             case AbilityType.Gravity: return new Gravity();
             case AbilityType.Rope: return new Rope();
+            case AbilityType.Laser: return new LaserAbility();
             default: return null;
         }
     }

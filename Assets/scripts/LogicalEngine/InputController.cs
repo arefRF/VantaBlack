@@ -581,7 +581,7 @@ public class InputController {
                 return;
             }
             Vector2 pos = Toolkit.VectorSum(player.position, direction);
-            if (player.Can_Lean(pos))
+            if (player.Can_Lean(pos) && Toolkit.GetUnit(pos).isLeanableFromDirection(Toolkit.ReverseDirection(direction)))
             {
                 if(player.leancoroutine != null)
                 {

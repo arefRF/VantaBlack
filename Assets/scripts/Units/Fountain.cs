@@ -188,6 +188,11 @@ public class Fountain : Unit {
         }
     }
 
+    public override bool isLeanable()
+    {
+        return true;
+    }
+
     private IEnumerator SmoothMove(Transform obj,Vector2 target)
     {
         float remain = ((Vector2)obj.localPosition - target).sqrMagnitude;
