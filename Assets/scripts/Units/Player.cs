@@ -184,7 +184,7 @@ public class Player : Unit
         List<Unit> units = api.engine.database.GetUnits(pos);
         for (int i = 0; i < units.Count; i++)
         {
-            if (units[i] is Container || units[i] is Fountain || (units[i] is Branch && ((Branch)units[i]).islocked) || (units[i] is Rock && ((Rock)units[i]).isleanable))
+            if (units[i].isLeanable())
                 return true;
         }
         return false;

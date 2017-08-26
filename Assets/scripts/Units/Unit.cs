@@ -122,6 +122,11 @@ public class Unit : MonoBehaviour {
         return false;
     }
    
+    public virtual bool isLeanableFromDirection(Direction direction)
+    {
+        return isLeanable();
+    }
+
 }
 
 public class CloneableUnit

@@ -94,7 +94,7 @@ public enum Direction
 
 public enum AbilityType
 {
-     Fuel,Direction, Jump, Gravity, Teleport, Rope, Key
+     Fuel,Direction, Jump, Gravity, Teleport, Rope, Key, Laser
 }
 
 public enum PlayerState

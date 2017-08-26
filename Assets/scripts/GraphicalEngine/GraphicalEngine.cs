@@ -387,12 +387,13 @@ public class GraphicalEngine : MonoBehaviour {
         die.transform.position = player.transform.position;
         die.GetComponent<Animator>().SetTrigger("Die");
         player.transform.GetChild(0).gameObject.SetActive(false);
-        StartCoroutine(DieLevelReset(1));
+        StartCoroutine(DieLevelReset(1, player));
     }
 
-    private IEnumerator DieLevelReset(float f)
+    private IEnumerator DieLevelReset(float f, Player player)
     {
         yield return new WaitForSeconds(f);
+        player.transform.position = new Vector3(-1, 1, 1);
         Starter.GetSceneLoader().Load(SceneManager.GetActiveScene().name, 0.5f);
     }
 
