@@ -107,6 +107,10 @@ public enum LifeState
     Alive, Dead
 }
 
+public enum EnemyState
+{
+    Idle, Moving, Falling
+}
 public enum GateType
 {
     Internal, InternalChangeScene, External
