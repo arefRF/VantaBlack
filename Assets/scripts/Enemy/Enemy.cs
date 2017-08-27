@@ -10,9 +10,12 @@ public class Enemy : Unit
     private Vector2 MoveToPosition, PlayerPosition;
     private Coroutine coroutine;
     public Direction gravityDirection;
-
+    private AudioSource audio;
+    private Animator animator;
     void Start()
     {
+        animator = GetComponent<Animator>();
+        audio = GetComponent<AudioSource>();
         gravityDirection = Starter.GetGravityDirection();
     }
 
@@ -53,6 +56,10 @@ public class Enemy : Unit
 
     private IEnumerator Move()
     {
+        if(!audio.isPlaying)
+        {
+            audio.Play();
+        }
         MoveToPosition = position + (PlayerPosition - position).normalized;
         float remain_distance = (((Vector2)transform.position - MoveToPosition)).magnitude;
         while (remain_distance > float.Epsilon)
