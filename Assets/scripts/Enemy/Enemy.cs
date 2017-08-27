@@ -68,12 +68,6 @@ public class Enemy : Unit
         coroutine = null;
     }
 
-    /*private Vector2 GetNextMovePosition()
-    {
-
-    }*/
-
-
     public override bool isLeanable()
     {
         return true;
