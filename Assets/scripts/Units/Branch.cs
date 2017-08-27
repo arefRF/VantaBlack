@@ -229,6 +229,7 @@ public class Branch : Unit {
 
     public void PlayerLeaned(Player player, Direction direction)
     {
+        Debug.Log("hhh");
         if (islocked)
         {
             if (player.abilities.Count != 0 && player.abilities[0] is Key)
@@ -360,7 +361,7 @@ public class Branch : Unit {
 
     public override bool isLeanable()
     {
-        return false;
+        //return false;
         return islocked || blocked;
     }
 

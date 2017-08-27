@@ -31,13 +31,21 @@ public class Enemy : Unit
         if (hit.collider != null && hit.collider.tag == "Player")
         {
             Player tempplayer = hit.collider.gameObject.GetComponent<Player>();
+<<<<<<< HEAD
             if ((tempplayer.position - pos).SqrMagnitude() <= 0.1f)
+=======
+            if (tempplayer.lifestate == LifeState.Dead)
+                return;
+            Debug.Log(tempplayer.lifestate);
+            if ((tempplayer.position - pos).SqrMagnitude() <= 1)
+>>>>>>> b0d702df14ba0bf515b2a3a5009a4710e7b53ec9
             {
                 
                 Starter.GetEngine().apigraphic.Laser_Player_Died(tempplayer);
             }
             else
             {
+                Debug.Log("coroutine update");
                 PlayerPosition = Toolkit.RoundVector(tempplayer.transform.position);
                 if (coroutine == null)
                 {
@@ -49,18 +57,26 @@ public class Enemy : Unit
 
     private IEnumerator Move()
     {
-        MoveToPosition = PlayerPosition;
-        float remain_distance = ((Vector2)transform.position - MoveToPosition).sqrMagnitude;
+        MoveToPosition = position + (PlayerPosition - position).normalized;
+        float remain_distance = (((Vector2)transform.position - MoveToPosition)).magnitude;
         while (remain_distance > float.Epsilon)
         {
             if(remain_distance < 0.1f)
             {
-                MoveToPosition = PlayerPosition;
+                Debug.Log(position);
                 api.RemoveFromDatabase(this);
                 position = Toolkit.RoundVector(transform.position);
                 api.AddToDatabase(this);
+                Vector2 temp = MoveToPosition;
+                MoveToPosition = position + (PlayerPosition - position).normalized;
+                Vector2 tempvector = temp - MoveToPosition;
+                if (tempvector.x == 0 && tempvector.y == 0)
+                {
+                    transform.position = position;
+                    break;
+                }
             }
-            remain_distance = ((Vector2)transform.position - MoveToPosition).sqrMagnitude;
+            remain_distance = (((Vector2)transform.position - MoveToPosition)).magnitude;
             Vector3 new_pos = Vector3.MoveTowards(transform.position, MoveToPosition, Time.deltaTime * 1 / move_time);
             transform.position = new_pos;
             yield return null;
@@ -68,11 +84,10 @@ public class Enemy : Unit
         coroutine = null;
     }
 
-    /*private Vector2 GetNextMovePosition()
+    private new void ApplyGravity()
     {
 
-    }*/
-
+    }
 
     public override bool isLeanable()
     {

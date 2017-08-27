@@ -9,6 +9,7 @@ public class Player : Unit
     public int abilitycount;
     public List<Ability> abilities;
     public List<Direction> move_direction;
+    public LifeState lifestate { get; set; }
 
     //Skill locks
     public bool CanJump;
@@ -57,6 +58,7 @@ public class Player : Unit
         oneJump = new Jump(1);
         state = PlayerState.Idle;
         tempstate = state;
+        lifestate = LifeState.Alive;
     }
 
     public void Update()
