@@ -565,6 +565,7 @@ public class PlayerGraphics : MonoBehaviour {
         }
         player.transform.GetChild(0).rotation = Quaternion.Euler(xrot, yrot, zrot);
         hologram.transform.localRotation = Quaternion.Euler(xrot, yrot, 0);
+        
     }
 
 
