@@ -31,10 +31,14 @@ public class Enemy : Unit
         if (hit.collider != null && hit.collider.tag == "Player")
         {
             Player tempplayer = hit.collider.gameObject.GetComponent<Player>();
+<<<<<<< HEAD
+            if ((tempplayer.position - pos).SqrMagnitude() <= 0.1f)
+=======
             if (tempplayer.lifestate == LifeState.Dead)
                 return;
             Debug.Log(tempplayer.lifestate);
             if ((tempplayer.position - pos).SqrMagnitude() <= 1)
+>>>>>>> b0d702df14ba0bf515b2a3a5009a4710e7b53ec9
             {
                 
                 Starter.GetEngine().apigraphic.Laser_Player_Died(tempplayer);
