@@ -31,7 +31,7 @@ public class Enemy : Unit
         if (hit.collider != null && hit.collider.tag == "Player")
         {
             Player tempplayer = hit.collider.gameObject.GetComponent<Player>();
-            if ((tempplayer.position - pos).SqrMagnitude() <= 1)
+            if ((tempplayer.position - pos).SqrMagnitude() <= 0.1f)
             {
                 
                 Starter.GetEngine().apigraphic.Laser_Player_Died(tempplayer);
