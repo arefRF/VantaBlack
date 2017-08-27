@@ -10,10 +10,15 @@ public class Enemy : Unit
     private Vector2 MoveToPosition, PlayerPosition;
     private Coroutine coroutine;
     public Direction gravityDirection;
+    private AudioSource audio;
+    private Animator animator;
+
     public EnemyState state { get; set; }
 
     void Start()
     {
+        animator = GetComponent<Animator>();
+        audio = GetComponent<AudioSource>();
         gravityDirection = Starter.GetGravityDirection();
     }
 
@@ -52,6 +57,8 @@ public class Enemy : Unit
 
     private IEnumerator Move()
     {
+        animator.SetInteger("Move", 1);
+        //animator.SetFloat("MoveSpeed", move_time);
         MoveToPosition = position + (PlayerPosition - position).normalized;
         float remain_distance = (((Vector2)transform.position - MoveToPosition)).magnitude;
         bool MoveFinished = false;
@@ -59,6 +66,8 @@ public class Enemy : Unit
         {
             if(remain_distance < 0.1f && !MoveFinished)
             {
+                if(!audio.isPlaying)
+                    audio.Play();
                 api.RemoveFromDatabase(this);
                 position = Toolkit.RoundVector(transform.position);
                 api.AddToDatabase(this);
@@ -81,6 +90,8 @@ public class Enemy : Unit
             transform.position = new_pos;
             yield return null;
         }
+        audio.Stop();
+        animator.SetInteger("Move", 0);
         coroutine = null;
     }
     private bool CanMove(Vector2 pos)
@@ -105,7 +116,6 @@ public class Enemy : Unit
     private bool CheckEmpty(Vector2 pos)
     {
         Vector2 rootpos = position + new Vector2(0.5f, 0.5f) + Toolkit.DirectiontoVector(api.engine.database.gravity_direction) / 1.5f;
-        Debug.Log(Toolkit.DirectiontoVector(api.engine.database.gravity_direction) / 1.5f);
         Vector2 temppos1, temppos2;
         if (Toolkit.isHorizontal(api.engine.database.gravity_direction))
         {
@@ -117,13 +127,10 @@ public class Enemy : Unit
             temppos1 = rootpos + new Vector2(0.2f, 0);
             temppos2 = rootpos + new Vector2(-0.2f, 0);
         }
-        Debug.Log(temppos1);
-        Debug.Log(temppos2);
         RaycastHit2D hit = Physics2D.Raycast(temppos1, (pos - temppos1).normalized, (pos - temppos1).magnitude);
         RaycastHit2D hit2 = Physics2D.Raycast(temppos2, (pos - temppos2).normalized, (pos - temppos2).magnitude);
         if (hit.collider != null || hit2.collider != null)
         {
-            Debug.Log(hit.collider);
            
             return false;
         }

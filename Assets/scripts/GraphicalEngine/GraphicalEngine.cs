@@ -382,8 +382,6 @@ public class GraphicalEngine : MonoBehaviour {
     public void LaserDieAnimation(Player player)
     {
         GameObject die = Toolkit.GetObjectInChild(GameObject.Find("Special Effects"), "Dying");
-        Debug.Log(die);
-        Debug.Log(player);
         die.transform.position = player.transform.position;
         die.GetComponent<Animator>().SetTrigger("Die");
         player.transform.GetChild(0).gameObject.SetActive(false);
@@ -393,7 +391,6 @@ public class GraphicalEngine : MonoBehaviour {
     private IEnumerator DieLevelReset(float f, Player player)
     {
         yield return new WaitForSeconds(f);
-        player.transform.position = new Vector3(-1, 1, 1);
         Starter.GetSceneLoader().Load(SceneManager.GetActiveScene().name, 0.5f);
     }
 
