@@ -506,6 +506,7 @@ public class APIGraphic{
     public void Laser_Player_Died(Player player)
     {
         Debug.Log("laser player died");
+        player.lifestate = LifeState.Dead;
         player.api.RemoveFromDatabase(player);
         graphicalengine.LaserDieAnimation(player);
     }

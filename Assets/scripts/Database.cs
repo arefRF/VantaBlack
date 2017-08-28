@@ -102,6 +102,11 @@ public enum PlayerState
     Idle, Falling, Jumping, Moving, Fakelean, Lean, Busy, Adjust, Gir
 }
 
+public enum LifeState
+{
+    Alive, Dead
+}
+
 public enum GateType
 {
     Internal, InternalChangeScene, External
