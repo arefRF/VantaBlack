@@ -128,10 +128,10 @@ public class APIGraphic{
     // Block to fall
     public void MovePlayer_Simple_4(Player player, Vector2 position)
     {
-        player.gameObject.GetComponent<PlayerGraphics>().BlockToFallAnimation();
+        player.gameObject.GetComponent<PlayerGraphics>().BlockToFallAnimation(position);
         player.GetComponent<PlayerGraphics>().StopAllCoroutines();
-        player.gameObject.GetComponent<PlayerGraphics>().Move_Animation(player.direction);
-        player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
+        //player.gameObject.GetComponent<PlayerGraphics>().Move_Animation(player.direction);
+        //player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
        
     }
     

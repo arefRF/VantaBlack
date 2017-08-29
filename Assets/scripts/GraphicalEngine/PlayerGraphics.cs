@@ -531,7 +531,7 @@ public class PlayerGraphics : MonoBehaviour {
         z_rot = 0;
     }
 
-    public virtual void BlockToFallAnimation()
+    public virtual void BlockToFallAnimation(Vector2 pos)
     {
 
     }
