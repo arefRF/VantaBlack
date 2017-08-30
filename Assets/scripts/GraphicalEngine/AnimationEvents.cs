@@ -17,7 +17,10 @@ public class AnimationEvents : MonoBehaviour {
         hit = hit1;
     }
 
-
+    private void BlockToFallFinished()
+    {
+        transform.parent.parent.GetComponent<PlayerGraphicsV5>().BlockToFallFinished();
+    }
     private void OpenEye()
     {
         transform.parent.parent.GetComponent<PlayerGraphics>().OpenEye();

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 public class PlayerGraphicsV5 : PlayerGraphics
 {
+    public Vector2 block_fall_pos;
     public override void MoveToBranch(Direction dir)
     {
         StopAllCoroutines();
@@ -61,9 +62,15 @@ public class PlayerGraphicsV5 : PlayerGraphics
 
         }
     }
-    public override void BlockToFallAnimation()
+    public override void BlockToFallAnimation(Vector2 pos)
     {
+        block_fall_pos = pos;
         animator.SetTrigger("BlockToFall");
+    }
+
+    public void BlockToFallFinished()
+    {
+        player.transform.position = block_fall_pos;
     }
     private void ChangeSprites()
     {
