@@ -9,7 +9,7 @@ public class Enemy : Unit
     public bool IsOn = true;
     private Vector2 MoveToPosition, PlayerPosition;
     private Coroutine coroutine;
-    public Direction gravityDirection;
+    public Direction gravityDirection { get; set; }
     public EnemyState state { get; set; }
 
     void Start()
@@ -36,7 +36,6 @@ public class Enemy : Unit
                 return;
             if ((tempplayer.position - pos).SqrMagnitude() <= 1)
             {
-                
                 Starter.GetEngine().apigraphic.Laser_Player_Died(tempplayer);
             }
             else
@@ -44,17 +43,18 @@ public class Enemy : Unit
                 PlayerPosition = Toolkit.RoundVector(tempplayer.transform.position);
                 if (coroutine == null)
                 {
-                    coroutine = StartCoroutine(Move());
+                    coroutine = StartCoroutine(Move(direction));
                 }
             }
         }
     }
 
-    private IEnumerator Move()
+    private new IEnumerator Move(Direction direction)
     {
         MoveToPosition = position + (PlayerPosition - position).normalized;
         float remain_distance = (((Vector2)transform.position - MoveToPosition)).magnitude;
         bool MoveFinished = false;
+        MoveNecessaryPlayers(direction);
         while (remain_distance > float.Epsilon)
         {
             if(remain_distance < 0.1f && !MoveFinished)
@@ -63,18 +63,16 @@ public class Enemy : Unit
                 position = Toolkit.RoundVector(transform.position);
                 api.AddToDatabase(this);
                 Vector2 temp = MoveToPosition;
-                if (CanMove(position + (PlayerPosition - position).normalized))
+                if (CanMove(position))
                     MoveToPosition = position + (PlayerPosition - position).normalized;
-                else
-                    Debug.Log(":DDDD");
                 Vector2 tempvector = temp - MoveToPosition;
                 if (tempvector.x == 0 && tempvector.y == 0)
                 {
-                    Debug.Log("here");
                     transform.position = position;
                     ApplyGravity();
                     break;
                 }
+                MoveNecessaryPlayers(direction);
             }
             remain_distance = (((Vector2)transform.position - MoveToPosition)).magnitude;
             Vector3 new_pos = Vector3.MoveTowards(transform.position, MoveToPosition, Time.deltaTime * 1 / move_time);
@@ -91,45 +89,74 @@ public class Enemy : Unit
     {
         Vector2 endpos = position;
         Vector2 temppos = endpos;
-        Debug.Log(CheckEmpty(position + Toolkit.DirectiontoVector(api.engine.database.gravity_direction)));
-        while (CheckEmpty(position + Toolkit.DirectiontoVector(api.engine.database.gravity_direction)))
+        while (CheckEmpty(position + Toolkit.DirectiontoVector(gravityDirection)))
         {
-            endpos += Toolkit.DirectiontoVector(api.engine.database.gravity_direction);
-            position += Toolkit.DirectiontoVector(api.engine.database.gravity_direction);
+            api.RemoveFromDatabase(this);
+            endpos += Toolkit.DirectiontoVector(gravityDirection);
+            position += Toolkit.DirectiontoVector(gravityDirection);
+            api.AddToDatabase(this);
+            transform.position = position;
         }
         if (temppos != endpos)
             state = EnemyState.Falling;
-        Debug.Log(endpos);
+        transform.position = endpos;
     }
 
     private bool CheckEmpty(Vector2 pos)
     {
-        Vector2 rootpos = position + new Vector2(0.5f, 0.5f) + Toolkit.DirectiontoVector(api.engine.database.gravity_direction) / 1.5f;
-        Debug.Log(Toolkit.DirectiontoVector(api.engine.database.gravity_direction) / 1.5f);
         Vector2 temppos1, temppos2;
-        if (Toolkit.isHorizontal(api.engine.database.gravity_direction))
+        if (Toolkit.isHorizontal(gravityDirection))
         {
-            temppos1 = rootpos + new Vector2(0,0.2f);
-            temppos2 = rootpos + new Vector2(0, -0.2f);
+            temppos1 = position + new Vector2(0,0.2f);
+            temppos2 = position + new Vector2(0, -0.2f);
         }
         else
         {
-            temppos1 = rootpos + new Vector2(0.2f, 0);
-            temppos2 = rootpos + new Vector2(-0.2f, 0);
+            temppos1 = position + new Vector2(0.2f, 0);
+            temppos2 = position + new Vector2(-0.2f, 0);
         }
-        Debug.Log(temppos1);
-        Debug.Log(temppos2);
-        RaycastHit2D hit = Physics2D.Raycast(temppos1, (pos - temppos1).normalized, (pos - temppos1).magnitude);
-        RaycastHit2D hit2 = Physics2D.Raycast(temppos2, (pos - temppos2).normalized, (pos - temppos2).magnitude);
+        RaycastHit2D hit = Physics2D.Raycast(temppos1, (pos - position).normalized, (pos - position).magnitude);
+        RaycastHit2D hit2 = Physics2D.Raycast(temppos2, (pos - position).normalized, (pos - position).magnitude);
         if (hit.collider != null || hit2.collider != null)
         {
-            Debug.Log(hit.collider);
-           
             return false;
         }
-        else
-            Debug.Log("true");
         return true;
+    }
+    private void MoveNecessaryPlayers(Direction direction)
+    {
+        List<Player> players = GetPlayersToMove();
+        for(int i=0; i<players.Count; i++)
+        {
+            if (players[i].CanMove(direction, transform.parent.gameObject))
+            {
+                api.RemoveFromDatabase(players[i]);
+                players[i].position = Toolkit.VectorSum(players[i].position, direction);
+                players[i].transform.position = players[i].position;
+                api.AddToDatabase(players[i]);
+            }
+        }
+    }
+    private List<Player> GetPlayersToMove()
+    {
+        List<Player> players = new List<Player>();
+        Vector2 tempvector = Toolkit.VectorSum(position, Toolkit.ReverseDirection(gravityDirection));
+        List<Unit> units = api.engine.database.units[(int)tempvector.x, (int)tempvector.y];
+        for(int i=0; i<units.Count; i++)
+        {
+            if (units[i] is Player)
+            {
+                Player tempplayer = units[i] as Player;
+                Debug.Log(tempplayer.LeanedTo);
+                if(tempplayer.LeanedTo == null || tempplayer.LeanedTo == this)
+                    players.Add(units[i] as Player);
+            }
+            else if (units[i] is Branch)
+                return new List<Player>();
+            else if(units[i] is Ramp && (units[i] as Ramp).IsOnRampSide(Toolkit.ReverseDirection(gravityDirection)))
+                return new List<Player>();
+        }
+        return players;
     }
 
     public override bool isLeanable()
