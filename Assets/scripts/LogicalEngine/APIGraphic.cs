@@ -130,8 +130,8 @@ public class APIGraphic{
     {
         player.gameObject.GetComponent<PlayerGraphics>().BlockToFallAnimation(position);
         player.GetComponent<PlayerGraphics>().StopAllCoroutines();
-        //player.gameObject.GetComponent<PlayerGraphics>().Move_Animation(player.direction);
-        //player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
+        player.gameObject.GetComponent<PlayerGraphics>().Move_Animation(player.direction);
+        player.gameObject.GetComponent<PlayerPhysics>().Simple_Move(position);
        
     }
     
