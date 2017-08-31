@@ -10,10 +10,15 @@ public class Enemy : Unit
     private Vector2 MoveToPosition, PlayerPosition;
     private Coroutine coroutine;
     public Direction gravityDirection { get; set; }
+    private AudioSource audio;
+    private Animator animator;
+
     public EnemyState state { get; set; }
 
     void Start()
     {
+        animator = GetComponent<Animator>();
+        audio = GetComponent<AudioSource>();
         gravityDirection = Starter.GetGravityDirection();
     }
 
@@ -51,6 +56,8 @@ public class Enemy : Unit
 
     private new IEnumerator Move(Direction direction)
     {
+        animator.SetInteger("Move", 1);
+        //animator.SetFloat("MoveSpeed", move_time);
         MoveToPosition = position + (PlayerPosition - position).normalized;
         float remain_distance = (((Vector2)transform.position - MoveToPosition)).magnitude;
         bool MoveFinished = false;
@@ -59,6 +66,8 @@ public class Enemy : Unit
         {
             if(remain_distance < 0.1f && !MoveFinished)
             {
+                if(!audio.isPlaying)
+                    audio.Play();
                 api.RemoveFromDatabase(this);
                 position = Toolkit.RoundVector(transform.position);
                 api.AddToDatabase(this);
@@ -79,6 +88,8 @@ public class Enemy : Unit
             transform.position = new_pos;
             yield return null;
         }
+        audio.Stop();
+        animator.SetInteger("Move", 0);
         coroutine = null;
     }
     private bool CanMove(Vector2 pos)
