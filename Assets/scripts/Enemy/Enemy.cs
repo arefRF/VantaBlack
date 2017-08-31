@@ -30,6 +30,11 @@ public class Enemy : Unit
                 CheckPlayer(MoveDirections[i]); 
     }
 
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        Debug.Log(col);
+    }
+
     public void CheckPlayer(Direction direction)
     {
         Vector2 pos = Toolkit.VectorSum(transform.position, Toolkit.DirectiontoVector(direction) / 1.95f);
@@ -39,10 +44,10 @@ public class Enemy : Unit
             Player tempplayer = hit.collider.gameObject.GetComponent<Player>();
             if (tempplayer.lifestate == LifeState.Dead)
                 return;
-            if ((tempplayer.position - pos).SqrMagnitude() <= 1)
+            /*if ((tempplayer.position - pos).SqrMagnitude() <= 1)
             {
                 Starter.GetEngine().apigraphic.Laser_Player_Died(tempplayer);
-            }
+            }*/
             else
             {
                 PlayerPosition = Toolkit.RoundVector(tempplayer.transform.position);
@@ -56,18 +61,17 @@ public class Enemy : Unit
 
     private new IEnumerator Move(Direction direction)
     {
-        animator.SetInteger("Move", 1);
+        //animator.SetInteger("Move", 1);
         //animator.SetFloat("MoveSpeed", move_time);
         MoveToPosition = position + (PlayerPosition - position).normalized;
         float remain_distance = (((Vector2)transform.position - MoveToPosition)).magnitude;
-        bool MoveFinished = false;
         MoveNecessaryPlayers(direction);
         while (remain_distance > float.Epsilon)
         {
-            if(remain_distance < 0.1f && !MoveFinished)
+            if(remain_distance < 0.1f)
             {
-                if(!audio.isPlaying)
-                    audio.Play();
+                /*if(!audio.isPlaying)
+                    audio.Play();*/
                 api.RemoveFromDatabase(this);
                 position = Toolkit.RoundVector(transform.position);
                 api.AddToDatabase(this);
@@ -115,19 +119,20 @@ public class Enemy : Unit
 
     private bool CheckEmpty(Vector2 pos)
     {
+        Vector2 rootposition = position + Toolkit.DirectiontoVector(gravityDirection) / 1.8f;
         Vector2 temppos1, temppos2;
         if (Toolkit.isHorizontal(gravityDirection))
         {
-            temppos1 = position + new Vector2(0,0.2f);
-            temppos2 = position + new Vector2(0, -0.2f);
+            temppos1 = rootposition + new Vector2(0,0.2f);
+            temppos2 = rootposition + new Vector2(0, -0.2f);
         }
         else
         {
-            temppos1 = position + new Vector2(0.2f, 0);
-            temppos2 = position + new Vector2(-0.2f, 0);
+            temppos1 = rootposition + new Vector2(0.2f, 0);
+            temppos2 = rootposition + new Vector2(-0.2f, 0);
         }
-        RaycastHit2D hit = Physics2D.Raycast(temppos1, (pos - position).normalized, (pos - position).magnitude);
-        RaycastHit2D hit2 = Physics2D.Raycast(temppos2, (pos - position).normalized, (pos - position).magnitude);
+        RaycastHit2D hit = Physics2D.Raycast(temppos1, (pos - position).normalized, (pos - position).magnitude/2);
+        RaycastHit2D hit2 = Physics2D.Raycast(temppos2, (pos - position).normalized, (pos - position).magnitude/2);
         if (hit.collider != null || hit2.collider != null)
         {
             return false;
@@ -158,7 +163,6 @@ public class Enemy : Unit
             if (units[i] is Player)
             {
                 Player tempplayer = units[i] as Player;
-                Debug.Log(tempplayer.LeanedTo);
                 if(tempplayer.LeanedTo == null || tempplayer.LeanedTo == this)
                     players.Add(units[i] as Player);
             }

@@ -37,7 +37,6 @@ public class Player : Unit
     public GameMode mode;
 
     private PlayerState tempstate;
-
     public PlayerState LeanUndoNextState { get; set; }
 
     public Coroutine leancoroutine { get; set;}
@@ -106,6 +105,9 @@ public class Player : Unit
         {
             GetComponent<PlayerGraphics>().TransitionAnimation();
         }*/
+        /*Debug.Log(state);
+        System.Diagnostics.StackTrace stackTrace = new System.Diagnostics.StackTrace();
+        Debug.Log(stackTrace.GetFrame(1).GetMethod().Name);*/
         if (state == PlayerState.Idle)
         {
             GetComponent<PlayerGraphics>().ResetStates();
