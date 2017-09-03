@@ -97,9 +97,7 @@ public class Laser : Unit {
                     }
                     if (!flag && !HittingContainers.Contains(tempcontainer))
                     {
-                        ContainerLaser temp = new ContainerLaser();
-                        temp.container = tempcontainer;
-                        temp.ContainerTimeFinished = false;
+                        ContainerLaser temp = new ContainerLaser(tempcontainer);
                         Containers.Add(temp);
                         engine.apigraphic.LaserHitDynamic(tempcontainer);
                         temp.ContainerLaserBeginCoroutine = StartCoroutine(ContainerLaserBegin(0.95f, Containers[Containers.Count - 1]));
