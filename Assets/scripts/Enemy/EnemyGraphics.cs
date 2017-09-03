@@ -15,7 +15,6 @@ public class EnemyGraphics : MonoBehaviour {
     void Start()
     {
         enemy = GetComponent<Enemy>();
->>>>>>> 58b2ea0947f206daddf4182534b17895815eb317
     }
     public void MoveSound()
     {
