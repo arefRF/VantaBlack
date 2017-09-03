@@ -16,6 +16,7 @@ public class EnemyMessage{
         MoveAnimationstop,
         KillPlayer,
         FireLaser,
+        OnOffChanged,
 
     }
 
