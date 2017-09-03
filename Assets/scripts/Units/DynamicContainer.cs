@@ -44,7 +44,6 @@ public class DynamicContainer : FunctionalContainer {
         }
         else if (LaserBeamHitting && !templaserhit)
         {
-            Debug.Log(this);
             templaserhit = true;
         }
         if(!LaserBeamHitting && (abilities.Count == 0 || abilities[0].abilitytype != AbilityType.Laser))

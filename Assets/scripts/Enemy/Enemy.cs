@@ -189,4 +189,8 @@ public class Enemy : Unit
         IsOn = !IsOn;
     }
 
+    public void SendMessage()
+    {
+
+    }
 }
