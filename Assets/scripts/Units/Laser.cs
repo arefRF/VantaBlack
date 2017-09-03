@@ -250,28 +250,14 @@ public class Laser : Unit {
         SetLaser();
         StartCoroutine(SetLaserTimer(0.05f));
     }
-
-    private class LaserBranchUnlocker
-    {
-        public Branch branch;
-        public Coroutine LaserUnlockWaitCoroutine;
-        public bool LaserUnlockTimeFinished;
-    }
-
-    private class ContainerLaser
-    {
-        public DynamicContainer container;
-        public bool ContainerTimeFinished;
-        public Coroutine ContainerLaserBeginCoroutine;
-    }
-
-    private IEnumerator LaserUnlockWait(float f, LaserBranchUnlocker branchunlocker)
+    
+    public IEnumerator LaserUnlockWait(float f, LaserBranchUnlocker branchunlocker)
     {
         yield return new WaitForSeconds(f);
         branchunlocker.LaserUnlockTimeFinished = true;
     }
 
-    private IEnumerator ContainerLaserBegin(float f, ContainerLaser containerlaser)
+    public IEnumerator ContainerLaserBegin(float f, ContainerLaser containerlaser)
     {
         yield return new WaitForSeconds(f);
         containerlaser.ContainerTimeFinished = true;

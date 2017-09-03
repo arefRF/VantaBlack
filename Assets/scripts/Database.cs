@@ -83,6 +83,18 @@ public class TimeLaps
     }
 }
 
+public class ContainerLaser
+{
+    public DynamicContainer container;
+    public bool ContainerTimeFinished;
+    public Coroutine ContainerLaserBeginCoroutine;
+}
+public class LaserBranchUnlocker
+{
+    public Branch branch;
+    public Coroutine LaserUnlockWaitCoroutine;
+    public bool LaserUnlockTimeFinished;
+}
 public enum State
 {
     Idle, Busy, Busy_Moving

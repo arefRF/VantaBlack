@@ -623,6 +623,7 @@ public class PlayerGraphics : MonoBehaviour {
         float[] color = new float[4];
         if (ability.Count != 0)
         {
+            Debug.Log(ability[0].abilitytype);
             switch (ability[0].abilitytype)
             {
                 case AbilityType.Key: color = new float[] { 1, 1, 1, 1 }; break;
@@ -631,6 +632,7 @@ public class PlayerGraphics : MonoBehaviour {
                 case AbilityType.Teleport: color = new float[] { 0.92f, 0.36f, 0.44f, 1 }; break;
                 case AbilityType.Gravity: color = new float[] { 0.81f, 0.60f, 0.96f, 1 }; break;
                 case AbilityType.Rope: color = new float[] { 1, 0.60f, 0.30f, 1 }; break;
+                case AbilityType.Laser: color = new float[] { 0.92f, 0.36f, 0.44f, 1 }; break;
             }
         }
         else

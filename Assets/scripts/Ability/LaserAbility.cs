@@ -3,5 +3,8 @@ using System.Collections;
 
 public class LaserAbility : Ability {
 
-	//public LaserAbility
+	public LaserAbility()
+    {
+        abilitytype = AbilityType.Laser;
+    }
 }

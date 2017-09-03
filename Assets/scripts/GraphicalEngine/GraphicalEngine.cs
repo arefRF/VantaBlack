@@ -243,6 +243,7 @@ public class GraphicalEngine : MonoBehaviour {
                 case AbilityType.Teleport: return new Vector3(0.92f,0.36f,0.44f);
                 case AbilityType.Gravity: return new Vector3(0.81f,0.60f,0.96f);
                 case AbilityType.Rope: return new Vector3(1,0.60f,0.30f);
+                case AbilityType.Laser: return new Vector3(0.92f, 0.36f, 0.44f);
             }
         }
         // else white
