@@ -2,13 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-<<<<<<< HEAD
-public class EnemyGraphics : MonoBehaviour
-{
-    void Start()
-    {
 
-=======
 public class EnemyGraphics : MonoBehaviour {
 
     private Enemy enemy;
