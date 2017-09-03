@@ -31,8 +31,7 @@ public class Enemy : Unit
         if(enemymove != null && IsOn && state != EnemyState.Falling)
             for (int i = 0; i < enemymove.MoveDirections.Count; i++)
                 CheckPlayer(enemymove.MoveDirections[i]); 
-    } 
-
+    }
     void OnCollisionEnter2D(Collision2D col)
     {
         Debug.Log(col);
