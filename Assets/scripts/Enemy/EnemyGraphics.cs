@@ -6,20 +6,27 @@ using UnityEngine;
 public class EnemyGraphics : MonoBehaviour {
 
     private Enemy enemy;
+    private AudioSource sound;
+    private Animator animator;
     void Start()
     {
         enemy = GetComponent<Enemy>();
-    }
-    public void MoveSound()
-    {
-        
+        sound = GetComponent<AudioSource>();
+        animator = GetComponent<Animator>();
+
     }
 
     public void MoveAnimation()
     {
-        Debug.Log("move animation");
+        sound.Play();
+        animator.SetInteger("Move", 1);
     }
 
+    public void MoveAnimationStop()
+    {
+        sound.Stop();
+        animator.SetInteger("Move", 0);
+    }
     public void KillPlayerAnimation()
     {
 
@@ -35,6 +42,7 @@ public class EnemyGraphics : MonoBehaviour {
         switch (message.messagetype)
         {
             case EnemyMessage.MessageType.MoveAnimation: MoveAnimation(); break;
+            case EnemyMessage.MessageType.MoveAnimationStop: MoveAnimationStop(); break;
         }
 
     }
