@@ -4,15 +4,15 @@ using System.Collections;
 
 public class Enemy : Unit
 {
-    public List<Direction> MoveDirections;
-    public float move_time = 0.2f;
     public bool IsOn = true;
-    private Vector2 MoveToPosition, PlayerPosition;
-    private Coroutine coroutine;
     public Direction gravityDirection { get; set; }
     private AudioSource audio;
     private Animator animator;
 
+
+    private EnemyMove enemymove;
+    private EnemyFireLaser enemyfirelaser;
+    private EnemyGraphics enemygraphics;
     public EnemyState state { get; set; }
 
     void Start()
@@ -20,14 +20,17 @@ public class Enemy : Unit
         animator = GetComponent<Animator>();
         audio = GetComponent<AudioSource>();
         gravityDirection = Starter.GetGravityDirection();
+        enemymove = GetComponent<EnemyMove>();
+        enemyfirelaser = GetComponent<EnemyFireLaser>();
+        enemygraphics = GetComponent<EnemyGraphics>();
     }
 
 
     void Update()
     {
-        if(IsOn && state != EnemyState.Falling)
-            for (int i = 0; i < MoveDirections.Count; i++)
-                CheckPlayer(MoveDirections[i]); 
+        if(enemymove != null && IsOn && state != EnemyState.Falling)
+            for (int i = 0; i < enemymove.MoveDirections.Count; i++)
+                CheckPlayer(enemymove.MoveDirections[i]); 
     } 
 
     void OnCollisionEnter2D(Collision2D col)
@@ -50,130 +53,10 @@ public class Enemy : Unit
             }*/
             else
             {
-                PlayerPosition = Toolkit.RoundVector(tempplayer.transform.position);
-                if (coroutine == null)
-                {
-                    coroutine = StartCoroutine(Move(direction));
-                }
+                SendMessage(new EnemyMessage(EnemyMessage.MessageType.PhysicalMove, direction, Toolkit.RoundVector(tempplayer.transform.position)));
             }
         }
     }
-
-    private new IEnumerator Move(Direction direction)
-    {
-        //animator.SetInteger("Move", 1);
-        //animator.SetFloat("MoveSpeed", move_time);
-        MoveToPosition = position + (PlayerPosition - position).normalized;
-        float remain_distance = (((Vector2)transform.position - MoveToPosition)).magnitude;
-        MoveNecessaryPlayers(direction);
-        while (remain_distance > float.Epsilon)
-        {
-            if(remain_distance < 0.1f)
-            {
-                /*if(!audio.isPlaying)
-                    audio.Play();*/
-                api.RemoveFromDatabase(this);
-                position = Toolkit.RoundVector(transform.position);
-                api.AddToDatabase(this);
-                Vector2 temp = MoveToPosition;
-                if (CanMove(position))
-                    MoveToPosition = position + (PlayerPosition - position).normalized;
-                Vector2 tempvector = temp - MoveToPosition;
-                if (tempvector.x == 0 && tempvector.y == 0)
-                {
-                    transform.position = position;
-                    ApplyGravity();
-                    break;
-                }
-                MoveNecessaryPlayers(direction);
-            }
-            remain_distance = (((Vector2)transform.position - MoveToPosition)).magnitude;
-            Vector3 new_pos = Vector3.MoveTowards(transform.position, MoveToPosition, Time.deltaTime * 1 / move_time);
-            transform.position = new_pos;
-            yield return null;
-        }
-        audio.Stop();
-        animator.SetInteger("Move", 0);
-        coroutine = null;
-    }
-    private bool CanMove(Vector2 pos)
-    {
-        return !CheckEmpty(pos + Toolkit.DirectiontoVector(api.engine.database.gravity_direction));
-    }
-    private new void ApplyGravity()
-    {
-        Vector2 endpos = position;
-        Vector2 temppos = endpos;
-        while (CheckEmpty(position + Toolkit.DirectiontoVector(gravityDirection)))
-        {
-            api.RemoveFromDatabase(this);
-            endpos += Toolkit.DirectiontoVector(gravityDirection);
-            position += Toolkit.DirectiontoVector(gravityDirection);
-            api.AddToDatabase(this);
-            transform.position = position;
-        }
-        if (temppos != endpos)
-            state = EnemyState.Falling;
-        transform.position = endpos;
-    }
-
-    private bool CheckEmpty(Vector2 pos)
-    {
-        Vector2 rootposition = position + Toolkit.DirectiontoVector(gravityDirection) / 1.8f;
-        Vector2 temppos1, temppos2;
-        if (Toolkit.isHorizontal(gravityDirection))
-        {
-            temppos1 = rootposition + new Vector2(0,0.2f);
-            temppos2 = rootposition + new Vector2(0, -0.2f);
-        }
-        else
-        {
-            temppos1 = rootposition + new Vector2(0.2f, 0);
-            temppos2 = rootposition + new Vector2(-0.2f, 0);
-        }
-        RaycastHit2D hit = Physics2D.Raycast(temppos1, (pos - position).normalized, (pos - position).magnitude/2);
-        RaycastHit2D hit2 = Physics2D.Raycast(temppos2, (pos - position).normalized, (pos - position).magnitude/2);
-        if (hit.collider != null || hit2.collider != null)
-        {
-            return false;
-        }
-        return true;
-    }
-    private void MoveNecessaryPlayers(Direction direction)
-    {
-        List<Player> players = GetPlayersToMove();
-        for(int i=0; i<players.Count; i++)
-        {
-            if (players[i].CanMove(direction, transform.parent.gameObject))
-            {
-                api.RemoveFromDatabase(players[i]);
-                players[i].position = Toolkit.VectorSum(players[i].position, direction);
-                players[i].transform.position = players[i].position;
-                api.AddToDatabase(players[i]);
-            }
-        }
-    }
-    private List<Player> GetPlayersToMove()
-    {
-        List<Player> players = new List<Player>();
-        Vector2 tempvector = Toolkit.VectorSum(position, Toolkit.ReverseDirection(gravityDirection));
-        List<Unit> units = api.engine.database.units[(int)tempvector.x, (int)tempvector.y];
-        for(int i=0; i<units.Count; i++)
-        {
-            if (units[i] is Player)
-            {
-                Player tempplayer = units[i] as Player;
-                if(tempplayer.LeanedTo == null || tempplayer.LeanedTo == this)
-                    players.Add(units[i] as Player);
-            }
-            else if (units[i] is Branch)
-                return new List<Player>();
-            else if(units[i] is Ramp && (units[i] as Ramp).IsOnRampSide(Toolkit.ReverseDirection(gravityDirection)))
-                return new List<Player>();
-        }
-        return players;
-    }
-
     public override bool isLeanable()
     {
         return true;
@@ -189,8 +72,11 @@ public class Enemy : Unit
         IsOn = !IsOn;
     }
 
-    public void SendMessage()
+    public void SendMessage(EnemyMessage message)
     {
-
+        if(enemymove != null)
+            enemymove.GetMessage(message);
+        if(enemygraphics != null)
+            enemygraphics.GetMessage(message);
     }
 }
