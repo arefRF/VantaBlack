@@ -531,7 +531,7 @@ public class PlayerGraphics : MonoBehaviour {
         z_rot = 0;
     }
 
-    public virtual void BlockToFallAnimation()
+    public virtual void BlockToFallAnimation(Vector2 pos)
     {
 
     }
@@ -623,7 +623,6 @@ public class PlayerGraphics : MonoBehaviour {
         float[] color = new float[4];
         if (ability.Count != 0)
         {
-            Debug.Log(ability[0].abilitytype);
             switch (ability[0].abilitytype)
             {
                 case AbilityType.Key: color = new float[] { 1, 1, 1, 1 }; break;

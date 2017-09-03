@@ -37,13 +37,27 @@ public class DynamicContainer : FunctionalContainer {
         if (!LaserBeamHitting && templaserhit)
         {
             templaserhit = false;
-            if(linerenderer != null)
+            if (linerenderer != null)
                 Destroy(linerenderer.gameObject);
             linerenderer = null;
             api.engine.apigraphic.LaserUnHitDynamic(this);
         }
         else if (LaserBeamHitting && !templaserhit)
+        {
+            Debug.Log(this);
             templaserhit = true;
+        }
+        if(!LaserBeamHitting && (abilities.Count == 0 || abilities[0].abilitytype != AbilityType.Laser))
+        {
+            if(linerenderer != null)
+            {
+                linerenderer = null;
+                /*for(int i=0; i<Containers.Count; i++)
+                {
+                    Containers[i].laser = false;
+                }*/
+            }
+        }
 	}
 
     public override void SetCapacityLight()
