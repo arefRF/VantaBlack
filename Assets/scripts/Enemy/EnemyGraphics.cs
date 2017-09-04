@@ -37,12 +37,40 @@ public class EnemyGraphics : MonoBehaviour {
 
     }
 
+    public void OnOffGraphics()
+    {
+        if (enemy.IsOn)
+        {
+            OpenCloseEyes(true);
+            Toolkit.GetObjectInChild(gameObject, "Powers").SetActive(true);
+        }
+        else
+        {
+            OpenCloseEyes(false);
+            Toolkit.GetObjectInChild(gameObject, "Powers").SetActive(false);
+        }
+    }
+
+    private void OpenCloseEyes(bool open)
+    {
+        if (open)
+        {
+            Toolkit.GetObjectInChild(gameObject, "Eyes").SetActive(true);
+            Toolkit.GetObjectInChild(gameObject, "Eyes Close").SetActive(false);
+        }
+        else
+        {
+            Toolkit.GetObjectInChild(gameObject, "Eyes").SetActive(false);
+            Toolkit.GetObjectInChild(gameObject, "Eyes Close").SetActive(true);
+        }
+    }
     public void GetMessage(EnemyMessage message)
     {
         switch (message.messagetype)
         {
             case EnemyMessage.MessageType.MoveAnimation: MoveAnimation(); break;
             case EnemyMessage.MessageType.MoveAnimationStop: MoveAnimationStop(); break;
+            case EnemyMessage.MessageType.OnOffChanged: OnOffGraphics(); break;
         }
 
     }
