@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyMessage : MonoBehaviour {
+public class EnemyMessage{
     /// <summary>
     ///  Message Class for Enemy components communation
     ///  position and direction are basic message variables
@@ -11,7 +11,8 @@ public class EnemyMessage : MonoBehaviour {
     public Direction direction;
     public MessageType messagetype;
     public enum MessageType {
-        Move,
+        PhysicalMove,
+        MoveAnimation,
         KillPlayer,
         FireLaser,
 
