@@ -88,6 +88,12 @@ public class ContainerLaser
     public DynamicContainer container;
     public bool ContainerTimeFinished;
     public Coroutine ContainerLaserBeginCoroutine;
+
+    public ContainerLaser(DynamicContainer container)
+    {
+        this.container = container;
+        ContainerTimeFinished = false;
+    }
 }
 public class LaserBranchUnlocker
 {
