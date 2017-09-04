@@ -33,9 +33,12 @@ public class Enemy : Unit
                 CheckPlayer(enemymove.MoveDirections[i]); 
     } 
 
-    void OnCollisionEnter2D(Collision2D col)
+    void OnTriggerEnter2D(Collider2D col)
     {
-        Debug.Log(col);
+        if(col.tag == "Player")
+        {
+            Starter.GetEngine().apigraphic.Laser_Player_Died(col.gameObject.GetComponent<Player>());
+        }
     }
 
     public void CheckPlayer(Direction direction)
@@ -70,6 +73,7 @@ public class Enemy : Unit
     public void OnOff()
     {
         IsOn = !IsOn;
+        SendMessage(new EnemyMessage(EnemyMessage.MessageType.OnOffChanged));
     }
 
     public void SendMessage(EnemyMessage message)

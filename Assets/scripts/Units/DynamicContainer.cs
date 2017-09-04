@@ -32,6 +32,8 @@ public class DynamicContainer : FunctionalContainer {
 	
 	// Update is called once per frame
 	void Update () {
+        Debug.Log(LaserBeamHitting);
+        Debug.Log(templaserhit);
         if (abilities.Count != 0 && abilities[0].abilitytype == AbilityType.Laser)
             SetLaser();
         if (!LaserBeamHitting && templaserhit)
