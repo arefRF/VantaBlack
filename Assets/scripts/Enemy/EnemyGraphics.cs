@@ -27,8 +27,8 @@ public class EnemyGraphics : MonoBehaviour {
 
     }
 
-    public void GetMessage()
+    public void GetMessage(EnemyMessage message)
     {
-
+       
     }
     }
