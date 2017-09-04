@@ -10,6 +10,8 @@ public class DynamicContainer : FunctionalContainer {
     private List<LaserBranchUnlocker> Branches, tempbranchlist;
     private List<ContainerLaser> Containers, tempcontainerlist;
     private List<Container> HittingContainers;
+    private ContainerLaser thiscontainerlaser; //used when container has laser ability
+    private int _laserabilitystate; //0 nolaser ability 1 havelaserability 2 hadlaserabilitybotgotabsorbed
     // Use this for initialization
     public override void Run() {
         abilities = new List<Ability>();
@@ -34,8 +36,28 @@ public class DynamicContainer : FunctionalContainer {
 	void Update () {
         /*Debug.Log(LaserBeamHitting);
         Debug.Log(templaserhit);*/
+        if (LaserBeamHitting && _laserabilitystate == 2)
+        {
+            if (linerenderer != null)
+            {
+                Destroy(linerenderer.gameObject);
+                linerenderer = null;
+                api.engine.apigraphic.LaserUnHitDynamic(this);
+                LaserBeamHitting = false;
+                for (int i = 0; i < HittingContainers.Count; i++)
+                    (HittingContainers[i] as DynamicContainer).LaserBeamHitting = false;
+            }
+            _laserabilitystate = 0;
+        }
         if (abilities.Count != 0 && abilities[0].abilitytype == AbilityType.Laser)
+        {
+            _laserabilitystate = 1;
             SetLaser();
+        }
+        else if(_laserabilitystate == 1)
+        {
+            _laserabilitystate = 2;
+        }
         if (!LaserBeamHitting && templaserhit)
         {
             templaserhit = false;
@@ -47,17 +69,6 @@ public class DynamicContainer : FunctionalContainer {
         else if (LaserBeamHitting && !templaserhit)
         {
             templaserhit = true;
-        }
-        if(!LaserBeamHitting && (abilities.Count == 0 || abilities[0].abilitytype != AbilityType.Laser))
-        {
-            if(linerenderer != null)
-            {
-                linerenderer = null;
-                /*for(int i=0; i<Containers.Count; i++)
-                {
-                    Containers[i].laser = false;
-                }*/
-            }
         }
 	}
 
@@ -128,12 +139,22 @@ public class DynamicContainer : FunctionalContainer {
 
     private void SetLaserInDirection(Direction direction, Vector2 startingpos, LineRenderer linerenderer, Unit LaserSource)
     {
-
         Vector2 pos = Toolkit.VectorSum(startingpos, Toolkit.DirectiontoVector(direction) / 1.95f);
         RaycastHit2D hit = Physics2D.Raycast(pos, Toolkit.DirectiontoVector(direction), Mathf.Max(api.engine.sizeX, api.engine.sizeY));
         Vector2 finalpos = hit.point;
         if (LaserSource is DynamicContainer)
             pos -= Toolkit.DirectiontoVector((LaserSource as DynamicContainer).direction) / 5;
+        if(linerenderer == null)
+        {
+            if (!LaserBeamHitting) {
+                LaserBeamHitting = true;
+                thiscontainerlaser = new ContainerLaser(this);
+                api.engine.apigraphic.LaserHitDynamic(this);
+                StartCoroutine(ContainerLaserBegin(1, thiscontainerlaser));
+            }
+            if (!thiscontainerlaser.ContainerTimeFinished)
+                return;
+        }
         if (hit.collider == null)
         {
             finalpos = pos + Toolkit.DirectiontoVector(direction) * Mathf.Max(api.engine.sizeX, api.engine.sizeY);
@@ -166,9 +187,7 @@ public class DynamicContainer : FunctionalContainer {
                     }
                     if (!flag && !HittingContainers.Contains(tempcontainer))
                     {
-                        ContainerLaser temp = new ContainerLaser();
-                        temp.container = tempcontainer;
-                        temp.ContainerTimeFinished = false;
+                        ContainerLaser temp = new ContainerLaser(tempcontainer);
                         Containers.Add(temp);
                         api.engine.apigraphic.LaserHitDynamic(tempcontainer);
                         temp.ContainerLaserBeginCoroutine = StartCoroutine(ContainerLaserBegin(0.95f, Containers[Containers.Count - 1]));
