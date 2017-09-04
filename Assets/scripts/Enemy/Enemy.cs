@@ -28,11 +28,11 @@ public class Enemy : Unit
 
     void Update()
     {
-        if(enemymove != null && IsOn && state != EnemyState.Falling)
+        if (enemymove != null && IsOn && state != EnemyState.Falling)
             for (int i = 0; i < enemymove.MoveDirections.Count; i++)
-                CheckPlayer(enemymove.MoveDirections[i]); 
-    } 
+                CheckPlayer(enemymove.MoveDirections[i]);
 
+    }
     void OnTriggerEnter2D(Collider2D col)
     {
         if(col.tag == "Player")

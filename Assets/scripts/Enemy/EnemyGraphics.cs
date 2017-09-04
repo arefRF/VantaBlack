@@ -12,7 +12,7 @@ public class EnemyGraphics : MonoBehaviour {
     }
     public void MoveSound()
     {
-
+        
     }
 
     public void MoveAnimation()
