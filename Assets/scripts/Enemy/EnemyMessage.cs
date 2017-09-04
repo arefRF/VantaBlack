@@ -13,6 +13,7 @@ public class EnemyMessage{
     public enum MessageType {
         PhysicalMove,
         MoveAnimation,
+        MoveAnimationstop,
         KillPlayer,
         FireLaser,
 

@@ -31,6 +31,7 @@ public class EnemyMove : MonoBehaviour {
         MoveToPosition = enemy.position + (PlayerPosition - enemy.position).normalized;
         float remain_distance = (((Vector2)transform.position - MoveToPosition)).magnitude;
         MoveNecessaryPlayers(direction);
+        enemy.SendMessage(new EnemyMessage(EnemyMessage.MessageType.MoveAnimation));
         while (remain_distance > float.Epsilon)
         {
             if (remain_distance < 0.1f)
@@ -57,9 +58,7 @@ public class EnemyMove : MonoBehaviour {
             transform.position = new_pos;
             yield return null;
         }
-        //audio.Stop();
-        //animator.SetInteger("Move", 0);
-        Debug.Log("here");
+        enemy.SendMessage(new EnemyMessage(EnemyMessage.MessageType.MoveAnimationstop));
         coroutine = null;
     }
 
