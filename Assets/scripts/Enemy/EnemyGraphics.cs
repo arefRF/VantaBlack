@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class EnemyGraphics : MonoBehaviour {
 
     private Enemy enemy;
@@ -11,7 +12,7 @@ public class EnemyGraphics : MonoBehaviour {
     }
     public void MoveSound()
     {
-        
+
     }
 
     public void MoveAnimation()
@@ -35,5 +36,6 @@ public class EnemyGraphics : MonoBehaviour {
         {
             case EnemyMessage.MessageType.MoveAnimation: MoveAnimation(); break;
         }
+
     }
 }
