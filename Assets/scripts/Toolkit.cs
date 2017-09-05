@@ -828,6 +828,7 @@ public sealed class Toolkit
             case AbilityType.Fuel: path += "Fuel Off"; break;
             case AbilityType.Key: path += @"Key"; break;
             case AbilityType.Jump: path += "Jump off"; break;
+            case AbilityType.Laser: path += "Laser Off"; break;
         }
         return path;
     }

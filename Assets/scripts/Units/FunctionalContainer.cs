@@ -36,6 +36,7 @@ public class FunctionalContainer : Container
             case AbilityType.Jump: ((Jump)abilities[0]).Action(player, dir); break;
             case AbilityType.Teleport: ((Teleport)abilities[0]).Action_Container(player,dir,this);break;
             case AbilityType.Gravity: ((Gravity)abilities[0]).Action_Container(this);break;
+            case AbilityType.Laser: SetOnorOff(); break;
         }
         actionlock = false;
     }
