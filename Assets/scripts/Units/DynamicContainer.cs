@@ -12,6 +12,7 @@ public class DynamicContainer : FunctionalContainer {
     private List<Container> HittingContainers;
     private ContainerLaser thiscontainerlaser; //used when container has laser ability
     private int _laserabilitystate; //0 nolaser ability 1 havelaserability 2 hadlaserabilitybotgotabsorbed
+    private Coroutine lasertimerCoroutine; //used when laser ability is in container
     // Use this for initialization
     public override void Run() {
         abilities = new List<Ability>();
@@ -42,14 +43,22 @@ public class DynamicContainer : FunctionalContainer {
             {
                 Destroy(linerenderer.gameObject);
                 linerenderer = null;
-                api.engine.apigraphic.LaserUnHitDynamic(this);
-                LaserBeamHitting = false;
-                for (int i = 0; i < HittingContainers.Count; i++)
+                for(int i=0; i<HittingContainers.Count; i++)
                     (HittingContainers[i] as DynamicContainer).LaserBeamHitting = false;
+                
             }
+            for(int i=0; i<Containers.Count; i++)
+            {
+                StopCoroutine(Containers[i].ContainerLaserBeginCoroutine);
+            }
+            Containers.Clear();
+            HittingContainers.Clear();
+            StopCoroutine(lasertimerCoroutine);
             _laserabilitystate = 0;
+            api.engine.apigraphic.LaserUnHitDynamic(this);
+            LaserBeamHitting = false;
         }
-        if (abilities.Count != 0 && abilities[0].abilitytype == AbilityType.Laser)
+        if (abilities.Count != 0 && abilities[0].abilitytype == AbilityType.Laser && on)
         {
             _laserabilitystate = 1;
             SetLaser();
@@ -150,7 +159,7 @@ public class DynamicContainer : FunctionalContainer {
                 LaserBeamHitting = true;
                 thiscontainerlaser = new ContainerLaser(this);
                 api.engine.apigraphic.LaserHitDynamic(this);
-                StartCoroutine(ContainerLaserBegin(1, thiscontainerlaser));
+                lasertimerCoroutine = StartCoroutine(ContainerLaserBegin(1, thiscontainerlaser));
             }
             if (!thiscontainerlaser.ContainerTimeFinished)
                 return;
