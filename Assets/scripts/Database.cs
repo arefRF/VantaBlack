@@ -13,6 +13,7 @@ public class Database {
         drainers = new List<Drainer>();
         lasers = new List<Laser>();
         bots = new List<Bot>();
+        LaserContainers = new List<DynamicContainer>();
     }
     public List<Bot> bots;
     public List<Unit> pipes;
@@ -37,6 +38,7 @@ public class Database {
     public List<FunctionalContainer> functionalCon;
     public List<Drainer> drainers;
     public List<Laser> lasers;
+    public List<DynamicContainer> LaserContainers; //containers which project or have laser
     public List<Unit> GetUnits(Vector2 position)
     {
         return units[(int)position.x, (int)position.y];

@@ -91,11 +91,13 @@ public class Laser : Unit {
                                 SetLaserInDirection(tempcontainer.direction, tempcontainer.transform.position, tempcontainer.linerenderer, tempcontainer);
                                 if(!HittingContainers.Contains(tempcontainer))
                                     HittingContainers.Add(tempcontainer);
+                                if (!api.engine.database.LaserContainers.Contains(tempcontainer))
+                                    api.engine.database.LaserContainers.Add(tempcontainer);
                             }
                             break;
                         }
                     }
-                    if (!flag && !HittingContainers.Contains(tempcontainer))
+                    if (!api.engine.database.LaserContainers.Contains(tempcontainer) && !flag && !HittingContainers.Contains(tempcontainer))
                     {
                         ContainerLaser temp = new ContainerLaser(tempcontainer);
                         Containers.Add(temp);

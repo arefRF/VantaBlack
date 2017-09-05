@@ -17,7 +17,6 @@ public class EnemyMessage{
         KillPlayer,
         FireLaser,
         OnOffChanged,
-
     }
 
     public EnemyMessage(MessageType messagetype)

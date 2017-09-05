@@ -35,8 +35,6 @@ public class DynamicContainer : FunctionalContainer {
 	
 	// Update is called once per frame
 	void Update () {
-        /*Debug.Log(LaserBeamHitting);
-        Debug.Log(templaserhit);*/
         if (LaserBeamHitting && _laserabilitystate == 2)
         {
             if (linerenderer != null)
@@ -69,6 +67,7 @@ public class DynamicContainer : FunctionalContainer {
         }
         if (!LaserBeamHitting && templaserhit)
         {
+            api.engine.database.LaserContainers.Remove(this);
             templaserhit = false;
             if (linerenderer != null)
                 Destroy(linerenderer.gameObject);
@@ -148,6 +147,8 @@ public class DynamicContainer : FunctionalContainer {
 
     private void SetLaserInDirection(Direction direction, Vector2 startingpos, LineRenderer linerenderer, Unit LaserSource)
     {
+        if(!api.engine.database.LaserContainers.Contains(this))
+            api.engine.database.LaserContainers.Add(this);
         Vector2 pos = Toolkit.VectorSum(startingpos, Toolkit.DirectiontoVector(direction) / 1.95f);
         RaycastHit2D hit = Physics2D.Raycast(pos, Toolkit.DirectiontoVector(direction), Mathf.Max(api.engine.sizeX, api.engine.sizeY));
         Vector2 finalpos = hit.point;
@@ -190,11 +191,13 @@ public class DynamicContainer : FunctionalContainer {
                                 SetLaserInDirection(tempcontainer.direction, tempcontainer.transform.position, tempcontainer.linerenderer, tempcontainer);
                                 if (!HittingContainers.Contains(tempcontainer))
                                     HittingContainers.Add(tempcontainer);
+                                if (!api.engine.database.LaserContainers.Contains(tempcontainer))
+                                    api.engine.database.LaserContainers.Add(tempcontainer);
                             }
                             break;
                         }
                     }
-                    if (!flag && !HittingContainers.Contains(tempcontainer))
+                    if (!api.engine.database.LaserContainers.Contains(tempcontainer) && !flag && !HittingContainers.Contains(tempcontainer))
                     {
                         ContainerLaser temp = new ContainerLaser(tempcontainer);
                         Containers.Add(temp);
