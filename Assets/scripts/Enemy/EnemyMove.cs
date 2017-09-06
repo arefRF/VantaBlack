@@ -6,7 +6,7 @@ public class EnemyMove : MonoBehaviour {
 
     public List<Direction> MoveDirections;
     public float move_time = 0.4f;
-    private Vector2 MoveToPosition, PlayerPosition;
+    private Vector2 PlayerPosition;
     private Coroutine coroutine;
     private Enemy enemy;
 
@@ -28,12 +28,13 @@ public class EnemyMove : MonoBehaviour {
         //animator.SetInteger("Move", 1);
         //animator.SetFloat("MoveSpeed", move_time);
         //Debug.Log((PlayerPosition - enemy.position).normalized);
-        MoveToPosition = enemy.position + (PlayerPosition - enemy.position).normalized;
+        Vector2 MoveToPosition = enemy.position + (PlayerPosition - enemy.position).normalized;
         float remain_distance = (((Vector2)transform.position - MoveToPosition)).magnitude;
         MoveNecessaryPlayers(direction);
         enemy.SendMessage(new EnemyMessage(EnemyMessage.MessageType.MoveAnimation));
         while (remain_distance > float.Epsilon)
         {
+
             if (remain_distance < 0.1f)
             {
                 /*if(!audio.isPlaying)
@@ -41,6 +42,7 @@ public class EnemyMove : MonoBehaviour {
                 enemy.api.RemoveFromDatabase(enemy);
                 enemy.position = Toolkit.RoundVector(transform.position);
                 enemy.api.AddToDatabase(enemy);
+                
                 Vector2 temp = MoveToPosition;
                 if (CanMove(enemy.position))
                     MoveToPosition = enemy.position + (PlayerPosition - enemy.position).normalized;
@@ -48,7 +50,6 @@ public class EnemyMove : MonoBehaviour {
                 if (tempvector.x == 0 && tempvector.y == 0)
                 {
                     transform.position = enemy.position;
-                    ApplyGravity();
                     break;
                 }
                 MoveNecessaryPlayers(direction);
@@ -97,23 +98,6 @@ public class EnemyMove : MonoBehaviour {
         return players;
     }
 
-    private new void ApplyGravity()
-    {
-        Vector2 endpos = enemy.position;
-        Vector2 temppos = endpos;
-        while (CheckEmpty(enemy.position + Toolkit.DirectiontoVector(enemy.gravityDirection)))
-        {
-            enemy.api.RemoveFromDatabase(enemy);
-            endpos += Toolkit.DirectiontoVector(enemy.gravityDirection);
-            enemy.position += Toolkit.DirectiontoVector(enemy.gravityDirection);
-            enemy.api.AddToDatabase(enemy);
-            transform.position = enemy.position;
-        }
-        if (temppos != endpos)
-            enemy.state = EnemyState.Falling;
-        transform.position = endpos;
-    }
-
     private bool CheckEmpty(Vector2 pos)
     {
         Vector2 rootposition = enemy.position + Toolkit.DirectiontoVector(enemy.gravityDirection) / 1.8f;
@@ -142,11 +126,22 @@ public class EnemyMove : MonoBehaviour {
         return !CheckEmpty(pos + Toolkit.DirectiontoVector(enemy.api.engine.database.gravity_direction));
     }
 
+    private void StopMove()
+    {
+        if (coroutine != null)
+            StopCoroutine(coroutine);
+        coroutine = null;
+        enemy.api.RemoveFromDatabase(enemy);
+        enemy.position = Toolkit.RoundVector(transform.position);
+        enemy.api.AddToDatabase(enemy);
+    }
+
     public void GetMessage(EnemyMessage message)
     {
         switch (message.messagetype)
         {
             case EnemyMessage.MessageType.PhysicalMove: Move(message.position, message.direction); break;
+            case EnemyMessage.MessageType.PhysicalMoveStop: StopMove(); break;
         }
     }
 }
