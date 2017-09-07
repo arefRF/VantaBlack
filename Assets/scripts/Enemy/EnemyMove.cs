@@ -113,7 +113,7 @@ public class EnemyMove : MonoBehaviour {
         }
         RaycastHit2D hit = Physics2D.Raycast(temppos1, (pos - enemy.position).normalized, (pos - enemy.position).magnitude / 2);
         RaycastHit2D hit2 = Physics2D.Raycast(temppos2, (pos - enemy.position).normalized, (pos - enemy.position).magnitude / 2);
-        if ((hit.collider != null || hit.collider.tag != "Player") || (hit2.collider != null || hit.collider.tag != "Player"))
+        if ((hit.collider != null && hit.collider.tag != "Player") || (hit2.collider != null && hit.collider.tag != "Player"))
         {
             return false;
         }
