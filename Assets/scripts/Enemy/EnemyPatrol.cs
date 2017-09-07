@@ -4,14 +4,16 @@ using UnityEngine;
 
 public class EnemyPatrol : MonoBehaviour {
 
-    public int Patroldistance;
+    public int PatrolDistance;
     public List<Direction> PatrolDirection;
+    public float move_time;
+    public float WaitTime = 1;
 
     private Enemy enemy;
     private int moved;
     private Direction MovingDirection; //direction that enemy is patrolling now
-    private bool boolean = true;
     private Coroutine PatrolCoroutine;
+    private bool boolean;
 	void Start () {
         enemy = GetComponent<Enemy>();
         moved = 0;
@@ -21,56 +23,81 @@ public class EnemyPatrol : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (boolean)
+        if (enemy.state == EnemyState.Idle)
         {
-            boolean = false;
-            enemy.SendMessage(new EnemyMessage(EnemyMessage.MessageType.PhysicalMove, MovingDirection, enemy.position + Patroldistance * Toolkit.DirectiontoVector(MovingDirection)));
+            if (PatrolCoroutine == null)
+            {
+                PatrolCoroutine = StartCoroutine(PatrolMove(MovingDirection));
+            }
         }
 	}
 
-    /*private IEnumerator PatrolMove(Direction direction)
+    private IEnumerator PatrolMove(Direction direction)
     {
-        //animator.SetInteger("Move", 1);
-        //animator.SetFloat("MoveSpeed", move_time);
-        //Debug.Log((PlayerPosition - enemy.position).normalized);
-        Vector2 MoveToPosition = enemy.position + (PlayerPosition - enemy.position).normalized;
-        float remain_distance = (((Vector2)transform.position - MoveToPosition)).magnitude;
-        MoveNecessaryPlayers(direction);
-        enemy.SendMessage(new EnemyMessage(EnemyMessage.MessageType.MoveAnimation));
-        while (remain_distance > float.Epsilon)
+        int temppatroldistance = PatrolDistance;
+        if (CanMove(enemy.position, direction))
         {
-
-            if (remain_distance < 0.1f)
+            enemy.state = EnemyState.Patrolling;
+            Vector2 MoveToPosition = enemy.position + Toolkit.DirectiontoVector(direction);
+            float remain_distance = (((Vector2)transform.position - MoveToPosition)).magnitude;
+            MoveNecessaryPlayers(direction);
+            enemy.SendMessage(new EnemyMessage(EnemyMessage.MessageType.MoveAnimation));
+            while (remain_distance > float.Epsilon )
             {
-                enemy.api.RemoveFromDatabase(enemy);
-                enemy.position = Toolkit.RoundVector(transform.position);
-                enemy.api.AddToDatabase(enemy);
-
-                Vector2 temp = MoveToPosition;
-                if (CanMove(enemy.position))
-                    MoveToPosition = enemy.position + (PlayerPosition - enemy.position).normalized;
-                Vector2 tempvector = temp - MoveToPosition;
-                if (tempvector.x == 0 && tempvector.y == 0)
+                remain_distance = (((Vector2)transform.position - MoveToPosition)).magnitude;
+                Vector3 new_pos = Vector3.MoveTowards(transform.position, MoveToPosition, Time.deltaTime / move_time);
+                transform.position = new_pos;
+                if (remain_distance < 0.1f)
                 {
-                    transform.position = enemy.position;
-                    break;
+                    moved++;
+                    enemy.api.RemoveFromDatabase(enemy);
+                    enemy.position = Toolkit.RoundVector(transform.position);
+                    enemy.api.AddToDatabase(enemy);
+                    if (moved >= temppatroldistance)
+                    {
+                        if (temppatroldistance == PatrolDistance)
+                            temppatroldistance = PatrolDistance * 2;
+                        moved = 0;
+                        direction = Toolkit.ReverseDirection(direction);
+                        yield return new WaitForSeconds(WaitTime);
+                    }
+                    Vector2 temp = MoveToPosition;
+                    if (CanMove(enemy.position, direction))
+                        MoveToPosition = enemy.position + Toolkit.DirectiontoVector(direction);
+                    else
+                    {
+                        direction = Toolkit.ReverseDirection(direction);
+                        moved = temppatroldistance - moved;
+                        if (temppatroldistance == PatrolDistance)
+                            temppatroldistance = PatrolDistance * 2;
+                        if (CanMove(enemy.position, direction))
+                            MoveToPosition = enemy.position + Toolkit.DirectiontoVector(direction);
+                        else
+                            break;
+                        yield return new WaitForSeconds(WaitTime);
+                    }
+                    Vector2 tempvector = temp - MoveToPosition;
+                    if (tempvector.x == 0 && tempvector.y == 0)
+                    {
+                        transform.position = enemy.position;
+                        break;
+                    }
+                    MoveNecessaryPlayers(direction);
+                    remain_distance = (((Vector2)transform.position - MoveToPosition)).magnitude;
                 }
-                MoveNecessaryPlayers(direction);
+                yield return null;
             }
-            remain_distance = (((Vector2)transform.position - MoveToPosition)).magnitude;
-            Vector3 new_pos = Vector3.MoveTowards(transform.position, MoveToPosition, Time.deltaTime * 1 / move_time);
-            transform.position = new_pos;
-            yield return null;
         }
         enemy.SendMessage(new EnemyMessage(EnemyMessage.MessageType.MoveAnimationStop));
         PatrolCoroutine = null;
+        enemy.state = EnemyState.Idle;
     }
-    */
-    private bool CheckEmpty(Vector2 pos, Direction direction)
+
+    private bool CheckEmpty(Vector2 CurrentPos, Vector2 DestinationPos, Direction direction)
     {
-        Vector2 rootposition = enemy.position + Toolkit.DirectiontoVector(enemy.gravityDirection) / 1.8f;
+        Vector2 rootposition = CurrentPos + Toolkit.DirectiontoVector(direction) / 1.8f;
         Vector2 temppos1, temppos2;
-        if (Toolkit.isHorizontal(enemy.gravityDirection))
+        if (Toolkit.isHorizontal(direction))
         {
             temppos1 = rootposition + new Vector2(0, 0.2f);
             temppos2 = rootposition + new Vector2(0, -0.2f);
@@ -80,18 +107,23 @@ public class EnemyPatrol : MonoBehaviour {
             temppos1 = rootposition + new Vector2(0.2f, 0);
             temppos2 = rootposition + new Vector2(-0.2f, 0);
         }
-        RaycastHit2D hit = Physics2D.Raycast(temppos1, (pos - enemy.position).normalized, (pos - enemy.position).magnitude / 2);
-        RaycastHit2D hit2 = Physics2D.Raycast(temppos2, (pos - enemy.position).normalized, (pos - enemy.position).magnitude / 2);
-        if (hit.collider != null || hit2.collider != null)
+        RaycastHit2D hit = Physics2D.Raycast(temppos1, (DestinationPos - CurrentPos).normalized, (DestinationPos - CurrentPos).magnitude / 2);
+        RaycastHit2D hit2 = Physics2D.Raycast(temppos2, (DestinationPos - CurrentPos).normalized, (DestinationPos - CurrentPos).magnitude / 2);
+        if ((hit.collider != null && hit.collider.tag != "Player") || (hit2.collider != null && hit.collider.tag != "Player"))
         {
             return false;
         }
         return true;
     }
 
-    private bool CanMove(Vector2 pos)
+    private bool CanMove(Vector2 pos, Direction direction)
     {
-        return false; //!CheckEmpty(pos + Toolkit.DirectiontoVector(enemy.api.engine.database.gravity_direction));
+        if (!CheckEmpty(pos, pos + Toolkit.DirectiontoVector(direction), direction))
+            return false;
+        Vector2 temppos = pos + Toolkit.DirectiontoVector(direction);
+        if (CheckEmpty(temppos, temppos + Toolkit.DirectiontoVector(enemy.gravityDirection), enemy.gravityDirection))
+            return false;
+        return true;
     }
 
     private void MoveNecessaryPlayers(Direction direction)
@@ -131,7 +163,13 @@ public class EnemyPatrol : MonoBehaviour {
 
     private void StopPatrol()
     {
-
+        if (PatrolCoroutine != null)
+            StopCoroutine(PatrolCoroutine);
+        PatrolCoroutine = null;
+        enemy.transform.position = Toolkit.RoundVector(enemy.transform.position);
+        enemy.api.RemoveFromDatabase(enemy);
+        enemy.position = enemy.transform.position;
+        enemy.api.AddToDatabase(enemy);
     }
 
     private void StartPatrol()

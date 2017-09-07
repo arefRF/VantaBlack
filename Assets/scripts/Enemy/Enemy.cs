@@ -14,7 +14,7 @@ public class Enemy : Unit
     private EnemyFireLaser enemyfirelaser;
     private EnemyGraphics enemygraphics;
     private EnemyPatrol enemypatrol;
-    public EnemyState state { get; set; }
+    public EnemyState state;//{ get; set; }
 
     void Start()
     {

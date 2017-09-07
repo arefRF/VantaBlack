@@ -25,9 +25,6 @@ public class EnemyMove : MonoBehaviour {
     }
     private IEnumerator Move(Direction direction)
     {
-        //animator.SetInteger("Move", 1);
-        //animator.SetFloat("MoveSpeed", move_time);
-        //Debug.Log((PlayerPosition - enemy.position).normalized);
         Vector2 MoveToPosition = enemy.position + (PlayerPosition - enemy.position).normalized;
         float remain_distance = (((Vector2)transform.position - MoveToPosition)).magnitude;
         MoveNecessaryPlayers(direction);
@@ -122,7 +119,7 @@ public class EnemyMove : MonoBehaviour {
 
     private bool CanMove(Vector2 pos, Direction direction)
     {
-        if (CheckEmpty(pos + Toolkit.DirectiontoVector(enemy.api.engine.database.gravity_direction), enemy.gravityDirection))
+        if (CheckEmpty(pos + Toolkit.DirectiontoVector(enemy.gravityDirection), enemy.gravityDirection))
             return false;
         if (!CheckEmpty(pos + Toolkit.DirectiontoVector(direction), direction))
             return false;
