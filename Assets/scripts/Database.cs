@@ -129,7 +129,7 @@ public enum LifeState
 
 public enum EnemyState
 {
-    Idle, Moving, Falling
+    Idle, Moving, Falling, Patrolling
 }
 public enum GateType
 {

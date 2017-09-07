@@ -18,6 +18,8 @@ public class EnemyMessage{
         KillPlayer,
         FireLaser,
         OnOffChanged,
+        StartPatrol,
+        StopPatrol,
     }
 
     public EnemyMessage(MessageType messagetype)

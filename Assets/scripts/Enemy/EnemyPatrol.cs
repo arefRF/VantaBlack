@@ -2,28 +2,33 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyMove : MonoBehaviour {
+public class EnemyPatrol : MonoBehaviour {
 
-    public List<Direction> MoveDirections;
-    public float move_time = 0.4f;
-    private Vector2 PlayerPosition;
-    private Coroutine coroutine;
+    public int Patroldistance;
+    public List<Direction> PatrolDirection;
+
     private Enemy enemy;
-
-    public void Start()
-    {
+    private int moved;
+    private Direction MovingDirection; //direction that enemy is patrolling now
+    private bool boolean = true;
+    private Coroutine PatrolCoroutine;
+	void Start () {
         enemy = GetComponent<Enemy>();
+        moved = 0;
+        MovingDirection = PatrolDirection[0];
+        
     }
-
-    public void Move(Vector2 playerposition, Direction direction)
-    { 
-        PlayerPosition = playerposition;
-        if (coroutine == null)
+	
+	// Update is called once per frame
+	void Update () {
+        if (boolean)
         {
-            coroutine = StartCoroutine(Move(direction));
+            boolean = false;
+            enemy.SendMessage(new EnemyMessage(EnemyMessage.MessageType.PhysicalMove, MovingDirection, enemy.position + Patroldistance * Toolkit.DirectiontoVector(MovingDirection)));
         }
-    }
-    private IEnumerator Move(Direction direction)
+	}
+
+    /*private IEnumerator PatrolMove(Direction direction)
     {
         //animator.SetInteger("Move", 1);
         //animator.SetFloat("MoveSpeed", move_time);
@@ -34,16 +39,15 @@ public class EnemyMove : MonoBehaviour {
         enemy.SendMessage(new EnemyMessage(EnemyMessage.MessageType.MoveAnimation));
         while (remain_distance > float.Epsilon)
         {
+
             if (remain_distance < 0.1f)
             {
-                /*if(!audio.isPlaying)
-                    audio.Play();*/
                 enemy.api.RemoveFromDatabase(enemy);
                 enemy.position = Toolkit.RoundVector(transform.position);
                 enemy.api.AddToDatabase(enemy);
-                
+
                 Vector2 temp = MoveToPosition;
-                if (CanMove(enemy.position, direction))
+                if (CanMove(enemy.position))
                     MoveToPosition = enemy.position + (PlayerPosition - enemy.position).normalized;
                 Vector2 tempvector = temp - MoveToPosition;
                 if (tempvector.x == 0 && tempvector.y == 0)
@@ -58,9 +62,36 @@ public class EnemyMove : MonoBehaviour {
             transform.position = new_pos;
             yield return null;
         }
-        Debug.Log(PlayerPosition);
         enemy.SendMessage(new EnemyMessage(EnemyMessage.MessageType.MoveAnimationStop));
-        coroutine = null;
+        PatrolCoroutine = null;
+    }
+    */
+    private bool CheckEmpty(Vector2 pos, Direction direction)
+    {
+        Vector2 rootposition = enemy.position + Toolkit.DirectiontoVector(enemy.gravityDirection) / 1.8f;
+        Vector2 temppos1, temppos2;
+        if (Toolkit.isHorizontal(enemy.gravityDirection))
+        {
+            temppos1 = rootposition + new Vector2(0, 0.2f);
+            temppos2 = rootposition + new Vector2(0, -0.2f);
+        }
+        else
+        {
+            temppos1 = rootposition + new Vector2(0.2f, 0);
+            temppos2 = rootposition + new Vector2(-0.2f, 0);
+        }
+        RaycastHit2D hit = Physics2D.Raycast(temppos1, (pos - enemy.position).normalized, (pos - enemy.position).magnitude / 2);
+        RaycastHit2D hit2 = Physics2D.Raycast(temppos2, (pos - enemy.position).normalized, (pos - enemy.position).magnitude / 2);
+        if (hit.collider != null || hit2.collider != null)
+        {
+            return false;
+        }
+        return true;
+    }
+
+    private bool CanMove(Vector2 pos)
+    {
+        return false; //!CheckEmpty(pos + Toolkit.DirectiontoVector(enemy.api.engine.database.gravity_direction));
     }
 
     private void MoveNecessaryPlayers(Direction direction)
@@ -98,55 +129,24 @@ public class EnemyMove : MonoBehaviour {
         return players;
     }
 
-    private bool CheckEmpty(Vector2 pos, Direction direction)
+    private void StopPatrol()
     {
-        Vector2 rootposition = enemy.position + Toolkit.DirectiontoVector(direction) / 1.8f;
-        Vector2 temppos1, temppos2;
-        if (Toolkit.isHorizontal(direction))
-        {
-            temppos1 = rootposition + new Vector2(0, 0.2f);
-            temppos2 = rootposition + new Vector2(0, -0.2f);
-        }
-        else
-        {
-            temppos1 = rootposition + new Vector2(0.2f, 0);
-            temppos2 = rootposition + new Vector2(-0.2f, 0);
-        }
-        RaycastHit2D hit = Physics2D.Raycast(temppos1, (pos - enemy.position).normalized, (pos - enemy.position).magnitude / 2);
-        RaycastHit2D hit2 = Physics2D.Raycast(temppos2, (pos - enemy.position).normalized, (pos - enemy.position).magnitude / 2);
-        if (hit.collider != null || hit2.collider != null)
-        {
-            return false;
-        }
-        return true;
+
     }
 
-    private bool CanMove(Vector2 pos, Direction direction)
+    private void StartPatrol()
     {
-        if (CheckEmpty(pos + Toolkit.DirectiontoVector(enemy.api.engine.database.gravity_direction), enemy.gravityDirection))
-            return false;
-        if (!CheckEmpty(pos + Toolkit.DirectiontoVector(direction), direction))
-            return false;
-        return true;
-    }
 
-    private void StopMove()
-    {
-        if (coroutine != null)
-            StopCoroutine(coroutine);
-        coroutine = null;
-        enemy.SendMessage(new EnemyMessage(EnemyMessage.MessageType.MoveAnimationStop));
-        enemy.api.RemoveFromDatabase(enemy);
-        enemy.position = Toolkit.RoundVector(transform.position);
-        enemy.api.AddToDatabase(enemy);
     }
 
     public void GetMessage(EnemyMessage message)
     {
         switch (message.messagetype)
         {
-            case EnemyMessage.MessageType.PhysicalMove: Move(message.position, message.direction); break;
-            case EnemyMessage.MessageType.PhysicalMoveStop: StopMove(); break;
+            case EnemyMessage.MessageType.StopPatrol: StopPatrol(); break;
+            case EnemyMessage.MessageType.StartPatrol: StartPatrol(); break;
         }
     }
+
+
 }

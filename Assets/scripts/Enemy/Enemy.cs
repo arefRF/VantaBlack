@@ -13,6 +13,7 @@ public class Enemy : Unit
     private EnemyMove enemymove;
     private EnemyFireLaser enemyfirelaser;
     private EnemyGraphics enemygraphics;
+    private EnemyPatrol enemypatrol;
     public EnemyState state { get; set; }
 
     void Start()
@@ -23,6 +24,7 @@ public class Enemy : Unit
         enemymove = GetComponent<EnemyMove>();
         enemyfirelaser = GetComponent<EnemyFireLaser>();
         enemygraphics = GetComponent<EnemyGraphics>();
+        enemypatrol = GetComponent<EnemyPatrol>();
     }
 
 
@@ -82,5 +84,7 @@ public class Enemy : Unit
             enemymove.GetMessage(message);
         if(enemygraphics != null)
             enemygraphics.GetMessage(message);
+        if (enemypatrol != null)
+            enemypatrol.GetMessage(message);
     }
 }
