@@ -58,7 +58,6 @@ public class EnemyMove : MonoBehaviour {
             transform.position = new_pos;
             yield return null;
         }
-        Debug.Log(PlayerPosition);
         enemy.SendMessage(new EnemyMessage(EnemyMessage.MessageType.MoveAnimationStop));
         coroutine = null;
     }
