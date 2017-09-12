@@ -1,7 +1,11 @@
 fileFormatVersion: 2
 guid: a8f6ee851c5e7d84bafa90680e5e3875
 folderAsset: yes
+<<<<<<< HEAD:Assets/scripts/Lock Combination.meta
 timeCreated: 1505207798
+=======
+timeCreated: 1505036145
+>>>>>>> 1cfa25671bfb9a269219043b481d9e7dff807069:Assets/Resources/Containers/Version 2/Branch.meta
 licenseType: Free
 DefaultImporter:
   userData: 
