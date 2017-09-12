@@ -35,6 +35,7 @@ public class EnemyPatrol : MonoBehaviour {
     private IEnumerator PatrolMove(Direction direction)
     {
         int temppatroldistance = PatrolDistance;
+        moved = 0;
         if (CanMove(enemy.position, direction))
         {
             enemy.state = EnemyState.Patrolling;
@@ -44,6 +45,7 @@ public class EnemyPatrol : MonoBehaviour {
             enemy.SendMessage(new EnemyMessage(EnemyMessage.MessageType.MoveAnimation));
             while (remain_distance > float.Epsilon )
             {
+                Debug.Log("patolling");
                 remain_distance = (((Vector2)transform.position - MoveToPosition)).magnitude;
                 Vector3 new_pos = Vector3.MoveTowards(transform.position, MoveToPosition, Time.deltaTime / move_time);
                 transform.position = new_pos;

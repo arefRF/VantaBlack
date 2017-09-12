@@ -58,6 +58,7 @@ public class Enemy : Unit
             }*/
             else
             {
+                SendMessage(new EnemyMessage(EnemyMessage.MessageType.StopPatrol));
                 SendMessage(new EnemyMessage(EnemyMessage.MessageType.PhysicalMove, direction, Toolkit.RoundVector(tempplayer.transform.position)));
             }
         }

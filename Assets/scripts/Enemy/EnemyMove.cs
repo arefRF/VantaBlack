@@ -25,6 +25,7 @@ public class EnemyMove : MonoBehaviour {
     }
     private IEnumerator Move(Direction direction)
     {
+        enemy.state = EnemyState.Moving;
         Vector2 MoveToPosition = enemy.position + (PlayerPosition - enemy.position).normalized;
         float remain_distance = (((Vector2)transform.position - MoveToPosition)).magnitude;
         MoveNecessaryPlayers(direction);
@@ -57,6 +58,7 @@ public class EnemyMove : MonoBehaviour {
         }
         enemy.SendMessage(new EnemyMessage(EnemyMessage.MessageType.MoveAnimationStop));
         coroutine = null;
+        enemy.state = EnemyState.Idle;
     }
 
     private void MoveNecessaryPlayers(Direction direction)
@@ -135,6 +137,7 @@ public class EnemyMove : MonoBehaviour {
         enemy.api.RemoveFromDatabase(enemy);
         enemy.position = Toolkit.RoundVector(transform.position);
         enemy.api.AddToDatabase(enemy);
+        enemy.state = EnemyState.Idle;
     }
 
     public void GetMessage(EnemyMessage message)
