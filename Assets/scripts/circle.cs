@@ -31,7 +31,7 @@ public class circle : MonoBehaviour {
         print(OldPos);
         for (int i = 0; i <= linerenderer.positionCount; i++)
         {
-            Vector3 pos = new Vector3(radius * Mathf.Cos(theta), radius * Mathf.Sin(theta), 0f)+OldPos;
+            Vector3 pos = new Vector3(radius * Mathf.Cos(theta), radius * Mathf.Sin(theta), 0f)+transform.position;
             linerenderer.SetPosition(i, pos);
             theta += DeltaTheta;
         }
