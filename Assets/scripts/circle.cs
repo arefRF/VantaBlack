@@ -26,13 +26,13 @@ public class circle : MonoBehaviour {
         linerenderer.widthMultiplier = line_width;
         float DeltaTheta = (2f * Mathf.PI) / vertexcount;
         float theta = 0f;
-        linerenderer.positionCount = vertexcount;
+        linerenderer.positionCount = vertexcount+1;
         Vector3 OldPos = transform.position + new Vector3(radius, 0f, 0f);
-        for (int i = 0; i < linerenderer.positionCount; i++)
+        print(OldPos);
+        for (int i = 0; i <= linerenderer.positionCount; i++)
         {
-            Vector3 pos = new Vector3(radius * Mathf.Cos(theta), radius * Mathf.Sin(theta), 0f);
+            Vector3 pos = new Vector3(radius * Mathf.Cos(theta), radius * Mathf.Sin(theta), 0f)+OldPos;
             linerenderer.SetPosition(i, pos);
-            OldPos = transform.position + pos;
             theta += DeltaTheta;
         }
 
