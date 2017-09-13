@@ -12,8 +12,8 @@ public class EnemyPatrol : MonoBehaviour {
     private Enemy enemy;
     private int moved;
     private Direction MovingDirection; //direction that enemy is patrolling now
-    private Coroutine PatrolCoroutine;
-    private bool boolean;
+    private Coroutine PatrolCoroutine, StartTimeCoRoutine;
+    private bool StartTimeFinished = false;
 	void Start () {
         enemy = GetComponent<Enemy>();
         moved = 0;
@@ -27,7 +27,10 @@ public class EnemyPatrol : MonoBehaviour {
         {
             if (PatrolCoroutine == null)
             {
-                PatrolCoroutine = StartCoroutine(PatrolMove(MovingDirection));
+                if (StartTimeFinished)
+                    PatrolCoroutine = StartCoroutine(PatrolMove(MovingDirection));
+                else
+                    StartTimeCoRoutine = StartCoroutine(PatrolStartWaitTime());
             }
         }
 	}
@@ -48,7 +51,7 @@ public class EnemyPatrol : MonoBehaviour {
                 remain_distance = (((Vector2)transform.position - MoveToPosition)).magnitude;
                 Vector3 new_pos = Vector3.MoveTowards(transform.position, MoveToPosition, Time.deltaTime / move_time);
                 transform.position = new_pos;
-                if (remain_distance < 0.1f)
+                if (remain_distance < 0.05f)
                 {
                     moved++;
                     enemy.api.RemoveFromDatabase(enemy);
@@ -56,6 +59,7 @@ public class EnemyPatrol : MonoBehaviour {
                     enemy.api.AddToDatabase(enemy);
                     if (moved >= temppatroldistance)
                     {
+                        enemy.transform.position = Toolkit.RoundVector(enemy.transform.position);
                         if (temppatroldistance == PatrolDistance)
                             temppatroldistance = PatrolDistance * 2;
                         moved = 0;
@@ -67,6 +71,7 @@ public class EnemyPatrol : MonoBehaviour {
                         MoveToPosition = enemy.position + Toolkit.DirectiontoVector(direction);
                     else
                     {
+                        enemy.transform.position = Toolkit.RoundVector(enemy.transform.position);
                         direction = Toolkit.ReverseDirection(direction);
                         moved = temppatroldistance - moved;
                         if (temppatroldistance == PatrolDistance)
@@ -167,7 +172,11 @@ public class EnemyPatrol : MonoBehaviour {
         Debug.Log("topng patrol");
         if (PatrolCoroutine != null)
             StopCoroutine(PatrolCoroutine);
+        if (StartTimeCoRoutine != null)
+            StopCoroutine(StartTimeCoRoutine);
+        StartTimeCoRoutine = null;
         PatrolCoroutine = null;
+        StartTimeFinished = false;
         //enemy.transform.position = Toolkit.RoundVector(enemy.transform.position);
         enemy.api.RemoveFromDatabase(enemy);
         enemy.position = Toolkit.RoundVector(enemy.transform.position);
@@ -176,6 +185,13 @@ public class EnemyPatrol : MonoBehaviour {
 
     private void StartPatrol()
     {
+        Debug.Log("not implemented");
+    }
+
+    public IEnumerator PatrolStartWaitTime()
+    {
+        yield return new WaitForSeconds(WaitTime);
+        StartTimeFinished = true;
 
     }
 
