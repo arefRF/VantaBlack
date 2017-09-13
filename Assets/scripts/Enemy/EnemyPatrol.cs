@@ -45,7 +45,6 @@ public class EnemyPatrol : MonoBehaviour {
             enemy.SendMessage(new EnemyMessage(EnemyMessage.MessageType.MoveAnimation));
             while (remain_distance > float.Epsilon )
             {
-                Debug.Log("patolling");
                 remain_distance = (((Vector2)transform.position - MoveToPosition)).magnitude;
                 Vector3 new_pos = Vector3.MoveTowards(transform.position, MoveToPosition, Time.deltaTime / move_time);
                 transform.position = new_pos;
@@ -165,12 +164,13 @@ public class EnemyPatrol : MonoBehaviour {
 
     private void StopPatrol()
     {
+        Debug.Log("topng patrol");
         if (PatrolCoroutine != null)
             StopCoroutine(PatrolCoroutine);
         PatrolCoroutine = null;
-        enemy.transform.position = Toolkit.RoundVector(enemy.transform.position);
+        //enemy.transform.position = Toolkit.RoundVector(enemy.transform.position);
         enemy.api.RemoveFromDatabase(enemy);
-        enemy.position = enemy.transform.position;
+        enemy.position = Toolkit.RoundVector(enemy.transform.position);
         enemy.api.AddToDatabase(enemy);
     }
 
