@@ -89,7 +89,8 @@ public class APIGraphic{
 
     public void BranchLight(bool on,Branch branch,Player player)
     {
-        graphicalengine.BranchLight(branch, on,player);
+        if(player.lifestate == LifeState.Alive)
+            graphicalengine.BranchLight(branch, on,player);
     }
 
     public void LaserHitDynamic(DynamicContainer container)

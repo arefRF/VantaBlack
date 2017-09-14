@@ -9,9 +9,16 @@ public class circle : MonoBehaviour {
 
     private LineRenderer linerenderer;
 
-    private void awake()
+    void Start()
     {
         linerenderer = GetComponent<LineRenderer>();
+        Debug.Log(linerenderer);
+        setup_circle();
+    }
+    void awake()
+    {
+        linerenderer = GetComponent<LineRenderer>();
+        Debug.Log(linerenderer);
         setup_circle();
     }
     private void setup_circle()
@@ -21,7 +28,7 @@ public class circle : MonoBehaviour {
         float theta = 0f;
         linerenderer.positionCount = vertexcount;
         Vector3 OldPos = transform.position + new Vector3(radius, 0f, 0f);
-        for (int i = 0; i <= linerenderer.positionCount; i++)
+        for (int i = 0; i < linerenderer.positionCount; i++)
         {
             Vector3 pos = new Vector3(radius * Mathf.Cos(theta), radius * Mathf.Sin(theta), 0f);
             linerenderer.SetPosition(i, pos);

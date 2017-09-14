@@ -13,7 +13,7 @@ public class EnemyPatrol : MonoBehaviour {
     public int moved;
     private Direction MovingDirection; //direction that enemy is patrolling now
     private Coroutine PatrolCoroutine, StartTimeCoRoutine;
-    private bool StartTimeFinished = false;
+    private bool StartTimeFinished = true;
 	void Start () {
         enemy = GetComponent<Enemy>();
         moved = 0;
