@@ -12,6 +12,7 @@ public class Starter : MonoBehaviour{
     public static bool Blockinvis;
     public static GameManager gamemanager;
     public static SceneLoader sceneloader;
+    public LockCombination LockCombination;
     void Awake()
     {
         Blockinvis = BlocksInvis;
@@ -37,6 +38,8 @@ public class Starter : MonoBehaviour{
         Toolkit.database = database;
         sceneloader = GameObject.Find("SceneLoader").GetComponent<SceneLoader>();
         //gamemanager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        if (LockCombination != null)
+            logicalengine.lockcombination = LockCombination;
         logicalengine.Run();
     }
 

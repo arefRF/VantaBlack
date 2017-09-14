@@ -10,7 +10,7 @@ public class EnemyPatrol : MonoBehaviour {
     public float WaitTime = 1;
 
     private Enemy enemy;
-    private int moved;
+    public int moved;
     private Direction MovingDirection; //direction that enemy is patrolling now
     private Coroutine PatrolCoroutine, StartTimeCoRoutine;
     private bool StartTimeFinished = false;
@@ -39,7 +39,9 @@ public class EnemyPatrol : MonoBehaviour {
     {
         int temppatroldistance = PatrolDistance;
         moved = 0;
-        if (CanMove(enemy.position, direction))
+        if (!CanMove(enemy.position, direction))
+            direction = Toolkit.ReverseDirection(direction);
+        if(CanMove(enemy.position, direction))
         {
             enemy.state = EnemyState.Patrolling;
             Vector2 MoveToPosition = enemy.position + Toolkit.DirectiontoVector(direction);
@@ -55,7 +57,7 @@ public class EnemyPatrol : MonoBehaviour {
                 {
                     moved++;
                     enemy.api.RemoveFromDatabase(enemy);
-                    enemy.position = Toolkit.RoundVector(transform.position);
+                    enemy.position = Toolkit.RoundVector(enemy.transform.position);
                     enemy.api.AddToDatabase(enemy);
                     if (moved >= temppatroldistance)
                     {
@@ -169,7 +171,6 @@ public class EnemyPatrol : MonoBehaviour {
 
     private void StopPatrol()
     {
-        Debug.Log("topng patrol");
         if (PatrolCoroutine != null)
             StopCoroutine(PatrolCoroutine);
         if (StartTimeCoRoutine != null)

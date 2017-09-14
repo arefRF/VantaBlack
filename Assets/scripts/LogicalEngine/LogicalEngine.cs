@@ -22,6 +22,8 @@ public class LogicalEngine {
 
     public SaveSerialize saveserialize;
     public SaveCheckpoint savecheckpoint;
+
+    public LockCombination lockcombination;
     public LogicalEngine(int x, int y)
     {
         sizeX = x;
@@ -903,6 +905,8 @@ public class LogicalEngine {
         }*/
         if(unit is FunctionalContainer)
         {
+            if (lockcombination != null)
+                lockcombination.Check();
             apiunit.GameObjectAnimationFinished((FunctionalContainer)unit);
             lasercontroller.SetLasers();
             for(int i=0; i<database.player.Count; i++)
