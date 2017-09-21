@@ -14,6 +14,8 @@ public class Database {
         lasers = new List<Laser>();
         bots = new List<Bot>();
         LaserContainers = new List<DynamicContainer>();
+        branchDrainers = new List<Branch>();
+        branchGravityChangers = new List<Branch>();
     }
     public List<Bot> bots;
     public List<Unit> pipes;
@@ -37,6 +39,8 @@ public class Database {
     // List of all Dynamic and Static Containers for Portal ability
     public List<FunctionalContainer> functionalCon;
     public List<Drainer> drainers;
+    public List<Branch> branchDrainers;
+    public List<Branch> branchGravityChangers;
     public List<Laser> lasers;
     public List<DynamicContainer> LaserContainers; //containers which project or have laser
     public List<Unit> GetUnits(Vector2 position)

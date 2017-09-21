@@ -9,7 +9,7 @@ public class SubEngine_Initializer{
     LogicalEngine engine;
     public Sprite[] sprite_Container, sprite_Rock, sprite_Fountain;
     public Sprite[,] sprite_Ramp, sprite_Branch;
-
+    public Sprite sprite_Unlock;
     public SubEngine_Initializer(int x, int y, LogicalEngine engine)
     {
         this.x = x;
@@ -17,6 +17,7 @@ public class SubEngine_Initializer{
         this.engine = engine;
         api = engine.apiunit;
 
+        sprite_Unlock = Resources.Load<Sprite>("Branch\\Branch Unlock");
         sprite_Container = new Sprite[5];
         sprite_Rock = new Sprite[15];
         sprite_Ramp = new Sprite[4,4];

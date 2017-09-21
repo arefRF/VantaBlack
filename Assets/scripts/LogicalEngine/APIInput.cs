@@ -146,17 +146,17 @@ public class APIInput{
         return input.isFunctionKeyDown();
     }
 
-    public bool isArrowKeyDown(Direction direction)
+    public bool isMoveKeyDown(Direction direction)
     {
         return input.isMoveKeyDown(direction);
     }
 
-    public bool isAnyArrowKeyDown()
+    public bool isAnyMoveKeyDown()
     {
-        return input.isAnyAnyKeyDown();
+        return input.isAnyKeyDown();
     }
 
-    public Direction GetArrowKeyDown()
+    public Direction GetMoveKeyDown()
     {
         return input.GetMoveKeyDown();
     }

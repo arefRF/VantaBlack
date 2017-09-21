@@ -342,15 +342,16 @@ public class InputController {
                     {
                         if (!player.HasAbility(AbilityType.Key))
                             return;
-                        player.abilities.RemoveAt(0);
-                        engine.apigraphic.UnitChangeSprite(player);
-                        tempbranch.UnlockBranch();
+                        tempbranch.UnlockBranch(player);
                     }
-                    player.SetState(PlayerState.Busy);
-                    engine.apigraphic.BranchLight(false, Toolkit.GetBranch(player.position),player);
-                    Toolkit.GetBranch(Toolkit.VectorSum(player.position, direction)).PlayerMove (Toolkit.ReverseDirection(direction), player);
-                    //player.SetState(PlayerState.Idle);
-                    return;
+                    else
+                    {
+                        player.SetState(PlayerState.Busy);
+                        engine.apigraphic.BranchLight(false, Toolkit.GetBranch(player.position), player);
+                        Toolkit.GetBranch(Toolkit.VectorSum(player.position, direction)).PlayerMove(Toolkit.ReverseDirection(direction), player);
+                        //player.SetState(PlayerState.Idle);
+                        return;
+                    }
                 }
             }
             if (player.Can_Move_Direction(direction))

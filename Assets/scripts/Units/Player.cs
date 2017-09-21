@@ -110,6 +110,11 @@ public class Player : Unit
         Debug.Log(stackTrace.GetFrame(1).GetMethod().Name);*/
         if (state == PlayerState.Idle)
         {
+            api.engine.drainercontroller.Check(this);
+            for(int i=0; i<api.engine.database.branchGravityChangers.Count; i++)
+            {
+                api.engine.database.branchGravityChangers[i].CheckGravity(this);
+            }
             GetComponent<PlayerGraphics>().ResetStates();
             movepercentage = 0;
         }

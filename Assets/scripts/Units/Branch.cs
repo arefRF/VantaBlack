@@ -5,8 +5,14 @@ using System.Collections.Generic;
 public class Branch : Unit {
 
     public bool islocked = false;
-    public bool blocked = false;
+    public bool isblocked = false;
     public bool isExternal = false;
+    public bool isDrainer = false;
+    public bool isGravityChanger = false;
+    public Direction GravityDirection;
+    public Circle circle { get; set; }
+
+    private Coroutine BranchUnlockCoroutine;
     public override void SetInitialSprite()
     {
         bool[] connected = Toolkit.GetConnectedSidesForBranch(this);
@@ -136,14 +142,21 @@ public class Branch : Unit {
         //  SetJointOrEntrance(Direction.Down);
         //  SetJointOrEntrance(Direction.Left);
         api.engine.apigraphic.UnitChangeSprite(this);
-        if (blocked)
+        if (isblocked)
         {
             GameObject obj = Toolkit.GetObjectInChild(gameObject, "Icon").transform.GetChild(0).gameObject;
             obj.SetActive(true);
             obj.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Branch\\Light Glass-DONT");
             //Debug.Log(obj.GetComponent<SpriteRenderer>().sprite);
             //obj.GetComponent<SpriteRenderer>().color = new Color(0.27f, 0, 0, 1f);
-            
+        }
+        if (isDrainer)
+        {
+            api.engine.database.branchDrainers.Add(this);
+        }
+        if (isGravityChanger)
+        {
+            api.engine.database.branchGravityChangers.Add(this);
         }
     }
 
@@ -219,7 +232,7 @@ public class Branch : Unit {
 
     public override bool PlayerMoveInto(Direction dir)
     {
-        return !islocked && !blocked;
+        return !islocked && !isblocked;
     }
 
     public override CloneableUnit Clone()
@@ -233,16 +246,12 @@ public class Branch : Unit {
         {
             if (player.abilities.Count != 0 && player.abilities[0] is Key)
             {
-                islocked = false;
-                (player.abilities[0] as Key).branch = this;
-                player.abilities.RemoveAt(0);
-                player._setability();
-                api.engine.apigraphic.Absorb(player, null);
-                api.engine.apigraphic.UnitChangeSprite(this);
-                api.engine.inputcontroller.PlayerMoveAction(player, direction);
+                UnlockBranch(player);
+                //api.engine.inputcontroller.PlayerMoveAction(player, direction);
             }
             else
             {
+                return;
                 player.SetState(PlayerState.Lean);
                 //player.transform.position = player.position;
                 player.LeanedTo = this;
@@ -258,6 +267,49 @@ public class Branch : Unit {
             }
         }
     }
+    public bool CheckGravity(Player player)
+    {
+        if (player.position == position)
+        {
+            player.SetGravity(GravityDirection);
+            int zrot = 0;
+            if (player.gravity == Direction.Up)
+                zrot = 180;
+            else if (player.gravity == Direction.Right)
+                zrot = 90;
+            else if (player.gravity == Direction.Left)
+                zrot = 270;
+
+            GameObject obj = Toolkit.GetObjectInChild(player.gameObject, "Sprite Holder");
+            obj.transform.rotation = Quaternion.Euler(obj.transform.rotation.x, obj.transform.rotation.y, zrot);
+            return true;
+        }
+        return false;
+    }
+
+    public bool CheckDrain(Player player)
+    {
+        if (player.position == position)
+        {
+            Drain(player);
+            return true;
+        }
+        return false;
+    }
+
+    public void Drain(Player player)
+    {
+        Debug.Log("dariner has some commented code! check");
+        player.SetState(PlayerState.Busy);
+        player.abilities.Clear();
+        api.engine.apigraphic.Player_Co_Stop(player);
+        player.GetComponent<PlayerGraphics>().ResetStates();
+        api.engine.apigraphic.BranchLight(true, this, player);
+        api.engine.apigraphic.Absorb(player, null);
+        player.SetState(PlayerState.Idle);
+        //api.engine.apigraphic.Drain(player, this);
+    }
+
     public void PlayerMove(Direction CameFrom, Player player)
     {
         if(Toolkit.GetObjectInChild(gameObject, "Icon").activeSelf == true)
@@ -331,6 +383,8 @@ public class Branch : Unit {
     {
         if(islocked)
         {
+            Debug.Log("player with key cant be pushed into branch in new version");
+            return false;
             if (player.abilities.Count == 0 || player.abilities[0].abilitytype != AbilityType.Key)
                 return false;
             (player.abilities[0] as Key).branch = this;
@@ -347,10 +401,48 @@ public class Branch : Unit {
     }
 
 
-    public void UnlockBranch()
+    public void UnlockBranch(Player player)
+    {
+        if (BranchUnlockCoroutine != null)
+            return;
+        BranchUnlockCoroutine = StartCoroutine(unlock_branch(player));
+        StartCoroutine(CheckPlayerHoldingKey(player));
+    }
+
+    private void UnlockBranchFinished(Player player)
     {
         islocked = false;
-        api.engine.apigraphic.UnitChangeSprite(this);
+        (player.abilities[0] as Key).branch = this;
+        player.abilities.RemoveAt(0);
+        player._setability();
+        api.engine.apigraphic.Absorb(player, null);
+    }
+
+    private IEnumerator CheckPlayerHoldingKey(Player player)
+    {
+        while (!IsCircleFinished())
+        {
+            Direction tempdir = Toolkit.VectorToDirection(position - player.position);
+            if (!api.engine.apiinput.isMoveKeyDown(tempdir))
+            {
+                if (BranchUnlockCoroutine != null)
+                {
+                    StopCoroutine(BranchUnlockCoroutine);
+                    BranchUnlockCoroutine = null;
+                    circle.StopCircle(new Color(1, 1, 1));
+                }
+                break;
+            }
+            yield return null;
+        }
+    }
+
+    private IEnumerator unlock_branch(Player player)
+    {
+        circle.StartCircleForLaser();
+        yield return new WaitUntil(new System.Func<bool>(() => IsCircleFinished()));
+        UnlockBranchFinished(player);
+        //api.engine.apigraphic.UnitChangeSprite(this);
     }
 
     public void BranchUnlockAnimationFinished()
@@ -361,13 +453,18 @@ public class Branch : Unit {
     public override bool isLeanable()
     {
         //return false;
-        return islocked || blocked;
+        return islocked || isblocked;
     }
 
     private IEnumerator Wait(float f, Player player)
     {
         yield return new WaitForSeconds(f);
         player.SetState(PlayerState.Idle);
+    }
+
+    public bool IsCircleFinished()
+    {
+        return circle.CircleFinished;
     }
 }
 
