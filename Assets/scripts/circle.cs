@@ -147,7 +147,11 @@ public class Circle : MonoBehaviour {
         linerenderer.endColor = color;
         for (int i = 0; i < linerenderer.positionCount; i++)
         {
+<<<<<<< HEAD
             Vector3 pos = new Vector3(radius * Mathf.Cos(theta), radius * Mathf.Sin(theta), 0f) + OldPos;
+=======
+            Vector3 pos = new Vector3(radius * Mathf.Cos(theta), radius * Mathf.Sin(theta), 0f)+transform.position;
+>>>>>>> 90e7286961de5dd5be0d6750e583eff43e9e5246
             linerenderer.SetPosition(i, pos);
             theta += DeltaTheta;
         }
