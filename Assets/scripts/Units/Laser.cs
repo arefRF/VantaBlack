@@ -47,6 +47,7 @@ public class Laser : Unit {
         {
             Branches.Remove(tempbranchlist[i]);
             StopCoroutine(tempbranchlist[i].LaserUnlockWaitCoroutine);
+            tempbranchlist[i].branch.circle.StopCircle(new Color(1,0,0));
         }
         for(int i=0; i < tempcontainerlist.Count; i++)
         {
@@ -151,47 +152,6 @@ public class Laser : Unit {
             linerenderers[Toolkit.DirectionToNumber(direction) - 1] = linerenderer;
         }
     }
-
-    private void SetLaser(Direction direction, Vector2 pos, Vector2 finalpos)
-    {
-        DynamicContainer container = Toolkit.GetContainer(finalpos) as DynamicContainer;
-        Branch branch = Toolkit.GetBranch(finalpos) as Branch;
-        Unit unit = Toolkit.GetUnitIncludingPlayer(finalpos);
-        if (unit != null)
-        {
-            if (unit.isLeanable())
-                api.engine.apigraphic.AddPartialLaser(finalpos, Toolkit.ReverseDirection(direction), unit.gameObject);
-            else if (unit is Player)
-            {
-                engine.apigraphic.Laser_Player_Died(unit as Player);
-                finalpos = Toolkit.VectorSum(finalpos, direction);
-            }
-        }
-        finalpos = Toolkit.VectorSum(finalpos, Toolkit.ReverseDirection(direction));
-        if (container != null && !api.engine.lasercontroller.containers.Contains(container))
-        {
-            if (!(container.ConnectedUnits.Contains(this) && Toolkit.AreNeighbours(container, this)))
-            {
-                api.engine.lasercontroller.containers.Add(container);
-                api.engine.apigraphic.AddPartialLaser(container.position, container.direction, container.gameObject);
-                api.engine.apigraphic.LaserHitDynamic(container);
-                //SetLaserInDirection(container.direction, container.position);
-            }
-        }
-        else
-        {
-            if (branch != null && branch.islocked)
-            {
-                engine.apigraphic.UnlockBranchLaser(branch);
-            }
-        }
-        /*if (flag)
-        {
-            beamPositions.Add(new Vector2[] { pos, finalpos });
-            api.engine.apigraphic.AddLaser(pos, finalpos, direction, gameObject);
-        }*/
-    }
-
     public bool CollideLaser(Vector2 pos)
     {
         return false;
@@ -253,7 +213,8 @@ public class Laser : Unit {
     
     public IEnumerator LaserUnlockWait(float f, LaserBranchUnlocker branchunlocker)
     {
-        yield return new WaitForSeconds(f);
+        branchunlocker.branch.circle.StartCircleForLaser(new Color(1,0,0));
+        yield return new WaitUntil(new System.Func<bool>(() => branchunlocker.branch.IsCircleFinished()));
         branchunlocker.LaserUnlockTimeFinished = true;
     }
 

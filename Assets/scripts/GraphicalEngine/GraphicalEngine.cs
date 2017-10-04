@@ -178,7 +178,9 @@ public class GraphicalEngine : MonoBehaviour {
         if (branch.islocked)
             Toolkit.GetObjectInChild(branch.gameObject, "Icon").transform.GetChild(1).gameObject.SetActive(true);
         else
+        {
             Toolkit.GetObjectInChild(branch.gameObject, "Icon").transform.GetChild(1).gameObject.SetActive(false);
+        }
     }
 
     public void LaserHit(DynamicContainer container)
@@ -210,7 +212,8 @@ public class GraphicalEngine : MonoBehaviour {
     public void UnlockBranchLaser(Branch branch)
     {
         GameObject icon_holder = Toolkit.GetObjectInChild(branch.gameObject, "Icon");
-        branch.GetComponent<Animator>().SetTrigger("Unlock");
+        Toolkit.GetObjectInChild(icon_holder, "LockIcon").SetActive(false);
+        //branch.GetComponent<Animator>().SetTrigger("Unlock");
         branch.BranchUnlockAnimationFinished();
     }
     public void Fountatin(Fountain fountatin)

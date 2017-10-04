@@ -321,7 +321,7 @@ public class GetInput : MonoBehaviour {
         }
     }
 
-    public bool isAnyAnyKeyDown()
+    public bool isAnyKeyDown()
     {
         return (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S));
     }
