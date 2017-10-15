@@ -49,15 +49,15 @@ public class Circle : MonoBehaviour {
         int n = currentN - 1;
         bool boolean = true;
         int i = 1;
-        while(n >= -1)
+        while (n >= -1)
         {
             Color color = new Color(1, 1, 1);
             setup_circle(n, color);
             if (boolean)
             {
-                if(i >= 10)
+                if (i >= 10)
                     boolean = false;
-                LockIcon.transform.rotation = Quaternion.Euler(0,0, i);
+                LockIcon.transform.rotation = Quaternion.Euler(0, 0, i);
                 i += 10;
             }
             else
@@ -147,34 +147,30 @@ public class Circle : MonoBehaviour {
         linerenderer.endColor = color;
         for (int i = 0; i < linerenderer.positionCount; i++)
         {
-<<<<<<< HEAD
             Vector3 pos = new Vector3(radius * Mathf.Cos(theta), radius * Mathf.Sin(theta), 0f) + OldPos;
-=======
-            Vector3 pos = new Vector3(radius * Mathf.Cos(theta), radius * Mathf.Sin(theta), 0f)+transform.position;
->>>>>>> 90e7286961de5dd5be0d6750e583eff43e9e5246
             linerenderer.SetPosition(i, pos);
             theta += DeltaTheta;
         }
 
 
     }
-/*#if UNITY_EDITOR
-    private void OnDrawGizmos()
-    {
-        float DeltaTheta = (2f * Mathf.PI) / vertexcount;
-        float theta = 0f;
-
-        Vector3 OldPos = transform.position + new Vector3(radius,0f,0f);
-
-        for (int i = 0; i <= vertexcount; i++)
+    /*#if UNITY_EDITOR
+        private void OnDrawGizmos()
         {
-            Vector3 pos = new Vector3(radius * Mathf.Cos(theta), radius * Mathf.Sin(theta), 0f);
-            Gizmos.DrawLine(OldPos, transform.position + pos);
-            OldPos = transform.position + pos;
+            float DeltaTheta = (2f * Mathf.PI) / vertexcount;
+            float theta = 0f;
 
-            theta += DeltaTheta;
+            Vector3 OldPos = transform.position + new Vector3(radius,0f,0f);
+
+            for (int i = 0; i <= vertexcount; i++)
+            {
+                Vector3 pos = new Vector3(radius * Mathf.Cos(theta), radius * Mathf.Sin(theta), 0f);
+                Gizmos.DrawLine(OldPos, transform.position + pos);
+                OldPos = transform.position + pos;
+
+                theta += DeltaTheta;
+            }
+
         }
-
-    }
-#endif*/
+    #endif*/
 }

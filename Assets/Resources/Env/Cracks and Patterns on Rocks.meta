@@ -1,7 +1,13 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Resources/Env/Cracks and Patterns on Rocks.meta
 guid: 59022018587f5214a99d31f3fbbf9bc7
 folderAsset: yes
 timeCreated: 1507126361
+=======
+guid: b54e26f7b7fa629418b15c925b5eec5d
+folderAsset: yes
+timeCreated: 1507272976
+>>>>>>> ff03b4abfcce1a3765c66a17481c114cb8120edc:Assets/Resources/Env/Cracks and Patterns on Rocks.meta
 licenseType: Free
 DefaultImporter:
   userData: 
