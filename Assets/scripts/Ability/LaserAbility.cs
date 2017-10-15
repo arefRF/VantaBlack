@@ -7,4 +7,6 @@ public class LaserAbility : Ability {
     {
         abilitytype = AbilityType.Laser;
     }
+
+
 }
