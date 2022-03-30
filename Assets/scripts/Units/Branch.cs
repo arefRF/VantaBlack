@@ -10,7 +10,6 @@ public class Branch : Unit {
     public bool isDrainer = false;
     public bool isGravityChanger = false;
     public Direction GravityDirection;
-    public Circle circle { get; set; }
 
     private Coroutine BranchUnlockCoroutine;
     public override void SetInitialSprite()
@@ -420,29 +419,23 @@ public class Branch : Unit {
 
     private IEnumerator CheckPlayerHoldingKey(Player player)
     {
-        while (!IsCircleFinished())
+        Direction tempdir = Toolkit.VectorToDirection(position - player.position);
+        if (!api.engine.apiinput.isMoveKeyDown(tempdir))
         {
-            Direction tempdir = Toolkit.VectorToDirection(position - player.position);
-            if (!api.engine.apiinput.isMoveKeyDown(tempdir))
+            if (BranchUnlockCoroutine != null)
             {
-                if (BranchUnlockCoroutine != null)
-                {
-                    StopCoroutine(BranchUnlockCoroutine);
-                    BranchUnlockCoroutine = null;
-                    circle.StopCircle(new Color(1, 1, 1));
-                }
-                break;
+                StopCoroutine(BranchUnlockCoroutine);
+                BranchUnlockCoroutine = null;
             }
-            yield return null;
         }
+        yield return null;
     }
 
     private IEnumerator unlock_branch(Player player)
     {
-        circle.StartCircleForLaser();
-        yield return new WaitUntil(new System.Func<bool>(() => IsCircleFinished()));
+        yield return new WaitForEndOfFrame();
         UnlockBranchFinished(player);
-        //api.engine.apigraphic.UnitChangeSprite(this);
+        api.engine.apigraphic.UnitChangeSprite(this);
     }
 
     public void BranchUnlockAnimationFinished()
@@ -460,11 +453,6 @@ public class Branch : Unit {
     {
         yield return new WaitForSeconds(f);
         player.SetState(PlayerState.Idle);
-    }
-
-    public bool IsCircleFinished()
-    {
-        return circle.CircleFinished;
     }
 }
 

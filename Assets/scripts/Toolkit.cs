@@ -397,8 +397,12 @@ public sealed class Toolkit
         for (int i = 0; i < units[(int)position.x, (int)position.y].Count; i++)
         {
             if (units[(int)position.x, (int)position.y][i] is Leanable)
+            {
+                Debug.LogError("leanable");
                 return true;
+            }
         }
+        Debug.LogError("not leanable");
         return false;
     }
 

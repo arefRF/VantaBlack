@@ -139,7 +139,6 @@ public class DynamicContainer : FunctionalContainer {
         {
             Containers.Remove(tempcontainerlist[i]);
             HittingContainers.Remove(tempcontainerlist[i].container);
-            tempbranchlist[i].branch.circle.StopCircle(new Color(1, 0, 0));
             tempcontainerlist[i].container.ChangeLaserHitState(false);
         }
         tempbranchlist.Clear();
@@ -255,8 +254,7 @@ public class DynamicContainer : FunctionalContainer {
 
     public IEnumerator LaserUnlockWait(float f, LaserBranchUnlocker branchunlocker)
     {
-        branchunlocker.branch.circle.StartCircleForLaser(new Color(1, 0, 0));
-        yield return new WaitUntil(new System.Func<bool>(() => branchunlocker.branch.IsCircleFinished()));
+        yield return new WaitForEndOfFrame();
         branchunlocker.LaserUnlockTimeFinished = true;
     }
 

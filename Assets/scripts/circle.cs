@@ -16,7 +16,6 @@ public class Circle : MonoBehaviour {
     void Start()
     {
         linerenderer = GetComponent<LineRenderer>();
-        transform.parent.GetComponent<Branch>().circle = this;
         GameObject temp = Toolkit.GetObjectInChild(transform.parent.gameObject, "Icon");
         LockIcon = Toolkit.GetObjectInChild(temp, "LockIcon");
         waittime = 1.3f / vertexcount;

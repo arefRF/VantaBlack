@@ -47,7 +47,6 @@ public class Laser : Unit {
         {
             Branches.Remove(tempbranchlist[i]);
             StopCoroutine(tempbranchlist[i].LaserUnlockWaitCoroutine);
-            tempbranchlist[i].branch.circle.StopCircle(new Color(1,0,0));
         }
         for(int i=0; i < tempcontainerlist.Count; i++)
         {
@@ -213,8 +212,7 @@ public class Laser : Unit {
     
     public IEnumerator LaserUnlockWait(float f, LaserBranchUnlocker branchunlocker)
     {
-        branchunlocker.branch.circle.StartCircleForLaser(new Color(1,0,0));
-        yield return new WaitUntil(new System.Func<bool>(() => branchunlocker.branch.IsCircleFinished()));
+        yield return new WaitForEndOfFrame();
         branchunlocker.LaserUnlockTimeFinished = true;
     }
 
